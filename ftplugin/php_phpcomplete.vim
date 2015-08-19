@@ -53,6 +53,12 @@ if g:phpcomplete_enhance_jump_to_definition
 	endif
 endif
 
+if !exists('g:phpcd_job_id')
+	let plugin_root = expand('<sfile>:p:h:h')
+	echomsg plugin_root . '/bin/PHPCD.php'
+	let g:phpcd_job_id = jobstart(['php', plugin_root . '/bin/PHPCD.php', $NVIM_LISTEN_ADDRESS])
+endif
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

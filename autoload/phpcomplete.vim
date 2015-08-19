@@ -173,6 +173,10 @@ endif
 let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 function! phpcomplete#CompletePHP(findstart, base) " {{{
+	if g:phpcd_channel_id < 0
+		return
+	endif
+
 	if a:findstart
 		unlet! b:php_menu
 		" Check if we are inside of PHP markup
@@ -935,6 +939,10 @@ endfunction
 " }}}
 
 function! phpcomplete#JumpToDefinition(mode) " {{{
+	if g:phpcd_channel_id < 0
+		return
+	endif
+
 	if !exists('g:php_builtin_functions')
 		call phpcomplete#LoadData()
 	endif
