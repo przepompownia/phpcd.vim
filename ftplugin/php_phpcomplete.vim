@@ -54,10 +54,10 @@ if g:phpcomplete_enhance_jump_to_definition
 endif
 
 if !exists('g:phpcd_job_id')
-	let plugin_root = expand('<sfile>:p:h:h')
-	let project_root = phpcomplete#getProjectRoot()
-	if project_root != '/'
-		let g:phpcd_job_id = jobstart(['php', plugin_root . '/bin/PHPCD.php', $NVIM_LISTEN_ADDRESS, project_root])
+	let phpcd_path = expand('<sfile>:p:h:h') . '/bin/PHPCD.php'
+	let autoload_file = phpcomplete#getComposerAutoloadFile()
+	if autoload_file != '/'
+		let g:phpcd_job_id = jobstart(['php', phpcd_path, $NVIM_LISTEN_ADDRESS, autoload_file])
 	endif
 endif
 

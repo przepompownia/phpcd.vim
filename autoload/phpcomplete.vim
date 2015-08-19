@@ -1041,7 +1041,7 @@ function! phpcomplete#LocateSymbol(symbol, symbol_context, symbol_namespace, cur
 		if (has_key(a:current_imports, a:symbol))
 			let full_classname = a:current_imports[a:symbol]['name']
 		else
-			let full_classname = a:current_namespace . '\' . a:symbol
+			let full_classname = a:symbol_namespace . '\' . a:symbol
 		endif
 
 		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, '')
@@ -2912,17 +2912,17 @@ let g:php_builtin_vars ={
 endfunction
 " }}}
 
-function! phpcomplete#getProjectRoot()
+function! phpcomplete#getComposerAutoloadFile() " {{{
 	let cwd = getcwd()
 	let root = cwd
 	while root != "/"
-		if (filereadable(root . "/vendor/autoload.php"))
-			break
+		let path = root . "/vendor/autoload.php"
+		if (filereadable(path))
+			return path
 		endif
 		let root = fnamemodify(root, ":h")
 	endwhile
-
 	return root
-endfunction
+endfunction " }}}
 
 " vim: foldmethod=marker:noexpandtab:ts=4:sts=4:sw=4

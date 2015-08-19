@@ -229,9 +229,4 @@ class PHPCD
     }
 }
 
-$socket_path = $argv[1];
-$project_root = $argv[2];
-$autoload_path = $project_root . '/vendor/autoload.php';
-
-$cd = new PHPCD($socket_path, $autoload_path);
-$cd->loop();
+(new PHPCD($argv[1], $argv[2]))->loop();
