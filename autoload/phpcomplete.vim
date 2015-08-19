@@ -2912,4 +2912,17 @@ let g:php_builtin_vars ={
 endfunction
 " }}}
 
+function! phpcomplete#getProjectRoot()
+	let cwd = getcwd()
+	let root = cwd
+	while root != "/"
+		if (filereadable(root . "/vendor/autoload.php"))
+			break
+		endif
+		let root = fnamemodify(root, ":h")
+	endwhile
+
+	return root
+endfunction
+
 " vim: foldmethod=marker:noexpandtab:ts=4:sts=4:sw=4

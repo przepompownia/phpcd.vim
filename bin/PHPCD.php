@@ -27,7 +27,11 @@ class PHPCD
     {
         $this->socket = socket_create(AF_UNIX, SOCK_STREAM, 0);
         $this->unpacker = new MessagePackUnpacker();
-        require '/home/lvht/code/agj/vendor/autoload.php';
+
+        if ($autoload_path) {
+            require $autoload_path;
+        }
+
         socket_connect($this->socket, $socket_path);
 
         $this->setChannelId();
@@ -208,6 +212,9 @@ class PHPCD
 }
 
 $socket_path = $argv[1];
+$project_root = $argv[2];
+$autoload_path = $project_root . '/vendor/autoload.php';
+echo $autoload_path . PHP_EOL;
 
-$cd = new PHPCD($socket_path);
+$cd = new PHPCD($socket_path, $autoload_path);
 $cd->loop();

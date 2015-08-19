@@ -55,8 +55,10 @@ endif
 
 if !exists('g:phpcd_job_id')
 	let plugin_root = expand('<sfile>:p:h:h')
-	echomsg plugin_root . '/bin/PHPCD.php'
-	let g:phpcd_job_id = jobstart(['php', plugin_root . '/bin/PHPCD.php', $NVIM_LISTEN_ADDRESS])
+	let project_root = phpcomplete#getProjectRoot()
+	if project_root != '/'
+		let g:phpcd_job_id = jobstart(['php', plugin_root . '/bin/PHPCD.php', $NVIM_LISTEN_ADDRESS, project_root])
+	endif
 endif
 
 let &cpo = s:save_cpo
