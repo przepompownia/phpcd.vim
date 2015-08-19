@@ -1029,6 +1029,15 @@ function! phpcomplete#LocateSymbol(symbol, symbol_context, symbol_namespace, cur
 			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, a:symbol)
 			return [path, line, 0]
 		endif
+	elseif a:symbol_context == 'new' || a:symbol_context =~ '^class '
+		if (has_key(a:current_imports, a:symbol))
+			let full_classname = a:current_imports[a:symbol]['name']
+		else
+			let full_classname = a:current_namespace . '\' . a:symbol
+		endif
+
+		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, '')
+		return [path, line, 0]
 	else
 		" it could be a function
 		let function_file = phpcomplete#GetFunctionLocation(a:symbol, a:symbol_namespace)
