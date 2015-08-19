@@ -116,7 +116,6 @@ class PHPCD
         try {
             $result = $this->onCall($method, $args);
         } catch (Exception $e) {
-            echo (string) $e;
             $error = true;
         }
 
