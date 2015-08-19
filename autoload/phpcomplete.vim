@@ -939,62 +939,20 @@ function! phpcomplete#JumpToDefinition(mode) " {{{
 		call phpcomplete#LoadData()
 	endif
 
-	let keys = ""
-	if a:mode == 'normal'
-		let notfound_commands = 'tag '
-	elseif a:mode == 'split'
-		let notfound_commands = 'split | tag '
-	elseif a:mode == 'vsplit'
-		let notfound_commands = 'vsplit | tag '
-	endif
-
 	let [symbol, symbol_context, symbol_namespace, current_imports] = phpcomplete#GetCurrentSymbolWithContext()
 	if symbol == ''
-		silent! exec notfound_commands.expand('<cword>')
 		return
 	endif
 
 	let [symbol_file, symbol_line, symbol_col] = phpcomplete#LocateSymbol(symbol, symbol_context, symbol_namespace, current_imports)
 	if symbol_file == ''
-		silent! exec notfound_commands.symbol
 		return
 	endif
 
-	let symbol_file_lines = readfile(symbol_file)
-	let tag_line = get(symbol_file_lines, symbol_line - 1, -1)
-	if tag_line == -1
-		silent! exec notfound_commands.symbol
-		return
-	endif
-
-	let tags = phpcomplete#GetTaglist(symbol)
-
-	let symbol_file = fnamemodify(symbol_file, ':p')
-	let tag_position = -1
-	let i = 1
-	for tag in tags
-		if fnamemodify(tag.filename, ":p") == symbol_file && tag.cmd =~ tag_line
-			let tag_position = i
-			break
-		endif
-		let i += 1
-	endfor
-
-	if tag_position == -1
-		silent! exec notfound_commands.symbol
-	else
-		let oldcscopetag = &cscopetag
-		set nocscopetag
-		if a:mode == 'split'
-			silent! exec 'split | '.tag_position.'tag '.symbol
-		elseif a:mode == 'vsplit'
-			silent! exec 'vsplit | '.tag_position.'tag '.symbol
-		elseif a:mode == 'normal'
-			silent! exec tag_position.'tag '.symbol
-		endif
-		let &cscopetag = oldcscopetag
-		unlet oldcscopetag
-	endif
+    silent! execute "e +". symbol_line . ' ' . symbol_file
+    silent! execute "normal! zt"
+    normal! zv
+    normal! zz
 endfunction " }}}
 
 function! phpcomplete#GetCurrentSymbolWithContext() " {{{
@@ -1059,6 +1017,7 @@ function! phpcomplete#LocateSymbol(symbol, symbol_context, symbol_namespace, cur
 
 		" Get location of class definition, we have to iterate through all
 		if classname != ''
+			let full_classname = classname
 			if classname =~ '\'
 				" split the last \ segment as a classname, everything else is the namespace
 				let classname_parts = split(classname, '\')
@@ -1067,24 +1026,8 @@ function! phpcomplete#LocateSymbol(symbol, symbol_context, symbol_namespace, cur
 			else
 				let namespace = '\'
 			endif
-			let classlocation = phpcomplete#GetClassLocation(classname, namespace)
-			if classlocation != '' && filereadable(classlocation)
-				let classcontents = phpcomplete#GetCachedClassContents(classlocation, classname)
-				for classcontent in classcontents
-					if classcontent.content =~? 'function\_s\+&\=\<'.search_symbol.'\(\>\|$\)' && filereadable(classcontent.file)
-						" Method found in classlocation
-						call s:readfileToTmpbuffer(classcontent.file)
-
-						call search('\cclass\_s\+\<'.classcontent.class.'\(\>\|$\)', 'wc')
-						call search('\cfunction\_s\+&\=\zs\<'.search_symbol.'\(\>\|$\)', 'wc')
-
-						let line = line('.')
-						let col  = col('.')
-						silent! exe 'bw! %'
-						return [classcontent.file, line, col]
-					endif
-				endfor
-			endif
+			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, a:symbol)
+			return [path, line, 0]
 		endif
 	else
 		" it could be a function
