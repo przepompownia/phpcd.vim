@@ -240,43 +240,8 @@ function! phpcomplete#CompletePHP(findstart, base) " {{{
 		endif
 
 		if context =~ '\(->\|::\)$'
-			" {{{
-			" Get name of the class
 			let classname = phpcomplete#GetClassName(line('.'), context, current_namespace, imports)
-
-			" Get location of class definition, we have to iterate through all
-			if classname != ''
-				if classname =~ '\'
-					" split the last \ segment as a classname, everything else is the namespace
-					let classname_parts = split(classname, '\')
-					let namespace = join(classname_parts[0:-2], '\')
-					let classname = classname_parts[-1]
-				else
-					let namespace = '\'
-				endif
-				let classlocation = phpcomplete#GetClassLocation(classname, namespace)
-			else
-				let classlocation = ''
-			endif
-
-			if classlocation != ''
-				if classlocation == 'VIMPHP_BUILTINOBJECT' && has_key(g:php_builtin_classes, tolower(classname))
-					return phpcomplete#CompleteBuiltInClass(context, classname, a:base)
-				endif
-
-				if filereadable(classlocation)
-					let classfile = readfile(classlocation)
-					let classcontent = ''
-					let classcontent .= "\n".phpcomplete#GetClassContents(classlocation, classname)
-					let sccontent = split(classcontent, "\n")
-					let visibility = expand('%:p') == fnamemodify(classlocation, ':p') ? 'private' : 'public'
-
-					return phpcomplete#CompleteUserClass(context, a:base, sccontent, visibility)
-				endif
-			endif
-
-			return phpcomplete#CompleteUnknownClass(a:base, context)
-			" }}}
+			return rpcrequest(g:phpcd_channel_id, 'info', classname, a:base)
 		elseif context =~? 'implements'
 			return phpcomplete#CompleteClassName(a:base, ['i'], current_namespace, imports)
 		elseif context =~? 'extends\s\+.\+$' && a:base == ''
@@ -2746,7 +2711,7 @@ function! phpcomplete#GetCurrentNameSpace(file_lines) " {{{
 		endif
 
 		if line =~? '^\s*use\>'
-			if line =~? ';'
+			if line =~? ';' " {{{
 				let use_line = line
 			else
 				" try to find the next line containing ';'
@@ -2761,10 +2726,10 @@ function! phpcomplete#GetCurrentNameSpace(file_lines) " {{{
 					let search_line = file_lines[l]
 					let use_line .= ' '.substitute(search_line, '\(^\s\+\|\s\+$\)', '', 'g')
 				endwhile
-			endif
+			endif " }}}
 			let use_expression = matchstr(use_line, '^\c\s*use\s\+\zs.\{-}\ze;')
 			let use_parts = map(split(use_expression, '\s*,\s*'), 'substitute(v:val, "\\s+", " ", "g")')
-			for part in use_parts
+			for part in use_parts " {{{
 				if part =~? '\s\+as\s\+'
 					let [object, name] = split(part, '\s\+as\s\+\c')
 					let object = substitute(object, '^\\', '', '')
@@ -2780,83 +2745,7 @@ function! phpcomplete#GetCurrentNameSpace(file_lines) " {{{
 				endif
 				" leading slash is not required use imports are always absolute
 				let imports[name] = {'name': object, 'kind': ''}
-			endfor
-
-			" find kind flags from tags or built in methods for the objects we extracted
-			" they can be either classes, interfaces or namespaces, no other thing is importable in php
-			for [key, import] in items(imports)
-				" if theres a \ in the name we have it's definetly not a built in thing, look for tags
-				if import.name =~ '\\'
-					let patched_ctags_detected = 0
-					let [classname, namespace_for_classes] = phpcomplete#ExpandClassName(import.name, '\', {})
-					let namespace_name_candidate = substitute(import.name, '\\', '\\\\', 'g')
-					" can be a namespace name as is, or can be a tagname at the end with a namespace
-					let tags = phpcomplete#GetTaglist('^\('.namespace_name_candidate.'\|'.classname.'\)$')
-					if len(tags) > 0
-						for tag in tags
-							" if there's a namespace with the name of the import
-							if tag.kind == 'n' && tag.name == import.name
-								call extend(import, tag)
-								let import['builtin'] = 0
-								let patched_ctags_detected = 1
-								break
-							endif
-							" if the name matches with the extracted classname and namespace
-							if (tag.kind == 'c' || tag.kind == 'i' || tag.kind == 't') && tag.name == classname
-								if has_key(tag, 'namespace')
-									let patched_ctags_detected = 1
-									if tag.namespace == namespace_for_classes
-										call extend(import, tag)
-										let import['builtin'] = 0
-										break
-									endif
-								elseif !exists('no_namespace_candidate')
-									" save the first namespacless match to be used if no better
-									" candidate found later on
-									let no_namespace_candidate = tag
-								endif
-							endif
-						endfor
-						" there were a namespacless class name match, if we think that the
-						" tags are not generated with patched ctags we will take it as a match
-						if exists('no_namespace_candidate') && !patched_ctags_detected
-							call extend(import, no_namespace_candidate)
-							let import['builtin'] = 0
-						endif
-					else
-						" if no tags are found, extract the namespace from the name
-						let ns = matchstr(import.name, '\c\zs[a-zA-Z0-9\\]\+\ze\\' . name)
-						if len(ns) > 0
-							let import['name'] = name
-							let import['namespace'] = ns
-							let import['builtin'] = 0
-						endif
-					endif
-				else
-					" if no \ in the name, it can be a built in class
-					if has_key(g:php_builtin_classnames, tolower(import.name))
-						let import['kind'] = 'c'
-						let import['builtin'] = 1
-					elseif has_key(g:php_builtin_interfacenames, tolower(import.name))
-						let import['kind'] = 'i'
-						let import['builtin'] = 1
-					else
-						" or can be a tag with exactly matchign name
-						let tags = phpcomplete#GetTaglist('^'.import['name'].'$')
-						for tag in tags
-							" search for the first matchin namespace, class, interface with no namespace
-							if !has_key(tag, 'namespace') && (tag.kind == 'n' || tag.kind == 'c' || tag.kind == 'i' || tag.kind == 't')
-								call extend(import, tag)
-								let import['builtin'] = 0
-								break
-							endif
-						endfor
-					endif
-				endif
-				if exists('no_namespace_candidate')
-					unlet no_namespace_candidate
-				endif
-			endfor
+			endfor " }}}
 		endif
 		let i += 1
 	endwhile
