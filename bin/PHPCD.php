@@ -91,7 +91,7 @@ class PHPCD
     public function loop()
     {
         foreach ($this->nextRpcMsg() as $msg) {
-            echo json_encode(msg) . PHP_EOL;
+            echo json_encode($msg) . PHP_EOL;
             $pid = pcntl_fork();
             if ($pid == -1) {
                 die('could not fork');
@@ -155,22 +155,28 @@ class PHPCD
         return call_user_func_array([$this, $method], $args);
     }
 
-    private function copy($name) {
-        return $name;
-    }
-
     private function info($class_name, $pattern)
     {
         $reflection = new ReflectionClass($class_name);
-        $methods = [];
+        $items = [];
+        foreach ($reflection->getConstants() as $name => $value)
+        {
+            $items[] = [
+                'word' => $name,
+                'abbr' => "+ @ $name = $value",
+                'kind' => 'd',
+                'icase' => 1,
+            ];
+        }
+
         foreach ($reflection->getMethods() as $method) {
             $info = $this->getMethodInfo($method, $pattern);
             if ($info) {
-                $methods[] = $info;
+                $items[] = $info;
             }
         }
 
-        return $methods;
+        return $items;
     }
 
     private function getMethodInfo($method, $pattern = null)
@@ -183,9 +189,21 @@ class PHPCD
             return $param->getName();
         }, $method->getParameters());
 
+        if ($method->isPublic()) {
+            $modifier = '+';
+        } elseif ($method->isProtected()) {
+            $modifier = '#';
+        } elseif ($method->isPrivate()) {
+            $modifier = '-';
+        } elseif ($method->isFinal()) {
+            $modifier = '!';
+        }
+
+        $static = $method->isStatic() ? '@' : ' ';
+
         return [
             'word' => $name,
-            'abbr' => $name . '(' . join(', ', $params) . ')',
+            'abbr' => "$modifier $static $name (" . join(', ', $params) . ')',
             'info' => preg_replace('#/?\*(\*|/)?#','', $method->getDocComment()),
             'kind' => 'f',
             'icase' => 1,
@@ -214,7 +232,6 @@ class PHPCD
 $socket_path = $argv[1];
 $project_root = $argv[2];
 $autoload_path = $project_root . '/vendor/autoload.php';
-echo $autoload_path . PHP_EOL;
 
 $cd = new PHPCD($socket_path, $autoload_path);
 $cd->loop();
