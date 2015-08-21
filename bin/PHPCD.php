@@ -1,12 +1,4 @@
 <?php
-fclose(STDIN);
-fclose(STDOUT);
-fclose(STDERR);
-$home_path = getenv('HOME');
-$STDIN = fopen('/dev/null', 'r');
-$STDOUT = fopen($home_path . '/.phpcd.log', 'wb');
-$STDERR = fopen($home_path . '/.phpcd.log', 'wb');
-
 class PHPCD
 {
     private static $req_msg_id = 0;
@@ -228,5 +220,3 @@ class PHPCD
         ];
     }
 }
-
-(new PHPCD($argv[1], $argv[2]))->loop();

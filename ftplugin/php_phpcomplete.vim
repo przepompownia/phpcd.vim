@@ -54,9 +54,10 @@ if g:phpcomplete_enhance_jump_to_definition
 endif
 
 if !exists('g:phpcd_job_id')
-	let phpcd_path = expand('<sfile>:p:h:h') . '/bin/PHPCD.php'
+	let phpcd_path = expand('<sfile>:p:h:h') . '/bin/phpcd_main.php'
 	let autoload_file = phpcomplete#getComposerAutoloadFile()
 	if autoload_file != '/'
+		echomsg string(['php', phpcd_path, $NVIM_LISTEN_ADDRESS, autoload_file])
 		let g:phpcd_job_id = jobstart(['php', phpcd_path, $NVIM_LISTEN_ADDRESS, autoload_file])
 	endif
 endif
