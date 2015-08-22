@@ -197,6 +197,25 @@ class PHPCD
             }
         }
 
+        return array_merge($items, $this->getConstantsInfo($pattern));
+    }
+
+    private function getConstantsInfo($pattern)
+    {
+        $items = [];
+        foreach (get_defined_constants() as $name => $value) {
+            if ($pattern && strpos($name, $pattern) === false) {
+                continue;
+            }
+
+            $items[] = [
+                'word' => $name,
+                'abbr' => "@ $name = $value",
+                'kind' => 'd',
+                'icase' => 0,
+            ];
+        }
+
         return $items;
     }
 
