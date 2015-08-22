@@ -2,7 +2,7 @@ fun! SetUp()
 
 endf
 fun! TestCase_creates_various_global_hashes()
-    call phpcomplete#LoadData()
+    call phpcd#LoadData()
 
     call VUAssertTrue(exists('g:php_builtin_classes'))
     call VUAssertTrue(exists('g:php_builtin_classnames'))
@@ -13,7 +13,7 @@ fun! TestCase_creates_various_global_hashes()
 endf
 
 fun! TestCase_php_built_classnames_and_builtin_classes_are_indexed_lowercase()
-    call phpcomplete#LoadData()
+    call phpcd#LoadData()
 
     call VUAssertTrue(has_key(g:php_builtin_classes, 'datetime'))
     call VUAssertTrue(has_key(g:php_builtin_classnames, 'datetime'))

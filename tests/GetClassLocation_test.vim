@@ -15,10 +15,10 @@ fun! TestCase_return_VIMPHP_BUILTINOBJECT_when_classname_in_builtin_classes()
     let g:php_builtin_classes = {
                 \'datetime':{}
                 \}
-    let res = phpcomplete#GetClassLocation('DateTime', '')
+    let res = phpcd#GetClassLocation('DateTime', '')
     call VUAssertEquals('VIMPHP_BUILTINOBJECT', res)
 
-    let res = phpcomplete#GetClassLocation('DateTime', '\')
+    let res = phpcd#GetClassLocation('DateTime', '\')
     call VUAssertEquals('VIMPHP_BUILTINOBJECT', res)
 endf
 
@@ -30,15 +30,15 @@ fun! TestCase_return_current_file_path_when_classname_found_in_previous_lines_of
     exe ":silent! edit ".path
 
     exe ':6'
-    let res = phpcomplete#GetClassLocation('Foo', '')
+    let res = phpcd#GetClassLocation('Foo', '')
     call VUAssertEquals(path, res)
 
     exe ':14'
-    let res = phpcomplete#GetClassLocation('Foo2', '')
+    let res = phpcd#GetClassLocation('Foo2', '')
     call VUAssertEquals(path, res)
 
     exe ':21'
-    let res = phpcomplete#GetClassLocation('Foo3', '')
+    let res = phpcd#GetClassLocation('Foo3', '')
     call VUAssertEquals(path, res)
 
     silent! bw! %
@@ -56,22 +56,22 @@ fun! TestCase_return_class_location_from_tags()
     exe ":silent! edit ".path
     exe ':3'
 
-    let res = phpcomplete#GetClassLocation('Foo', '')
+    let res = phpcd#GetClassLocation('Foo', '')
     call VUAssertEquals('fixtures/GetClassLocation/foo.class.php', res)
 
-    let res = phpcomplete#GetClassLocation('FooInterface', '')
+    let res = phpcd#GetClassLocation('FooInterface', '')
     call VUAssertEquals('fixtures/GetClassLocation/foo.class.php', res)
 
-    let res = phpcomplete#GetClassLocation('FooTrait', '')
+    let res = phpcd#GetClassLocation('FooTrait', '')
     call VUAssertEquals('fixtures/GetClassLocation/foo.class.php', res)
 
     " when there are no namespaces to match for the classes from the tags file
     " should return the first class's location where the name matches
     exe ':set tags='.old_style_tags_path
-    let res = phpcomplete#GetClassLocation('Foo', '')
+    let res = phpcd#GetClassLocation('Foo', '')
     call VUAssertEquals('fixtures/GetClassLocation/foo.class.php', res)
 
-    let res = phpcomplete#GetClassLocation('FooInterface', '')
+    let res = phpcd#GetClassLocation('FooInterface', '')
     call VUAssertEquals('fixtures/GetClassLocation/foo.class.php', res)
 
     silent! bw! %

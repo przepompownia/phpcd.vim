@@ -5,7 +5,7 @@
 "	OPTIONS:
 "		let g:phpcomplete_enhance_jump_to_definition = 1/0  [default 1]
 "			When enabled the <C-]> and <C-W><C-]> (see g:phpcomplete_mappings)
-"			will be mapped to phpcomplete#JumpToDefinition() which will try to
+"			will be mapped to phpcd#JumpToDefinition() which will try to
 "			make a more educated guess of the current symbol's location than simple
 "			tag search. If the symbol's location cannot be found the original
 "			<C-]> or <C-W><C-]> functionality will be invoked
@@ -43,18 +43,18 @@ let g:phpcomplete_mappings = extend({
 
 if g:phpcomplete_enhance_jump_to_definition
 	if '' == mapcheck(g:phpcomplete_mappings['jump_to_def'])
-		silent! exe "nnoremap <silent> <unique> <buffer> ".g:phpcomplete_mappings['jump_to_def']." :<C-u>call phpcomplete#JumpToDefinition('normal')<CR>"
+		silent! exe "nnoremap <silent> <unique> <buffer> ".g:phpcomplete_mappings['jump_to_def']." :<C-u>call phpcd#JumpToDefinition('normal')<CR>"
 	endif
 	if '' == mapcheck(g:phpcomplete_mappings['jump_to_def_split'])
-		silent! exe "nnoremap <silent> <unique> <buffer> ".g:phpcomplete_mappings['jump_to_def_split']." :<C-u>call phpcomplete#JumpToDefinition('split')<CR>"
+		silent! exe "nnoremap <silent> <unique> <buffer> ".g:phpcomplete_mappings['jump_to_def_split']." :<C-u>call phpcd#JumpToDefinition('split')<CR>"
 	endif
 	if '' == mapcheck(g:phpcomplete_mappings['jump_to_def_vsplit'])
-		silent! exe "nnoremap <silent> <unique> <buffer> ".g:phpcomplete_mappings['jump_to_def_vsplit']." :<C-u>call phpcomplete#JumpToDefinition('vsplit')<CR>"
+		silent! exe "nnoremap <silent> <unique> <buffer> ".g:phpcomplete_mappings['jump_to_def_vsplit']." :<C-u>call phpcd#JumpToDefinition('vsplit')<CR>"
 	endif
 endif
 
 if !exists('g:phpcd_job_id')
-	let root = phpcomplete#getComposerRoot()
+	let root = phpcd#getComposerRoot()
 	if root != '/'
 		let autoload_file = root . '/vendor/autoload.php'
 		let phpcd_path = expand('<sfile>:p:h:h') . '/bin/phpcd_main.php'

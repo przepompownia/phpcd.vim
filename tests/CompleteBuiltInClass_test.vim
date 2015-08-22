@@ -17,7 +17,7 @@ fun! TestCase_returns_methods()
     \   },
     \},
     \}
-    let ret = phpcomplete#CompleteBuiltInClass('$d->', 'DateTime', 'add')
+    let ret = phpcd#CompleteBuiltInClass('$d->', 'DateTime', 'add')
     call VUAssertEquals(1, len(ret))
     call VUAssertEquals([{
                 \ 'word': 'add(',
@@ -44,7 +44,7 @@ fun! TestCase_returns_properties()
     \   },
     \},
     \}
-    let ret = phpcomplete#CompleteBuiltInClass('$dom->', 'DOMDocument', 'enc')
+    let ret = phpcd#CompleteBuiltInClass('$dom->', 'DOMDocument', 'enc')
     call VUAssertEquals(1, len(ret))
     call VUAssertEquals([{
                 \ 'word': 'encoding',
@@ -72,7 +72,7 @@ fun! TestCase_returns_static_methods()
     \   },
     \},
     \}
-    let ret = phpcomplete#CompleteBuiltInClass('DateTime::', 'DateTime', 'create')
+    let ret = phpcd#CompleteBuiltInClass('DateTime::', 'DateTime', 'create')
     call VUAssertEquals(1, len(ret))
     call VUAssertEquals([{
                 \ 'word': 'createFromFormat(',
@@ -100,7 +100,7 @@ fun! TestCase_returns_static_properties()
     \   },
     \},
     \}
-    let ret = phpcomplete#CompleteBuiltInClass('MongoCursor::', 'MongoCursor', '$tim')
+    let ret = phpcd#CompleteBuiltInClass('MongoCursor::', 'MongoCursor', '$tim')
     call VUAssertEquals(1, len(ret))
     call VUAssertEquals([{
                 \ 'word': '$timeout',
@@ -128,7 +128,7 @@ fun! TestCase_returns_constants()
     \   },
     \},
     \}
-    let ret = phpcomplete#CompleteBuiltInClass('Datetime::', 'DateTime', 'ATO')
+    let ret = phpcd#CompleteBuiltInClass('Datetime::', 'DateTime', 'ATO')
     call VUAssertEquals(1, len(ret))
     call VUAssertEquals([{
                 \ 'word': 'ATOM',

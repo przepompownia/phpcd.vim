@@ -14,7 +14,7 @@ fun! TestCase_complete_variables_from_current_file()
     below 1new
     exe ":silent! edit ".path
 
-    let res = phpcomplete#CompleteVariable('$find')
+    let res = phpcd#CompleteVariable('$find')
 
     " -> added for the variable detected as an object
     call VUAssertEquals([
@@ -43,7 +43,7 @@ fun! TestCase_complete_variables_built_in_global_variable()
                 \ '$this':'',
                 \ }
 
-    let res = phpcomplete#CompleteVariable('$_')
+    let res = phpcd#CompleteVariable('$_')
     call VUAssertEquals([
                 \ {'word': '$_GET', 'kind': 'v'},
                 \ {'word': '$_POST', 'kind': 'v'}],
@@ -64,7 +64,7 @@ fun! TestCase_complete_variables_from_tags()
     below 1new
     exe ":silent! edit ".path
 
-    let res = phpcomplete#CompleteVariable('$find_')
+    let res = phpcd#CompleteVariable('$find_')
     call VUAssertEquals([
                 \ {'word': '$find_instance_in_tags', 'info': '$find_instance_in_tags class foo', 'menu': 'foo', 'kind': 'v'},
                 \ {'word': '$find_variable_in_tags', 'kind': 'v'}],

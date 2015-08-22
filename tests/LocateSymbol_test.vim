@@ -16,7 +16,7 @@ endf
 fun! TestCase_returns_empty_strings_when_symbol_not_found()
     call SetUp()
 
-    let res = phpcomplete#LocateSymbol('no_such_thing', '', '', {})
+    let res = phpcd#LocateSymbol('no_such_thing', '', '', {})
     call VUAssertEquals(['', '', ''], res)
 endf
 
@@ -28,19 +28,19 @@ fun! TestCase_returns_symbol_locations()
     exe ":silent! edit ".path
 
     call cursor(18, 2)
-    let res = phpcomplete#LocateSymbol('get_foo', '', '', {})
+    let res = phpcd#LocateSymbol('get_foo', '', '', {})
     call VUAssertEquals([path, 15, 10], res)
 
     call cursor(18, 13)
-    let res = phpcomplete#LocateSymbol('baz', 'get_foo()->', '', {})
+    let res = phpcd#LocateSymbol('baz', 'get_foo()->', '', {})
     call VUAssertEquals([path, 4, 18], res)
 
     call cursor(20, 3)
-    let res = phpcomplete#LocateSymbol('Foo', '', '', {})
+    let res = phpcd#LocateSymbol('Foo', '', '', {})
     call VUAssertEquals([path, 2, 7], res)
 
     call cursor(20, 7)
-    let res = phpcomplete#LocateSymbol('baz', 'Foo::', '', {})
+    let res = phpcd#LocateSymbol('baz', 'Foo::', '', {})
     call VUAssertEquals([path, 4, 18], res)
 
     silent! bw! %
@@ -57,11 +57,11 @@ fun! TestCase_returns_symbol_locations_with_namespaces()
     exe ":silent! edit ".path
 
     call cursor(24, 25)
-    let res = phpcomplete#LocateSymbol('returnFoo2', '$f2->returnBaz2()->', 'NS1', {})
+    let res = phpcd#LocateSymbol('returnFoo2', '$f2->returnBaz2()->', 'NS1', {})
     call VUAssertEquals([foo2_path, 22, 18], res)
 
     call cursor(28, 10)
-    let res = phpcomplete#LocateSymbol('returnBaz2', '$f2->', 'NS1', {})
+    let res = phpcd#LocateSymbol('returnBaz2', '$f2->', 'NS1', {})
     call VUAssertEquals([foo2_path, 11, 18], res)
 
     silent! bw! %
@@ -77,7 +77,7 @@ fun! TestCase_returns_location_for_inherited_methods()
     exe ":silent! edit ".path
 
     call cursor(7, 10)
-    let res = phpcomplete#LocateSymbol('inherited', '$f->', '', {})
+    let res = phpcd#LocateSymbol('inherited', '$f->', '', {})
     call VUAssertEquals([base_path, 5, 18], res)
 
     silent! bw! %
@@ -91,11 +91,11 @@ fun! TestCase_returns_locations_for_reference_returning_functions()
     exe ":silent! edit ".path
 
     call cursor(16, 5)
-    let res = phpcomplete#LocateSymbol('return_foo_ref', '', '', {})
+    let res = phpcd#LocateSymbol('return_foo_ref', '', '', {})
     call VUAssertEquals([path, 13, 11], res)
 
     call cursor(16, 32)
-    let res = phpcomplete#LocateSymbol('return_foo_ref_method', 'return_foo_ref()->', '', {})
+    let res = phpcd#LocateSymbol('return_foo_ref_method', 'return_foo_ref()->', '', {})
     call VUAssertEquals([path, 4, 19], res)
 
     silent! bw! %

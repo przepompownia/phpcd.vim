@@ -6,22 +6,22 @@ endf
 fun! TestCase_returns_empty_string_when_no_comment_block_found()
     call SetUp()
 
-    let ret = phpcomplete#GetDocBlock(g:fixture_class_content, 'function\<not_commented\>')
+    let ret = phpcd#GetDocBlock(g:fixture_class_content, 'function\<not_commented\>')
     call VUAssertEquals('', ret)
 
-    let ret = phpcomplete#GetDocBlock(g:fixture_class_content, '    public $nocomment;')
+    let ret = phpcd#GetDocBlock(g:fixture_class_content, '    public $nocomment;')
     call VUAssertEquals('', ret)
 endf
 
 fun! TestCase_returns_the_comment_block_without_last_and_first_line_and_without_leading_stars()
     call SetUp()
 
-    let ret = phpcomplete#GetDocBlock(g:fixture_class_content, 'function\s*\<minimally_commented\>')
+    let ret = phpcd#GetDocBlock(g:fixture_class_content, 'function\s*\<minimally_commented\>')
     call VUAssertEquals(
                 \ "minimally_commented",
                 \ ret)
 
-    let ret = phpcomplete#GetDocBlock(g:fixture_class_content, '    public $foo;')
+    let ret = phpcd#GetDocBlock(g:fixture_class_content, '    public $foo;')
     call VUAssertEquals(
                 \ "@var Foo",
                 \ ret)
@@ -30,7 +30,7 @@ endf
 fun! TestCase_recognizes_a_oneline_comment_block_for_properties()
     call SetUp()
 
-    let ret = phpcomplete#GetDocBlock(g:fixture_class_content, '    public $onliner;')
+    let ret = phpcd#GetDocBlock(g:fixture_class_content, '    public $onliner;')
     call VUAssertEquals(
                 \ "@var Bar",
                 \ ret)

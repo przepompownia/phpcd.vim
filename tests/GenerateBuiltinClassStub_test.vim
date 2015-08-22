@@ -37,7 +37,7 @@ fun! TestCase_can_generates_empty_class() " {{{
 	\   'static_methods': {
 	\   },
 	\}
-    let res = phpcomplete#GenerateBuiltinClassStub('class', g:php_builtin_classes['fictionalbuiltinclass'])
+    let res = phpcd#GenerateBuiltinClassStub('class', g:php_builtin_classes['fictionalbuiltinclass'])
     call VUAssertEquals({
 				\ 'file': 'VIMPHP_BUILTINOBJECT',
 				\ 'mtime': 0,
@@ -58,7 +58,7 @@ fun! TestCase_can_generates_empty_interface() " {{{
 	\   'methods': {
 	\   },
 	\}
-    let res = phpcomplete#GenerateBuiltinClassStub('interface', g:php_builtin_interfaces['fictionalbuiltininterface'])
+    let res = phpcd#GenerateBuiltinClassStub('interface', g:php_builtin_interfaces['fictionalbuiltininterface'])
     call VUAssertEquals({
 				\ 'file': 'VIMPHP_BUILTINOBJECT',
 				\ 'mtime': 0,
@@ -97,7 +97,7 @@ fun! TestCase_can_generates_class_from_class_info() " {{{
 	let path = expand('%:p:h').'/'.'fixtures/GenerateBuiltinClassStub/fictionalbuiltinclass.txt'
 	let good_answer = join(readfile(path), "\n")
 
-    let res = phpcomplete#GenerateBuiltinClassStub('class', g:php_builtin_classes['fictionalbuiltinclass'])
+    let res = phpcd#GenerateBuiltinClassStub('class', g:php_builtin_classes['fictionalbuiltinclass'])
     call VUAssertEquals({
 				\ 'file': 'VIMPHP_BUILTINOBJECT',
 				\ 'mtime': 0,
@@ -126,7 +126,7 @@ fun! TestCase_can_generates_class_from_class_info() " {{{
 	let path = expand('%:p:h').'/'.'fixtures/GenerateBuiltinClassStub/arrayaccess.txt'
 	let good_answer = join(readfile(path), "\n")
 
-    let res = phpcomplete#GenerateBuiltinClassStub('interface', g:php_builtin_interfaces['arrayaccess'])
+    let res = phpcd#GenerateBuiltinClassStub('interface', g:php_builtin_interfaces['arrayaccess'])
     call VUAssertEquals({
 				\ 'file': 'VIMPHP_BUILTINOBJECT',
 				\ 'mtime': 0,

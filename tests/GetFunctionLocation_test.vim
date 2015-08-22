@@ -12,13 +12,13 @@ fun! TestCase_return_VIMPHP_BUILTINFUNCTION_when_function_name_is_builtin()
     \ 'array_map(': 'callable $callback, array $array1 [, array $...] | array',
     \ }
 
-    let res = phpcomplete#GetFunctionLocation('array_map', '')
+    let res = phpcd#GetFunctionLocation('array_map', '')
     call VUAssertEquals('VIMPHP_BUILTINFUNCTION', res)
 
-    let res = phpcomplete#GetFunctionLocation('array_map', '\')
+    let res = phpcd#GetFunctionLocation('array_map', '\')
     call VUAssertEquals('VIMPHP_BUILTINFUNCTION', res)
 
-    let res = phpcomplete#GetFunctionLocation('array_map', 'FooNS')
+    let res = phpcd#GetFunctionLocation('array_map', 'FooNS')
     call VUAssertEquals('VIMPHP_BUILTINFUNCTION', res)
 endf
 
@@ -29,11 +29,11 @@ fun! TestCase_return_current_file_path_when_function_declaration_is_found_in_the
     below 1new
     exe ":silent! edit ".path
 
-    let res = phpcomplete#GetFunctionLocation('foo', '')
+    let res = phpcd#GetFunctionLocation('foo', '')
     call VUAssertEquals(path, res)
 
     " function names are case in-sensitive
-    let res = phpcomplete#GetFunctionLocation('foo2', '')
+    let res = phpcd#GetFunctionLocation('foo2', '')
     call VUAssertEquals(path, res)
 
     silent! bw! %
@@ -50,10 +50,10 @@ fun! TestCase_return_function_location_from_tags()
     exe ":silent! edit ".path
     exe ':3'
 
-    let res = phpcomplete#GetFunctionLocation('foo', '')
+    let res = phpcd#GetFunctionLocation('foo', '')
     call VUAssertEquals('fixtures/GetFunctionLocation/foo.function.php', res)
 
-    let res = phpcomplete#GetFunctionLocation('foo2', '')
+    let res = phpcd#GetFunctionLocation('foo2', '')
     call VUAssertEquals('fixtures/GetFunctionLocation/foo.function.php', res)
 
     silent! bw! %

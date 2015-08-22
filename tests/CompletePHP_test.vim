@@ -12,7 +12,7 @@ fun! TestCase_split_height_doesnt_change_when_completing()
     " measure height
     let before_height = winheight(0)
     " trigger plugin
-    let ret = phpcomplete#CompletePHP(0, 2)
+    let ret = phpcd#CompletePHP(0, 2)
     " take a second measurement
     let after_height = winheight(0)
 

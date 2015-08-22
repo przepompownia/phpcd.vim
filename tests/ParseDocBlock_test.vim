@@ -4,7 +4,7 @@ endf
 fun! TestCase_collects_lines_up_until_the_first_param_var_or_return_as_description_whitespace_trimmed_down_from_the_ends()
     call SetUp()
 
-    let ret = phpcomplete#ParseDocBlock(
+    let ret = phpcd#ParseDocBlock(
                 \ "short description\n".
                 \ "\n".
                 \ "long description line\n".
@@ -23,12 +23,12 @@ endf
 fun! TestCase_extracts_return_type_and_description()
     call SetUp()
 
-    let ret = phpcomplete#ParseDocBlock("@return Foo some foo\n")
+    let ret = phpcd#ParseDocBlock("@return Foo some foo\n")
     call VUAssertEquals("Foo", ret.return.type)
     call VUAssertEquals("some foo", ret.return.description)
 
     " description is empty string when not specified
-    let ret = phpcomplete#ParseDocBlock("@return Foo\n")
+    let ret = phpcd#ParseDocBlock("@return Foo\n")
     call VUAssertEquals("Foo", ret.return.type)
     call VUAssertEquals("", ret.return.description)
 endf
@@ -36,7 +36,7 @@ endf
 fun! TestCase_extracts_parameters_with_types_and_descriptions()
     call SetUp()
 
-    let ret = phpcomplete#ParseDocBlock("".
+    let ret = phpcd#ParseDocBlock("".
                 \ "@param mixed $foo\n".
                 \ "@param Foo $bar some description\n")
 
@@ -52,7 +52,7 @@ endf
 fun! TestCase_extracts_throws_and_exception_lines_with_type_and_description()
     call SetUp()
 
-    let ret = phpcomplete#ParseDocBlock("".
+    let ret = phpcd#ParseDocBlock("".
                 \ "@exception Foo on full moons\n".
                 \ "@throws Foo\n")
 
@@ -66,11 +66,11 @@ endf
 fun! TestCase_extracts_var_lines_with_type_and_description()
     call SetUp()
 
-    let ret = phpcomplete#ParseDocBlock("@var Foo some description\n")
+    let ret = phpcd#ParseDocBlock("@var Foo some description\n")
     call VUAssertEquals("Foo", ret.var.type)
     call VUAssertEquals("some description", ret.var.description)
 
-    let ret = phpcomplete#ParseDocBlock("@var Foo\n")
+    let ret = phpcd#ParseDocBlock("@var Foo\n")
     call VUAssertEquals("Foo", ret.var.type)
     call VUAssertEquals("", ret.var.description)
 endf

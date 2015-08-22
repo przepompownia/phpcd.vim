@@ -10,17 +10,17 @@ fun! TestCase_reads_in_the_class_from_the_list_of_lines()
     call SetUp()
 
     let location =  expand('%:p:h')."/".'fixtures/GetClassContents/foo.class.php'
-    let contents = phpcomplete#GetClassContents(location, 'FooClass')
+    let contents = phpcd#GetClassContents(location, 'FooClass')
     let expected = join(readfile(location)[1:], "\n")
     call VUAssertEquals(expected, contents)
 
     let location =  expand('%:p:h')."/".'fixtures/GetClassContents/foo_whitespace.class.php'
-    let contents = phpcomplete#GetClassContents(location, 'FooClass')
+    let contents = phpcd#GetClassContents(location, 'FooClass')
     let expected = join(readfile(location)[4:9], "\n")
     call VUAssertEquals(expected, contents)
 
     let location =  expand('%:p:h')."/".'fixtures/GetClassContents/foo.interface.php'
-    let contents = phpcomplete#GetClassContents(location, 'FooInterface')
+    let contents = phpcd#GetClassContents(location, 'FooInterface')
     let expected = join(readfile(location)[1:], "\n")
     call VUAssertEquals(expected, contents)
 endf
@@ -29,7 +29,7 @@ fun! TestCase_only_reads_in_the_class_content()
     call SetUp()
 
     let location =  expand('%:p:h')."/".'fixtures/GetClassContents/foo_with_extra_content.class.php'
-    let contents = phpcomplete#GetClassContents(location, 'FooClass')
+    let contents = phpcd#GetClassContents(location, 'FooClass')
     let expected = join(readfile(location)[5:8], "\n")
     call VUAssertEquals(expected, contents)
 endf
@@ -42,7 +42,7 @@ fun! TestCase_reads_in_the_extended_class_content()
     let location         =  expand('%:p:h')."/".'fixtures/GetClassContents/extends/foo_extends_bar.class.php'
     let extends_location =  expand('%:p:h')."/".'fixtures/GetClassContents/extends/bar.class.php'
 
-    let contents = phpcomplete#GetClassContents(location, 'FooClass')
+    let contents = phpcd#GetClassContents(location, 'FooClass')
 
     let expected = readfile(location)[2]."\n".readfile(extends_location)[2]
     call VULog(expected)
@@ -64,7 +64,7 @@ fun! TestCase_reads_in_the_extended_classes_recursive()
     let expected .= readfile(extends_extends_location)[2]
     call VULog(expected)
 
-    let contents = phpcomplete#GetClassContents(location, 'FooClass2')
+    let contents = phpcd#GetClassContents(location, 'FooClass2')
     call VUAssertEquals(expected, contents)
 endf
 
@@ -80,7 +80,7 @@ fun! TestCase_reads_in_the_extended_classes_recursive_with_namespaces()
     let expected .= readfile(extends_location)[3]
     call VULog(expected)
 
-    let contents = phpcomplete#GetClassContents(location, 'NamespacedFoo2')
+    let contents = phpcd#GetClassContents(location, 'NamespacedFoo2')
     call VUAssertEquals(expected, contents)
 endf
 
@@ -97,7 +97,7 @@ fun! TestCase_reads_in_the_extended_classes_with_imports()
     let expected .= readfile(extends_location)[3]
     call VULog(expected)
 
-    let contents = phpcomplete#GetClassContents(location, 'NamespacedFoo2')
+    let contents = phpcd#GetClassContents(location, 'NamespacedFoo2')
     call VUAssertEquals(expected, contents)
 endf
 
@@ -117,7 +117,7 @@ fun! TestCase_handles_matching_class_name_extends_with_different_namespaces()
     exe ":silent! edit ".location
 
     exe ':7'
-    let structure = phpcomplete#GetClassContentsStructure(location, class_contents, 'Foo')
+    let structure = phpcd#GetClassContentsStructure(location, class_contents, 'Foo')
     call VUAssertEquals(expected, structure[0].content."\n".structure[1].content)
 
     silent! bw! %
@@ -132,7 +132,7 @@ fun! TestCase_returns_contents_of_a_class_regardless_of_comments_or_strings()
     below 1new
     exe ":silent! edit ".path1
 
-    let structure = phpcomplete#GetClassContentsStructure(path1, contents1, 'Foo2')
+    let structure = phpcd#GetClassContentsStructure(path1, contents1, 'Foo2')
     call VUAssertEquals(expected1, structure[0].content)
 
     silent! bw! %
@@ -149,7 +149,7 @@ fun! TestCase_returns_contents_of_used_traits_too()
     below 1new
     exe ":silent! edit ".path1
 
-    let contents = phpcomplete#GetClassContents(path1, 'Foo3')
+    let contents = phpcd#GetClassContents(path1, 'Foo3')
     call VUAssertEquals(expected, contents)
 
     silent! bw! %
@@ -171,12 +171,12 @@ fun! TestCase_returns_class_content_from_inside_the_same_file()
     " plugin should try to find it in the same file that the extending class
     " located
     exe ':8'
-    let structure = phpcomplete#GetClassContentsStructure(location, readfile(location), 'SomeTraitedClass')
+    let structure = phpcd#GetClassContentsStructure(location, readfile(location), 'SomeTraitedClass')
     call VUAssertEquals(expected, structure[0].content."\n".structure[1].content)
 
     " The function should just skip any non-locatable extended class
     exe ':12'
-    let structure = phpcomplete#GetClassContentsStructure(location, readfile(location), 'ExtendsNonExistsing')
+    let structure = phpcd#GetClassContentsStructure(location, readfile(location), 'ExtendsNonExistsing')
     call VUAssertEquals(expected2, structure[0].content)
 
     silent! bw! %
@@ -194,10 +194,10 @@ fun! TestCase_returns_contents_of_implemented_interfaces()
     below 1new
     exe ":silent! edit ".path2
 
-    let contents = phpcomplete#GetClassContents(path2, 'X')
+    let contents = phpcd#GetClassContents(path2, 'X')
     call VUAssertEquals(expected, contents)
 
-    let contents2 = phpcomplete#GetClassContents(path2, 'Y')
+    let contents2 = phpcd#GetClassContents(path2, 'Y')
     call VUAssertEquals(expected2, contents2)
 
     silent! bw! %
@@ -212,7 +212,7 @@ fun! TestCase_returns_the_contents_of_extended_interfaces()
     below 1new
     exe ":silent! edit ".path
 
-    let contents = phpcomplete#GetClassContentsStructure(path, readfile(path), 'FooFoo2')
+    let contents = phpcd#GetClassContentsStructure(path, readfile(path), 'FooFoo2')
     call VUAssertEquals('FooFoo2', contents[0].class)
     call VUAssertEquals('Foo',     contents[1].class)
     call VUAssertEquals('Foo2',    contents[2].class)

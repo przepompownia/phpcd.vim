@@ -14,7 +14,7 @@ fun! TestCase_returns_class_properties_from_current_file()
     below 1new
     exe ":silent! edit ".path
 
-    let res = phpcomplete#CompleteUnknownClass("prop", "$a->")
+    let res = phpcd#CompleteUnknownClass("prop", "$a->")
 
     call VUAssertEquals([
                 \ {'word': 'property1', 'info': ' ', 'kind': 'v'},
@@ -31,7 +31,7 @@ fun! TestCase_returns_functions_from_current_file()
     below 1new
     exe ":silent! edit ".path
 
-    let res = phpcomplete#CompleteUnknownClass("met", "$a->")
+    let res = phpcd#CompleteUnknownClass("met", "$a->")
 
     " TODO: At this moment, the code finds private and protected methods, it should not do that
     " TODO: At this moment, the code doesn't take filter for staticness of results
@@ -57,7 +57,7 @@ fun! TestCase_completes_function_signature_from_tags_if_field_available()
     below 1new
     exe ":silent! edit ".path
 
-    let res = phpcomplete#CompleteUnknownClass("method_with_", "$a->")
+    let res = phpcd#CompleteUnknownClass("method_with_", "$a->")
 
     " TODO: At this moment, the code finds functions that are not in a class
     " (so they are no methods)
@@ -79,7 +79,7 @@ fun! TestCase_returns_functions_from_tags()
     below 1new
     exe ":silent! edit ".path
 
-    let res = phpcomplete#CompleteUnknownClass("fun", "$a->")
+    let res = phpcd#CompleteUnknownClass("fun", "$a->")
 
     " TODO: At this moment, the code finds functions that are not in a class
     " (so they are no methods)
@@ -107,7 +107,7 @@ fun! TestCase_returns_built_in_object_functions()
                 \ 'DateTime::setDate(': 'int $year, int $month, int $day | DateTime',
                 \ }
 
-    let res = phpcomplete#CompleteUnknownClass("set", "$d->")
+    let res = phpcd#CompleteUnknownClass("set", "$d->")
 
     " TODO: At this moment, the code doesn't take filter for staticness
     call VUAssertEquals([{
@@ -123,7 +123,7 @@ fun! TestCase_returns_empty_list_when_unknown_class_completion_disabled()
     call SetUp()
 
     let g:phpcomplete_complete_for_unknown_classes = 0
-    let res = phpcomplete#CompleteUnknownClass("setDat", "$d->")
+    let res = phpcd#CompleteUnknownClass("setDat", "$d->")
     call VUAssertEquals([], res)
 endf
 
