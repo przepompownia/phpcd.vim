@@ -5,9 +5,10 @@ class PHPID extends PHPCD
 {
     private $index_dir;
 
-    public function __construct($socket_path, $autoload_path = null, $map_file)
+    public function __construct($socket_path, $autoload_path, $map_file, $root)
     {
         $this->map_file = $map_file;
+        $this->root = $root;
 
         parent::__construct($socket_path, $autoload_path);
     }
@@ -21,29 +22,46 @@ class PHPID extends PHPCD
         $this->callRpc('vim_command',  $command);
     }
 
+    private function getIndexDir()
+    {
+        return $this->root . '/.phpcd';
+    }
+
+    private function getIntefacesDir()
+    {
+        return $this->getIndexDir() . '/interfaces';
+    }
+
+    private function getExtendsDir()
+    {
+        return $this->getIndexDir() . '/extends';
+    }
+
     private function initIndexDir()
     {
-        $this->index_dir = '/tmp/phpid/' . getmypid();
-        $this->extends_dir = $this->index_dir . '/extends';
-        if (!is_dir($this->extends_dir)) {
-            mkdir($this->extends_dir, 0700, true);
+        $extends_dir = $this->getExtendsDir();
+        if (!is_dir($extends_dir)) {
+            mkdir($extends_dir, 0700, true);
         }
 
-        $this->interfaces_dir = $this->index_dir . '/interfaces';
-        if (!is_dir($this->interfaces_dir)) {
-            mkdir($this->interfaces_dir, 0700, true);
+        $interfaces_dir = $this->getIntefacesDir();
+        if (!is_dir($interfaces_dir)) {
+            mkdir($interfaces_dir, 0700, true);
         }
     }
 
     /**
      * 解析 autoload_classmap.php 生成类的继承关系和接口的实现关系
      */
-    public function index()
+    public function index($is_force = null)
     {
-        $map = require "$this->map_file";
+        if (is_dir($this->getIndexDir()) && !$is_force) {
+            return;
+        }
+
         $this->initIndexDir();
 
-        $ct = time();
+        $map = require "$this->map_file";
         foreach ($map as $class_name => $file_path) {
             $pid = pcntl_fork();
             if ($pid == -1) {
@@ -66,15 +84,15 @@ class PHPID extends PHPCD
     public function loop()
     {
         $this->index();
-
         // 索引完成方可使用
         $this->setChannelId0();
+
         parent::loop();
     }
 
     private function updateParentIndex($parent, $child)
     {
-        $index_file = $this->extends_dir . '/' . $this->getIndexFileName($parent);
+        $index_file = $this->getExtendsDir() . '/' . $this->getIndexFileName($parent);
         if (is_file($index_file)) {
             $childs = json_decode(file_get_contents($index_file));
         } else {
@@ -87,7 +105,7 @@ class PHPID extends PHPCD
 
     private function updateInterfaceIndex($interface, $implementation)
     {
-        $index_file = $this->interfaces_dir . '/' . $this->getIndexFileName($interface);
+        $index_file = $this->getIntefacesDir() . '/' . $this->getIndexFileName($interface);
         if (is_file($index_file)) {
             $childs = json_decode(file_get_contents($index_file));
         } else {
@@ -126,5 +144,23 @@ class PHPID extends PHPCD
      */
     private function update($class_name)
     {
+    }
+
+    public function ls($name, $is_interface = false)
+    {
+        $base_path = $is_interface ? $this->getIntefacesDir() : $this->getExtendsDir();
+        $path = $base_path . '/' . $this->getIndexFileName($name);
+        if (!is_file($path)) {
+            return [];
+        }
+
+        $list = json_decode(file_get_contents($path));
+        if (!is_array($list)) {
+            return [];
+        }
+
+        sort($list);
+
+        return $list;
     }
 }

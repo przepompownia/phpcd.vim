@@ -98,6 +98,7 @@ class PHPCD
 
     private function on($msg)
     {
+        var_dump($msg);
         $msg_id = null;
         if (count($msg) == 4) {
             // rpc request
