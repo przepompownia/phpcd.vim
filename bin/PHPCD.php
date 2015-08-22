@@ -148,7 +148,15 @@ class PHPCD
         return call_user_func_array([$this, $method], $args);
     }
 
-    private function info($class_name, $pattern)
+    public function info ($class_name, $pattern) {
+        if ($class_name) {
+            return $this->classInfo($class_name, $pattern);
+        } else {
+            return $this->functionOrConstantInfo($pattern);
+        }
+    }
+
+    private function classInfo($class_name, $pattern)
     {
         $reflection = new ReflectionClass($class_name);
         $items = [];
@@ -170,6 +178,46 @@ class PHPCD
         }
 
         return $items;
+    }
+
+    private function functionOrConstantInfo($pattern)
+    {
+        $items = [];
+        $funcs = get_defined_functions();
+        foreach ($funcs['internal'] as $func) {
+            $info = $this->getFunctionInfo($func, $pattern);
+            if ($info) {
+                $items[] = $info;
+            }
+        }
+        foreach ($funcs['user'] as $func) {
+            $info = $this->getFunctionInfo($func, $pattern);
+            if ($info) {
+                $items[] = $info;
+            }
+        }
+
+        return $items;
+    }
+
+    private function getFunctionInfo($name, $pattern = null)
+    {
+        if ($pattern && strpos($name, $pattern) === false) {
+            return null;
+        }
+
+        $reflection = new ReflectionFunction($name);
+        $params = array_map(function ($param) {
+            return $param->getName();
+        }, $reflection->getParameters());
+
+        return [
+            'word' => $name,
+            'abbr' => "$name(" . join(', ', $params) . ')',
+            'info' => preg_replace('#/?\*(\*|/)?#','', $reflection->getDocComment()),
+            'kind' => 'f',
+            'icase' => 1,
+        ];
     }
 
     private function getMethodInfo($method, $pattern = null)
