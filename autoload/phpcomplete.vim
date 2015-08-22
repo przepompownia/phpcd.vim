@@ -1041,38 +1041,39 @@ function! phpcomplete#LocateSymbol(symbol, symbol_context, symbol_namespace, cur
 		if (has_key(a:current_imports, a:symbol))
 			let full_classname = a:current_imports[a:symbol]['name']
 		else
-			let full_classname = a:current_namespace . '\' . a:symbol
+			let full_classname = a:symbol_namespace . '\' . a:symbol
 		endif
 
 		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, '')
 		return [path, line, 0]
+	elseif a:symbol_context != ''
+		" try to find interface method's implementation
+		let interface = phpcomplete#GetClassName(line('.'), a:symbol_context, a:symbol_namespace, a:current_imports)
+		if interface != '' && g:phpid_channel_id >= 0
+			let impls = rpcrequest(g:phpid_channel_id, 'ls', interface, 1)
+			let impl = ''
+			if len(impls) == 1
+				let impl = impls[0]
+			elseif len(impls) > 1
+				let impls_list = []
+				let impls_len = len(impls)
+				for i in range(1, impls_len)
+					call add(impls_list, printf("%2d %s", i, impls[i - 1]))
+				endfor
+				let index = inputlist(impls_list)
+				if index >= 1 && index <= impls_len
+					let impl = impls[index - 1]
+				endif
+			endif
+
+			if impl != ''
+				let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', impl, a:symbol)
+				return [path, line, 0]
+			endif
+		endif
 	else
 		" it could be a function
-		let function_file = phpcomplete#GetFunctionLocation(a:symbol, a:symbol_namespace)
-		if function_file != '' && filereadable(function_file)
-			" Function found in function_file
-			call s:readfileToTmpbuffer(function_file)
-
-			call search('\cfunction\_s\+&\=\zs\<'.search_symbol.'\(\>\|$\)', 'wc')
-
-			let line = line('.')
-			let col  = col('.')
-			silent! exe 'bw! %'
-			return [function_file, line, col]
-		endif
-
-		let class_file = phpcomplete#GetClassLocation(a:symbol, a:symbol_namespace)
-		if class_file != '' && filereadable(class_file)
-			" Class or interface found in class_file
-			call s:readfileToTmpbuffer(class_file)
-
-			call search('\c\(interface\|class\)\_s\+\zs\<'.search_symbol.'\(\>\|$\)', 'wc')
-
-			let line = line('.')
-			let col  = col('.')
-			silent! exe 'bw! %'
-			return [class_file, line, col]
-		endif
+		" TODO impl
 	endif
 
 	return unknow_location
@@ -1742,6 +1743,27 @@ function! phpcomplete#GetClassName(start_line, context, current_namespace, impor
 					let [classname_candidate, class_candidate_namespace] = phpcomplete#GetCallChainReturnType(classname_candidate, class_candidate_namespace, class_candidate_imports, methodstack)
 					" return absolute classname, without leading \
 					return (class_candidate_namespace == '\' || class_candidate_namespace == '') ? classname_candidate : class_candidate_namespace.'\'.classname_candidate
+				endif
+			endif
+
+			let i += 1
+		endwhile
+	elseif a:context =~ '\vpublic|protected|private|final|static'
+		let i = 1
+		while i < a:start_line
+			let line = getline(a:start_line - i)
+
+			" Don't complete self:: or $this if outside of a class
+			" (assumes correct indenting)
+			if line =~ '^}'
+				return ''
+			endif
+
+			if line =~? '\v^\s*interface\s'
+				let class_name = matchstr(line, '\cinterface\s\+\zs'.class_name_pattern.'\ze')
+
+				if class_name != ''
+					return a:current_namespace . '\' . class_name
 				endif
 			endif
 
@@ -2912,17 +2934,15 @@ let g:php_builtin_vars ={
 endfunction
 " }}}
 
-function! phpcomplete#getProjectRoot()
-	let cwd = getcwd()
-	let root = cwd
+function! phpcomplete#getComposerRoot() " {{{
+	let root = getcwd()
 	while root != "/"
 		if (filereadable(root . "/vendor/autoload.php"))
 			break
 		endif
 		let root = fnamemodify(root, ":h")
 	endwhile
-
 	return root
-endfunction
+endfunction " }}}
 
 " vim: foldmethod=marker:noexpandtab:ts=4:sts=4:sw=4

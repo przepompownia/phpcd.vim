@@ -1,12 +1,4 @@
 <?php
-fclose(STDIN);
-fclose(STDOUT);
-fclose(STDERR);
-$home_path = getenv('HOME');
-$STDIN = fopen('/dev/null', 'r');
-$STDOUT = fopen($home_path . '/.phpcd.log', 'wb');
-$STDERR = fopen($home_path . '/.phpcd.log', 'wb');
-
 class PHPCD
 {
     private static $req_msg_id = 0;
@@ -37,13 +29,13 @@ class PHPCD
         $this->setChannelId();
     }
 
-    private function getChannelId()
+    protected function getChannelId()
     {
         list($result, $error) = $this->callRpc('vim_get_api_info');
         return $result[0];
     }
 
-    private function setChannelId()
+    protected function setChannelId()
     {
         $command = 'let g:phpcd_channel_id = ' . $this->getChannelId();
         $this->callRpc('vim_command',  $command);
@@ -52,7 +44,7 @@ class PHPCD
     /**
      * @return [$result, $error]
      */
-    private function callRpc()
+    protected function callRpc()
     {
         $args = func_get_args();
         if (count($args) === 0) {
@@ -106,6 +98,7 @@ class PHPCD
 
     private function on($msg)
     {
+        var_dump($msg);
         $msg_id = null;
         if (count($msg) == 4) {
             // rpc request
@@ -228,10 +221,3 @@ class PHPCD
         ];
     }
 }
-
-$socket_path = $argv[1];
-$project_root = $argv[2];
-$autoload_path = $project_root . '/vendor/autoload.php';
-
-$cd = new PHPCD($socket_path, $autoload_path);
-$cd->loop();
