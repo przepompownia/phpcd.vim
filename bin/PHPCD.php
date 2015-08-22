@@ -29,13 +29,13 @@ class PHPCD
         $this->setChannelId();
     }
 
-    private function getChannelId()
+    protected function getChannelId()
     {
         list($result, $error) = $this->callRpc('vim_get_api_info');
         return $result[0];
     }
 
-    private function setChannelId()
+    protected function setChannelId()
     {
         $command = 'let g:phpcd_channel_id = ' . $this->getChannelId();
         $this->callRpc('vim_command',  $command);
@@ -44,7 +44,7 @@ class PHPCD
     /**
      * @return [$result, $error]
      */
-    private function callRpc()
+    protected function callRpc()
     {
         $args = func_get_args();
         if (count($args) === 0) {

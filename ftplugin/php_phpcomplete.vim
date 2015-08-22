@@ -54,11 +54,15 @@ if g:phpcomplete_enhance_jump_to_definition
 endif
 
 if !exists('g:phpcd_job_id')
-	let phpcd_path = expand('<sfile>:p:h:h') . '/bin/phpcd_main.php'
-	let autoload_file = phpcomplete#getComposerAutoloadFile()
-	if autoload_file != '/'
-		echomsg string(['php', phpcd_path, $NVIM_LISTEN_ADDRESS, autoload_file])
+	let root = phpcomplete#getComposerRoot()
+	if root != '/'
+		let autoload_file = root . '/vendor/autoload.php'
+		let phpcd_path = expand('<sfile>:p:h:h') . '/bin/phpcd_main.php'
 		let g:phpcd_job_id = jobstart(['php', phpcd_path, $NVIM_LISTEN_ADDRESS, autoload_file])
+
+		let phpid_path = expand('<sfile>:p:h:h') . '/bin/phpid_main.php'
+		let class_map_file = root . '/vendor/composer/autoload_classmap.php'
+		let g:phpid_job_id = jobstart(['php', phpid_path, $NVIM_LISTEN_ADDRESS, autoload_file, class_map_file])
 	endif
 endif
 

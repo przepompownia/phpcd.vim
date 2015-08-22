@@ -2912,13 +2912,11 @@ let g:php_builtin_vars ={
 endfunction
 " }}}
 
-function! phpcomplete#getComposerAutoloadFile() " {{{
-	let cwd = getcwd()
-	let root = cwd
+function! phpcomplete#getComposerRoot() " {{{
+	let root = getcwd()
 	while root != "/"
-		let path = root . "/vendor/autoload.php"
-		if (filereadable(path))
-			return path
+		if (filereadable(root . "/vendor/autoload.php"))
+			break
 		endif
 		let root = fnamemodify(root, ":h")
 	endwhile
