@@ -6,68 +6,68 @@
 "
 "	OPTIONS:
 "
-"		let g:phpcomplete_relax_static_constraint = 1/0  [default 0]
+"		let g:phpcd_relax_static_constraint = 1/0  [default 0]
 "			Enables completion for non-static methods when completing for static context (::).
 "			This generates E_STRICT level warning, but php calls these methods nontheless.
 "
-"		let g:phpcomplete_complete_for_unknown_classes = 1/0 [default 0]
+"		let g:phpcd_complete_for_unknown_classes = 1/0 [default 0]
 "			Enables completion of variables and functions in "everything under the sun" fashion
 "			when completing for an instance or static class context but the code can't tell the class
 "			or locate the file that it lives in.
 "			The completion list generated this way is only filtered by the completion base
 "			and generally not much more accurate then simple keyword completion.
 "
-"		let g:phpcomplete_search_tags_for_variables = 1/0 [default 0]
+"		let g:phpcd_search_tags_for_variables = 1/0 [default 0]
 "			Enables use of tags when the plugin tries to find variables.
 "			When enabled the plugin will search for the variables in the tag files with kind 'v',
 "			lines like $some_var = new Foo; but these usually yield highly inaccurate results and
 "			can	be fairly slow.
 "
-"		let g:phpcomplete_min_num_of_chars_for_namespace_completion = n [default 1]
+"		let g:phpcd_min_num_of_chars_for_namespace_completion = n [default 1]
 "			This option controls the number of characters the user needs to type before
 "			the tags will be searched for namespaces and classes in typed out namespaces in
 "			"use ..." context. Setting this to 0 is not recommended because that means the code
 "			have to scan every tag, and vim's taglist() function runs extremly slow with a
 "			"match everything" pattern.
 "
-"		let g:phpcomplete_parse_docblock_comments = 1/0 [default 0]
+"		let g:phpcd_parse_docblock_comments = 1/0 [default 0]
 "			When enabled the preview window's content will include information
 "			extracted from docblock comments of the completions.
 "			Enabling this option will add return types to the completion menu for functions too.
 "
-"		let g:phpcomplete_cache_taglists = 1/0 [default 1]
+"		let g:phpcd_cache_taglists = 1/0 [default 1]
 "			When enabled the taglist() lookups will be cached and subsequent searches
 "			for the same pattern will not check the tagfiles any more, thus making the
 "			lookups faster. Cache expiration is based on the mtimes of the tag files.
 "
-"		let g:phpcomplete_add_function_extensions = [...]
-"		let g:phpcomplete_add_class_extensions = [...]
-"		let g:phpcomplete_add_interface_extensions = [...]
-"		let g:phpcomplete_add_constant_extensions = [...]
-"		let g:phpcomplete_remove_function_extensions = [...]
-"		let g:phpcomplete_remove_class_extensions = [...]
-"		let g:phpcomplete_remove_interface_extensions = [...]
-"		let g:phpcomplete_remove_constant_extensions = [...]
+"		let g:phpcd_add_function_extensions = [...]
+"		let g:phpcd_add_class_extensions = [...]
+"		let g:phpcd_add_interface_extensions = [...]
+"		let g:phpcd_add_constant_extensions = [...]
+"		let g:phpcd_remove_function_extensions = [...]
+"		let g:phpcd_remove_class_extensions = [...]
+"		let g:phpcd_remove_interface_extensions = [...]
+"		let g:phpcd_remove_constant_extensions = [...]
 "			Built-in functions, classes, interfaces and constatns are grouped together by the extension.
 "			Only the enabled extensions will be loaded for the plugin, the defaultly enabled ones can be
 "			found in.
 "
-"				g:phpcomplete_active_function_extensions
-"				g:phpcomplete_active_class_extensions
-"				g:phpcomplete_active_interface_extensions
-"				g:phpcomplete_active_constant_extensions
+"				g:phpcd_active_function_extensions
+"				g:phpcd_active_class_extensions
+"				g:phpcd_active_interface_extensions
+"				g:phpcd_active_constant_extensions
 "
 "			If you want to enable an extension that is disabled you can add it to the enabled lists
 "			in your vimrc. Let's say you want to have the mongo extension's classes and functions
 "			to be completed by the plugin, you can add it like this (in your `.vimrc`):
 "
-"				let g:phpcomplete_add_class_extensions = ['mongo']
-"				let g:phpcomplete_add_function_extensions = ['mongo']
+"				let g:phpcd_add_class_extensions = ['mongo']
+"				let g:phpcd_add_function_extensions = ['mongo']
 "
 "			If you want to disable an otherwise enabled one, use the ..._remove_... version of these options:
 "
-"				let g:phpcomplete_remove_function_extensions = ['xslt_php_4']
-"				let g:phpcomplete_remove_constant_extensions = ['xslt_php_4']
+"				let g:phpcd_remove_function_extensions = ['xslt_php_4']
+"				let g:phpcd_remove_constant_extensions = ['xslt_php_4']
 "
 "			For the available extension files, check the directories under `misc/`
 "
@@ -81,28 +81,28 @@
 "	  phpStrings this can be even a bonus but outside of <?php?> it is not the
 "	  best situation
 
-if !exists('g:phpcomplete_relax_static_constraint')
-	let g:phpcomplete_relax_static_constraint = 0
+if !exists('g:phpcd_relax_static_constraint')
+	let g:phpcd_relax_static_constraint = 0
 endif
 
-if !exists('g:phpcomplete_complete_for_unknown_classes')
-	let g:phpcomplete_complete_for_unknown_classes = 0
+if !exists('g:phpcd_complete_for_unknown_classes')
+	let g:phpcd_complete_for_unknown_classes = 0
 endif
 
-if !exists('g:phpcomplete_search_tags_for_variables')
-	let g:phpcomplete_search_tags_for_variables = 0
+if !exists('g:phpcd_search_tags_for_variables')
+	let g:phpcd_search_tags_for_variables = 0
 endif
 
-if !exists('g:phpcomplete_min_num_of_chars_for_namespace_completion')
-	let g:phpcomplete_min_num_of_chars_for_namespace_completion = 1
+if !exists('g:phpcd_min_num_of_chars_for_namespace_completion')
+	let g:phpcd_min_num_of_chars_for_namespace_completion = 1
 endif
 
-if !exists('g:phpcomplete_parse_docblock_comments')
-	let g:phpcomplete_parse_docblock_comments = 0
+if !exists('g:phpcd_parse_docblock_comments')
+	let g:phpcd_parse_docblock_comments = 0
 endif
 
-if !exists('g:phpcomplete_cache_taglists')
-	let g:phpcomplete_cache_taglists = 1
+if !exists('g:phpcd_cache_taglists')
+	let g:phpcd_cache_taglists = 1
 endif
 
 if !exists('s:cache_classstructures')
@@ -118,7 +118,7 @@ if !exists('s:cache_tags_checksum')
 endif
 
 
-let g:phpcomplete_active_function_extensions = [
+let g:phpcd_active_function_extensions = [
 			\'apache', 'apc', 'apd', 'arrays', 'bc_math', 'bzip2', 'calendar', 'classes_objects', 'ctype', 'curl', 'date_time', 'dba', 'dbase',
 			\'directories', 'dom', 'enchant', 'error_handling', 'exif', 'fastcgi_process_manager', 'fileinfo', 'filesystem', 'filter', 'ftp',
 			\'function_handling', 'gd', 'geoip', 'gettext', 'gmp', 'hash', 'iconv', 'iis', 'json', 'ldap', 'libxml', 'mail', 'math', 'mcrypt',
@@ -127,13 +127,13 @@ let g:phpcomplete_active_function_extensions = [
 			\'program_execution', 'ps', 'pspell', 'readline', 'recode', 'runkit', 'sessions', 'shared_memory', 'simplexml', 'snmp', 'soap', 'sockets',
 			\'solr', 'spl', 'sqlite', 'sqlsrv', 'streams', 'strings', 'tidy', 'tokenizer', 'urls', 'variable_handling', 'wddx', 'xml_parser',
 			\'xmlwriter', 'zip', 'zlib']
-let g:phpcomplete_active_class_extensions = [
+let g:phpcd_active_class_extensions = [
 			\'apc', 'curl', 'date_time', 'directories', 'dom', 'fileinfo', 'imagemagick', 'libxml', 'memcache', 'memcached', 'mongo', 'mysqli', 'pdo', 'phar',
 			\'predefined_exceptions', 'predefined_interfaces_and_classes', 'reflection', 'sessions', 'simplexml', 'snmp', 'soap', 'solr', 'sphinx',
 			\'spl', 'sqlite3', 'streams', 'tidy', 'varnish', 'xmlreader', 'xmlwriter', 'xsl', 'zip']
-let g:phpcomplete_active_interface_extensions = [
+let g:phpcd_active_interface_extensions = [
 			\'json', 'predefined_interfaces_and_classes', 'spl', 'date_time', 'reflection']
-let g:phpcomplete_active_constant_extensions = [
+let g:phpcd_active_constant_extensions = [
 			\'apc', 'apd', 'arrays', 'calendar', 'classkit', 'command_line_usage', 'common', 'curl', 'date_time', 'directories', 'dom', 'error_handling', 'exif',
 			\'fileinfo', 'filesystem', 'filter', 'ftp', 'gd', 'geoip', 'gmp', 'handling_file_uploads', 'hash', 'iconv', 'iis', 'imagemagick', 'imap',
 			\'json', 'ldap', 'libxml', 'list_of_parser_tokens', 'list_of_reserved_words', 'math', 'mcrypt', 'memcache', 'mhash', 'misc', 'ms_sql_server_pdo',
@@ -142,32 +142,32 @@ let g:phpcomplete_active_constant_extensions = [
 			\'sessions', 'snmp', 'soap', 'sockets', 'solr', 'sphinx', 'spl', 'sqlite', 'sqlite3', 'sqlsrv', 'streams', 'strings', 'tidy', 'types', 'urls',
 			\'variable_handling', 'varnish', 'xml_parser', 'xsl', 'zlib']
 
-if exists('g:phpcomplete_add_function_extensions')
-	let g:phpcomplete_active_function_extensions += g:phpcomplete_add_function_extensions
+if exists('g:phpcd_add_function_extensions')
+	let g:phpcd_active_function_extensions += g:phpcd_add_function_extensions
 endif
-if exists('g:phpcomplete_remove_function_extensions')
-	call filter(g:phpcomplete_active_function_extensions, 'index(g:phpcomplete_remove_function_extensions, v:val) == -1')
-endif
-
-if exists('g:phpcomplete_add_class_extensions')
-	let g:phpcomplete_active_class_extensions += g:phpcomplete_add_class_extensions
-endif
-if exists('g:phpcomplete_remove_class_extensions')
-	call filter(g:phpcomplete_active_class_extensions, 'index(g:phpcomplete_remove_class_extensions, v:val) == -1')
+if exists('g:phpcd_remove_function_extensions')
+	call filter(g:phpcd_active_function_extensions, 'index(g:phpcd_remove_function_extensions, v:val) == -1')
 endif
 
-if exists('g:phpcomplete_add_interface_extensions')
-	let g:phpcomplete_active_interface_extensions += g:phpcomplete_add_interface_extensions
+if exists('g:phpcd_add_class_extensions')
+	let g:phpcd_active_class_extensions += g:phpcd_add_class_extensions
 endif
-if exists('g:phpcomplete_remove_interface_extensions')
-	call filter(g:phpcomplete_active_interface_extensions, 'index(g:phpcomplete_remove_interface_extensions, v:val) == -1')
+if exists('g:phpcd_remove_class_extensions')
+	call filter(g:phpcd_active_class_extensions, 'index(g:phpcd_remove_class_extensions, v:val) == -1')
 endif
 
-if exists('g:phpcomplete_add_constant_extensions')
-	let g:phpcomplete_active_constant_extensions += g:phpcomplete_add_constant_extensions
+if exists('g:phpcd_add_interface_extensions')
+	let g:phpcd_active_interface_extensions += g:phpcd_add_interface_extensions
 endif
-if exists('g:phpcomplete_remove_constant_extensions')
-	call filter(g:phpcomplete_active_constant_extensions, 'index(g:phpcomplete_remove_constant_extensions, v:val) == -1')
+if exists('g:phpcd_remove_interface_extensions')
+	call filter(g:phpcd_active_interface_extensions, 'index(g:phpcd_remove_interface_extensions, v:val) == -1')
+endif
+
+if exists('g:phpcd_add_constant_extensions')
+	let g:phpcd_active_constant_extensions += g:phpcd_add_constant_extensions
+endif
+if exists('g:phpcd_remove_constant_extensions')
+	call filter(g:phpcd_active_constant_extensions, 'index(g:phpcd_remove_constant_extensions, v:val) == -1')
 endif
 
 let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
@@ -272,7 +272,7 @@ endfunction
 " }}}
 
 function! phpcd#CompleteUse(base) " {{{
-	" completes builtin class names regadless of g:phpcomplete_min_num_of_chars_for_namespace_completion
+	" completes builtin class names regadless of g:phpcd_min_num_of_chars_for_namespace_completion
 	" completes namespaces from tags
 	"   * requires patched ctags
 	" completes classnames from tags within the already typed out namespace using the "namespace" field of tags
@@ -292,8 +292,8 @@ function! phpcd#CompleteUse(base) " {{{
 	let classname_match_pattern = matchstr(base, '[^\\]\+$')
 	let namespace_for_class = substitute(substitute(namespace_match_pattern, '\\\\', '\\', 'g'), '\\*'.classname_match_pattern.'$', '', '')
 
-	if len(namespace_match_pattern) >= g:phpcomplete_min_num_of_chars_for_namespace_completion
-		if len(classname_match_pattern) >= g:phpcomplete_min_num_of_chars_for_namespace_completion
+	if len(namespace_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion
+		if len(classname_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion
 			let tags = phpcd#GetTaglist('^\('.namespace_match_pattern.'\|'.classname_match_pattern.'\)')
 		else
 			let tags = phpcd#GetTaglist('^'.namespace_match_pattern)
@@ -402,11 +402,11 @@ function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{
 	let namespace_match_pattern  = substitute((namespace_for_tag == '' ? '' : namespace_for_tag.'\').tag_match_pattern, '\\', '\\\\', 'g')
 
 	let tags = []
-	if len(namespace_match_pattern) >= g:phpcomplete_min_num_of_chars_for_namespace_completion && len(tag_match_pattern) >= g:phpcomplete_min_num_of_chars_for_namespace_completion && tag_match_pattern != namespace_match_pattern
+	if len(namespace_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion && len(tag_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion && tag_match_pattern != namespace_match_pattern
 		let tags = phpcd#GetTaglist('\c^\('.tag_match_pattern.'\|'.namespace_match_pattern.'\)')
-	elseif len(namespace_match_pattern) >= g:phpcomplete_min_num_of_chars_for_namespace_completion
+	elseif len(namespace_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion
 		let tags = phpcd#GetTaglist('\c^'.namespace_match_pattern)
-	elseif len(tag_match_pattern) >= g:phpcomplete_min_num_of_chars_for_namespace_completion
+	elseif len(tag_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion
 		let tags = phpcd#GetTaglist('\c^'.tag_match_pattern)
 	endif
 
@@ -658,7 +658,7 @@ endfunction
 function! phpcd#CompleteUnknownClass(base, context) " {{{
 	let res = []
 
-	if g:phpcomplete_complete_for_unknown_classes != 1
+	if g:phpcd_complete_for_unknown_classes != 1
 		return []
 	endif
 
@@ -780,7 +780,7 @@ function! phpcd#CompleteVariable(base) " {{{
 	call extend(int_vars, g:php_builtin_vars)
 
 	" ctags has support for PHP, use tags file for external variables
-	if  g:phpcomplete_search_tags_for_variables
+	if  g:phpcd_search_tags_for_variables
 		let ext_vars = {}
 		let tags = phpcd#GetTaglist('\C^'.substitute(a:base, '^\$', '', ''))
 		for tag in tags
@@ -860,7 +860,7 @@ function! phpcd#CompleteClassName(base, kinds, current_namespace, imports) " {{{
 	let [tag_match_pattern, namespace_for_class] = phpcd#ExpandClassName(a:base, a:current_namespace, a:imports)
 
 	let tags = []
-	if len(tag_match_pattern) >= g:phpcomplete_min_num_of_chars_for_namespace_completion
+	if len(tag_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion
 		let tags = phpcd#GetTaglist('^\c'.tag_match_pattern)
 	endif
 
@@ -1159,7 +1159,7 @@ function! phpcd#CompleteUserClass(context, base, sccontent, visibility) " {{{
 	" limit based on context to static or normal methods
 	let static_con = ''
 	if a:context =~ '::$' && a:context !~? 'parent::$'
-		if g:phpcomplete_relax_static_constraint != 1
+		if g:phpcd_relax_static_constraint != 1
 			let required_modifiers += ['static']
 		endif
 	elseif a:context =~ '->$'
@@ -1186,7 +1186,7 @@ function! phpcd#CompleteUserClass(context, base, sccontent, visibility) " {{{
 					\ 'function\s*&\?[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*\s*(\zs.\{-}\ze)\_s*\(;\|{\|\_$\)')
 		if f_name != '' && stridx(f_name, '__') != 0
 			let c_functions[f_name.'('] = f_args
-			if g:phpcomplete_parse_docblock_comments
+			if g:phpcd_parse_docblock_comments
 				let c_doc[f_name.'('] = phpcd#GetDocBlock(a:sccontent, 'function\s*&\?\<'.f_name.'\>')
 			endif
 		endif
@@ -1220,7 +1220,7 @@ function! phpcd#CompleteUserClass(context, base, sccontent, visibility) " {{{
 				let c_var = '$'.c_var
 			endif
 			let c_variables[c_var] = ''
-			if g:phpcomplete_parse_docblock_comments && len(get(variables, var_index)) > 0
+			if g:phpcd_parse_docblock_comments && len(get(variables, var_index)) > 0
 				let c_doc[c_var] = phpcd#GetDocBlock(a:sccontent, variables[var_index])
 			endif
 			let var_index += 1
@@ -1240,7 +1240,7 @@ function! phpcd#CompleteUserClass(context, base, sccontent, visibility) " {{{
 					\ '^\s*\zs[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*\ze')
 		if c_con != ''
 			let c_constants[c_con] = ''
-			if g:phpcomplete_parse_docblock_comments && len(get(constants, const_index)) > 0
+			if g:phpcd_parse_docblock_comments && len(get(constants, const_index)) > 0
 				let c_doc[c_con] = phpcd#GetDocBlock(a:sccontent, constants[const_index])
 			endif
 			let const_index += 1
@@ -1342,7 +1342,7 @@ endfunction
 
 function! phpcd#GetTaglist(pattern) " {{{
 	let cache_checksum = ''
-	if g:phpcomplete_cache_taglists == 1
+	if g:phpcd_cache_taglists == 1
 		" build a string with  format of "<tagfile>:<mtime>$<tagfile2>:<mtime2>..."
 		" to validate that the tags are not changed since the time we saved the results in cache
 		for tagfile in sort(tagfiles())
@@ -2076,7 +2076,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 		" OK, first way failed, now check tags file(s)
 		" This method is useless when local variables are not indexed by ctags and
 		" pretty inaccurate even if it is
-		if g:phpcomplete_search_tags_for_variables
+		if g:phpcd_search_tags_for_variables
 			let tags = phpcd#GetTaglist('^'.substitute(object, '^\$', '', ''))
 			if len(tags) == 0
 				return
@@ -2828,26 +2828,26 @@ runtime! misc/builtin_manual.vim
 
 " Built in functions
 let g:php_builtin_functions = {}
-for ext in g:phpcomplete_active_function_extensions
-	call extend(g:php_builtin_functions, g:phpcomplete_builtin['functions'][ext])
+for ext in g:phpcd_active_function_extensions
+	call extend(g:php_builtin_functions, g:phpcd_builtin['functions'][ext])
 endfor
 
 " Built in classs
 let g:php_builtin_classes = {}
-for ext in g:phpcomplete_active_class_extensions
-	call extend(g:php_builtin_classes, g:phpcomplete_builtin['classes'][ext])
+for ext in g:phpcd_active_class_extensions
+	call extend(g:php_builtin_classes, g:phpcd_builtin['classes'][ext])
 endfor
 
 " Built in interfaces
 let g:php_builtin_interfaces = {}
-for ext in g:phpcomplete_active_interface_extensions
-	call extend(g:php_builtin_interfaces, g:phpcomplete_builtin['interfaces'][ext])
+for ext in g:phpcd_active_interface_extensions
+	call extend(g:php_builtin_interfaces, g:phpcd_builtin['interfaces'][ext])
 endfor
 
 " Built in constants
 let g:php_constants = {}
-for ext in g:phpcomplete_active_constant_extensions
-	call extend(g:php_constants, g:phpcomplete_builtin['constants'][ext])
+for ext in g:phpcd_active_constant_extensions
+	call extend(g:php_constants, g:phpcd_builtin['constants'][ext])
 endfor
 
 " When the classname not found or found but the tags dosen't contain that

@@ -1,8 +1,8 @@
 fun! SetUp()
     let g:fixture_class_content = readfile(expand('%:p:h').'/'.'fixtures/CompleteUserClass/user_extended.class.php')[2:]
     let g:commented_fixture_class_content = readfile(expand('%:p:h').'/'.'fixtures/CompleteUserClass/commented_foo.class.php')[2:]
-    let g:phpcomplete_relax_static_constraint = 0
-    let g:phpcomplete_parse_docblock_comments = 0
+    let g:phpcd_relax_static_constraint = 0
+    let g:phpcd_parse_docblock_comments = 0
 endf
 
 fun! TestCase_returns_everyting_instance_related_when_scope_is_in_class()
@@ -97,7 +97,7 @@ endfun
 
 fun! TestCase_returns_non_explicit_static_methods_when_phpcomplete_relax_static_constraint_enabled()
     call SetUp()
-    let g:phpcomplete_relax_static_constraint = 1
+    let g:phpcd_relax_static_constraint = 1
     let ret = phpcd#CompleteUserClass('UserClass::', '', g:fixture_class_content, 'public')
     call VUAssertEquals([
                 \ {'word': '$public_static_property', 'info': '', 'menu': '', 'kind': 'v'},
@@ -115,7 +115,7 @@ endfun
 
 fun! TestCase_returns_types_for_properties_and_return_types_from_docblock_comments()
     call SetUp()
-    let g:phpcomplete_parse_docblock_comments = 1
+    let g:phpcd_parse_docblock_comments = 1
 
     let ret = phpcd#CompleteUserClass('$u->', 'commented', g:commented_fixture_class_content, 'public')
     call VUAssertEquals([

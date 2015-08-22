@@ -1,10 +1,10 @@
-let g:phpcomplete_builtin = {
+let g:phpcd_builtin = {
 \ 'functions':{},
 \ 'classes':{},
 \ 'interfaces':{},
 \ 'constants':{},
 \ }
-let g:phpcomplete_builtin['functions']['math'] = {
+let g:phpcd_builtin['functions']['math'] = {
 \ 'abs(': 'mixed $number | number',
 \ 'acos(': 'float $arg | float',
 \ 'acosh(': 'float $arg | float',
@@ -54,7 +54,7 @@ let g:phpcomplete_builtin['functions']['math'] = {
 \ 'tan(': 'float $arg | float',
 \ 'tanh(': 'float $arg | float',
 \ }
-let g:phpcomplete_builtin['functions']['strings'] = {
+let g:phpcd_builtin['functions']['strings'] = {
 \ 'addcslashes(': 'string $str, string $charlist | string',
 \ 'addslashes(': 'string $str | string',
 \ 'bin2hex(': 'string $str | string',
@@ -154,7 +154,7 @@ let g:phpcomplete_builtin['functions']['strings'] = {
 \ 'vsprintf(': 'string $format, array $args | string',
 \ 'wordwrap(': 'string $str [, int $width = 75 [, string $break = "\n" [, bool $cut = false]]] | string',
 \ }
-let g:phpcomplete_builtin['functions']['apache'] = {
+let g:phpcd_builtin['functions']['apache'] = {
 \ 'apache_child_terminate(': 'void | bool',
 \ 'apache_get_modules(': 'void | array',
 \ 'apache_get_version(': 'void | string',
@@ -168,7 +168,7 @@ let g:phpcomplete_builtin['functions']['apache'] = {
 \ 'getallheaders(': 'void | array',
 \ 'virtual(': 'string $filename | bool',
 \ }
-let g:phpcomplete_builtin['functions']['apc'] = {
+let g:phpcd_builtin['functions']['apc'] = {
 \ 'apc_add(': 'string $key, mixed $var [, int $ttl = 0] | bool',
 \ 'apc_bin_dump(': '[ array $files = NULL [, array $user_vars = NULL]] | string',
 \ 'apc_bin_dumpfile(': 'array $files, array $user_vars, string $filename [, int $flags = 0 [, resource $context = NULL]] | int',
@@ -189,7 +189,7 @@ let g:phpcomplete_builtin['functions']['apc'] = {
 \ 'apc_sma_info(': '[ bool $limited = false] | array',
 \ 'apc_store(': 'string $key, mixed $var [, int $ttl = 0] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['apd'] = {
+let g:phpcd_builtin['functions']['apd'] = {
 \ 'apd_breakpoint(': 'int $debug_level | bool',
 \ 'apd_callstack(': 'void | array',
 \ 'apd_clunk(': 'string $warning [, string $delimiter = "<BR />"] | void',
@@ -207,7 +207,7 @@ let g:phpcomplete_builtin['functions']['apd'] = {
 \ 'override_function(': 'string $function_name, string $function_args, string $function_code | bool',
 \ 'rename_function(': 'string $original_name, string $new_name | bool',
 \ }
-let g:phpcomplete_builtin['functions']['arrays'] = {
+let g:phpcd_builtin['functions']['arrays'] = {
 \ 'array_change_key_case(': 'array $array [, int $case = CASE_LOWER] | array',
 \ 'array_chunk(': 'array $array, int $size [, bool $preserve_keys = false] | array',
 \ 'array_column(': 'array $array, mixed $column_key [, mixed $index_key = null] | array',
@@ -288,7 +288,7 @@ let g:phpcomplete_builtin['functions']['arrays'] = {
 \ 'uksort(': 'array &$array, callable $key_compare_func | bool',
 \ 'usort(': 'array &$array, callable $value_compare_func | bool',
 \ }
-let g:phpcomplete_builtin['functions']['php_options_info'] = {
+let g:phpcd_builtin['functions']['php_options_info'] = {
 \ 'assert_options(': 'int $what [, mixed $value] | mixed',
 \ 'assert(': 'mixed $assertion [, string $description] | bool',
 \ 'cli_get_process_title(': 'void | string',
@@ -344,7 +344,7 @@ let g:phpcomplete_builtin['functions']['php_options_info'] = {
 \ 'zend_thread_id(': 'void | int',
 \ 'zend_version(': 'void | string',
 \ }
-let g:phpcomplete_builtin['functions']['classes_objects'] = {
+let g:phpcd_builtin['functions']['classes_objects'] = {
 \ '__autoload(': 'string $class | void',
 \ 'call_user_method_array(': 'string $method_name, object &$obj, array $params | mixed',
 \ 'call_user_method(': 'string $method_name, object &$obj [, mixed $parameter [, mixed $...]] | mixed',
@@ -366,7 +366,7 @@ let g:phpcomplete_builtin['functions']['classes_objects'] = {
 \ 'property_exists(': 'mixed $class, string $property | bool',
 \ 'trait_exists(': 'string $traitname [, bool $autoload] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['urls'] = {
+let g:phpcd_builtin['functions']['urls'] = {
 \ 'base64_decode(': 'string $data [, bool $strict = false] | string',
 \ 'base64_encode(': 'string $data | string',
 \ 'get_headers(': 'string $url [, int $format = 0] | array',
@@ -378,7 +378,7 @@ let g:phpcomplete_builtin['functions']['urls'] = {
 \ 'urldecode(': 'string $str | string',
 \ 'urlencode(': 'string $str | string',
 \ }
-let g:phpcomplete_builtin['functions']['filesystem'] = {
+let g:phpcd_builtin['functions']['filesystem'] = {
 \ 'basename(': 'string $path [, string $suffix] | string',
 \ 'chgrp(': 'string $filename, mixed $group | bool',
 \ 'chmod(': 'string $filename, int $mode | bool',
@@ -460,7 +460,7 @@ let g:phpcomplete_builtin['functions']['filesystem'] = {
 \ 'umask(': '[ int $mask] | int',
 \ 'unlink(': 'string $filename [, resource $context] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['bbcode'] = {
+let g:phpcd_builtin['functions']['bbcode'] = {
 \ 'bbcode_add_element(': 'resource $bbcode_container, string $tag_name, array $tag_rules | bool',
 \ 'bbcode_add_smiley(': 'resource $bbcode_container, string $smiley, string $replace_by | bool',
 \ 'bbcode_create(': '[ array $bbcode_initial_tags = NULL] | resource',
@@ -469,7 +469,7 @@ let g:phpcomplete_builtin['functions']['bbcode'] = {
 \ 'bbcode_set_arg_parser(': 'resource $bbcode_container, resource $bbcode_arg_parser | bool',
 \ 'bbcode_set_flags(': 'resource $bbcode_container, int $flags [, int $mode = BBCODE_SET_FLAGS_SET] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['bc_math'] = {
+let g:phpcd_builtin['functions']['bc_math'] = {
 \ 'bcadd(': 'string $left_operand, string $right_operand [, int $scale] | string',
 \ 'bccomp(': '[ string $left_operand = "" [, string $right_operand = "" [, int $scale = int]]] | int',
 \ 'bcdiv(': '[ string $left_operand = "" [, string $right_operand = "" [, int $scale = int]]] | string',
@@ -481,7 +481,7 @@ let g:phpcomplete_builtin['functions']['bc_math'] = {
 \ 'bcsqrt(': 'string $operand [, int $scale] | string',
 \ 'bcsub(': '[ string $left_operand = "" [, string $right_operand = "" [, int $scale = int]]] | string',
 \ }
-let g:phpcomplete_builtin['functions']['bcompiler'] = {
+let g:phpcd_builtin['functions']['bcompiler'] = {
 \ 'bcompiler_load_exe(': 'string $filename | bool',
 \ 'bcompiler_load(': 'string $filename | bool',
 \ 'bcompiler_parse_class(': 'string $class, string $callback | bool',
@@ -496,7 +496,7 @@ let g:phpcomplete_builtin['functions']['bcompiler'] = {
 \ 'bcompiler_write_header(': 'resource $filehandle [, string $write_ver] | bool',
 \ 'bcompiler_write_included_filename(': 'resource $filehandle, string $filename | bool',
 \ }
-let g:phpcomplete_builtin['functions']['gettext'] = {
+let g:phpcd_builtin['functions']['gettext'] = {
 \ 'bind_textdomain_codeset(': 'string $domain, string $codeset | string',
 \ 'bindtextdomain(': 'string $domain, string $directory | string',
 \ 'dcgettext(': 'string $domain, string $message, int $category | string',
@@ -507,10 +507,10 @@ let g:phpcomplete_builtin['functions']['gettext'] = {
 \ 'ngettext(': 'string $msgid1, string $msgid2, int $n | string',
 \ 'textdomain(': 'string $text_domain | string',
 \ }
-let g:phpcomplete_builtin['functions']['blenc'] = {
+let g:phpcd_builtin['functions']['blenc'] = {
 \ 'blenc_encrypt(': 'string $plaintext, string $encodedfile [, string $encryption_key] | string',
 \ }
-let g:phpcomplete_builtin['functions']['variable_handling'] = {
+let g:phpcd_builtin['functions']['variable_handling'] = {
 \ 'boolval(': 'mixed $var | boolean',
 \ 'debug_zval_dump(': 'mixed $variable [, mixed $...] | void',
 \ 'doubleval(': 'doubleval — Alias of floatval()',
@@ -546,7 +546,7 @@ let g:phpcomplete_builtin['functions']['variable_handling'] = {
 \ 'var_dump(': 'mixed $expression [, mixed $...] | void',
 \ 'var_export(': 'mixed $expression [, bool $return = false] | mixed',
 \ }
-let g:phpcomplete_builtin['functions']['mongo'] = {
+let g:phpcd_builtin['functions']['mongo'] = {
 \ 'bson_decode(': 'string $bson | array',
 \ 'bson_encode(': 'mixed $anything | string',
 \ 'log_cmd_delete(': 'array $server, array $writeOptions, array $deleteOptions, array $protocolOptions | void',
@@ -557,7 +557,7 @@ let g:phpcomplete_builtin['functions']['mongo'] = {
 \ 'log_reply(': 'array $server, array $messageHeaders, array $operationHeaders | void',
 \ 'log_write_batch(': 'array $server, array $writeOptions, array $batch, array $protocolOptions | void',
 \ }
-let g:phpcomplete_builtin['functions']['bzip2'] = {
+let g:phpcd_builtin['functions']['bzip2'] = {
 \ 'bzclose(': 'resource $bz | int',
 \ 'bzcompress(': 'string $source [, int $blocksize = 4 [, int $workfactor = 0]] | mixed',
 \ 'bzdecompress(': 'string $source [, int $small = 0] | mixed',
@@ -569,7 +569,7 @@ let g:phpcomplete_builtin['functions']['bzip2'] = {
 \ 'bzread(': 'resource $bz [, int $length = 1024] | string',
 \ 'bzwrite(': 'resource $bz, string $data [, int $length] | int',
 \ }
-let g:phpcomplete_builtin['functions']['cairo'] = {
+let g:phpcd_builtin['functions']['cairo'] = {
 \ 'cairo_create(': 'CairoSurface $surface | CairoContext',
 \ 'cairo_font_face_get_type(': 'CairoFontFace $fontface | int',
 \ 'cairo_font_face_status(': 'CairoFontFace $fontface | int',
@@ -772,7 +772,7 @@ let g:phpcomplete_builtin['functions']['cairo'] = {
 \ 'cairo_has_current_point(': 'CairoContext $context | bool',
 \ 'cairo_rel_move_to(': 'CairoContext $context, string $x, string $y | void',
 \ }
-let g:phpcomplete_builtin['functions']['calendar'] = {
+let g:phpcd_builtin['functions']['calendar'] = {
 \ 'cal_days_in_month(': 'int $calendar, int $month, int $year | int',
 \ 'cal_from_jd(': 'int $jd, int $calendar | array',
 \ 'cal_info(': '[ int $calendar = -1] | array',
@@ -792,12 +792,12 @@ let g:phpcomplete_builtin['functions']['calendar'] = {
 \ 'juliantojd(': 'int $month, int $day, int $year | int',
 \ 'unixtojd(': '[ int $timestamp = time()] | int',
 \ }
-let g:phpcomplete_builtin['functions']['spplus'] = {
+let g:phpcd_builtin['functions']['spplus'] = {
 \ 'calcul_hmac(': 'string $clent, string $siretcode, string $price, string $reference, string $validity, string $taxation, string $devise, string $language | string',
 \ 'calculhmac(': 'string $clent, string $data | string',
 \ 'nthmac(': 'string $clent, string $data | string',
 \ }
-let g:phpcomplete_builtin['functions']['function_handling'] = {
+let g:phpcd_builtin['functions']['function_handling'] = {
 \ 'call_user_func_array(': 'callable $callback, array $param_arr | mixed',
 \ 'call_user_func(': 'callable $callback [, mixed $parameter [, mixed $...]] | mixed',
 \ 'create_function(': 'string $args, string $code | string',
@@ -812,10 +812,10 @@ let g:phpcomplete_builtin['functions']['function_handling'] = {
 \ 'register_tick_function(': 'callable $function [, mixed $arg [, mixed $...]] | bool',
 \ 'unregister_tick_function(': 'string $function_name | void',
 \ }
-let g:phpcomplete_builtin['functions']['chdb'] = {
+let g:phpcd_builtin['functions']['chdb'] = {
 \ 'chdb_create(': 'string $pathname, array $data | bool',
 \ }
-let g:phpcomplete_builtin['functions']['directories'] = {
+let g:phpcd_builtin['functions']['directories'] = {
 \ 'chdir(': 'string $directory | bool',
 \ 'chroot(': 'string $directory | bool',
 \ 'closedir(': '[ resource $dir_handle] | void',
@@ -826,7 +826,7 @@ let g:phpcomplete_builtin['functions']['directories'] = {
 \ 'rewinddir(': '[ resource $dir_handle] | void',
 \ 'scandir(': 'string $directory [, int $sorting_order = SCANDIR_SORT_ASCENDING [, resource $context]] | array',
 \ }
-let g:phpcomplete_builtin['functions']['date_time'] = {
+let g:phpcd_builtin['functions']['date_time'] = {
 \ 'checkdate(': 'int $month, int $day, int $year | bool',
 \ 'date_default_timezone_get(': 'void | string',
 \ 'date_default_timezone_set(': 'string $timezone_identifier | bool',
@@ -876,7 +876,7 @@ let g:phpcomplete_builtin['functions']['date_time'] = {
 \ 'timezone_name_get(': 'DateTimeZone $object | string',
 \ 'timezone_transitions_get(': 'DateTimeZone $object [, int $timestamp_begin [, int $timestamp_end]] | array',
 \ }
-let g:phpcomplete_builtin['functions']['network'] = {
+let g:phpcd_builtin['functions']['network'] = {
 \ 'checkdnsrr(': 'string $host [, string $type = "MX"] | bool',
 \ 'closelog(': 'void | bool',
 \ 'define_syslog_variables(': 'void | void',
@@ -910,7 +910,7 @@ let g:phpcomplete_builtin['functions']['network'] = {
 \ 'socket_set_timeout(': 'socket_set_timeout — Alias of stream_set_timeout()',
 \ 'syslog(': 'int $priority, string $message | bool',
 \ }
-let g:phpcomplete_builtin['functions']['spl'] = {
+let g:phpcd_builtin['functions']['spl'] = {
 \ 'class_implements(': 'mixed $class [, bool $autoload = true] | array',
 \ 'class_parents(': 'mixed $class [, bool $autoload = true] | array',
 \ 'class_uses(': 'mixed $class [, bool $autoload = true] | array',
@@ -926,7 +926,7 @@ let g:phpcomplete_builtin['functions']['spl'] = {
 \ 'spl_classes(': 'void | array',
 \ 'spl_object_hash(': 'object $obj | string',
 \ }
-let g:phpcomplete_builtin['functions']['classkit'] = {
+let g:phpcd_builtin['functions']['classkit'] = {
 \ 'classkit_import(': 'string $filename | array',
 \ 'classkit_method_add(': 'string $classname, string $methodname, string $args, string $code [, int $flags = CLASSKIT_ACC_PUBLIC] | bool',
 \ 'classkit_method_copy(': 'string $dClass, string $dMethod, string $sClass [, string $sMethod] | bool',
@@ -934,7 +934,7 @@ let g:phpcomplete_builtin['functions']['classkit'] = {
 \ 'classkit_method_remove(': 'string $classname, string $methodname | bool',
 \ 'classkit_method_rename(': 'string $classname, string $methodname, string $newname | bool',
 \ }
-let g:phpcomplete_builtin['functions']['com'] = {
+let g:phpcd_builtin['functions']['com'] = {
 \ 'com_create_guid(': 'void | string',
 \ 'com_event_sink(': 'variant $comobject, object $sinkobject [, mixed $sinkinterface] | bool',
 \ 'com_get_active_object(': 'string $progid [, int $code_page] | variant',
@@ -968,7 +968,7 @@ let g:phpcomplete_builtin['functions']['com'] = {
 \ 'variant_sub(': 'mixed $left, mixed $right | mixed',
 \ 'variant_xor(': 'mixed $left, mixed $right | mixed',
 \ }
-let g:phpcomplete_builtin['functions']['misc'] = {
+let g:phpcd_builtin['functions']['misc'] = {
 \ 'connection_aborted(': 'void | int',
 \ 'connection_status(': 'void | int',
 \ 'constant(': 'string $name | mixed',
@@ -993,13 +993,13 @@ let g:phpcomplete_builtin['functions']['misc'] = {
 \ 'unpack(': 'string $format, string $data | array',
 \ 'usleep(': 'int $micro_seconds | void',
 \ }
-let g:phpcomplete_builtin['functions']['crack'] = {
+let g:phpcd_builtin['functions']['crack'] = {
 \ 'crack_check(': 'resource $dictionary, string $password | bool',
 \ 'crack_closedict(': '[ resource $dictionary] | bool',
 \ 'crack_getlastmessage(': 'void | string',
 \ 'crack_opendict(': 'string $dictionary | resource',
 \ }
-let g:phpcomplete_builtin['functions']['ctype'] = {
+let g:phpcd_builtin['functions']['ctype'] = {
 \ 'ctype_alnum(': 'string $text | bool',
 \ 'ctype_alpha(': 'string $text | bool',
 \ 'ctype_cntrl(': 'string $text | bool',
@@ -1012,7 +1012,7 @@ let g:phpcomplete_builtin['functions']['ctype'] = {
 \ 'ctype_upper(': 'string $text | bool',
 \ 'ctype_xdigit(': 'string $text | bool',
 \ }
-let g:phpcomplete_builtin['functions']['cubrid'] = {
+let g:phpcd_builtin['functions']['cubrid'] = {
 \ 'cubrid_affected_rows(': '[ resource $conn_identifier] | int',
 \ 'cubrid_bind(': 'resource $req_identifier, int $bind_index, mixed $bind_value [, string $bind_value_type] | bool',
 \ 'cubrid_client_encoding(': '[ resource $conn_identifier] | string',
@@ -1112,7 +1112,7 @@ let g:phpcomplete_builtin['functions']['cubrid'] = {
 \ 'cubrid_unbuffered_query(': 'string $query [, resource $conn_identifier] | resource',
 \ 'cubrid_version(': 'void | string',
 \ }
-let g:phpcomplete_builtin['functions']['curl'] = {
+let g:phpcd_builtin['functions']['curl'] = {
 \ 'curl_close(': 'resource $ch | void',
 \ 'curl_copy_handle(': 'resource $ch | resource',
 \ 'curl_errno(': 'resource $ch | int',
@@ -1143,7 +1143,7 @@ let g:phpcomplete_builtin['functions']['curl'] = {
 \ 'curl_version(': '[ int $age = CURLVERSION_NOW] | array',
 \ 'curl_file_create(': 'string $filename [, string $mimetype [, string $postname]] | CURLFile',
 \ }
-let g:phpcomplete_builtin['functions']['cyrus'] = {
+let g:phpcd_builtin['functions']['cyrus'] = {
 \ 'cyrus_authenticate(': 'resource $connection [, string $mechlist [, string $service [, string $user [, int $minssf [, int $maxssf [, string $authname [, string $password]]]]]]] | void',
 \ 'cyrus_bind(': 'resource $connection, array $callbacks | bool',
 \ 'cyrus_close(': 'resource $connection | bool',
@@ -1151,7 +1151,7 @@ let g:phpcomplete_builtin['functions']['cyrus'] = {
 \ 'cyrus_query(': 'resource $connection, string $query | array',
 \ 'cyrus_unbind(': 'resource $connection, string $trigger_name | bool',
 \ }
-let g:phpcomplete_builtin['functions']['ibm_db2'] = {
+let g:phpcd_builtin['functions']['ibm_db2'] = {
 \ 'db2_autocommit(': 'resource $connection [, bool $value] | mixed',
 \ 'db2_bind_param(': 'resource $stmt, int $parameter-number, string $variable-name [, int $parameter-type [, int $data-type = 0 [, int $precision = -1 [, int $scale = 0]]]] | bool',
 \ 'db2_client_info(': 'resource $connection | object',
@@ -1204,7 +1204,7 @@ let g:phpcomplete_builtin['functions']['ibm_db2'] = {
 \ 'db2_table_privileges(': 'resource $connection [, string $qualifier [, string $schema [, string $table_name]]] | resource',
 \ 'db2_tables(': 'resource $connection [, string $qualifier [, string $schema [, string $table-name [, string $table-type]]]] | resource',
 \ }
-let g:phpcomplete_builtin['functions']['dba'] = {
+let g:phpcd_builtin['functions']['dba'] = {
 \ 'dba_close(': 'resource $handle | void',
 \ 'dba_delete(': 'string $key, resource $handle | bool',
 \ 'dba_exists(': 'string $key, resource $handle | bool',
@@ -1221,7 +1221,7 @@ let g:phpcomplete_builtin['functions']['dba'] = {
 \ 'dba_replace(': 'string $key, string $value, resource $handle | bool',
 \ 'dba_sync(': 'resource $handle | bool',
 \ }
-let g:phpcomplete_builtin['functions']['dbase'] = {
+let g:phpcd_builtin['functions']['dbase'] = {
 \ 'dbase_add_record(': 'int $dbase_identifier, array $record | bool',
 \ 'dbase_close(': 'int $dbase_identifier | bool',
 \ 'dbase_create(': 'string $filename, array $fields | int',
@@ -1235,7 +1235,7 @@ let g:phpcomplete_builtin['functions']['dbase'] = {
 \ 'dbase_pack(': 'int $dbase_identifier | bool',
 \ 'dbase_replace_record(': 'int $dbase_identifier, array $record, int $record_number | bool',
 \ }
-let g:phpcomplete_builtin['functions']['db_'] = {
+let g:phpcd_builtin['functions']['db_'] = {
 \ 'dbplus_add(': 'resource $relation, array $tuple | int',
 \ 'dbplus_aql(': 'string $query [, string $server [, string $dbpath]] | resource',
 \ 'dbplus_chdir(': '[ string $newdir] | string',
@@ -1284,7 +1284,7 @@ let g:phpcomplete_builtin['functions']['db_'] = {
 \ 'dbplus_xlockrel(': 'resource $relation | int',
 \ 'dbplus_xunlockrel(': 'resource $relation | int',
 \ }
-let g:phpcomplete_builtin['functions']['dbx'] = {
+let g:phpcd_builtin['functions']['dbx'] = {
 \ 'dbx_close(': 'object $link_identifier | int',
 \ 'dbx_compare(': 'array $row_a, array $row_b, string $column_key [, int $flags = DBX_CMP_ASC | DBX_CMP_NATIVE] | int',
 \ 'dbx_connect(': 'mixed $module, string $host, string $database, string $username, string $password [, int $persistent] | object',
@@ -1294,7 +1294,7 @@ let g:phpcomplete_builtin['functions']['dbx'] = {
 \ 'dbx_query(': 'object $link_identifier, string $sql_statement [, int $flags] | mixed',
 \ 'dbx_sort(': 'object $result, string $user_compare_function | bool',
 \ }
-let g:phpcomplete_builtin['functions']['error_handling'] = {
+let g:phpcd_builtin['functions']['error_handling'] = {
 \ 'debug_backtrace(': '[ int $options = DEBUG_BACKTRACE_PROVIDE_OBJECT [, int $limit = 0]] | array',
 \ 'debug_print_backtrace(': '[ int $options = 0 [, int $limit = 0]] | void',
 \ 'error_get_last(': 'void | array',
@@ -1306,7 +1306,7 @@ let g:phpcomplete_builtin['functions']['error_handling'] = {
 \ 'set_exception_handler(': 'callable $exception_handler | callable',
 \ 'trigger_error(': 'string $error_msg [, int $error_type = E_USER_NOTICE] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['direct_io'] = {
+let g:phpcd_builtin['functions']['direct_io'] = {
 \ 'dio_close(': 'resource $fd | void',
 \ 'dio_fcntl(': 'resource $fd, int $cmd [, mixed $args] | mixed',
 \ 'dio_open(': 'string $filename, int $flags [, int $mode = 0] | resource',
@@ -1317,10 +1317,10 @@ let g:phpcomplete_builtin['functions']['direct_io'] = {
 \ 'dio_truncate(': 'resource $fd, int $offset | bool',
 \ 'dio_write(': 'resource $fd, string $data [, int $len = 0] | int',
 \ }
-let g:phpcomplete_builtin['functions']['dom'] = {
+let g:phpcd_builtin['functions']['dom'] = {
 \ 'dom_import_simplexml(': 'SimpleXMLElement $node | DOMElement',
 \ }
-let g:phpcomplete_builtin['functions']['eio'] = {
+let g:phpcd_builtin['functions']['eio'] = {
 \ 'eio_busy(': 'int $delay [, int $pri = EIO_PRI_DEFAULT [, callable $callback = NULL [, mixed $data = NULL]]] | resource',
 \ 'eio_cancel(': 'resource $req | void',
 \ 'eio_chmod(': 'string $path, int $mode [, int $pri = EIO_PRI_DEFAULT [, callable $callback = NULL [, mixed $data = NULL]]] | resource',
@@ -1381,7 +1381,7 @@ let g:phpcomplete_builtin['functions']['eio'] = {
 \ 'eio_utime(': 'string $path, float $atime, float $mtime [, int $pri = EIO_PRI_DEFAULT [, callable $callback = NULL [, mixed $data = NULL]]] | resource',
 \ 'eio_write(': 'mixed $fd, string $str [, int $length = 0 [, int $offset = 0 [, int $pri = EIO_PRI_DEFAULT [, callable $callback = NULL [, mixed $data = NULL]]]]] | resource',
 \ }
-let g:phpcomplete_builtin['functions']['enchant'] = {
+let g:phpcd_builtin['functions']['enchant'] = {
 \ 'enchant_broker_describe(': 'resource $broker | array',
 \ 'enchant_broker_dict_exists(': 'resource $broker, string $tag | bool',
 \ 'enchant_broker_free_dict(': 'resource $dict | bool',
@@ -1402,7 +1402,7 @@ let g:phpcomplete_builtin['functions']['enchant'] = {
 \ 'enchant_dict_store_replacement(': 'resource $dict, string $mis, string $cor | void',
 \ 'enchant_dict_suggest(': 'resource $dict, string $word | array',
 \ }
-let g:phpcomplete_builtin['functions']['posix_regex'] = {
+let g:phpcd_builtin['functions']['posix_regex'] = {
 \ 'ereg_replace(': 'string $pattern, string $replacement, string $string | string',
 \ 'ereg(': 'string $pattern, string $string [, array &$regs] | int',
 \ 'eregi_replace(': 'string $pattern, string $replacement, string $string | string',
@@ -1411,7 +1411,7 @@ let g:phpcomplete_builtin['functions']['posix_regex'] = {
 \ 'spliti(': 'string $pattern, string $string [, int $limit = -1] | array',
 \ 'sql_regcase(': 'string $string | string',
 \ }
-let g:phpcomplete_builtin['functions']['program_execution'] = {
+let g:phpcd_builtin['functions']['program_execution'] = {
 \ 'escapeshellarg(': 'string $arg | string',
 \ 'escapeshellcmd(': 'string $command | string',
 \ 'exec(': 'string $command [, array &$output [, int &$return_var]] | string',
@@ -1424,7 +1424,7 @@ let g:phpcomplete_builtin['functions']['program_execution'] = {
 \ 'shell_exec(': 'string $cmd | string',
 \ 'system(': 'string $command [, int &$return_var] | string',
 \ }
-let g:phpcomplete_builtin['functions']['libevent'] = {
+let g:phpcd_builtin['functions']['libevent'] = {
 \ 'event_add(': 'resource $event [, int $timeout = -1] | bool',
 \ 'event_base_free(': 'resource $event_base | void',
 \ 'event_base_loop(': 'resource $event_base [, int $flags = 0] | int',
@@ -1456,22 +1456,22 @@ let g:phpcomplete_builtin['functions']['libevent'] = {
 \ 'event_timer_new(': 'event_timer_new — Alias of event_new()',
 \ 'event_timer_set(': 'resource $event, callable $callback [, mixed $arg] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['exif'] = {
+let g:phpcd_builtin['functions']['exif'] = {
 \ 'exif_imagetype(': 'string $filename | int',
 \ 'exif_read_data(': 'string $filename [, string $sections = NULL [, bool $arrays = false [, bool $thumbnail = false]]] | array',
 \ 'exif_tagname(': 'int $index | string',
 \ 'exif_thumbnail(': 'string $filename [, int &$width [, int &$height [, int &$imagetype]]] | string',
 \ 'read_exif_data(': 'read_exif_data — Alias of exif_read_data()',
 \ }
-let g:phpcomplete_builtin['functions']['expect'] = {
+let g:phpcd_builtin['functions']['expect'] = {
 \ 'expect_expectl(': 'resource $expect, array $cases [, array &$match] | int',
 \ 'expect_popen(': 'string $command | resource',
 \ }
-let g:phpcomplete_builtin['functions']['mail'] = {
+let g:phpcd_builtin['functions']['mail'] = {
 \ 'ezmlm_hash(': 'string $addr | int',
 \ 'mail(': 'string $to, string $subject, string $message [, string $additional_headers [, string $additional_parameters]] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['fam'] = {
+let g:phpcd_builtin['functions']['fam'] = {
 \ 'fam_cancel_monitor(': 'resource $fam, resource $fam_monitor | bool',
 \ 'fam_close(': 'resource $fam | void',
 \ 'fam_monitor_collection(': 'resource $fam, string $dirname, int $depth, string $mask | resource',
@@ -1483,7 +1483,7 @@ let g:phpcomplete_builtin['functions']['fam'] = {
 \ 'fam_resume_monitor(': 'resource $fam, resource $fam_monitor | bool',
 \ 'fam_suspend_monitor(': 'resource $fam, resource $fam_monitor | bool',
 \ }
-let g:phpcomplete_builtin['functions']['fann'] = {
+let g:phpcd_builtin['functions']['fann'] = {
 \ 'fann_cascadetrain_on_data(': 'resource $ann, resource $data, int $max_neurons, int $neurons_between_reports, float $desired_error | bool',
 \ 'fann_cascadetrain_on_file(': 'resource $ann, string $filename, int $max_neurons, int $neurons_between_reports, float $desired_error | bool',
 \ 'fann_clear_scaling_params(': 'resource $ann | bool',
@@ -1626,10 +1626,10 @@ let g:phpcomplete_builtin['functions']['fann'] = {
 \ 'fann_train_on_file(': 'resource $ann, string $filename, int $max_epochs, int $epochs_between_reports, float $desired_error | bool',
 \ 'fann_train(': 'resource $ann, array $input, array $desired_output | bool',
 \ }
-let g:phpcomplete_builtin['functions']['fastcgi_process_manager'] = {
+let g:phpcd_builtin['functions']['fastcgi_process_manager'] = {
 \ 'fastcgi_finish_request(': 'void | boolean',
 \ }
-let g:phpcomplete_builtin['functions']['frontbase'] = {
+let g:phpcd_builtin['functions']['frontbase'] = {
 \ 'fbsql_affected_rows(': '[ resource $link_identifier] | int',
 \ 'fbsql_autocommit(': 'resource $link_identifier [, bool $OnOff] | bool',
 \ 'fbsql_blob_size(': 'string $blob_handle [, resource $link_identifier] | int',
@@ -1690,7 +1690,7 @@ let g:phpcomplete_builtin['functions']['frontbase'] = {
 \ 'fbsql_username(': 'resource $link_identifier [, string $username] | string',
 \ 'fbsql_warnings(': '[ bool $OnOff] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['fdf'] = {
+let g:phpcd_builtin['functions']['fdf'] = {
 \ 'fdf_add_doc_javascript(': 'resource $fdf_document, string $script_name, string $script_code | bool',
 \ 'fdf_add_template(': 'resource $fdf_document, int $newpage, string $filename, string $template, int $rename | bool',
 \ 'fdf_close(': 'resource $fdf_document | void',
@@ -1727,7 +1727,7 @@ let g:phpcomplete_builtin['functions']['fdf'] = {
 \ 'fdf_set_value(': 'resource $fdf_document, string $fieldname, mixed $value [, int $isName] | bool',
 \ 'fdf_set_version(': 'resource $fdf_document, string $version | bool',
 \ }
-let g:phpcomplete_builtin['functions']['filepro'] = {
+let g:phpcd_builtin['functions']['filepro'] = {
 \ 'filepro_fieldcount(': 'void | int',
 \ 'filepro_fieldname(': 'int $field_number | string',
 \ 'filepro_fieldtype(': 'int $field_number | string',
@@ -1736,7 +1736,7 @@ let g:phpcomplete_builtin['functions']['filepro'] = {
 \ 'filepro_rowcount(': 'void | int',
 \ 'filepro(': 'string $directory | bool',
 \ }
-let g:phpcomplete_builtin['functions']['filter'] = {
+let g:phpcd_builtin['functions']['filter'] = {
 \ 'filter_has_var(': 'int $type, string $variable_name | bool',
 \ 'filter_id(': 'string $filtername | int',
 \ 'filter_input_array(': 'int $type [, mixed $definition [, bool $add_empty = true]] | mixed',
@@ -1745,7 +1745,7 @@ let g:phpcomplete_builtin['functions']['filter'] = {
 \ 'filter_var_array(': 'array $data [, mixed $definition [, bool $add_empty = true]] | mixed',
 \ 'filter_var(': 'mixed $variable [, int $filter = FILTER_DEFAULT [, mixed $options]] | mixed',
 \ }
-let g:phpcomplete_builtin['functions']['fileinfo'] = {
+let g:phpcd_builtin['functions']['fileinfo'] = {
 \ 'finfo_buffer(': 'resource $finfo [, string $string = NULL [, int $options = FILEINFO_NONE [, resource $context = NULL]]] | string',
 \ 'finfo_close(': 'resource $finfo | bool',
 \ 'finfo_file(': 'resource $finfo [, string $file_name = NULL [, int $options = FILEINFO_NONE [, resource $context = NULL]]] | string',
@@ -1753,7 +1753,7 @@ let g:phpcomplete_builtin['functions']['fileinfo'] = {
 \ 'finfo_set_flags(': 'resource $finfo, int $options | bool',
 \ 'mime_content_type(': 'string $filename | string',
 \ }
-let g:phpcomplete_builtin['functions']['output_control'] = {
+let g:phpcd_builtin['functions']['output_control'] = {
 \ 'flush(': 'void | void',
 \ 'ob_clean(': 'void | void',
 \ 'ob_end_clean(': 'void | bool',
@@ -1772,10 +1772,10 @@ let g:phpcomplete_builtin['functions']['output_control'] = {
 \ 'output_add_rewrite_var(': 'string $name, string $value | bool',
 \ 'output_reset_rewrite_vars(': 'void | bool',
 \ }
-let g:phpcomplete_builtin['functions']['fribidi'] = {
+let g:phpcd_builtin['functions']['fribidi'] = {
 \ 'fribidi_log2vis(': 'string $str, string $direction, int $charset | string',
 \ }
-let g:phpcomplete_builtin['functions']['semaphore'] = {
+let g:phpcd_builtin['functions']['semaphore'] = {
 \ 'ftok(': 'string $pathname, string $proj | int',
 \ 'msg_get_queue(': 'int $key [, int $perms = 0666] | resource',
 \ 'msg_queue_exists(': 'int $key | bool',
@@ -1796,7 +1796,7 @@ let g:phpcomplete_builtin['functions']['semaphore'] = {
 \ 'shm_remove_var(': 'resource $shm_identifier, int $variable_key | bool',
 \ 'shm_remove(': 'resource $shm_identifier | bool',
 \ }
-let g:phpcomplete_builtin['functions']['ftp'] = {
+let g:phpcd_builtin['functions']['ftp'] = {
 \ 'ftp_alloc(': 'resource $ftp_stream, int $filesize [, string &$result] | bool',
 \ 'ftp_cdup(': 'resource $ftp_stream | bool',
 \ 'ftp_chdir(': 'resource $ftp_stream, string $directory | bool',
@@ -1832,7 +1832,7 @@ let g:phpcomplete_builtin['functions']['ftp'] = {
 \ 'ftp_ssl_connect(': 'string $host [, int $port = 21 [, int $timeout = 90]] | resource',
 \ 'ftp_systype(': 'resource $ftp_stream | string',
 \ }
-let g:phpcomplete_builtin['functions']['gd'] = {
+let g:phpcd_builtin['functions']['gd'] = {
 \ 'gd_info(': 'void | array',
 \ 'getimagesize(': 'string $filename [, array &$imageinfo] | array',
 \ 'getimagesizefromstring(': 'string $imagedata [, array &$imageinfo] | array',
@@ -1948,7 +1948,7 @@ let g:phpcomplete_builtin['functions']['gd'] = {
 \ 'jpeg2wbmp(': 'string $jpegname, string $wbmpname, int $dest_height, int $dest_width, int $threshold | bool',
 \ 'png2wbmp(': 'string $pngname, string $wbmpname, int $dest_height, int $dest_width, int $threshold | bool',
 \ }
-let g:phpcomplete_builtin['functions']['geoip'] = {
+let g:phpcd_builtin['functions']['geoip'] = {
 \ 'geoip_asnum_by_name(': 'string $hostname | string',
 \ 'geoip_continent_code_by_name(': 'string $hostname | string',
 \ 'geoip_country_code_by_name(': 'string $hostname | string',
@@ -1969,7 +1969,7 @@ let g:phpcomplete_builtin['functions']['geoip'] = {
 \ 'geoip_setup_custom_directory(': 'string $path | void',
 \ 'geoip_time_zone_by_country_and_region(': 'string $country_code [, string $region_code] | string',
 \ }
-let g:phpcomplete_builtin['functions']['gmp'] = {
+let g:phpcd_builtin['functions']['gmp'] = {
 \ 'gmp_abs(': 'GMP $a | GMP',
 \ 'gmp_add(': 'GMP $a, GMP $b | GMP',
 \ 'gmp_and(': 'GMP $a, GMP $b | GMP',
@@ -2018,7 +2018,7 @@ let g:phpcomplete_builtin['functions']['gmp'] = {
 \ 'gmp_testbit(': 'GMP $a, int $index | bool',
 \ 'gmp_xor(': 'GMP $a, GMP $b | GMP',
 \ }
-let g:phpcomplete_builtin['functions']['gnupg'] = {
+let g:phpcd_builtin['functions']['gnupg'] = {
 \ 'gnupg_adddecryptkey(': 'resource $identifier, string $fingerprint, string $passphrase | bool',
 \ 'gnupg_addencryptkey(': 'resource $identifier, string $fingerprint | bool',
 \ 'gnupg_addsignkey(': 'resource $identifier, string $fingerprint [, string $passphrase] | bool',
@@ -2041,10 +2041,10 @@ let g:phpcomplete_builtin['functions']['gnupg'] = {
 \ 'gnupg_sign(': 'resource $identifier, string $plaintext | string',
 \ 'gnupg_verify(': 'resource $identifier, string $signed_text, string $signature [, string &$plaintext] | array',
 \ }
-let g:phpcomplete_builtin['functions']['gopher'] = {
+let g:phpcd_builtin['functions']['gopher'] = {
 \ 'gopher_parsedir(': 'string $dirent | array',
 \ }
-let g:phpcomplete_builtin['functions']['intl'] = {
+let g:phpcd_builtin['functions']['intl'] = {
 \ 'grapheme_extract(': 'string $haystack, int $size [, int $extract_type [, int $start = 0 [, int &$next]]] | string',
 \ 'grapheme_stripos(': 'string $haystack, string $needle [, int $offset = 0] | int',
 \ 'grapheme_stristr(': 'string $haystack, string $needle [, bool $before_needle = false] | string',
@@ -2198,7 +2198,7 @@ let g:phpcomplete_builtin['functions']['intl'] = {
 \ 'intlcal_get_repeated_wall_time_option(': 'IntlCalendar $cal | int',
 \ 'numfmt_parse(': 'NumberFormatter $fmt, string $value [, int $type [, int &$position]] | mixed',
 \ }
-let g:phpcomplete_builtin['functions']['gupnp'] = {
+let g:phpcd_builtin['functions']['gupnp'] = {
 \ 'gupnp_context_get_host_ip(': 'resource $context | string',
 \ 'gupnp_context_get_port(': 'resource $context | int',
 \ 'gupnp_context_get_subscription_timeout(': 'resource $context | int',
@@ -2238,7 +2238,7 @@ let g:phpcomplete_builtin['functions']['gupnp'] = {
 \ 'gupnp_service_proxy_set_subscribed(': 'resource $proxy, bool $subscribed | bool',
 \ 'gupnp_service_thaw_notify(': 'resource $service | bool',
 \ }
-let g:phpcomplete_builtin['functions']['zlib'] = {
+let g:phpcd_builtin['functions']['zlib'] = {
 \ 'gzclose(': 'resource $zp | bool',
 \ 'gzcompress(': 'string $data [, int $level = -1 [, int $encoding = ZLIB_ENCODING_DEFLATE]] | string',
 \ 'gzdecode(': 'string $data [, int $length] | string',
@@ -2264,7 +2264,7 @@ let g:phpcomplete_builtin['functions']['zlib'] = {
 \ 'zlib_encode(': 'string $data, string $encoding [, string $level = -1] | string',
 \ 'zlib_get_coding_type(': 'void | string',
 \ }
-let g:phpcomplete_builtin['functions']['hash'] = {
+let g:phpcd_builtin['functions']['hash'] = {
 \ 'hash_algos(': 'void | array',
 \ 'hash_copy(': 'resource $context | resource',
 \ 'hash_equals(': 'string $known_string, string $user_string | bool',
@@ -2279,7 +2279,7 @@ let g:phpcomplete_builtin['functions']['hash'] = {
 \ 'hash_update(': 'resource $context, string $data | bool',
 \ 'hash(': 'string $algo, string $data [, bool $raw_output = false] | string',
 \ }
-let g:phpcomplete_builtin['functions']['http'] = {
+let g:phpcd_builtin['functions']['http'] = {
 \ 'http_build_cookie(': 'array $cookie | string',
 \ 'http_build_str(': 'array $query [, string $prefix [, string $arg_separator = ini_get("arg_separator.output")]] | string',
 \ 'http_build_url(': '[ mixed $url [, mixed $parts [, int $flags = HTTP_URL_REPLACE [, array &$new_url]]]] | string',
@@ -2332,13 +2332,13 @@ let g:phpcomplete_builtin['functions']['http'] = {
 \ 'ob_etaghandler(': 'string $data, int $mode | string',
 \ 'ob_inflatehandler(': 'string $data, int $mode | string',
 \ }
-let g:phpcomplete_builtin['functions']['hyperwave_api'] = {
+let g:phpcd_builtin['functions']['hyperwave_api'] = {
 \ 'hwapi_attribute_new(': '[ string $name [, string $value]] | HW_API_Attribute',
 \ 'hwapi_content_new(': 'string $content, string $mimetype | HW_API_Content',
 \ 'hwapi_hgcsp(': 'string $hostname [, int $port] | HW_API',
 \ 'hwapi_object_new(': 'array $parameter | hw_api_object',
 \ }
-let g:phpcomplete_builtin['functions']['firebird_interbase'] = {
+let g:phpcd_builtin['functions']['firebird_interbase'] = {
 \ 'ibase_add_user(': 'resource $service_handle, string $user_name, string $password [, string $first_name [, string $middle_name [, string $last_name]]] | bool',
 \ 'ibase_affected_rows(': '[ resource $link_identifier] | int',
 \ 'ibase_backup(': 'resource $service_handle, string $source_db, string $dest_file [, int $options = 0 [, bool $verbose = false]] | mixed',
@@ -2388,7 +2388,7 @@ let g:phpcomplete_builtin['functions']['firebird_interbase'] = {
 \ 'ibase_trans(': '[ int $trans_args [, resource $link_identifier]] | resource',
 \ 'ibase_wait_event(': 'string $event_name1 [, string $event_name2 [, string $...]] | string',
 \ }
-let g:phpcomplete_builtin['functions']['iconv'] = {
+let g:phpcd_builtin['functions']['iconv'] = {
 \ 'iconv_get_encoding(': '[ string $type = "all"] | mixed',
 \ 'iconv_mime_decode_headers(': 'string $encoded_headers [, int $mode = 0 [, string $charset = ini_get("iconv.internal_encoding")]] | array',
 \ 'iconv_mime_decode(': 'string $encoded_header [, int $mode = 0 [, string $charset = ini_get("iconv.internal_encoding")]] | string',
@@ -2401,7 +2401,7 @@ let g:phpcomplete_builtin['functions']['iconv'] = {
 \ 'iconv(': 'string $in_charset, string $out_charset, string $str | string',
 \ 'ob_iconv_handler(': 'string $contents, int $status | string',
 \ }
-let g:phpcomplete_builtin['functions']['id3'] = {
+let g:phpcd_builtin['functions']['id3'] = {
 \ 'id3_get_frame_long_name(': 'string $frameId | string',
 \ 'id3_get_frame_short_name(': 'string $frameId | string',
 \ 'id3_get_genre_id(': 'string $genre | int',
@@ -2412,7 +2412,7 @@ let g:phpcomplete_builtin['functions']['id3'] = {
 \ 'id3_remove_tag(': 'string $filename [, int $version = ID3_V1_0] | bool',
 \ 'id3_set_tag(': 'string $filename, array $tag [, int $version = ID3_V1_0] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['informix'] = {
+let g:phpcd_builtin['functions']['informix'] = {
 \ 'ifx_affected_rows(': 'resource $result_id | int',
 \ 'ifx_blobinfile_mode(': 'int $mode | bool',
 \ 'ifx_byteasvarchar(': 'int $mode | bool',
@@ -2452,7 +2452,7 @@ let g:phpcomplete_builtin['functions']['informix'] = {
 \ 'ifxus_tell_slob(': 'int $bid | int',
 \ 'ifxus_write_slob(': 'int $bid, string $content | int',
 \ }
-let g:phpcomplete_builtin['functions']['iis'] = {
+let g:phpcd_builtin['functions']['iis'] = {
 \ 'iis_add_server(': 'string $path, string $comment, string $server_ip, int $port, string $host_name, int $rights, int $start_server | int',
 \ 'iis_get_dir_security(': 'int $server_instance, string $virtual_path | int',
 \ 'iis_get_script_map(': 'int $server_instance, string $virtual_path, string $script_extension | string',
@@ -2470,7 +2470,7 @@ let g:phpcomplete_builtin['functions']['iis'] = {
 \ 'iis_stop_server(': 'int $server_instance | int',
 \ 'iis_stop_service(': 'string $service_id | int',
 \ }
-let g:phpcomplete_builtin['functions']['imap'] = {
+let g:phpcd_builtin['functions']['imap'] = {
 \ 'imap_8bit(': 'string $string | string',
 \ 'imap_alerts(': 'void | array',
 \ 'imap_append(': 'resource $imap_stream, string $mailbox, string $message [, string $options = NULL [, string $internal_date = NULL]] | bool',
@@ -2545,10 +2545,10 @@ let g:phpcomplete_builtin['functions']['imap'] = {
 \ 'imap_utf7_encode(': 'string $data | string',
 \ 'imap_utf8(': 'string $mime_encoded_text | string',
 \ }
-let g:phpcomplete_builtin['functions']['inclued'] = {
+let g:phpcd_builtin['functions']['inclued'] = {
 \ 'inclued_get_data(': 'void | array',
 \ }
-let g:phpcomplete_builtin['functions']['ingres'] = {
+let g:phpcd_builtin['functions']['ingres'] = {
 \ 'ingres_autocommit_state(': 'resource $link | bool',
 \ 'ingres_autocommit(': 'resource $link | bool',
 \ 'ingres_charset(': 'resource $link | string',
@@ -2584,33 +2584,33 @@ let g:phpcomplete_builtin['functions']['ingres'] = {
 \ 'ingres_set_environment(': 'resource $link, array $options | bool',
 \ 'ingres_unbuffered_query(': 'resource $link, string $query [, array $params [, string $types]] | mixed',
 \ }
-let g:phpcomplete_builtin['functions']['inotify'] = {
+let g:phpcd_builtin['functions']['inotify'] = {
 \ 'inotify_add_watch(': 'resource $inotify_instance, string $pathname, int $mask | int',
 \ 'inotify_init(': 'void | resource',
 \ 'inotify_queue_len(': 'resource $inotify_instance | int',
 \ 'inotify_read(': 'resource $inotify_instance | array',
 \ 'inotify_rm_watch(': 'resource $inotify_instance, int $watch_descriptor | bool',
 \ }
-let g:phpcomplete_builtin['functions']['soap'] = {
+let g:phpcd_builtin['functions']['soap'] = {
 \ 'is_soap_fault(': 'mixed $object | bool',
 \ 'use_soap_error_handler(': '[ bool $handler = true] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['taint'] = {
+let g:phpcd_builtin['functions']['taint'] = {
 \ 'is_tainted(': 'string $string | bool',
 \ 'taint(': 'string &$string [, string $...] | bool',
 \ 'untaint(': 'string &$string [, string $...] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['json'] = {
+let g:phpcd_builtin['functions']['json'] = {
 \ 'json_decode(': 'string $json [, bool $assoc = false [, int $depth = 512 [, int $options = 0]]] | mixed',
 \ 'json_encode(': 'mixed $value [, int $options = 0 [, int $depth = 512]] | string',
 \ 'json_last_error_msg(': 'void | string',
 \ 'json_last_error(': 'void | int',
 \ }
-let g:phpcomplete_builtin['functions']['judy'] = {
+let g:phpcd_builtin['functions']['judy'] = {
 \ 'judy_type(': 'Judy $array | int',
 \ 'judy_version(': 'void | string',
 \ }
-let g:phpcomplete_builtin['functions']['kadm5'] = {
+let g:phpcd_builtin['functions']['kadm5'] = {
 \ 'kadm5_chpass_principal(': 'resource $handle, string $principal, string $password | bool',
 \ 'kadm5_create_principal(': 'resource $handle, string $principal [, string $password [, array $options]] | bool',
 \ 'kadm5_delete_principal(': 'resource $handle, string $principal | bool',
@@ -2622,7 +2622,7 @@ let g:phpcomplete_builtin['functions']['kadm5'] = {
 \ 'kadm5_init_with_password(': 'string $admin_server, string $realm, string $principal, string $password | resource',
 \ 'kadm5_modify_principal(': 'resource $handle, string $principal, array $options | bool',
 \ }
-let g:phpcomplete_builtin['functions']['ldap'] = {
+let g:phpcd_builtin['functions']['ldap'] = {
 \ 'ldap_8859_to_t61(': 'string $value | string',
 \ 'ldap_add(': 'resource $link_identifier, string $dn, array $entry | bool',
 \ 'ldap_bind(': 'resource $link_identifier [, string $bind_rdn = NULL [, string $bind_password = NULL]] | bool',
@@ -2671,7 +2671,7 @@ let g:phpcomplete_builtin['functions']['ldap'] = {
 \ 'ldap_t61_to_8859(': 'string $value | string',
 \ 'ldap_unbind(': 'resource $link_identifier | bool',
 \ }
-let g:phpcomplete_builtin['functions']['libxml'] = {
+let g:phpcd_builtin['functions']['libxml'] = {
 \ 'libxml_clear_errors(': 'void | void',
 \ 'libxml_disable_entity_loader(': '[ bool $disable = true] | bool',
 \ 'libxml_get_errors(': 'void | array',
@@ -2680,12 +2680,12 @@ let g:phpcomplete_builtin['functions']['libxml'] = {
 \ 'libxml_set_streams_context(': 'resource $streams_context | void',
 \ 'libxml_use_internal_errors(': '[ bool $use_errors = false] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['lzf'] = {
+let g:phpcd_builtin['functions']['lzf'] = {
 \ 'lzf_compress(': 'string $data | string',
 \ 'lzf_decompress(': 'string $data | string',
 \ 'lzf_optimized_for(': 'void | int',
 \ }
-let g:phpcomplete_builtin['functions']['mcve'] = {
+let g:phpcd_builtin['functions']['mcve'] = {
 \ 'm_checkstatus(': 'resource $conn, int $identifier | int',
 \ 'm_completeauthorizations(': 'resource $conn, int &$array | int',
 \ 'm_connect(': 'resource $conn | int',
@@ -2726,7 +2726,7 @@ let g:phpcomplete_builtin['functions']['mcve'] = {
 \ 'm_verifyconnection(': 'resource $conn, int $tf | bool',
 \ 'm_verifysslcert(': 'resource $conn, int $tf | bool',
 \ }
-let g:phpcomplete_builtin['functions']['mailparse'] = {
+let g:phpcd_builtin['functions']['mailparse'] = {
 \ 'mailparse_determine_best_xfer_encoding(': 'resource $fp | string',
 \ 'mailparse_msg_create(': 'void | resource',
 \ 'mailparse_msg_extract_part_file(': 'resource $mimemail, mixed $filename [, callable $callbackfunc] | string',
@@ -2742,7 +2742,7 @@ let g:phpcomplete_builtin['functions']['mailparse'] = {
 \ 'mailparse_stream_encode(': 'resource $sourcefp, resource $destfp, string $encoding | bool',
 \ 'mailparse_uudecode_all(': 'resource $fp | array',
 \ }
-let g:phpcomplete_builtin['functions']['maxdb'] = {
+let g:phpcd_builtin['functions']['maxdb'] = {
 \ 'maxdb_affected_rows(': 'resource $link | int',
 \ 'maxdb_autocommit(': 'resource $link, bool $mode | bool',
 \ 'maxdb_bind_param(': 'maxdb_bind_param — Alias of maxdb_stmt_bind_param()',
@@ -2846,7 +2846,7 @@ let g:phpcomplete_builtin['functions']['maxdb'] = {
 \ 'maxdb_use_result(': 'resource $link | resource',
 \ 'maxdb_warning_count(': 'resource $link | int',
 \ }
-let g:phpcomplete_builtin['functions']['multibyte_string'] = {
+let g:phpcd_builtin['functions']['multibyte_string'] = {
 \ 'mb_check_encoding(': '[ string $var = NULL [, string $encoding = mb_internal_encoding()]] | bool',
 \ 'mb_convert_case(': 'string $str, int $mode [, string $encoding = mb_internal_encoding()] | string',
 \ 'mb_convert_encoding(': 'string $str, string $to_encoding [, mixed $from_encoding = mb_internal_encoding()] | string',
@@ -2903,7 +2903,7 @@ let g:phpcomplete_builtin['functions']['multibyte_string'] = {
 \ 'mb_substr_count(': 'string $haystack, string $needle [, string $encoding = mb_internal_encoding()] | int',
 \ 'mb_substr(': 'string $str, int $start [, int $length = NULL [, string $encoding = mb_internal_encoding()]] | string',
 \ }
-let g:phpcomplete_builtin['functions']['mcrypt'] = {
+let g:phpcd_builtin['functions']['mcrypt'] = {
 \ 'mcrypt_cbc(': 'int $cipher, string $key, string $data, int $mode [, string $iv] | string',
 \ 'mcrypt_cfb(': 'int $cipher, string $key, string $data, int $mode, string $iv | string',
 \ 'mcrypt_create_iv(': 'int $size [, int $source = MCRYPT_DEV_URANDOM] | string',
@@ -2942,17 +2942,17 @@ let g:phpcomplete_builtin['functions']['mcrypt'] = {
 \ 'mcrypt_ofb(': 'int $cipher, string $key, string $data, int $mode, string $iv | string',
 \ 'mdecrypt_generic(': 'resource $td, string $data | string',
 \ }
-let g:phpcomplete_builtin['functions']['memcache'] = {
+let g:phpcd_builtin['functions']['memcache'] = {
 \ 'memcache_debug(': 'bool $on_off | bool',
 \ }
-let g:phpcomplete_builtin['functions']['mhash'] = {
+let g:phpcd_builtin['functions']['mhash'] = {
 \ 'mhash_count(': 'void | int',
 \ 'mhash_get_block_size(': 'int $hash | int',
 \ 'mhash_get_hash_name(': 'int $hash | string',
 \ 'mhash_keygen_s2k(': 'int $hash, string $password, string $salt, int $bytes | string',
 \ 'mhash(': 'int $hash, string $data [, string $key] | string',
 \ }
-let g:phpcomplete_builtin['functions']['ming'] = {
+let g:phpcd_builtin['functions']['ming'] = {
 \ 'ming_keypress(': 'string $char | int',
 \ 'ming_setcubicthreshold(': 'int $threshold | void',
 \ 'ming_setscale(': 'float $scale | void',
@@ -2960,7 +2960,7 @@ let g:phpcomplete_builtin['functions']['ming'] = {
 \ 'ming_useconstants(': 'int $use | void',
 \ 'ming_useswfversion(': 'int $version | void',
 \ }
-let g:phpcomplete_builtin['functions']['mqseries'] = {
+let g:phpcd_builtin['functions']['mqseries'] = {
 \ 'mqseries_back(': 'resource $hconn, resource &$compCode, resource &$reason | void',
 \ 'mqseries_begin(': 'resource $hconn, array $beginOptions, resource &$compCode, resource &$reason | void',
 \ 'mqseries_close(': 'resource $hconn, resource $hobj, int $options, resource &$compCode, resource &$reason | void',
@@ -2976,7 +2976,7 @@ let g:phpcomplete_builtin['functions']['mqseries'] = {
 \ 'mqseries_set(': 'resource $hconn, resource $hobj, int $selectorcount, array $selectors, int $intattrcount, array $intattrs, int $charattrlength, array $charattrs, resource &$compCode, resource &$reason | void',
 \ 'mqseries_strerror(': 'int $reason | string',
 \ }
-let g:phpcomplete_builtin['functions']['msession'] = {
+let g:phpcd_builtin['functions']['msession'] = {
 \ 'msession_connect(': 'string $host, string $port | bool',
 \ 'msession_count(': 'void | int',
 \ 'msession_create(': 'string $session [, string $classname [, string $data]] | bool',
@@ -2999,7 +2999,7 @@ let g:phpcomplete_builtin['functions']['msession'] = {
 \ 'msession_uniq(': 'int $param [, string $classname [, string $data]] | string',
 \ 'msession_unlock(': 'string $session, int $key | int',
 \ }
-let g:phpcomplete_builtin['functions']['msql'] = {
+let g:phpcd_builtin['functions']['msql'] = {
 \ 'msql_affected_rows(': 'resource $result | int',
 \ 'msql_close(': '[ resource $link_identifier] | bool',
 \ 'msql_connect(': '[ string $hostname] | resource',
@@ -3029,7 +3029,7 @@ let g:phpcomplete_builtin['functions']['msql'] = {
 \ 'msql_result(': 'resource $result, int $row [, mixed $field] | string',
 \ 'msql_select_db(': 'string $database_name [, resource $link_identifier] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['mssql'] = {
+let g:phpcd_builtin['functions']['mssql'] = {
 \ 'mssql_bind(': 'resource $stmt, string $param_name, mixed &$var, int $type [, bool $is_output = false [, bool $is_null = false [, int $maxlen = -1]]] | bool',
 \ 'mssql_close(': '[ resource $link_identifier] | bool',
 \ 'mssql_connect(': '[ string $servername [, string $username [, string $password [, bool $new_link = false]]]] | resource',
@@ -3061,7 +3061,7 @@ let g:phpcomplete_builtin['functions']['mssql'] = {
 \ 'mssql_rows_affected(': 'resource $link_identifier | int',
 \ 'mssql_select_db(': 'string $database_name [, resource $link_identifier] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['mysql'] = {
+let g:phpcd_builtin['functions']['mysql'] = {
 \ 'mysql_affected_rows(': '[ resource $link_identifier = NULL] | int',
 \ 'mysql_client_encoding(': '[ resource $link_identifier = NULL] | string',
 \ 'mysql_close(': '[ resource $link_identifier = NULL] | bool',
@@ -3111,7 +3111,7 @@ let g:phpcomplete_builtin['functions']['mysql'] = {
 \ 'mysql_thread_id(': '[ resource $link_identifier = NULL] | int',
 \ 'mysql_unbuffered_query(': 'string $query [, resource $link_identifier = NULL] | resource',
 \ }
-let g:phpcomplete_builtin['functions']['mysqli'] = {
+let g:phpcd_builtin['functions']['mysqli'] = {
 \ 'mysqli_disable_reads_from_master(': 'mysqli $link | bool',
 \ 'mysqli_disable_rpl_parse(': 'mysqli $link | bool',
 \ 'mysqli_enable_reads_from_master(': 'mysqli $link | bool',
@@ -3228,11 +3228,11 @@ let g:phpcomplete_builtin['functions']['mysqli'] = {
 \ 'mysqli_rpl_query_type(': 'mysqli $link, string $query | int',
 \ 'mysqli_options(': 'mysqli $link, int $option, mixed $value | bool',
 \ }
-let g:phpcomplete_builtin['functions']['mysqlnd_memcache'] = {
+let g:phpcd_builtin['functions']['mysqlnd_memcache'] = {
 \ 'mysqlnd_memcache_get_config(': 'mixed $connection | array',
 \ 'mysqlnd_memcache_set(': 'mixed $mysql_connection [, Memcached $memcache_connection [, string $pattern [, callback $callback]]] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['mysqlnd_ms'] = {
+let g:phpcd_builtin['functions']['mysqlnd_ms'] = {
 \ 'mysqlnd_ms_dump_servers(': 'mixed $connection | array',
 \ 'mysqlnd_ms_fabric_select_global(': 'mixed $connection, mixed $table_name | array',
 \ 'mysqlnd_ms_fabric_select_shard(': 'mixed $connection, mixed $table_name, mixed $shard_key | array',
@@ -3248,7 +3248,7 @@ let g:phpcomplete_builtin['functions']['mysqlnd_ms'] = {
 \ 'mysqlnd_ms_xa_gc(': 'mixed $connection [, string $gtrid [, boolean $ignore_max_retries]] | int',
 \ 'mysqlnd_ms_xa_rollback(': 'mixed $connection, string $gtrid | int',
 \ }
-let g:phpcomplete_builtin['functions']['mysqlnd_qc'] = {
+let g:phpcd_builtin['functions']['mysqlnd_qc'] = {
 \ 'mysqlnd_qc_clear_cache(': 'void | bool',
 \ 'mysqlnd_qc_get_available_handlers(': 'void | array',
 \ 'mysqlnd_qc_get_cache_info(': 'void | array',
@@ -3260,12 +3260,12 @@ let g:phpcomplete_builtin['functions']['mysqlnd_qc'] = {
 \ 'mysqlnd_qc_set_storage_handler(': 'string $handler | bool',
 \ 'mysqlnd_qc_set_user_handlers(': 'string $get_hash, string $find_query_in_cache, string $return_to_cache, string $add_query_to_cache_if_not_exists, string $query_is_select, string $update_query_run_time_stats, string $get_stats, string $clear_cache | bool',
 \ }
-let g:phpcomplete_builtin['functions']['mysqlnd_uh'] = {
+let g:phpcd_builtin['functions']['mysqlnd_uh'] = {
 \ 'mysqlnd_uh_convert_to_mysqlnd(': 'mysqli &$mysql_connection | resource',
 \ 'mysqlnd_uh_set_connection_proxy(': 'MysqlndUhConnection &$connection_proxy [, mysqli &$mysqli_connection] | bool',
 \ 'mysqlnd_uh_set_statement_proxy(': 'MysqlndUhStatement &$statement_proxy | bool',
 \ }
-let g:phpcomplete_builtin['functions']['ncurses'] = {
+let g:phpcd_builtin['functions']['ncurses'] = {
 \ 'ncurses_addch(': 'int $ch | int',
 \ 'ncurses_addchnstr(': 'string $s, int $n | int',
 \ 'ncurses_addchstr(': 'string $s | int',
@@ -3427,7 +3427,7 @@ let g:phpcomplete_builtin['functions']['ncurses'] = {
 \ 'ncurses_wstandout(': 'resource $window | int',
 \ 'ncurses_wvline(': 'resource $window, int $charattr, int $n | int',
 \ }
-let g:phpcomplete_builtin['functions']['newt'] = {
+let g:phpcd_builtin['functions']['newt'] = {
 \ 'newt_bell(': 'void | void',
 \ 'newt_button_bar(': 'array &$buttons | resource',
 \ 'newt_button(': 'int $left, int $top, string $text | resource',
@@ -3545,16 +3545,16 @@ let g:phpcomplete_builtin['functions']['newt'] = {
 \ 'newt_win_messagev(': 'string $title, string $button_text, string $format, array $args | void',
 \ 'newt_win_ternary(': 'string $title, string $button1_text, string $button2_text, string $button3_text, string $format [, mixed $args [, mixed $...]] | int',
 \ }
-let g:phpcomplete_builtin['functions']['nsapi'] = {
+let g:phpcd_builtin['functions']['nsapi'] = {
 \ 'nsapi_request_headers(': 'void | array',
 \ 'nsapi_response_headers(': 'void | array',
 \ 'nsapi_virtual(': 'string $uri | bool',
 \ }
-let g:phpcomplete_builtin['functions']['oauth'] = {
+let g:phpcd_builtin['functions']['oauth'] = {
 \ 'oauth_get_sbs(': 'string $http_method, string $uri [, array $request_parameters] | string',
 \ 'oauth_urlencode(': 'string $uri | string',
 \ }
-let g:phpcomplete_builtin['functions']['tidy'] = {
+let g:phpcd_builtin['functions']['tidy'] = {
 \ 'ob_tidyhandler(': 'string $input [, int $mode] | string',
 \ 'tidy_access_count(': 'tidy $object | int',
 \ 'tidy_config_count(': 'tidy $object | int',
@@ -3586,7 +3586,7 @@ let g:phpcomplete_builtin['functions']['tidy'] = {
 \ 'tidy_repair_file(': 'string $filename [, mixed $config [, string $encoding [, bool $use_include_path = false]]] | string',
 \ 'tidy_get_root(': 'tidy $object | tidyNode',
 \ }
-let g:phpcomplete_builtin['functions']['oci8'] = {
+let g:phpcd_builtin['functions']['oci8'] = {
 \ 'oci_bind_array_by_name(': 'resource $statement, string $name, array &$var_array, int $max_table_length [, int $max_item_length = -1 [, int $type = SQLT_AFC]] | bool',
 \ 'oci_bind_by_name(': 'resource $statement, string $bv_name, mixed &$variable [, int $maxlength = -1 [, int $type = SQLT_CHR]] | bool',
 \ 'oci_cancel(': 'resource $statement | bool',
@@ -3636,7 +3636,7 @@ let g:phpcomplete_builtin['functions']['oci8'] = {
 \ 'oci_set_prefetch(': 'resource $statement, int $rows | bool',
 \ 'oci_statement_type(': 'resource $statement | string',
 \ }
-let g:phpcomplete_builtin['functions']['odbc'] = {
+let g:phpcd_builtin['functions']['odbc'] = {
 \ 'odbc_autocommit(': 'resource $connection_id [, bool $OnOff = false] | mixed',
 \ 'odbc_binmode(': 'resource $result_id, int $mode | bool',
 \ 'odbc_close_all(': 'void | void',
@@ -3681,14 +3681,14 @@ let g:phpcomplete_builtin['functions']['odbc'] = {
 \ 'odbc_tableprivileges(': 'resource $connection_id, string $qualifier, string $owner, string $name | resource',
 \ 'odbc_tables(': 'resource $connection_id [, string $qualifier [, string $owner [, string $name [, string $types]]]] | resource',
 \ }
-let g:phpcomplete_builtin['functions']['opcache'] = {
+let g:phpcd_builtin['functions']['opcache'] = {
 \ 'opcache_compile_file(': 'string $file | boolean',
 \ 'opcache_get_configuration(': 'void | array',
 \ 'opcache_get_status(': '[ boolean $get_scripts = TRUE] | array',
 \ 'opcache_invalidate(': 'string $script [, boolean $force = FALSE] | boolean',
 \ 'opcache_reset(': 'void | boolean',
 \ }
-let g:phpcomplete_builtin['functions']['openal'] = {
+let g:phpcd_builtin['functions']['openal'] = {
 \ 'openal_buffer_create(': 'void | resource',
 \ 'openal_buffer_data(': 'resource $buffer, int $format, string $data, int $freq | bool',
 \ 'openal_buffer_destroy(': 'resource $buffer | bool',
@@ -3713,7 +3713,7 @@ let g:phpcomplete_builtin['functions']['openal'] = {
 \ 'openal_source_stop(': 'resource $source | bool',
 \ 'openal_stream(': 'resource $source, int $format, int $rate | resource',
 \ }
-let g:phpcomplete_builtin['functions']['openssl'] = {
+let g:phpcd_builtin['functions']['openssl'] = {
 \ 'openssl_cipher_iv_length(': 'string $method | int',
 \ 'openssl_csr_export_to_file(': 'resource $csr, string $outfilename [, bool $notext = true] | bool',
 \ 'openssl_csr_export(': 'resource $csr, string &$out [, bool $notext = true] | bool',
@@ -3769,18 +3769,18 @@ let g:phpcomplete_builtin['functions']['openssl'] = {
 \ 'openssl_x509_parse(': 'mixed $x509cert [, bool $shortnames = true] | array',
 \ 'openssl_x509_read(': 'mixed $x509certdata | resource',
 \ }
-let g:phpcomplete_builtin['functions']['parsekit'] = {
+let g:phpcd_builtin['functions']['parsekit'] = {
 \ 'parsekit_compile_file(': 'string $filename [, array &$errors [, int $options = PARSEKIT_QUIET]] | array',
 \ 'parsekit_compile_string(': 'string $phpcode [, array &$errors [, int $options = PARSEKIT_QUIET]] | array',
 \ 'parsekit_func_arginfo(': 'mixed $function | array',
 \ }
-let g:phpcomplete_builtin['functions']['password_hashing'] = {
+let g:phpcd_builtin['functions']['password_hashing'] = {
 \ 'password_get_info(': 'string $hash | array',
 \ 'password_hash(': 'string $password, integer $algo [, array $options] | string',
 \ 'password_needs_rehash(': 'string $hash, integer $algo [, array $options] | boolean',
 \ 'password_verify(': 'string $password, string $hash | boolean',
 \ }
-let g:phpcomplete_builtin['functions']['pcntl'] = {
+let g:phpcd_builtin['functions']['pcntl'] = {
 \ 'pcntl_alarm(': 'int $seconds | int',
 \ 'pcntl_errno(': 'pcntl_errno — Alias of pcntl_strerror()',
 \ 'pcntl_exec(': 'string $path [, array $args [, array $envs]] | void',
@@ -3803,7 +3803,7 @@ let g:phpcomplete_builtin['functions']['pcntl'] = {
 \ 'pcntl_wstopsig(': 'int $status | int',
 \ 'pcntl_wtermsig(': 'int $status | int',
 \ }
-let g:phpcomplete_builtin['functions']['pdf'] = {
+let g:phpcd_builtin['functions']['pdf'] = {
 \ 'PDF_activate_item(': 'resource $pdfdoc, int $id | bool',
 \ 'PDF_add_launchlink(': 'resource $pdfdoc, float $llx, float $lly, float $urx, float $ury, string $filename | bool',
 \ 'PDF_add_locallink(': 'resource $pdfdoc, float $lowerleftx, float $lowerlefty, float $upperrightx, float $upperrighty, int $page, string $dest | bool',
@@ -3959,7 +3959,7 @@ let g:phpcomplete_builtin['functions']['pdf'] = {
 \ 'PDF_utf32_to_utf16(': 'resource $pdfdoc, string $utf32string, string $ordering | string',
 \ 'PDF_utf8_to_utf16(': 'resource $pdfdoc, string $utf8string, string $ordering | string',
 \ }
-let g:phpcomplete_builtin['functions']['postgresql'] = {
+let g:phpcd_builtin['functions']['postgresql'] = {
 \ 'pg_affected_rows(': 'resource $result | int',
 \ 'pg_cancel_query(': 'resource $connection | bool',
 \ 'pg_client_encoding(': '[ resource $connection] | string',
@@ -4050,7 +4050,7 @@ let g:phpcomplete_builtin['functions']['postgresql'] = {
 \ 'pg_update(': 'resource $connection, string $table_name, array $data, array $condition [, int $options = PGSQL_DML_EXEC] | mixed',
 \ 'pg_version(': '[ resource $connection] | array',
 \ }
-let g:phpcomplete_builtin['functions']['posix'] = {
+let g:phpcd_builtin['functions']['posix'] = {
 \ 'posix_access(': 'string $file [, int $mode = POSIX_F_OK] | bool',
 \ 'posix_ctermid(': 'void | string',
 \ 'posix_errno(': 'posix_errno — Alias of posix_get_last_error()',
@@ -4088,7 +4088,7 @@ let g:phpcomplete_builtin['functions']['posix'] = {
 \ 'posix_ttyname(': 'mixed $fd | string',
 \ 'posix_uname(': 'void | array',
 \ }
-let g:phpcomplete_builtin['functions']['pcre'] = {
+let g:phpcd_builtin['functions']['pcre'] = {
 \ 'preg_filter(': 'mixed $pattern, mixed $replacement, mixed $subject [, int $limit = -1 [, int &$count]] | mixed',
 \ 'preg_grep(': 'string $pattern, array $input [, int $flags = 0] | array',
 \ 'preg_last_error(': 'void | int',
@@ -4099,7 +4099,7 @@ let g:phpcomplete_builtin['functions']['pcre'] = {
 \ 'preg_replace(': 'mixed $pattern, mixed $replacement, mixed $subject [, int $limit = -1 [, int &$count]] | mixed',
 \ 'preg_split(': 'string $pattern, string $subject [, int $limit = -1 [, int $flags = 0]] | array',
 \ }
-let g:phpcomplete_builtin['functions']['ps'] = {
+let g:phpcd_builtin['functions']['ps'] = {
 \ 'ps_add_bookmark(': 'resource $psdoc, string $text [, int $parent = 0 [, int $open = 0]] | int',
 \ 'ps_add_launchlink(': 'resource $psdoc, float $llx, float $lly, float $urx, float $ury, string $filename | bool',
 \ 'ps_add_locallink(': 'resource $psdoc, float $llx, float $lly, float $urx, float $ury, int $page, string $dest | bool',
@@ -4179,7 +4179,7 @@ let g:phpcomplete_builtin['functions']['ps'] = {
 \ 'ps_symbol(': 'resource $psdoc, int $ord | bool',
 \ 'ps_translate(': 'resource $psdoc, float $x, float $y | bool',
 \ }
-let g:phpcomplete_builtin['functions']['pspell'] = {
+let g:phpcd_builtin['functions']['pspell'] = {
 \ 'pspell_add_to_personal(': 'int $dictionary_link, string $word | bool',
 \ 'pspell_add_to_session(': 'int $dictionary_link, string $word | bool',
 \ 'pspell_check(': 'int $dictionary_link, string $word | bool',
@@ -4200,7 +4200,7 @@ let g:phpcomplete_builtin['functions']['pspell'] = {
 \ 'pspell_store_replacement(': 'int $dictionary_link, string $misspelled, string $correct | bool',
 \ 'pspell_suggest(': 'int $dictionary_link, string $word | array',
 \ }
-let g:phpcomplete_builtin['functions']['paradox'] = {
+let g:phpcd_builtin['functions']['paradox'] = {
 \ 'px_close(': 'resource $pxdoc | bool',
 \ 'px_create_fp(': 'resource $pxdoc, resource $file, array $fielddesc | bool',
 \ 'px_date2string(': 'resource $pxdoc, int $value, string $format | string',
@@ -4227,7 +4227,7 @@ let g:phpcomplete_builtin['functions']['paradox'] = {
 \ 'px_timestamp2string(': 'resource $pxdoc, float $value, string $format | string',
 \ 'px_update_record(': 'resource $pxdoc, array $data, int $num | bool',
 \ }
-let g:phpcomplete_builtin['functions']['radius'] = {
+let g:phpcd_builtin['functions']['radius'] = {
 \ 'radius_acct_open(': 'void | resource',
 \ 'radius_add_server(': 'resource $radius_handle, string $hostname, int $port, string $secret, int $timeout, int $max_tries | bool',
 \ 'radius_auth_open(': 'void | resource',
@@ -4257,7 +4257,7 @@ let g:phpcomplete_builtin['functions']['radius'] = {
 \ 'radius_server_secret(': 'resource $radius_handle | string',
 \ 'radius_strerror(': 'resource $radius_handle | string',
 \ }
-let g:phpcomplete_builtin['functions']['rar'] = {
+let g:phpcd_builtin['functions']['rar'] = {
 \ 'rar_wrapper_cache_stats(': 'void | string',
 \ 'rar_entry_get(': 'RarArchive $rarfile, string $entryname | RarEntry',
 \ 'rar_list(': 'RarArchive $rarfile | array',
@@ -4268,7 +4268,7 @@ let g:phpcomplete_builtin['functions']['rar'] = {
 \ 'rar_close(': 'RarArchive $rarfile | bool',
 \ 'rar_broken_is(': 'RarArchive $rarfile | bool',
 \ }
-let g:phpcomplete_builtin['functions']['readline'] = {
+let g:phpcd_builtin['functions']['readline'] = {
 \ 'readline_add_history(': 'string $line | bool',
 \ 'readline_callback_handler_install(': 'string $prompt, callable $callback | bool',
 \ 'readline_callback_handler_remove(': 'void | bool',
@@ -4283,19 +4283,19 @@ let g:phpcomplete_builtin['functions']['readline'] = {
 \ 'readline_write_history(': '[ string $filename] | bool',
 \ 'readline(': '[ string $prompt] | string',
 \ }
-let g:phpcomplete_builtin['functions']['recode'] = {
+let g:phpcd_builtin['functions']['recode'] = {
 \ 'recode_file(': 'string $request, resource $input, resource $output | bool',
 \ 'recode_string(': 'string $request, string $string | string',
 \ 'recode(': 'recode — Alias of recode_string()',
 \ }
-let g:phpcomplete_builtin['functions']['rpm_reader'] = {
+let g:phpcd_builtin['functions']['rpm_reader'] = {
 \ 'rpm_close(': 'resource $rpmr | bool',
 \ 'rpm_get_tag(': 'resource $rpmr, int $tagnum | mixed',
 \ 'rpm_is_valid(': 'string $filename | bool',
 \ 'rpm_open(': 'string $filename | resource',
 \ 'rpm_version(': 'void | string',
 \ }
-let g:phpcomplete_builtin['functions']['rrd'] = {
+let g:phpcd_builtin['functions']['rrd'] = {
 \ 'rrd_create(': 'string $filename, array $options | bool',
 \ 'rrd_error(': 'void | string',
 \ 'rrd_fetch(': 'string $filename, array $options | array',
@@ -4311,7 +4311,7 @@ let g:phpcomplete_builtin['functions']['rrd'] = {
 \ 'rrd_xport(': 'array $options | array',
 \ 'rrdc_disconnect(': 'void | void',
 \ }
-let g:phpcomplete_builtin['functions']['runkit'] = {
+let g:phpcd_builtin['functions']['runkit'] = {
 \ 'runkit_class_adopt(': 'string $classname, string $parentname | bool',
 \ 'runkit_class_emancipate(': 'string $classname | bool',
 \ 'runkit_constant_add(': 'string $constname, mixed $value | bool',
@@ -4334,7 +4334,7 @@ let g:phpcomplete_builtin['functions']['runkit'] = {
 \ 'runkit_sandbox_output_handler(': 'object $sandbox [, mixed $callback] | mixed',
 \ 'runkit_superglobals(': 'void | array',
 \ }
-let g:phpcomplete_builtin['functions']['sessions'] = {
+let g:phpcd_builtin['functions']['sessions'] = {
 \ 'session_abort(': 'void | bool',
 \ 'session_cache_expire(': '[ string $new_cache_expire] | int',
 \ 'session_cache_limiter(': '[ string $cache_limiter] | string',
@@ -4360,7 +4360,7 @@ let g:phpcomplete_builtin['functions']['sessions'] = {
 \ 'session_unset(': 'void | void',
 \ 'session_write_close(': 'void | void',
 \ }
-let g:phpcomplete_builtin['functions']['session_pgsql'] = {
+let g:phpcd_builtin['functions']['session_pgsql'] = {
 \ 'session_pgsql_add_error(': 'int $error_level [, string $error_message] | bool',
 \ 'session_pgsql_get_error(': '[ bool $with_error_message = false] | array',
 \ 'session_pgsql_get_field(': 'void | string',
@@ -4368,7 +4368,7 @@ let g:phpcomplete_builtin['functions']['session_pgsql'] = {
 \ 'session_pgsql_set_field(': 'string $value | bool',
 \ 'session_pgsql_status(': 'void | array',
 \ }
-let g:phpcomplete_builtin['functions']['streams'] = {
+let g:phpcd_builtin['functions']['streams'] = {
 \ 'set_socket_blocking(': 'set_socket_blocking — Alias of stream_set_blocking()',
 \ 'stream_bucket_append(': 'resource $brigade, resource $bucket | void',
 \ 'stream_bucket_make_writeable(': 'resource $brigade | object',
@@ -4416,11 +4416,11 @@ let g:phpcomplete_builtin['functions']['streams'] = {
 \ 'stream_wrapper_restore(': 'string $protocol | bool',
 \ 'stream_wrapper_unregister(': 'string $protocol | bool',
 \ }
-let g:phpcomplete_builtin['functions']['proctitle'] = {
+let g:phpcd_builtin['functions']['proctitle'] = {
 \ 'setproctitle(': 'string $title | void',
 \ 'setthreadtitle(': 'string $title | bool',
 \ }
-let g:phpcomplete_builtin['functions']['shared_memory'] = {
+let g:phpcd_builtin['functions']['shared_memory'] = {
 \ 'shmop_close(': 'int $shmid | void',
 \ 'shmop_delete(': 'int $shmid | bool',
 \ 'shmop_open(': 'int $key, string $flags, int $mode, int $size | int',
@@ -4428,12 +4428,12 @@ let g:phpcomplete_builtin['functions']['shared_memory'] = {
 \ 'shmop_size(': 'int $shmid | int',
 \ 'shmop_write(': 'int $shmid, string $data, int $offset | int',
 \ }
-let g:phpcomplete_builtin['functions']['simplexml'] = {
+let g:phpcd_builtin['functions']['simplexml'] = {
 \ 'simplexml_import_dom(': 'DOMNode $node [, string $class_name = "SimpleXMLElement"] | SimpleXMLElement',
 \ 'simplexml_load_file(': 'string $filename [, string $class_name = "SimpleXMLElement" [, int $options = 0 [, string $ns = "" [, bool $is_prefix = false]]]] | SimpleXMLElement',
 \ 'simplexml_load_string(': 'string $data [, string $class_name = "SimpleXMLElement" [, int $options = 0 [, string $ns = "" [, bool $is_prefix = false]]]] | SimpleXMLElement',
 \ }
-let g:phpcomplete_builtin['functions']['snmp'] = {
+let g:phpcd_builtin['functions']['snmp'] = {
 \ 'snmp_get_quick_print(': 'void | bool',
 \ 'snmp_get_valueretrieval(': 'void | int',
 \ 'snmp_read_mib(': 'string $filename | bool',
@@ -4459,7 +4459,7 @@ let g:phpcomplete_builtin['functions']['snmp'] = {
 \ 'snmpwalk(': 'string $hostname, string $community, string $object_id [, int $timeout = 1000000 [, int $retries = 5]] | array',
 \ 'snmpwalkoid(': 'string $hostname, string $community, string $object_id [, int $timeout = 1000000 [, int $retries = 5]] | array',
 \ }
-let g:phpcomplete_builtin['functions']['sockets'] = {
+let g:phpcd_builtin['functions']['sockets'] = {
 \ 'socket_accept(': 'resource $socket | resource',
 \ 'socket_bind(': 'resource $socket, string $address [, int $port = 0] | bool',
 \ 'socket_clear_error(': '[ resource $socket] | void',
@@ -4490,10 +4490,10 @@ let g:phpcomplete_builtin['functions']['sockets'] = {
 \ 'socket_strerror(': 'int $errno | string',
 \ 'socket_write(': 'resource $socket, string $buffer [, int $length = 0] | int',
 \ }
-let g:phpcomplete_builtin['functions']['solr'] = {
+let g:phpcd_builtin['functions']['solr'] = {
 \ 'solr_get_version(': 'void | string',
 \ }
-let g:phpcomplete_builtin['functions']['sqlite'] = {
+let g:phpcd_builtin['functions']['sqlite'] = {
 \ 'sqlite_array_query(': 'resource $dbhandle, string $query [, int $result_type = SQLITE_BOTH [, bool $decode_binary = true]] | array',
 \ 'sqlite_busy_timeout(': 'resource $dbhandle, int $milliseconds | void',
 \ 'sqlite_changes(': 'resource $dbhandle | int',
@@ -4534,7 +4534,7 @@ let g:phpcomplete_builtin['functions']['sqlite'] = {
 \ 'sqlite_unbuffered_query(': 'resource $dbhandle, string $query [, int $result_type = SQLITE_BOTH [, string &$error_msg]] | resource',
 \ 'sqlite_valid(': 'resource $result | bool',
 \ }
-let g:phpcomplete_builtin['functions']['sqlsrv'] = {
+let g:phpcd_builtin['functions']['sqlsrv'] = {
 \ 'sqlsrv_begin_transaction(': 'resource $conn | bool',
 \ 'sqlsrv_cancel(': 'resource $stmt | bool',
 \ 'sqlsrv_client_info(': 'resource $conn | array',
@@ -4562,12 +4562,12 @@ let g:phpcomplete_builtin['functions']['sqlsrv'] = {
 \ 'sqlsrv_send_stream_data(': 'resource $stmt | bool',
 \ 'sqlsrv_server_info(': 'resource $conn | array',
 \ }
-let g:phpcomplete_builtin['functions']['ssdeep'] = {
+let g:phpcd_builtin['functions']['ssdeep'] = {
 \ 'ssdeep_fuzzy_compare(': 'string $signature1, string $signature2 | int',
 \ 'ssdeep_fuzzy_hash_filename(': 'string $file_name | string',
 \ 'ssdeep_fuzzy_hash(': 'string $to_hash | string',
 \ }
-let g:phpcomplete_builtin['functions']['ssh2'] = {
+let g:phpcd_builtin['functions']['ssh2'] = {
 \ 'ssh2_auth_agent(': 'resource $session, string $username | bool',
 \ 'ssh2_auth_hostbased_file(': 'resource $session, string $username, string $hostname, string $pubkeyfile, string $privkeyfile [, string $passphrase [, string $local_username]] | bool',
 \ 'ssh2_auth_none(': 'resource $session, string $username | mixed',
@@ -4598,7 +4598,7 @@ let g:phpcomplete_builtin['functions']['ssh2'] = {
 \ 'ssh2_shell(': 'resource $session [, string $term_type = "vanilla" [, array $env [, int $width = 80 [, int $height = 25 [, int $width_height_type = SSH2_TERM_UNIT_CHARS]]]]] | resource',
 \ 'ssh2_tunnel(': 'resource $session, string $host, int $port | resource',
 \ }
-let g:phpcomplete_builtin['functions']['statistics'] = {
+let g:phpcd_builtin['functions']['statistics'] = {
 \ 'stats_absolute_deviation(': 'array $a | float',
 \ 'stats_cdf_beta(': 'float $par1, float $par2, float $par3, int $which | float',
 \ 'stats_cdf_binomial(': 'float $par1, float $par2, float $par3, int $which | float',
@@ -4668,7 +4668,7 @@ let g:phpcomplete_builtin['functions']['statistics'] = {
 \ 'stats_stat_powersum(': 'array $arr, float $power | float',
 \ 'stats_variance(': 'array $a [, bool $sample = false] | float',
 \ }
-let g:phpcomplete_builtin['functions']['stomp'] = {
+let g:phpcd_builtin['functions']['stomp'] = {
 \ 'stomp_connect_error(': 'void | string',
 \ 'stomp_version(': 'void | string',
 \ 'stomp_subscribe(': 'resource $link, string $destination [, array $headers] | bool',
@@ -4687,7 +4687,7 @@ let g:phpcomplete_builtin['functions']['stomp'] = {
 \ 'stomp_close(': 'resource $link | bool',
 \ 'stomp_set_read_timeout(': 'resource $link, int $seconds [, int $microseconds] | void',
 \ }
-let g:phpcomplete_builtin['functions']['svn'] = {
+let g:phpcd_builtin['functions']['svn'] = {
 \ 'svn_add(': 'string $path [, bool $recursive = true [, bool $force = false]] | bool',
 \ 'svn_auth_get_parameter(': 'string $key | string',
 \ 'svn_auth_set_parameter(': 'string $key, string $value | void',
@@ -4737,7 +4737,7 @@ let g:phpcomplete_builtin['functions']['svn'] = {
 \ 'svn_status(': 'string $path [, int $flags = 0] | array',
 \ 'svn_update(': 'string $path [, int $revno = SVN_REVISION_HEAD [, bool $recurse = true]] | int',
 \ }
-let g:phpcomplete_builtin['functions']['sybase'] = {
+let g:phpcd_builtin['functions']['sybase'] = {
 \ 'sybase_affected_rows(': '[ resource $link_identifier] | int',
 \ 'sybase_close(': '[ resource $link_identifier] | bool',
 \ 'sybase_connect(': '[ string $servername [, string $username [, string $password [, string $charset [, string $appname [, bool $new = false]]]]]] | resource',
@@ -4764,14 +4764,14 @@ let g:phpcomplete_builtin['functions']['sybase'] = {
 \ 'sybase_set_message_handler(': 'callable $handler [, resource $link_identifier] | bool',
 \ 'sybase_unbuffered_query(': 'string $query, resource $link_identifier [, bool $store_result] | resource',
 \ }
-let g:phpcomplete_builtin['functions']['tcp'] = {
+let g:phpcd_builtin['functions']['tcp'] = {
 \ 'tcpwrap_check(': 'string $daemon, string $address [, string $user [, bool $nodns = false]] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['tokenizer'] = {
+let g:phpcd_builtin['functions']['tokenizer'] = {
 \ 'token_get_all(': 'string $source | array',
 \ 'token_name(': 'int $token | string',
 \ }
-let g:phpcomplete_builtin['functions']['trader'] = {
+let g:phpcd_builtin['functions']['trader'] = {
 \ 'trader_acos(': 'array $real | array',
 \ 'trader_ad(': 'array $high, array $low, array $close, array $volume | array',
 \ 'trader_add(': 'array $real0, array $real1 | array',
@@ -4936,7 +4936,7 @@ let g:phpcomplete_builtin['functions']['trader'] = {
 \ 'trader_willr(': 'array $high, array $low, array $close [, integer $timePeriod] | array',
 \ 'trader_wma(': 'array $real [, integer $timePeriod] | array',
 \ }
-let g:phpcomplete_builtin['functions']['mnogosearch'] = {
+let g:phpcd_builtin['functions']['mnogosearch'] = {
 \ 'udm_add_search_limit(': 'resource $agent, int $var, string $val | bool',
 \ 'udm_alloc_agent_array(': 'array $databases | resource',
 \ 'udm_alloc_agent(': 'string $dbaddr [, string $dbmode] | resource',
@@ -4959,7 +4959,7 @@ let g:phpcomplete_builtin['functions']['mnogosearch'] = {
 \ 'udm_load_ispell_data(': 'resource $agent, int $var, string $val1, string $val2, int $flag | bool',
 \ 'udm_set_agent_param(': 'resource $agent, int $var, string $val | bool',
 \ }
-let g:phpcomplete_builtin['functions']['uopz'] = {
+let g:phpcd_builtin['functions']['uopz'] = {
 \ 'uopz_backup(': 'string $class, string $function | void',
 \ 'uopz_compose(': 'string $name, array $classes [, array $methods [, array $properties [, int $flags]]] | void',
 \ 'uopz_copy(': 'string $class, string $function | Closure',
@@ -4974,7 +4974,7 @@ let g:phpcomplete_builtin['functions']['uopz'] = {
 \ 'uopz_restore(': 'string $class, string $function | void',
 \ 'uopz_undefine(': 'string $class, string $constant | void',
 \ }
-let g:phpcomplete_builtin['functions']['xml_parser'] = {
+let g:phpcd_builtin['functions']['xml_parser'] = {
 \ 'utf8_decode(': 'string $data | string',
 \ 'utf8_encode(': 'string $data | string',
 \ 'xml_error_string(': 'int $code | string',
@@ -5000,7 +5000,7 @@ let g:phpcomplete_builtin['functions']['xml_parser'] = {
 \ 'xml_set_start_namespace_decl_handler(': 'resource $parser, callable $handler | bool',
 \ 'xml_set_unparsed_entity_decl_handler(': 'resource $parser, callable $handler | bool',
 \ }
-let g:phpcomplete_builtin['functions']['vpopmail'] = {
+let g:phpcd_builtin['functions']['vpopmail'] = {
 \ 'vpopmail_add_alias_domain_ex(': 'string $olddomain, string $newdomain | bool',
 \ 'vpopmail_add_alias_domain(': 'string $domain, string $aliasdomain | bool',
 \ 'vpopmail_add_domain_ex(': 'string $domain, string $passwd [, string $quota [, string $bounce [, bool $apop]]] | bool',
@@ -5019,7 +5019,7 @@ let g:phpcomplete_builtin['functions']['vpopmail'] = {
 \ 'vpopmail_passwd(': 'string $user, string $domain, string $password [, bool $apop] | bool',
 \ 'vpopmail_set_user_quota(': 'string $user, string $domain, string $quota | bool',
 \ }
-let g:phpcomplete_builtin['functions']['wddx'] = {
+let g:phpcd_builtin['functions']['wddx'] = {
 \ 'wddx_add_vars(': 'resource $packet_id, mixed $var_name [, mixed $...] | bool',
 \ 'wddx_deserialize(': 'string $packet | mixed',
 \ 'wddx_packet_end(': 'resource $packet_id | string',
@@ -5027,7 +5027,7 @@ let g:phpcomplete_builtin['functions']['wddx'] = {
 \ 'wddx_serialize_value(': 'mixed $var [, string $comment] | string',
 \ 'wddx_serialize_vars(': 'mixed $var_name [, mixed $...] | string',
 \ }
-let g:phpcomplete_builtin['functions']['win32service'] = {
+let g:phpcd_builtin['functions']['win32service'] = {
 \ 'win32_continue_service(': 'string $servicename [, string $machine] | int',
 \ 'win32_create_service(': 'array $details [, string $machine] | mixed',
 \ 'win32_delete_service(': 'string $servicename [, string $machine] | mixed',
@@ -5039,12 +5039,12 @@ let g:phpcomplete_builtin['functions']['win32service'] = {
 \ 'win32_start_service(': 'string $servicename [, string $machine] | int',
 \ 'win32_stop_service(': 'string $servicename [, string $machine] | int',
 \ }
-let g:phpcomplete_builtin['functions']['win32ps'] = {
+let g:phpcd_builtin['functions']['win32ps'] = {
 \ 'win32_ps_list_procs(': 'void | array',
 \ 'win32_ps_stat_mem(': 'void | array',
 \ 'win32_ps_stat_proc(': '[ int $pid = 0] | array',
 \ }
-let g:phpcomplete_builtin['functions']['wincache'] = {
+let g:phpcd_builtin['functions']['wincache'] = {
 \ 'wincache_fcache_fileinfo(': '[ bool $summaryonly = false] | array',
 \ 'wincache_fcache_meminfo(': 'void | array',
 \ 'wincache_lock(': 'string $key [, bool $isglobal = false] | bool',
@@ -5068,14 +5068,14 @@ let g:phpcomplete_builtin['functions']['wincache'] = {
 \ 'wincache_ucache_set(': 'mixed $key, mixed $value [, int $ttl = 0] | bool',
 \ 'wincache_unlock(': 'string $key | bool',
 \ }
-let g:phpcomplete_builtin['functions']['xattr'] = {
+let g:phpcd_builtin['functions']['xattr'] = {
 \ 'xattr_get(': 'string $filename, string $name [, int $flags = 0] | string',
 \ 'xattr_list(': 'string $filename [, int $flags = 0] | array',
 \ 'xattr_remove(': 'string $filename, string $name [, int $flags = 0] | bool',
 \ 'xattr_set(': 'string $filename, string $name, string $value [, int $flags = 0] | bool',
 \ 'xattr_supported(': 'string $filename [, int $flags = 0] | bool',
 \ }
-let g:phpcomplete_builtin['functions']['xdiff'] = {
+let g:phpcd_builtin['functions']['xdiff'] = {
 \ 'xdiff_file_bdiff_size(': 'string $file | int',
 \ 'xdiff_file_bdiff(': 'string $old_file, string $new_file, string $dest | bool',
 \ 'xdiff_file_bpatch(': 'string $file, string $patch, string $dest | bool',
@@ -5093,13 +5093,13 @@ let g:phpcomplete_builtin['functions']['xdiff'] = {
 \ 'xdiff_string_patch_binary(': 'string $str, string $patch | string',
 \ 'xdiff_string_patch(': 'string $str, string $patch [, int $flags [, string &$error]] | string',
 \ }
-let g:phpcomplete_builtin['functions']['xhprof'] = {
+let g:phpcd_builtin['functions']['xhprof'] = {
 \ 'xhprof_disable(': 'void | array',
 \ 'xhprof_enable(': '[ int $flags = 0 [, array $options]] | void',
 \ 'xhprof_sample_disable(': 'void | array',
 \ 'xhprof_sample_enable(': 'void | void',
 \ }
-let g:phpcomplete_builtin['functions']['xml_rpc'] = {
+let g:phpcd_builtin['functions']['xml_rpc'] = {
 \ 'xmlrpc_decode_request(': 'string $xml, string &$method [, string $encoding] | mixed',
 \ 'xmlrpc_decode(': 'string $xml [, string $encoding = "iso-8859-1"] | mixed',
 \ 'xmlrpc_encode_request(': 'string $method, mixed $params [, array $output_options] | string',
@@ -5115,7 +5115,7 @@ let g:phpcomplete_builtin['functions']['xml_rpc'] = {
 \ 'xmlrpc_server_register_method(': 'resource $server, string $method_name, string $function | bool',
 \ 'xmlrpc_set_type(': 'string &$value, string $type | bool',
 \ }
-let g:phpcomplete_builtin['functions']['xmlwriter'] = {
+let g:phpcd_builtin['functions']['xmlwriter'] = {
 \ 'xmlwriter_end_attribute(': 'resource $xmlwriter | bool',
 \ 'xmlwriter_end_cdata(': 'resource $xmlwriter | bool',
 \ 'xmlwriter_end_comment(': 'resource $xmlwriter | bool',
@@ -5159,14 +5159,14 @@ let g:phpcomplete_builtin['functions']['xmlwriter'] = {
 \ 'xmlwriter_write_pi(': 'resource $xmlwriter, string $target, string $content | bool',
 \ 'xmlwriter_write_raw(': 'resource $xmlwriter, string $content | bool',
 \ }
-let g:phpcomplete_builtin['functions']['yaml'] = {
+let g:phpcd_builtin['functions']['yaml'] = {
 \ 'yaml_emit_file(': 'string $filename, mixed $data [, int $encoding = YAML_ANY_ENCODING [, int $linebreak = YAML_ANY_BREAK [, array $callbacks]]] | bool',
 \ 'yaml_emit(': 'mixed $data [, int $encoding = YAML_ANY_ENCODING [, int $linebreak = YAML_ANY_BREAK [, array $callbacks]]] | string',
 \ 'yaml_parse_file(': 'string $filename [, int $pos = 0 [, int &$ndocs [, array $callbacks]]] | mixed',
 \ 'yaml_parse_url(': 'string $url [, int $pos = 0 [, int &$ndocs [, array $callbacks]]] | mixed',
 \ 'yaml_parse(': 'string $input [, int $pos = 0 [, int &$ndocs [, array $callbacks]]] | mixed',
 \ }
-let g:phpcomplete_builtin['functions']['yaz'] = {
+let g:phpcd_builtin['functions']['yaz'] = {
 \ 'yaz_addinfo(': 'resource $id | string',
 \ 'yaz_ccl_conf(': 'resource $id, array $config | void',
 \ 'yaz_ccl_parse(': 'resource $id, string $query, array &$result | bool',
@@ -5193,7 +5193,7 @@ let g:phpcomplete_builtin['functions']['yaz'] = {
 \ 'yaz_syntax(': 'resource $id, string $syntax | void',
 \ 'yaz_wait(': '[ array &$options] | mixed',
 \ }
-let g:phpcomplete_builtin['functions']['yp_nis'] = {
+let g:phpcd_builtin['functions']['yp_nis'] = {
 \ 'yp_all(': 'string $domain, string $map, string $callback | void',
 \ 'yp_cat(': 'string $domain, string $map | array',
 \ 'yp_err_string(': 'int $errorcode | string',
@@ -5205,7 +5205,7 @@ let g:phpcomplete_builtin['functions']['yp_nis'] = {
 \ 'yp_next(': 'string $domain, string $map, string $key | array',
 \ 'yp_order(': 'string $domain, string $map | int',
 \ }
-let g:phpcomplete_builtin['functions']['zip'] = {
+let g:phpcd_builtin['functions']['zip'] = {
 \ 'zip_close(': 'resource $zip | void',
 \ 'zip_entry_close(': 'resource $zip_entry | bool',
 \ 'zip_entry_compressedsize(': 'resource $zip_entry | int',
@@ -5217,7 +5217,7 @@ let g:phpcomplete_builtin['functions']['zip'] = {
 \ 'zip_open(': 'string $filename | resource',
 \ 'zip_read(': 'resource $zip | resource',
 \ }
-let g:phpcomplete_builtin['classes']['oci8'] = {
+let g:phpcd_builtin['classes']['oci8'] = {
 \'oci-collection': {
 \   'name': 'OCI-Collection',
 \   'methods': {
@@ -5257,7 +5257,7 @@ let g:phpcomplete_builtin['classes']['oci8'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['apc'] = {
+let g:phpcd_builtin['classes']['apc'] = {
 \'apciterator': {
 \   'name': 'APCIterator',
 \   'methods': {
@@ -5273,7 +5273,7 @@ let g:phpcomplete_builtin['classes']['apc'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['spl'] = {
+let g:phpcd_builtin['classes']['spl'] = {
 \'appenditerator': {
 \   'name': 'AppendIterator',
 \   'methods': {
@@ -6411,7 +6411,7 @@ let g:phpcomplete_builtin['classes']['spl'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['cairo'] = {
+let g:phpcd_builtin['classes']['cairo'] = {
 \'cairo': {
 \   'name': 'Cairo',
 \   'static_methods': {
@@ -7036,7 +7036,7 @@ let g:phpcomplete_builtin['classes']['cairo'] = {
 \   'name': 'CairoToyFontFace',
 \},
 \}
-let g:phpcomplete_builtin['classes']['chdb'] = {
+let g:phpcd_builtin['classes']['chdb'] = {
 \'chdb': {
 \   'name': 'chdb',
 \   'methods': {
@@ -7045,7 +7045,7 @@ let g:phpcomplete_builtin['classes']['chdb'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['predefined_interfaces_and_classes'] = {
+let g:phpcd_builtin['classes']['predefined_interfaces_and_classes'] = {
 \'closure': {
 \   'name': 'Closure',
 \   'methods': {
@@ -7070,7 +7070,7 @@ let g:phpcomplete_builtin['classes']['predefined_interfaces_and_classes'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['intl'] = {
+let g:phpcd_builtin['classes']['intl'] = {
 \'collator': {
 \   'name': 'Collator',
 \   'methods': {
@@ -7688,7 +7688,7 @@ let g:phpcomplete_builtin['classes']['intl'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['pthreads'] = {
+let g:phpcd_builtin['classes']['pthreads'] = {
 \'collectable': {
 \   'name': 'Collectable',
 \   'methods': {
@@ -7834,7 +7834,7 @@ let g:phpcomplete_builtin['classes']['pthreads'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['curl'] = {
+let g:phpcd_builtin['classes']['curl'] = {
 \'curlfile': {
 \   'name': 'CURLFile',
 \   'properties': {
@@ -7853,7 +7853,7 @@ let g:phpcomplete_builtin['classes']['curl'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['date_time'] = {
+let g:phpcd_builtin['classes']['date_time'] = {
 \'dateinterval': {
 \   'name': 'DateInterval',
 \   'properties': {
@@ -7978,7 +7978,7 @@ let g:phpcomplete_builtin['classes']['date_time'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['directories'] = {
+let g:phpcd_builtin['classes']['directories'] = {
 \'directory': {
 \   'name': 'Directory',
 \   'properties': {
@@ -7992,7 +7992,7 @@ let g:phpcomplete_builtin['classes']['directories'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['dom'] = {
+let g:phpcd_builtin['classes']['dom'] = {
 \'domattr': {
 \   'name': 'DOMAttr',
 \   'properties': {
@@ -8497,7 +8497,7 @@ let g:phpcomplete_builtin['classes']['dom'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['predefined_exceptions'] = {
+let g:phpcd_builtin['classes']['predefined_exceptions'] = {
 \'errorexception': {
 \   'name': 'ErrorException',
 \   'properties': {
@@ -8543,7 +8543,7 @@ let g:phpcomplete_builtin['classes']['predefined_exceptions'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['ev'] = {
+let g:phpcd_builtin['classes']['ev'] = {
 \'ev': {
 \   'name': 'Ev',
 \   'constants': {
@@ -8939,7 +8939,7 @@ let g:phpcomplete_builtin['classes']['ev'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['event'] = {
+let g:phpcd_builtin['classes']['event'] = {
 \'event': {
 \   'name': 'Event',
 \   'constants': {
@@ -9293,7 +9293,7 @@ let g:phpcomplete_builtin['classes']['event'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['fann'] = {
+let g:phpcd_builtin['classes']['fann'] = {
 \'fannconnection': {
 \   'name': 'FANNConnection',
 \   'properties': {
@@ -9310,7 +9310,7 @@ let g:phpcomplete_builtin['classes']['fann'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['fileinfo'] = {
+let g:phpcd_builtin['classes']['fileinfo'] = {
 \'finfo': {
 \   'name': 'finfo',
 \   'methods': {
@@ -9321,7 +9321,7 @@ let g:phpcomplete_builtin['classes']['fileinfo'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['gearman'] = {
+let g:phpcd_builtin['classes']['gearman'] = {
 \'gearmanclient': {
 \   'name': 'GearmanClient',
 \   'methods': {
@@ -9467,7 +9467,7 @@ let g:phpcomplete_builtin['classes']['gearman'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['gender'] = {
+let g:phpcd_builtin['classes']['gender'] = {
 \'gender\gender': {
 \   'name': 'Gender\Gender',
 \   'constants': {
@@ -9544,7 +9544,7 @@ let g:phpcomplete_builtin['classes']['gender'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['gmagick'] = {
+let g:phpcd_builtin['classes']['gmagick'] = {
 \'gmagick': {
 \   'name': 'Gmagick',
 \   'methods': {
@@ -9741,12 +9741,12 @@ let g:phpcomplete_builtin['classes']['gmagick'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['gmp'] = {
+let g:phpcd_builtin['classes']['gmp'] = {
 \'gmp': {
 \   'name': 'GMP',
 \},
 \}
-let g:phpcomplete_builtin['classes']['haru'] = {
+let g:phpcd_builtin['classes']['haru'] = {
 \'haruannotation': {
 \   'name': 'HaruAnnotation',
 \   'methods': {
@@ -9966,7 +9966,7 @@ let g:phpcomplete_builtin['classes']['haru'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['hrtime'] = {
+let g:phpcd_builtin['classes']['hrtime'] = {
 \'hrtime\performancecounter': {
 \   'name': 'HRTime\PerformanceCounter',
 \   'methods': {
@@ -10001,7 +10001,7 @@ let g:phpcomplete_builtin['classes']['hrtime'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['http'] = {
+let g:phpcd_builtin['classes']['http'] = {
 \'httpdeflatestream': {
 \   'name': 'HttpDeflateStream',
 \   'methods': {
@@ -10182,7 +10182,7 @@ let g:phpcomplete_builtin['classes']['http'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['imagemagick'] = {
+let g:phpcd_builtin['classes']['imagemagick'] = {
 \'imagick': {
 \   'name': 'Imagick',
 \   'methods': {
@@ -10670,7 +10670,7 @@ let g:phpcomplete_builtin['classes']['imagemagick'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['judy'] = {
+let g:phpcd_builtin['classes']['judy'] = {
 \'judy': {
 \   'name': 'Judy',
 \   'constants': {
@@ -10704,7 +10704,7 @@ let g:phpcomplete_builtin['classes']['judy'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['ktaglib'] = {
+let g:phpcd_builtin['classes']['ktaglib'] = {
 \'ktaglib_id3v2_frame': {
 \   'name': 'KTaglib_ID3v2_Frame',
 \   'methods': {
@@ -10764,7 +10764,7 @@ let g:phpcomplete_builtin['classes']['ktaglib'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['lapack'] = {
+let g:phpcd_builtin['classes']['lapack'] = {
 \'lapack': {
 \   'name': 'Lapack',
 \   'static_methods': {
@@ -10798,7 +10798,7 @@ let g:phpcomplete_builtin['classes']['lapack'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['libxml'] = {
+let g:phpcd_builtin['classes']['libxml'] = {
 \'libxmlerror': {
 \   'name': 'libXMLError',
 \   'properties': {
@@ -10811,7 +10811,7 @@ let g:phpcomplete_builtin['classes']['libxml'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['lua'] = {
+let g:phpcd_builtin['classes']['lua'] = {
 \'lua': {
 \   'name': 'Lua',
 \   'constants': {
@@ -10835,7 +10835,7 @@ let g:phpcomplete_builtin['classes']['lua'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['memcache'] = {
+let g:phpcd_builtin['classes']['memcache'] = {
 \'memcache': {
 \   'name': 'Memcache',
 \   'methods': {
@@ -10860,7 +10860,7 @@ let g:phpcomplete_builtin['classes']['memcache'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['memcached'] = {
+let g:phpcd_builtin['classes']['memcached'] = {
 \'memcached': {
 \   'name': 'Memcached',
 \   'methods': {
@@ -10938,7 +10938,7 @@ let g:phpcomplete_builtin['classes']['memcached'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['mongo'] = {
+let g:phpcd_builtin['classes']['mongo'] = {
 \'mongo': {
 \   'name': 'Mongo',
 \   'methods': {
@@ -11434,7 +11434,7 @@ let g:phpcomplete_builtin['classes']['mongo'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['mysqli'] = {
+let g:phpcd_builtin['classes']['mysqli'] = {
 \'mysqli_driver': {
 \   'name': 'mysqli_driver',
 \   'properties': {
@@ -11592,7 +11592,7 @@ let g:phpcomplete_builtin['classes']['mysqli'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['mysqlnd_uh'] = {
+let g:phpcd_builtin['classes']['mysqlnd_uh'] = {
 \'mysqlnduhconnection': {
 \   'name': 'MysqlndUhConnection',
 \   'methods': {
@@ -11658,7 +11658,7 @@ let g:phpcomplete_builtin['classes']['mysqlnd_uh'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['oauth'] = {
+let g:phpcd_builtin['classes']['oauth'] = {
 \'oauth': {
 \   'name': 'OAuth',
 \   'properties': {
@@ -11741,7 +11741,7 @@ let g:phpcomplete_builtin['classes']['oauth'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['pdo'] = {
+let g:phpcd_builtin['classes']['pdo'] = {
 \'pdo': {
 \   'name': 'PDO',
 \   'constants': {
@@ -11918,7 +11918,7 @@ let g:phpcomplete_builtin['classes']['pdo'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['phar'] = {
+let g:phpcd_builtin['classes']['phar'] = {
 \'phar': {
 \   'name': 'Phar',
 \   'methods': {
@@ -12089,7 +12089,7 @@ let g:phpcomplete_builtin['classes']['phar'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['streams'] = {
+let g:phpcd_builtin['classes']['streams'] = {
 \'php_user_filter': {
 \   'name': 'php_user_filter',
 \   'properties': {
@@ -12103,7 +12103,7 @@ let g:phpcomplete_builtin['classes']['streams'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['quickhash'] = {
+let g:phpcd_builtin['classes']['quickhash'] = {
 \'quickhashinthash': {
 \   'name': 'QuickHashIntHash',
 \   'constants': {
@@ -12203,7 +12203,7 @@ let g:phpcomplete_builtin['classes']['quickhash'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['rar'] = {
+let g:phpcd_builtin['classes']['rar'] = {
 \'rararchive': {
 \   'name': 'RarArchive',
 \   'methods': {
@@ -12301,7 +12301,7 @@ let g:phpcomplete_builtin['classes']['rar'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['reflection'] = {
+let g:phpcd_builtin['classes']['reflection'] = {
 \'reflection': {
 \   'name': 'Reflection',
 \   'static_methods': {
@@ -12703,7 +12703,7 @@ let g:phpcomplete_builtin['classes']['reflection'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['rrd'] = {
+let g:phpcd_builtin['classes']['rrd'] = {
 \'rrdcreator': {
 \   'name': 'RRDCreator',
 \   'methods': {
@@ -12730,7 +12730,7 @@ let g:phpcomplete_builtin['classes']['rrd'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['sessions'] = {
+let g:phpcd_builtin['classes']['sessions'] = {
 \'sessionhandler': {
 \   'name': 'SessionHandler',
 \   'methods': {
@@ -12755,7 +12755,7 @@ let g:phpcomplete_builtin['classes']['sessions'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['simplexml'] = {
+let g:phpcd_builtin['classes']['simplexml'] = {
 \'simplexmlelement': {
 \   'name': 'SimpleXMLElement',
 \   'methods': {
@@ -12800,7 +12800,7 @@ let g:phpcomplete_builtin['classes']['simplexml'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['snmp'] = {
+let g:phpcd_builtin['classes']['snmp'] = {
 \'snmp': {
 \   'name': 'SNMP',
 \   'constants': {
@@ -12860,7 +12860,7 @@ let g:phpcomplete_builtin['classes']['snmp'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['soap'] = {
+let g:phpcd_builtin['classes']['soap'] = {
 \'soapclient': {
 \   'name': 'SoapClient',
 \   'methods': {
@@ -12938,7 +12938,7 @@ let g:phpcomplete_builtin['classes']['soap'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['solr'] = {
+let g:phpcd_builtin['classes']['solr'] = {
 \'solrclient': {
 \   'name': 'SolrClient',
 \   'constants': {
@@ -13568,7 +13568,7 @@ let g:phpcomplete_builtin['classes']['solr'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['sphinx'] = {
+let g:phpcd_builtin['classes']['sphinx'] = {
 \'sphinxclient': {
 \   'name': 'SphinxClient',
 \   'methods': {
@@ -13610,7 +13610,7 @@ let g:phpcomplete_builtin['classes']['sphinx'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['spl_types'] = {
+let g:phpcd_builtin['classes']['spl_types'] = {
 \'splbool': {
 \   'name': 'SplBool',
 \   'constants': {
@@ -13669,7 +13669,7 @@ let g:phpcomplete_builtin['classes']['spl_types'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['sqlite3'] = {
+let g:phpcd_builtin['classes']['sqlite3'] = {
 \'sqlite3': {
 \   'name': 'SQLite3',
 \   'methods': {
@@ -13719,7 +13719,7 @@ let g:phpcomplete_builtin['classes']['sqlite3'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['stomp'] = {
+let g:phpcd_builtin['classes']['stomp'] = {
 \'stomp': {
 \   'name': 'Stomp',
 \   'methods': {
@@ -13767,7 +13767,7 @@ let g:phpcomplete_builtin['classes']['stomp'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['svm'] = {
+let g:phpcd_builtin['classes']['svm'] = {
 \'svm': {
 \   'name': 'SVM',
 \   'constants': {
@@ -13819,7 +13819,7 @@ let g:phpcomplete_builtin['classes']['svm'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['ming'] = {
+let g:phpcd_builtin['classes']['ming'] = {
 \'swfaction': {
 \   'name': 'SWFAction',
 \   'methods': {
@@ -14052,7 +14052,7 @@ let g:phpcomplete_builtin['classes']['ming'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['sync'] = {
+let g:phpcd_builtin['classes']['sync'] = {
 \'syncevent': {
 \   'name': 'SyncEvent',
 \   'methods': {
@@ -14089,7 +14089,7 @@ let g:phpcomplete_builtin['classes']['sync'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['tidy'] = {
+let g:phpcd_builtin['classes']['tidy'] = {
 \'tidy': {
 \   'name': 'tidy',
 \   'properties': {
@@ -14143,7 +14143,7 @@ let g:phpcomplete_builtin['classes']['tidy'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['tokyo_tyrant'] = {
+let g:phpcd_builtin['classes']['tokyo_tyrant'] = {
 \'tokyotyrant': {
 \   'name': 'TokyoTyrant',
 \   'constants': {
@@ -14319,7 +14319,7 @@ let g:phpcomplete_builtin['classes']['tokyo_tyrant'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['v8js'] = {
+let g:phpcd_builtin['classes']['v8js'] = {
 \'v8js': {
 \   'name': 'V8Js',
 \   'constants': {
@@ -14366,7 +14366,7 @@ let g:phpcomplete_builtin['classes']['v8js'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['varnish'] = {
+let g:phpcd_builtin['classes']['varnish'] = {
 \'varnishadmin': {
 \   'name': 'VarnishAdmin',
 \   'methods': {
@@ -14463,7 +14463,7 @@ let g:phpcomplete_builtin['classes']['varnish'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['weakref'] = {
+let g:phpcd_builtin['classes']['weakref'] = {
 \'weakmap': {
 \   'name': 'WeakMap',
 \   'methods': {
@@ -14491,7 +14491,7 @@ let g:phpcomplete_builtin['classes']['weakref'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['xmldiff'] = {
+let g:phpcd_builtin['classes']['xmldiff'] = {
 \'xmldiff\base': {
 \   'name': 'XMLDiff\Base',
 \   'methods': {
@@ -14525,7 +14525,7 @@ let g:phpcomplete_builtin['classes']['xmldiff'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['xmlreader'] = {
+let g:phpcd_builtin['classes']['xmlreader'] = {
 \'xmlreader': {
 \   'name': 'XMLReader',
 \   'constants': {
@@ -14597,7 +14597,7 @@ let g:phpcomplete_builtin['classes']['xmlreader'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['xsl'] = {
+let g:phpcd_builtin['classes']['xsl'] = {
 \'xsltprocessor': {
 \   'name': 'XSLTProcessor',
 \   'methods': {
@@ -14616,7 +14616,7 @@ let g:phpcomplete_builtin['classes']['xsl'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['yaf'] = {
+let g:phpcd_builtin['classes']['yaf'] = {
 \'yaf_action_abstract': {
 \   'name': 'Yaf_Action_Abstract',
 \   'properties': {
@@ -15291,7 +15291,7 @@ let g:phpcomplete_builtin['classes']['yaf'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['yar'] = {
+let g:phpcd_builtin['classes']['yar'] = {
 \'yar_client_exception': {
 \   'name': 'Yar_Client_Exception',
 \   'methods': {
@@ -15362,7 +15362,7 @@ let g:phpcomplete_builtin['classes']['yar'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['zip'] = {
+let g:phpcd_builtin['classes']['zip'] = {
 \'ziparchive': {
 \   'name': 'ZipArchive',
 \   'properties': {
@@ -15411,7 +15411,7 @@ let g:phpcomplete_builtin['classes']['zip'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['classes']['0mq_messaging'] = {
+let g:phpcd_builtin['classes']['0mq_messaging'] = {
 \'zmq': {
 \   'name': 'ZMQ',
 \   'constants': {
@@ -15533,7 +15533,7 @@ let g:phpcomplete_builtin['classes']['0mq_messaging'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['interfaces']['predefined_interfaces_and_classes'] = {
+let g:phpcd_builtin['interfaces']['predefined_interfaces_and_classes'] = {
 \'arrayaccess': {
 \   'name': 'ArrayAccess',
 \   'methods': {
@@ -15570,7 +15570,7 @@ let g:phpcomplete_builtin['interfaces']['predefined_interfaces_and_classes'] = {
 \   'name': 'Traversable',
 \},
 \}
-let g:phpcomplete_builtin['interfaces']['spl'] = {
+let g:phpcd_builtin['interfaces']['spl'] = {
 \'countable': {
 \   'name': 'Countable',
 \   'methods': {
@@ -15626,7 +15626,7 @@ let g:phpcomplete_builtin['interfaces']['spl'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['interfaces']['date_time'] = {
+let g:phpcd_builtin['interfaces']['date_time'] = {
 \'datetimeinterface': {
 \   'name': 'DateTimeInterface',
 \   'methods': {
@@ -15639,7 +15639,7 @@ let g:phpcomplete_builtin['interfaces']['date_time'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['interfaces']['json'] = {
+let g:phpcd_builtin['interfaces']['json'] = {
 \'jsonserializable': {
 \   'name': 'JsonSerializable',
 \   'methods': {
@@ -15647,7 +15647,7 @@ let g:phpcomplete_builtin['interfaces']['json'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['interfaces']['reflection'] = {
+let g:phpcd_builtin['interfaces']['reflection'] = {
 \'reflector': {
 \   'name': 'Reflector',
 \   'methods': {
@@ -15658,7 +15658,7 @@ let g:phpcomplete_builtin['interfaces']['reflection'] = {
 \   },
 \},
 \}
-let g:phpcomplete_builtin['constants']['common'] = {
+let g:phpcd_builtin['constants']['common'] = {
 \ 'TRUE': '',
 \ 'FALSE': '',
 \ 'NULL': '',
@@ -15688,7 +15688,7 @@ let g:phpcomplete_builtin['constants']['common'] = {
 \ '__METHOD__': '',
 \ '__NAMESPACE__': '',
 \ }
-let g:phpcomplete_builtin['constants']['apc'] = {
+let g:phpcd_builtin['constants']['apc'] = {
 \ 'APC_BIN_VERIFY_CRC32': '',
 \ 'APC_BIN_VERIFY_MD5': '',
 \ 'APC_ITER_ALL': '',
@@ -15711,7 +15711,7 @@ let g:phpcomplete_builtin['constants']['apc'] = {
 \ 'APC_LIST_ACTIVE': '',
 \ 'APC_LIST_DELETED': '',
 \ }
-let g:phpcomplete_builtin['constants']['apd'] = {
+let g:phpcd_builtin['constants']['apd'] = {
 \ 'FUNCTION_TRACE': '',
 \ 'ARGS_TRACE': '',
 \ 'ASSIGNMENT_TRACE': '',
@@ -15725,7 +15725,7 @@ let g:phpcomplete_builtin['constants']['apd'] = {
 \ 'AF_UNIX': '',
 \ 'APD_AF_INET': '',
 \ }
-let g:phpcomplete_builtin['constants']['arrays'] = {
+let g:phpcd_builtin['constants']['arrays'] = {
 \ 'CASE_LOWER': '',
 \ 'CASE_UPPER': '',
 \ 'SORT_ASC': '',
@@ -15749,7 +15749,7 @@ let g:phpcomplete_builtin['constants']['arrays'] = {
 \ 'EXTR_IF_EXISTS': '',
 \ 'EXTR_REFS': '',
 \ }
-let g:phpcomplete_builtin['constants']['bbcode'] = {
+let g:phpcd_builtin['constants']['bbcode'] = {
 \ 'BBCODE_TYPE_NOARG': '',
 \ 'BBCODE_TYPE_SINGLE': '',
 \ 'BBCODE_TYPE_ARG': '',
@@ -15777,10 +15777,10 @@ let g:phpcomplete_builtin['constants']['bbcode'] = {
 \ 'BBCODE_SET_FLAGS_ADD': '',
 \ 'BBCODE_SET_FLAGS_REMOVE': '',
 \ }
-let g:phpcomplete_builtin['constants']['blenc'] = {
+let g:phpcd_builtin['constants']['blenc'] = {
 \ 'BLENC_EXT_VERSION': '',
 \ }
-let g:phpcomplete_builtin['constants']['cairo'] = {
+let g:phpcd_builtin['constants']['cairo'] = {
 \ 'CAIRO_STATUS_SUCCESS': '',
 \ 'CAIRO_STATUS_NO_MEMORY': '',
 \ 'CAIRO_STATUS_INVALID_RESTORE': '',
@@ -15894,7 +15894,7 @@ let g:phpcomplete_builtin['constants']['cairo'] = {
 \ 'CAIRO_SVG_VERSION_1_1': '',
 \ 'CAIRO_SVG_VERSION_1_2': '',
 \ }
-let g:phpcomplete_builtin['constants']['calendar'] = {
+let g:phpcd_builtin['constants']['calendar'] = {
 \ 'CAL_GREGORIAN': '',
 \ 'CAL_JULIAN': '',
 \ 'CAL_JEWISH': '',
@@ -15917,7 +15917,7 @@ let g:phpcomplete_builtin['constants']['calendar'] = {
 \ 'CAL_JEWISH_ADD_ALAFIM': '',
 \ 'CAL_JEWISH_ADD_GERESHAYIM': '',
 \ }
-let g:phpcomplete_builtin['constants']['oci8'] = {
+let g:phpcd_builtin['constants']['oci8'] = {
 \ 'OCI_SEEK_SET': '',
 \ 'SQLT_NUM': '',
 \ 'SQLT_INT': '',
@@ -15988,7 +15988,7 @@ let g:phpcomplete_builtin['constants']['oci8'] = {
 \ 'OCI_D_ROWID': '',
 \ 'SQLT_BFILE': '',
 \ }
-let g:phpcomplete_builtin['constants']['com'] = {
+let g:phpcd_builtin['constants']['com'] = {
 \ 'CLSCTX_INPROC_SERVER': '',
 \ 'CLSCTX_INPROC_HANDLER': '',
 \ 'CLSCTX_LOCAL_SERVER': '',
@@ -16040,7 +16040,7 @@ let g:phpcomplete_builtin['constants']['com'] = {
 \ 'DISP_E_OVERFLOW': '',
 \ 'MK_E_UNAVAILABLE': '',
 \ }
-let g:phpcomplete_builtin['constants']['curl'] = {
+let g:phpcd_builtin['constants']['curl'] = {
 \ 'CURLOPT_POSTFIELDS': '',
 \ 'CURLOPT_CAINFO': '',
 \ 'CURLOPT_AUTOREFERER': '',
@@ -16318,7 +16318,7 @@ let g:phpcomplete_builtin['constants']['curl'] = {
 \ 'CURL_LOCK_DATA_DNS': '',
 \ 'CURL_LOCK_DATA_SSL_SESSION': '',
 \ }
-let g:phpcomplete_builtin['constants']['date_time'] = {
+let g:phpcd_builtin['constants']['date_time'] = {
 \ 'DATE_ATOM': '',
 \ 'DATE_COOKIE': '',
 \ 'DATE_ISO8601': '',
@@ -16335,7 +16335,7 @@ let g:phpcomplete_builtin['constants']['date_time'] = {
 \ 'SUNFUNCS_RET_DOUBLE': '',
 \ 'LC_TIME': '',
 \ }
-let g:phpcomplete_builtin['constants']['ev'] = {
+let g:phpcd_builtin['constants']['ev'] = {
 \ 'SIGCHLD': '',
 \ 'EAGAIN': '',
 \ 'SIGALRM': '',
@@ -16344,12 +16344,12 @@ let g:phpcomplete_builtin['constants']['ev'] = {
 \ 'N': '',
 \ 'STDIN': '',
 \ }
-let g:phpcomplete_builtin['constants']['event'] = {
+let g:phpcd_builtin['constants']['event'] = {
 \ 'FD_CLOEXEC': '',
 \ 'SIGTERM': '',
 \ 'SIGHUP': '',
 \ }
-let g:phpcomplete_builtin['constants']['libxml'] = {
+let g:phpcd_builtin['constants']['libxml'] = {
 \ 'LIBXML_ERR_WARNING': '',
 \ 'LIBXML_ERR_ERROR': '',
 \ 'LIBXML_ERR_FATAL': '',
@@ -16376,7 +16376,7 @@ let g:phpcomplete_builtin['constants']['libxml'] = {
 \ 'LIBXML_DOTTED_VERSION': '',
 \ 'LIBXML_SCHEMA_CREATE': '',
 \ }
-let g:phpcomplete_builtin['constants']['mysqli'] = {
+let g:phpcd_builtin['constants']['mysqli'] = {
 \ 'MYSQLI_REPORT_OFF': '',
 \ 'MYSQLI_REPORT_ALL': '',
 \ 'MYSQLI_REPORT_STRICT': '',
@@ -16480,7 +16480,7 @@ let g:phpcomplete_builtin['constants']['mysqli'] = {
 \ 'MYSQLI_RPL_ADMIN': '',
 \ 'MYSQLI_STORE_RESULT_COPY_DATA': '',
 \ }
-let g:phpcomplete_builtin['constants']['oauth'] = {
+let g:phpcd_builtin['constants']['oauth'] = {
 \ 'OAUTH_SIG_METHOD_HMACSHA1': '',
 \ 'OAUTH_SIG_METHOD_RSASHA1': '',
 \ 'OAUTH_SIG_METHOD_HMACSHA256': '',
@@ -16509,7 +16509,7 @@ let g:phpcomplete_builtin['constants']['oauth'] = {
 \ 'OAUTH_PARAMETER_ABSENT': '',
 \ 'OAUTH_SIGNATURE_METHOD_REJECTED': '',
 \ }
-let g:phpcomplete_builtin['constants']['rar'] = {
+let g:phpcd_builtin['constants']['rar'] = {
 \ 'RAR_HOST_MSDOS': '',
 \ 'RAR_HOST_OS2': '',
 \ 'RAR_HOST_WIN32': '',
@@ -16517,7 +16517,7 @@ let g:phpcomplete_builtin['constants']['rar'] = {
 \ 'RAR_HOST_BEOS': '',
 \ 'PHP_INT_MAX': '',
 \ }
-let g:phpcomplete_builtin['constants']['snmp'] = {
+let g:phpcd_builtin['constants']['snmp'] = {
 \ 'SNMP_VALUE_LIBRARY': '',
 \ 'SNMP_VALUE_PLAIN': '',
 \ 'SNMP_VALUE_OBJECT': '',
@@ -16541,7 +16541,7 @@ let g:phpcomplete_builtin['constants']['snmp'] = {
 \ 'SNMP_INTEGER': '',
 \ 'SNMP_COUNTER64': '',
 \ }
-let g:phpcomplete_builtin['constants']['spl'] = {
+let g:phpcd_builtin['constants']['spl'] = {
 \ 'READ_AHEAD': '',
 \ 'MIT_NEED_ALL': '',
 \ 'MIT_KEYS_ASSOC': '',
@@ -16557,7 +16557,7 @@ let g:phpcomplete_builtin['constants']['spl'] = {
 \ 'SEEK_END': '',
 \ 'PHP_INT_MAX': '',
 \ }
-let g:phpcomplete_builtin['constants']['tidy'] = {
+let g:phpcd_builtin['constants']['tidy'] = {
 \ 'TIDY_NODETYPE_PHP': '',
 \ 'TIDY_TAG_FRAME': '',
 \ 'TIDY_TAG_A': '',
@@ -16815,12 +16815,12 @@ let g:phpcomplete_builtin['constants']['tidy'] = {
 \ 'TIDY_NODETYPE_JSTE': '',
 \ 'TIDY_NODETYPE_XMLDECL': '',
 \ }
-let g:phpcomplete_builtin['constants']['classkit'] = {
+let g:phpcd_builtin['constants']['classkit'] = {
 \ 'CLASSKIT_ACC_PRIVATE': '',
 \ 'CLASSKIT_ACC_PROTECTED': '',
 \ 'CLASSKIT_ACC_PUBLIC': '',
 \ }
-let g:phpcomplete_builtin['constants']['unknow'] = {
+let g:phpcd_builtin['constants']['unknow'] = {
 \ 'PHP_INI_ALL': '',
 \ 'PHP_INI_PERDIR': '',
 \ 'PHP_INI_SYSTEM': '',
@@ -16867,7 +16867,7 @@ let g:phpcomplete_builtin['constants']['unknow'] = {
 \ 'STREAM_MUST_SEEK': '',
 \ 'STREAM_WILL_CAST': '',
 \ }
-let g:phpcomplete_builtin['constants']['dbx'] = {
+let g:phpcd_builtin['constants']['dbx'] = {
 \ 'DBX_MYSQL': '',
 \ 'DBX_ODBC': '',
 \ 'DBX_PGSQL': '',
@@ -16890,7 +16890,7 @@ let g:phpcomplete_builtin['constants']['dbx'] = {
 \ 'DBX_CMP_ASC': '',
 \ 'DBX_CMP_DESC': '',
 \ }
-let g:phpcomplete_builtin['constants']['newt'] = {
+let g:phpcd_builtin['constants']['newt'] = {
 \ 'NEWT_ANCHOR_LEFT': '',
 \ 'NEWT_ANCHOR_RIGHT': '',
 \ 'NEWT_ANCHOR_TOP': '',
@@ -16993,19 +16993,19 @@ let g:phpcomplete_builtin['constants']['newt'] = {
 \ 'NEWT_TEXTBOX_WRAP': '',
 \ 'NEWT_TEXTBOX_SCROLL': '',
 \ }
-let g:phpcomplete_builtin['constants']['context_options_and_parameters'] = {
+let g:phpcd_builtin['constants']['context_options_and_parameters'] = {
 \ 'GET': '',
 \ 'POST': '',
 \ 'HEAD': '',
 \ 'OPENSSL_TLSEXT_SERVER_NAME': '',
 \ }
-let g:phpcomplete_builtin['constants']['cyrus'] = {
+let g:phpcd_builtin['constants']['cyrus'] = {
 \ 'CYRUS_CONN_NONSYNCLITERAL': '',
 \ 'CYRUS_CONN_INITIALRESPONSE': '',
 \ 'CYRUS_CALLBACK_NUMBERED': '',
 \ 'CYRUS_CALLBACK_NOLITERAL': '',
 \ }
-let g:phpcomplete_builtin['constants']['db_'] = {
+let g:phpcd_builtin['constants']['db_'] = {
 \ 'DBPLUS_ERR_NOERR': '',
 \ 'DBPLUS_ERR_DUPLICATE': '',
 \ 'DBPLUS_ERR_EOSCAN': '',
@@ -17046,7 +17046,7 @@ let g:phpcomplete_builtin['constants']['db_'] = {
 \ 'DBPLUS_ERR_USER': '',
 \ 'DBPLUS_ERR_UNKNOWN': '',
 \ }
-let g:phpcomplete_builtin['constants']['direct_io'] = {
+let g:phpcd_builtin['constants']['direct_io'] = {
 \ 'F_DUPFD': '',
 \ 'F_GETFD': '',
 \ 'F_GETFL': '',
@@ -17088,14 +17088,14 @@ let g:phpcomplete_builtin['constants']['direct_io'] = {
 \ 'SEEK_END': '',
 \ 'SEEK_CUR': '',
 \ }
-let g:phpcomplete_builtin['constants']['directories'] = {
+let g:phpcd_builtin['constants']['directories'] = {
 \ 'DIRECTORY_SEPARATOR': '',
 \ 'PATH_SEPARATOR': '',
 \ 'SCANDIR_SORT_ASCENDING': '',
 \ 'SCANDIR_SORT_DESCENDING': '',
 \ 'SCANDIR_SORT_NONE': '',
 \ }
-let g:phpcomplete_builtin['constants']['dom'] = {
+let g:phpcd_builtin['constants']['dom'] = {
 \ 'XML_ELEMENT_NODE': '',
 \ 'XML_ATTRIBUTE_NODE': '',
 \ 'XML_TEXT_NODE': '',
@@ -17143,7 +17143,7 @@ let g:phpcomplete_builtin['constants']['dom'] = {
 \ 'DOM_NOT_FOUND_ERROR': '',
 \ 'DOM_NOT_FOUND': '',
 \ }
-let g:phpcomplete_builtin['constants']['eio'] = {
+let g:phpcd_builtin['constants']['eio'] = {
 \ 'EIO_PRI_MIN': '',
 \ 'EIO_PRI_DEFAULT': '',
 \ 'EIO_PRI_MAX': '',
@@ -17199,7 +17199,7 @@ let g:phpcomplete_builtin['constants']['eio'] = {
 \ 'EIO_FALLOC_FL_KEEP_SIZE': '',
 \ 'FALLOC_FL_KEEP_SIZE': '',
 \ }
-let g:phpcomplete_builtin['constants']['exif'] = {
+let g:phpcd_builtin['constants']['exif'] = {
 \ 'EXIF_USE_MBSTRING': '',
 \ 'IMAGETYPE_GIF': '',
 \ 'IMAGETYPE_JPEG': '',
@@ -17219,7 +17219,7 @@ let g:phpcomplete_builtin['constants']['exif'] = {
 \ 'IMAGETYPE_XBM': '',
 \ 'IMAGETYPE_ICO': '',
 \ }
-let g:phpcomplete_builtin['constants']['expect'] = {
+let g:phpcd_builtin['constants']['expect'] = {
 \ 'EXP_GLOB': '',
 \ 'EXP_EXACT': '',
 \ 'EXP_REGEXP': '',
@@ -17227,7 +17227,7 @@ let g:phpcomplete_builtin['constants']['expect'] = {
 \ 'EXP_TIMEOUT': '',
 \ 'EXP_FULLBUFFER': '',
 \ }
-let g:phpcomplete_builtin['constants']['fann'] = {
+let g:phpcd_builtin['constants']['fann'] = {
 \ 'FANN_TRAIN_INCREMENTAL': '',
 \ 'FANN_TRAIN_BATCH': '',
 \ 'FANN_TRAIN_RPROP': '',
@@ -17279,7 +17279,7 @@ let g:phpcomplete_builtin['constants']['fann'] = {
 \ 'FANN_E_INPUT_NO_MATCH': '',
 \ 'FANN_E_OUTPUT_NO_MATCH': '',
 \ }
-let g:phpcomplete_builtin['constants']['frontbase'] = {
+let g:phpcd_builtin['constants']['frontbase'] = {
 \ 'FBSQL_ASSOC': '',
 \ 'FBSQL_NUM': '',
 \ 'FBSQL_BOTH': '',
@@ -17300,20 +17300,20 @@ let g:phpcomplete_builtin['constants']['frontbase'] = {
 \ 'FBSQL_LOB_DIRECT': '',
 \ 'FBSQL_LOB_HANDLE': '',
 \ }
-let g:phpcomplete_builtin['constants']['fdf'] = {
+let g:phpcd_builtin['constants']['fdf'] = {
 \ 'FDFID': '',
 \ 'FDFAP': '',
 \ 'FDFAS': '',
 \ 'FDFAA': '',
 \ 'FDFIF': '',
 \ }
-let g:phpcomplete_builtin['constants']['command_line_usage'] = {
+let g:phpcd_builtin['constants']['command_line_usage'] = {
 \ 'PHP_SAPI': '',
 \ 'STDIN': '',
 \ 'STDOUT': '',
 \ 'STDERR': '',
 \ }
-let g:phpcomplete_builtin['constants']['handling_file_uploads'] = {
+let g:phpcd_builtin['constants']['handling_file_uploads'] = {
 \ 'UPLOAD_ERR_OK': '',
 \ 'UPLOAD_ERR_INI_SIZE': '',
 \ 'UPLOAD_ERR_FORM_SIZE': '',
@@ -17323,7 +17323,7 @@ let g:phpcomplete_builtin['constants']['handling_file_uploads'] = {
 \ 'UPLOAD_ERR_CANT_WRITE': '',
 \ 'UPLOAD_ERR_EXTENSION': '',
 \ }
-let g:phpcomplete_builtin['constants']['fileinfo'] = {
+let g:phpcd_builtin['constants']['fileinfo'] = {
 \ 'FILEINFO_NONE': '',
 \ 'FILEINFO_SYMLINK': '',
 \ 'FILEINFO_MIME_TYPE': '',
@@ -17335,7 +17335,7 @@ let g:phpcomplete_builtin['constants']['fileinfo'] = {
 \ 'FILEINFO_PRESERVE_ATIME': '',
 \ 'FILEINFO_RAW': '',
 \ }
-let g:phpcomplete_builtin['constants']['filesystem'] = {
+let g:phpcd_builtin['constants']['filesystem'] = {
 \ 'SEEK_SET': '',
 \ 'SEEK_CUR': '',
 \ 'SEEK_END': '',
@@ -17369,7 +17369,7 @@ let g:phpcomplete_builtin['constants']['filesystem'] = {
 \ 'FNM_CASEFOLD': '',
 \ 'GLOB_ERR': '',
 \ }
-let g:phpcomplete_builtin['constants']['filter'] = {
+let g:phpcd_builtin['constants']['filter'] = {
 \ 'FILTER_FLAG_NO_ENCODE_QUOTES': '',
 \ 'INPUT_POST': '',
 \ 'INPUT_GET': '',
@@ -17423,7 +17423,7 @@ let g:phpcomplete_builtin['constants']['filter'] = {
 \ 'FILTER_SANITIZE_FULL_SPECIAL_CHARS': '',
 \ 'ENT_QUOTES': '',
 \ }
-let g:phpcomplete_builtin['constants']['fribidi'] = {
+let g:phpcd_builtin['constants']['fribidi'] = {
 \ 'FRIBIDI_CHARSET_UTF8': '',
 \ 'FRIBIDI_CHARSET_8859_6': '',
 \ 'FRIBIDI_CHARSET_8859_8': '',
@@ -17435,7 +17435,7 @@ let g:phpcomplete_builtin['constants']['fribidi'] = {
 \ 'FRIBIDI_LTR': '',
 \ 'FRIBIDI_AUTO': '',
 \ }
-let g:phpcomplete_builtin['constants']['ftp'] = {
+let g:phpcd_builtin['constants']['ftp'] = {
 \ 'FTP_ASCII': '',
 \ 'FTP_TEXT': '',
 \ 'FTP_BINARY': '',
@@ -17447,7 +17447,7 @@ let g:phpcomplete_builtin['constants']['ftp'] = {
 \ 'FTP_FINISHED': '',
 \ 'FTP_MOREDATA': '',
 \ }
-let g:phpcomplete_builtin['constants']['php_options_info'] = {
+let g:phpcd_builtin['constants']['php_options_info'] = {
 \ 'ASSERT_CALLBACK': '',
 \ 'RUSAGE_CHILDREN': '',
 \ 'PHP_SAPI': '',
@@ -17487,7 +17487,7 @@ let g:phpcomplete_builtin['constants']['php_options_info'] = {
 \ 'PHP_WINDOWS_NT_SERVER': '',
 \ 'PHP_WINDOWS_NT_WORKSTATION': '',
 \ }
-let g:phpcomplete_builtin['constants']['strings'] = {
+let g:phpcd_builtin['constants']['strings'] = {
 \ 'CRYPT_SALT_LENGTH': '',
 \ 'CRYPT_STD_DES': '',
 \ 'CRYPT_EXT_DES': '',
@@ -17557,7 +17557,7 @@ let g:phpcomplete_builtin['constants']['strings'] = {
 \ 'STR_PAD_LEFT': '',
 \ 'STR_PAD_BOTH': '',
 \ }
-let g:phpcomplete_builtin['constants']['cubrid'] = {
+let g:phpcd_builtin['constants']['cubrid'] = {
 \ 'PARAM_ISOLATION_LEVEL': '',
 \ 'PARAM_LOCK_TIMEOUT': '',
 \ 'PARAM_MAX_STRING_LENGTH': '',
@@ -17566,11 +17566,11 @@ let g:phpcomplete_builtin['constants']['cubrid'] = {
 \ 'CUBRID_AUTOCOMMIT_FALSE': '',
 \ 'CUBRID_AUTOCOMMIT_TRUE': '',
 \ }
-let g:phpcomplete_builtin['constants']['error_handling'] = {
+let g:phpcd_builtin['constants']['error_handling'] = {
 \ 'DEBUG_BACKTRACE_PROVIDE_OBJECT': '',
 \ 'DEBUG_BACKTRACE_IGNORE_ARGS': '',
 \ }
-let g:phpcomplete_builtin['constants']['math'] = {
+let g:phpcd_builtin['constants']['math'] = {
 \ 'PHP_INT_MAX': '',
 \ 'M_PI': '',
 \ 'PHP_ROUND_HALF_UP': '',
@@ -17596,7 +17596,7 @@ let g:phpcomplete_builtin['constants']['math'] = {
 \ 'NAN': '',
 \ 'INF': '',
 \ }
-let g:phpcomplete_builtin['constants']['network'] = {
+let g:phpcd_builtin['constants']['network'] = {
 \ 'LOG_EMERG': '',
 \ 'LOG_ALERT': '',
 \ 'LOG_CRIT': '',
@@ -17646,10 +17646,10 @@ let g:phpcomplete_builtin['constants']['network'] = {
 \ 'SID': '',
 \ 'LOG_UUCP': '',
 \ }
-let g:phpcomplete_builtin['constants']['posix_regex'] = {
+let g:phpcd_builtin['constants']['posix_regex'] = {
 \ 'PCRE_CASELESS': '',
 \ }
-let g:phpcomplete_builtin['constants']['libevent'] = {
+let g:phpcd_builtin['constants']['libevent'] = {
 \ 'EVLOOP_ONCE': '',
 \ 'EVLOOP_NONBLOCK': '',
 \ 'EV_READ': '',
@@ -17659,7 +17659,7 @@ let g:phpcomplete_builtin['constants']['libevent'] = {
 \ 'EV_PERSIST': '',
 \ 'STDIN': '',
 \ }
-let g:phpcomplete_builtin['constants']['gmp'] = {
+let g:phpcd_builtin['constants']['gmp'] = {
 \ 'GMP_ROUND_ZERO': '',
 \ 'GMP_ROUND_PLUSINF': '',
 \ 'GMP_ROUND_MINUSINF': '',
@@ -17670,7 +17670,7 @@ let g:phpcomplete_builtin['constants']['gmp'] = {
 \ 'GMP_NATIVE_ENDIAN': '',
 \ 'GMP_VERSION': '',
 \ }
-let g:phpcomplete_builtin['constants']['gnupg'] = {
+let g:phpcd_builtin['constants']['gnupg'] = {
 \ 'GNUPG_PROTOCOL_CMS': '',
 \ 'GNUPG_ERROR_WARNING': '',
 \ 'GNUPG_ERROR_EXCEPTION': '',
@@ -17696,7 +17696,7 @@ let g:phpcomplete_builtin['constants']['gnupg'] = {
 \ 'GNUPG_SIGSUM_BAD_POLICY': '',
 \ 'GNUPG_SIGSUM_SYS_ERROR': '',
 \ }
-let g:phpcomplete_builtin['constants']['gupnp'] = {
+let g:phpcd_builtin['constants']['gupnp'] = {
 \ 'GUPNP_SIGNAL_DEVICE_PROXY_AVAILABLE': '',
 \ 'GUPNP_SIGNAL_DEVICE_PROXY_UNAVAILABLE': '',
 \ 'GUPNP_SIGNAL_SERVICE_PROXY_AVAILABLE': '',
@@ -17715,18 +17715,18 @@ let g:phpcomplete_builtin['constants']['gupnp'] = {
 \ 'GUPNP_CONTROL_ERROR_ACTION_FAILED': '',
 \ 'GUPNP_SIGNAL_SUBSCRIPTION_LOST': '',
 \ }
-let g:phpcomplete_builtin['constants']['zlib'] = {
+let g:phpcd_builtin['constants']['zlib'] = {
 \ 'FORCE_GZIP': '',
 \ 'FORCE_DEFLATE': '',
 \ 'SEEK_SET': '',
 \ 'SEEK_CUR': '',
 \ }
-let g:phpcomplete_builtin['constants']['hash'] = {
+let g:phpcd_builtin['constants']['hash'] = {
 \ 'HASH_HMAC': '',
 \ 'INT_MAX': '',
 \ 'CRYPT_BLOWFISH': '',
 \ }
-let g:phpcomplete_builtin['constants']['urls'] = {
+let g:phpcd_builtin['constants']['urls'] = {
 \ 'PHP_QUERY_RFC1738': '',
 \ 'PHP_QUERY_RFC3986': '',
 \ 'PHP_URL_SCHEME': '',
@@ -17738,7 +17738,7 @@ let g:phpcomplete_builtin['constants']['urls'] = {
 \ 'PHP_URL_QUERY': '',
 \ 'PHP_URL_FRAGMENT': '',
 \ }
-let g:phpcomplete_builtin['constants']['http'] = {
+let g:phpcd_builtin['constants']['http'] = {
 \ 'HTTP_URL_REPLACE': '',
 \ 'HTTP_COOKIE_PARSE_RAW': '',
 \ 'HTTP_SUPPORT': '',
@@ -17850,7 +17850,7 @@ let g:phpcomplete_builtin['constants']['http'] = {
 \ 'TYPE_RESPONSE': '',
 \ 'TYPE': '',
 \ }
-let g:phpcomplete_builtin['constants']['firebird_interbase'] = {
+let g:phpcd_builtin['constants']['firebird_interbase'] = {
 \ 'IBASE_TEXT': '',
 \ 'IBASE_UNIXTIME': '',
 \ 'IBASE_READ': '',
@@ -17914,7 +17914,7 @@ let g:phpcomplete_builtin['constants']['firebird_interbase'] = {
 \ 'IBASE_SVC_SVR_DB_INFO': '',
 \ 'IBASE_SVC_GET_USERS': '',
 \ }
-let g:phpcomplete_builtin['constants']['id3'] = {
+let g:phpcd_builtin['constants']['id3'] = {
 \ 'ID3_V1_0': '',
 \ 'ID3_V1_1': '',
 \ 'ID3_V2': '',
@@ -17924,7 +17924,7 @@ let g:phpcomplete_builtin['constants']['id3'] = {
 \ 'ID3_V2_4': '',
 \ 'ID3_BEST': '',
 \ }
-let g:phpcomplete_builtin['constants']['intl'] = {
+let g:phpcd_builtin['constants']['intl'] = {
 \ 'INTL_IDNA_VARIANT_2003': '',
 \ 'INTL_IDNA_VARIANT_UTS46': '',
 \ 'INTL_MAX_LOCALE_LEN': '',
@@ -17952,7 +17952,7 @@ let g:phpcomplete_builtin['constants']['intl'] = {
 \ 'U_ZERO_ERROR': '',
 \ 'U_UNSUPPORTED_ERROR': '',
 \ }
-let g:phpcomplete_builtin['constants']['informix'] = {
+let g:phpcd_builtin['constants']['informix'] = {
 \ 'IFX_SCROLL': '',
 \ 'IFX_HOLD': '',
 \ 'IFX_LO_RDONLY': '',
@@ -17962,7 +17962,7 @@ let g:phpcomplete_builtin['constants']['informix'] = {
 \ 'IFX_LO_BUFFER': '',
 \ 'IFX_LO_NOBUFFER': '',
 \ }
-let g:phpcomplete_builtin['constants']['gd'] = {
+let g:phpcd_builtin['constants']['gd'] = {
 \ 'IMAGETYPE_GIF': '',
 \ 'IMAGETYPE_JPEG': '',
 \ 'IMAGETYPE_PNG': '',
@@ -18054,7 +18054,7 @@ let g:phpcomplete_builtin['constants']['gd'] = {
 \ 'PNG_FILTER_AVG': '',
 \ 'PNG_FILTER_PAETH': '',
 \ }
-let g:phpcomplete_builtin['constants']['imap'] = {
+let g:phpcd_builtin['constants']['imap'] = {
 \ 'FT_UID': '',
 \ 'FT_PEEK': '',
 \ 'FT_INTERNAL': '',
@@ -18126,7 +18126,7 @@ let g:phpcomplete_builtin['constants']['imap'] = {
 \ 'LATT_HASNOCHILDREN': '',
 \ 'TYPEMODEL': '',
 \ }
-let g:phpcomplete_builtin['constants']['ingres'] = {
+let g:phpcd_builtin['constants']['ingres'] = {
 \ 'INGRES_NUM': '',
 \ 'INGRES_ASSOC': '',
 \ 'INGRES_BOTH': '',
@@ -18154,7 +18154,7 @@ let g:phpcomplete_builtin['constants']['ingres'] = {
 \ 'INGRES_STRUCTURE_ISAM': '',
 \ 'INGRES_STRUCTURE_CISAM': '',
 \ }
-let g:phpcomplete_builtin['constants']['inotify'] = {
+let g:phpcd_builtin['constants']['inotify'] = {
 \ 'IN_MASK_ADD': '',
 \ 'IN_MOVE_FROM': '',
 \ 'IN_MOVE_TO': '',
@@ -18181,7 +18181,7 @@ let g:phpcomplete_builtin['constants']['inotify'] = {
 \ 'IN_DONT_FOLLOW': '',
 \ 'IN_ONESHOT': '',
 \ }
-let g:phpcomplete_builtin['constants']['json'] = {
+let g:phpcd_builtin['constants']['json'] = {
 \ 'JSON_BIGINT_AS_STRING': '',
 \ 'JSON_HEX_QUOT': '',
 \ 'JSON_HEX_TAG': '',
@@ -18205,7 +18205,7 @@ let g:phpcomplete_builtin['constants']['json'] = {
 \ 'JSON_ERROR_UNSUPPORTED_TYPE': '',
 \ 'JSON_PARTIAL_OUTPUT_ON_ERROR': '',
 \ }
-let g:phpcomplete_builtin['constants']['kadm5'] = {
+let g:phpcd_builtin['constants']['kadm5'] = {
 \ 'KADM5_PRINC_EXPIRE_TIME': '',
 \ 'KADM5_PW_EXPIRATION': '',
 \ 'KADM5_ATTRIBUTES': '',
@@ -18216,7 +18216,7 @@ let g:phpcomplete_builtin['constants']['kadm5'] = {
 \ 'KADM5_MAX_RLIFE': '',
 \ 'KADM5_FAIL_AUTH_COUNT': '',
 \ }
-let g:phpcomplete_builtin['constants']['ldap'] = {
+let g:phpcd_builtin['constants']['ldap'] = {
 \ 'LDAP_ESCAPE_FILTER': '',
 \ 'LDAP_ESCAPE_DN': '',
 \ 'LDAP_OPT_DEREF': '',
@@ -18248,7 +18248,7 @@ let g:phpcomplete_builtin['constants']['ldap'] = {
 \ 'GSLC_SSL_ONEWAY_AUTH': '',
 \ 'GSLC_SSL_TWOWAY_AUTH': '',
 \ }
-let g:phpcomplete_builtin['constants']['maxdb'] = {
+let g:phpcd_builtin['constants']['maxdb'] = {
 \ 'MAXDB_COMPNAME': '',
 \ 'MAXDB_APPLICATION': '',
 \ 'MAXDB_APPVERSION': '',
@@ -18260,7 +18260,7 @@ let g:phpcomplete_builtin['constants']['maxdb'] = {
 \ 'MAXDB_STATEMENTCACHESIZE': '',
 \ 'MAXDB_CURSORPREFIX': '',
 \ }
-let g:phpcomplete_builtin['constants']['multibyte_string'] = {
+let g:phpcd_builtin['constants']['multibyte_string'] = {
 \ 'MB_CASE_UPPER': '',
 \ 'MB_CASE_LOWER': '',
 \ 'MB_CASE_TITLE': '',
@@ -18268,7 +18268,7 @@ let g:phpcomplete_builtin['constants']['multibyte_string'] = {
 \ 'MB_OVERLOAD_STRING': '',
 \ 'MB_OVERLOAD_REGEX': '',
 \ }
-let g:phpcomplete_builtin['constants']['mcrypt'] = {
+let g:phpcd_builtin['constants']['mcrypt'] = {
 \ 'MCRYPT_ENCRYPT': '',
 \ 'MCRYPT_DECRYPT': '',
 \ 'MCRYPT_RAND': '',
@@ -18284,19 +18284,19 @@ let g:phpcomplete_builtin['constants']['mcrypt'] = {
 \ 'MCRYPT_MODE_NOFB': '',
 \ 'MCRYPT_MODE_STREAM': '',
 \ }
-let g:phpcomplete_builtin['constants']['semaphore'] = {
+let g:phpcd_builtin['constants']['semaphore'] = {
 \ 'MSG_IPC_NOWAIT': '',
 \ 'MSG_ENOMSG': '',
 \ 'MSG_EXCEPT': '',
 \ 'MSG_NOERROR': '',
 \ 'MSG_EAGAIN': '',
 \ }
-let g:phpcomplete_builtin['constants']['msql'] = {
+let g:phpcd_builtin['constants']['msql'] = {
 \ 'MSQL_ASSOC': '',
 \ 'MSQL_NUM': '',
 \ 'MSQL_BOTH': '',
 \ }
-let g:phpcomplete_builtin['constants']['mssql'] = {
+let g:phpcd_builtin['constants']['mssql'] = {
 \ 'SQLTEXT': '',
 \ 'SQLVARCHAR': '',
 \ 'SQLCHAR': '',
@@ -18311,7 +18311,7 @@ let g:phpcomplete_builtin['constants']['mssql'] = {
 \ 'MSSQL_NUM': '',
 \ 'MSSQL_BOTH': '',
 \ }
-let g:phpcomplete_builtin['constants']['mysql'] = {
+let g:phpcd_builtin['constants']['mysql'] = {
 \ 'MYSQL_CLIENT_SSL': '',
 \ 'MYSQL_CLIENT_COMPRESS': '',
 \ 'MYSQL_CLIENT_IGNORE_SPACE': '',
@@ -18321,7 +18321,7 @@ let g:phpcomplete_builtin['constants']['mysql'] = {
 \ 'MYSQL_BOTH': '',
 \ 'MYSQL_PORT': '',
 \ }
-let g:phpcomplete_builtin['constants']['mysqlnd_ms'] = {
+let g:phpcd_builtin['constants']['mysqlnd_ms'] = {
 \ 'MYSQLND_MS_QUERY_USE_MASTER': '',
 \ 'MYSQLND_MS_QUERY_USE_SLAVE': '',
 \ 'MYSQLND_MS_QUERY_USE_LAST_USED': '',
@@ -18337,7 +18337,7 @@ let g:phpcomplete_builtin['constants']['mysqlnd_ms'] = {
 \ 'MYSQLND_MS_VERSION_ID': '',
 \ 'MYSQLND_MS_LAST_USED': '',
 \ }
-let g:phpcomplete_builtin['constants']['mysqlnd_qc'] = {
+let g:phpcd_builtin['constants']['mysqlnd_qc'] = {
 \ 'MYSQLND_QC_CONDITION_META_SCHEMA_PATTERN': '',
 \ 'MYSQLND_QC_SERVER_ID_SWITCH': '',
 \ 'MYSQLND_QC_VERSION': '',
@@ -18346,7 +18346,7 @@ let g:phpcomplete_builtin['constants']['mysqlnd_qc'] = {
 \ 'MYSQLND_QC_DISABLE_SWITCH': '',
 \ 'MYSQLND_QC_TTL_SWITCH': '',
 \ }
-let g:phpcomplete_builtin['constants']['ncurses'] = {
+let g:phpcd_builtin['constants']['ncurses'] = {
 \ 'NCURSES_ERR': '',
 \ 'NCURSES_KEY_MOUSE': '',
 \ 'NCURSES_COLOR_BLACK': '',
@@ -18460,7 +18460,7 @@ let g:phpcomplete_builtin['constants']['ncurses'] = {
 \ 'NCURSES_ALL_MOUSE_EVENTS': '',
 \ 'NCURSES_REPORT_MOUSE_POSITION': '',
 \ }
-let g:phpcomplete_builtin['constants']['output_control'] = {
+let g:phpcd_builtin['constants']['output_control'] = {
 \ 'PHP_OUTPUT_HANDLER_STDFLAGS': '',
 \ 'PHP_OUTPUT_HANDLER_CLEANABLE': '',
 \ 'PHP_OUTPUT_HANDLER_FLUSHABLE': '',
@@ -18473,7 +18473,7 @@ let g:phpcomplete_builtin['constants']['output_control'] = {
 \ 'PHP_OUTPUT_HANDLER_CONT': '',
 \ 'PHP_OUTPUT_HANDLER_END': '',
 \ }
-let g:phpcomplete_builtin['constants']['odbc'] = {
+let g:phpcd_builtin['constants']['odbc'] = {
 \ 'ODBC_BINMODE_PASSTHRU': '',
 \ 'ODBC_BINMODE_RETURN': '',
 \ 'ODBC_BINMODE_CONVERT': '',
@@ -18529,7 +18529,7 @@ let g:phpcomplete_builtin['constants']['odbc'] = {
 \ 'SQL_ENSURE': '',
 \ 'SQL_QUICK': '',
 \ }
-let g:phpcomplete_builtin['constants']['openal'] = {
+let g:phpcd_builtin['constants']['openal'] = {
 \ 'AL_FORMAT_MONO8': '',
 \ 'AL_FORMAT_MONO16': '',
 \ 'AL_FORMAT_STEREO8': '',
@@ -18566,7 +18566,7 @@ let g:phpcomplete_builtin['constants']['openal'] = {
 \ 'AL_TRUE': '',
 \ 'AL_FALSE': '',
 \ }
-let g:phpcomplete_builtin['constants']['openssl'] = {
+let g:phpcd_builtin['constants']['openssl'] = {
 \ 'OPENSSL_KEYTYPE_DSA': '',
 \ 'OPENSSL_KEYTYPE_DH': '',
 \ 'OPENSSL_KEYTYPE_RSA': '',
@@ -18615,7 +18615,7 @@ let g:phpcomplete_builtin['constants']['openssl'] = {
 \ 'OPENSSL_ALGO_MD4': '',
 \ 'OPENSSL_ALGO_MD2': '',
 \ }
-let g:phpcomplete_builtin['constants']['parsekit'] = {
+let g:phpcd_builtin['constants']['parsekit'] = {
 \ 'PARSEKIT_QUIET': '',
 \ 'PARSEKIT_SIMPLE': '',
 \ 'PARSEKIT_EXTENDED_VALUE': '',
@@ -18772,12 +18772,12 @@ let g:phpcomplete_builtin['constants']['parsekit'] = {
 \ 'PARSEKIT_ZEND_UNSET_VAR': '',
 \ 'PARSEKIT_ZEND_VERIFY_ABSTRACT_CLASS': '',
 \ }
-let g:phpcomplete_builtin['constants']['password_hashing'] = {
+let g:phpcd_builtin['constants']['password_hashing'] = {
 \ 'PASSWORD_DEFAULT': '',
 \ 'PASSWORD_BCRYPT': '',
 \ 'CRYPT_BLOWFISH': '',
 \ }
-let g:phpcomplete_builtin['constants']['pcntl'] = {
+let g:phpcd_builtin['constants']['pcntl'] = {
 \ 'SIGALRM': '',
 \ 'PRIO_PGRP': '',
 \ 'PRIO_USER': '',
@@ -18869,7 +18869,7 @@ let g:phpcomplete_builtin['constants']['pcntl'] = {
 \ 'BUS_ADRERR': '',
 \ 'BUS_OBJERR': '',
 \ }
-let g:phpcomplete_builtin['constants']['postgresql'] = {
+let g:phpcd_builtin['constants']['postgresql'] = {
 \ 'PGSQL_CONNECT_ASYNC': '',
 \ 'PGSQL_POLLING_FAILED': '',
 \ 'PGSQL_POLLING_READING': '',
@@ -18932,7 +18932,7 @@ let g:phpcomplete_builtin['constants']['postgresql'] = {
 \ 'PG_DIAG_STATEMENT_POSITION': '',
 \ 'PG_DIAG_INTERNAL_QUERY': '',
 \ }
-let g:phpcomplete_builtin['constants']['posix'] = {
+let g:phpcd_builtin['constants']['posix'] = {
 \ 'POSIX_F_OK': '',
 \ 'POSIX_R_OK': '',
 \ 'POSIX_W_OK': '',
@@ -18945,7 +18945,7 @@ let g:phpcomplete_builtin['constants']['posix'] = {
 \ 'S_IFCHR': '',
 \ 'S_IFBLK': '',
 \ }
-let g:phpcomplete_builtin['constants']['pcre'] = {
+let g:phpcd_builtin['constants']['pcre'] = {
 \ 'PREG_GREP_INVERT': '',
 \ 'PREG_NO_ERROR': '',
 \ 'PREG_INTERNAL_ERROR': '',
@@ -18961,23 +18961,23 @@ let g:phpcomplete_builtin['constants']['pcre'] = {
 \ 'PREG_SPLIT_OFFSET_CAPTURE': '',
 \ 'PCRE_VERSION': '',
 \ }
-let g:phpcomplete_builtin['constants']['program_execution'] = {
+let g:phpcd_builtin['constants']['program_execution'] = {
 \ 'STDIN': '',
 \ }
-let g:phpcomplete_builtin['constants']['pspell'] = {
+let g:phpcd_builtin['constants']['pspell'] = {
 \ 'PSPELL_FAST': '',
 \ 'PSPELL_NORMAL': '',
 \ 'PSPELL_BAD_SPELLERS': '',
 \ 'PSPELL_RUN_TOGETHER': '',
 \ }
-let g:phpcomplete_builtin['constants']['paradox'] = {
+let g:phpcd_builtin['constants']['paradox'] = {
 \ 'PX_KEYTOLOWER': '',
 \ 'PX_KEYTOUPPER': '',
 \ 'PX_FIELD_TIME': '',
 \ 'PX_FIELD_TIMESTAMP': '',
 \ 'PX_FIELD_DATE': '',
 \ }
-let g:phpcomplete_builtin['constants']['radius'] = {
+let g:phpcd_builtin['constants']['radius'] = {
 \ 'RADIUS_ACCESS_REQUEST': '',
 \ 'RADIUS_ACCOUNTING_REQUEST': '',
 \ 'RADIUS_VENDOR_SPECIFIC': '',
@@ -19144,7 +19144,7 @@ let g:phpcomplete_builtin['constants']['radius'] = {
 \ 'RADIUS_MICROSOFT_MS_SECONDARY_NBNS_SERVER': '',
 \ 'RADIUS_MICROSOFT_MS_ARAP_CHALLENGE': '',
 \ }
-let g:phpcomplete_builtin['constants']['runkit'] = {
+let g:phpcd_builtin['constants']['runkit'] = {
 \ 'RUNKIT_ACC_PUBLIC': '',
 \ 'RUNKIT_ACC_PROTECTED': '',
 \ 'RUNKIT_ACC_PRIVATE': '',
@@ -19161,23 +19161,23 @@ let g:phpcomplete_builtin['constants']['runkit'] = {
 \ 'RUNKIT_VERSION': '',
 \ 'CLASSKIT_VERSION': '',
 \ }
-let g:phpcomplete_builtin['constants']['sessions'] = {
+let g:phpcd_builtin['constants']['sessions'] = {
 \ 'SID': '',
 \ 'PHP_SESSION_DISABLED': '',
 \ 'PHP_SESSION_NONE': '',
 \ 'PHP_SESSION_ACTIVE': '',
 \ 'UPLOAD_ERR_EXTENSION': '',
 \ }
-let g:phpcomplete_builtin['constants']['variable_handling'] = {
+let g:phpcd_builtin['constants']['variable_handling'] = {
 \ 'PHP_INT_MAX': '',
 \ }
-let g:phpcomplete_builtin['constants']['misc'] = {
+let g:phpcd_builtin['constants']['misc'] = {
 \ 'WAIT_IO_COMPLETION': '',
 \ 'CONNECTION_ABORTED': '',
 \ 'CONNECTION_NORMAL': '',
 \ 'CONNECTION_TIMEOUT': '',
 \ }
-let g:phpcomplete_builtin['constants']['sockets'] = {
+let g:phpcd_builtin['constants']['sockets'] = {
 \ 'AF_INET': '',
 \ 'AF_UNIX': '',
 \ 'AF_INET6': '',
@@ -19349,7 +19349,7 @@ let g:phpcomplete_builtin['constants']['sockets'] = {
 \ 'SOCKET_ENOMEDIUM': '',
 \ 'SOCKET_EMEDIUMTYPE': '',
 \ }
-let g:phpcomplete_builtin['constants']['sqlite'] = {
+let g:phpcd_builtin['constants']['sqlite'] = {
 \ 'SQLITE_ASSOC': '',
 \ 'SQLITE_NUM': '',
 \ 'SQLITE_BOTH': '',
@@ -19382,7 +19382,7 @@ let g:phpcomplete_builtin['constants']['sqlite'] = {
 \ 'SQLITE_ROW': '',
 \ 'SQLITE_DONE': '',
 \ }
-let g:phpcomplete_builtin['constants']['sqlsrv'] = {
+let g:phpcd_builtin['constants']['sqlsrv'] = {
 \ 'SQLSRV_FETCH_ASSOC': '',
 \ 'SQLSRV_FETCH_NUMERIC': '',
 \ 'SQLSRV_FETCH_BOTH': '',
@@ -19460,7 +19460,7 @@ let g:phpcomplete_builtin['constants']['sqlsrv'] = {
 \ 'SQLSRV_CURSOR_KEYSET': '',
 \ 'SQLSRV_CURSOR_BUFFERED': '',
 \ }
-let g:phpcomplete_builtin['constants']['ssh2'] = {
+let g:phpcd_builtin['constants']['ssh2'] = {
 \ 'SSH2_MSG_IGNORE': '',
 \ 'SSH2_MSG_DEBUG': '',
 \ 'SSH2_MSG_DISCONNECT': '',
@@ -19477,7 +19477,7 @@ let g:phpcomplete_builtin['constants']['ssh2'] = {
 \ 'SSH2_STREAM_STDIO': '',
 \ 'SSH2_DEFAULT_TERMINAL': '',
 \ }
-let g:phpcomplete_builtin['constants']['streams'] = {
+let g:phpcd_builtin['constants']['streams'] = {
 \ 'STREAM_FILTER_READ': '',
 \ 'STREAM_FILTER_WRITE': '',
 \ 'STREAM_FILTER_ALL': '',
@@ -19552,7 +19552,7 @@ let g:phpcomplete_builtin['constants']['streams'] = {
 \ 'STREAM_BUFFER_NONE': '',
 \ 'STREAM_BUFFER_FULL': '',
 \ }
-let g:phpcomplete_builtin['constants']['svn'] = {
+let g:phpcd_builtin['constants']['svn'] = {
 \ 'SVN_NON_RECURSIVE': '',
 \ 'SVN_IGNORE_EXTERNALS': '',
 \ 'SVN_REVISION_HEAD': '',
@@ -19600,7 +19600,7 @@ let g:phpcomplete_builtin['constants']['svn'] = {
 \ 'SVN_NODE_DIR': '',
 \ 'SVN_NODE_UNKNOWN': '',
 \ }
-let g:phpcomplete_builtin['constants']['mnogosearch'] = {
+let g:phpcd_builtin['constants']['mnogosearch'] = {
 \ 'UDM_LIMIT_URL': '',
 \ 'UDM_LIMIT_TAG': '',
 \ 'UDM_LIMIT_LANG': '',
@@ -19697,7 +19697,7 @@ let g:phpcomplete_builtin['constants']['mnogosearch'] = {
 \ 'UDM_ISPELL_PREFIXES_DISABLED': '',
 \ 'UDM_ISPELL_PREFIX_DISABLED': '',
 \ }
-let g:phpcomplete_builtin['constants']['win32service'] = {
+let g:phpcd_builtin['constants']['win32service'] = {
 \ 'WIN32_NO_ERROR': '',
 \ 'WIN32_SERVICE_WIN32_OWN_PROCESS': '',
 \ 'WIN32_SERVICE_AUTO_START': '',
@@ -19762,24 +19762,24 @@ let g:phpcomplete_builtin['constants']['win32service'] = {
 \ 'WIN32_SERVICE_INTERACTIVE_PROCESS': '',
 \ 'WIN32_SERVICE_WIN32_OWN_PROCESS_INTERACTIVE': '',
 \ }
-let g:phpcomplete_builtin['constants']['xattr'] = {
+let g:phpcd_builtin['constants']['xattr'] = {
 \ 'XATTR_DONTFOLLOW': '',
 \ 'XATTR_ROOT': '',
 \ 'XATTR_CREATE': '',
 \ 'XATTR_REPLACE': '',
 \ }
-let g:phpcomplete_builtin['constants']['xdiff'] = {
+let g:phpcd_builtin['constants']['xdiff'] = {
 \ 'XDIFF_PATCH_NORMAL': '',
 \ 'XDIFF_PATCH_REVERSE': '',
 \ 'XDIFF_PATCH_IGNORESPACE': '',
 \ }
-let g:phpcomplete_builtin['constants']['xhprof'] = {
+let g:phpcd_builtin['constants']['xhprof'] = {
 \ 'XHPROF_FLAGS_MEMORY': '',
 \ 'PHP_INI_ALL': '',
 \ 'XHPROF_FLAGS_NO_BUILTINS': '',
 \ 'XHPROF_FLAGS_CPU': '',
 \ }
-let g:phpcomplete_builtin['constants']['xml_parser'] = {
+let g:phpcd_builtin['constants']['xml_parser'] = {
 \ 'XML_OPTION_CASE_FOLDING': '',
 \ 'XML_OPTION_TARGET_ENCODING': '',
 \ 'XML_OPTION_SKIP_TAGSTART': '',
@@ -19808,7 +19808,7 @@ let g:phpcomplete_builtin['constants']['xml_parser'] = {
 \ 'XML_ERROR_UNCLOSED_CDATA_SECTION': '',
 \ 'XML_SAX_IMPL': '',
 \ }
-let g:phpcomplete_builtin['constants']['yaml'] = {
+let g:phpcd_builtin['constants']['yaml'] = {
 \ 'YAML_ANY_ENCODING': '',
 \ 'YAML_UTF8_ENCODING': '',
 \ 'YAML_UTF16LE_ENCODING': '',
@@ -19833,7 +19833,7 @@ let g:phpcomplete_builtin['constants']['yaml'] = {
 \ 'YAML_MAP_TAG': '',
 \ 'YAML_PHP_TAG': '',
 \ }
-let g:phpcomplete_builtin['constants']['gearman'] = {
+let g:phpcd_builtin['constants']['gearman'] = {
 \ 'GEARMAN_SUCCESS': '',
 \ 'GEARMAN_IO_WAIT': '',
 \ 'GEARMAN_ERRNO': '',
@@ -19881,7 +19881,7 @@ let g:phpcomplete_builtin['constants']['gearman'] = {
 \ 'GEARMAN_RECV_BUFFER_SIZE': '',
 \ 'GEARMAN_WORKER_WAIT_TIMEOUT': '',
 \ }
-let g:phpcomplete_builtin['constants']['geoip'] = {
+let g:phpcd_builtin['constants']['geoip'] = {
 \ 'GEOIP_COUNTRY_EDITION': '',
 \ 'GEOIP_REGION_EDITION_REV0': '',
 \ 'GEOIP_CITY_EDITION_REV0': '',
@@ -19898,7 +19898,7 @@ let g:phpcomplete_builtin['constants']['geoip'] = {
 \ 'GEOIP_CABLEDSL_SPEED': '',
 \ 'GEOIP_CORPORATE_SPEED': '',
 \ }
-let g:phpcomplete_builtin['constants']['hyperwave_api'] = {
+let g:phpcd_builtin['constants']['hyperwave_api'] = {
 \ 'HW_API_CHECKIN_NORMAL': '',
 \ 'HW_API_CHECKIN_RECURSIVE': '',
 \ 'HW_API_CONTENT_ALLLINKS': '',
@@ -19921,7 +19921,7 @@ let g:phpcomplete_builtin['constants']['hyperwave_api'] = {
 \ 'HW_API_REPLACE_REVERT_IF_NOT_CHANGED': '',
 \ 'HW_API_REPLACE_KEEP_TIME_MODIFIED': '',
 \ }
-let g:phpcomplete_builtin['constants']['ibm_db2'] = {
+let g:phpcd_builtin['constants']['ibm_db2'] = {
 \ 'DB2_BINARY': '',
 \ 'DB2_CONVERT': '',
 \ 'DB2_PASSTHRU': '',
@@ -19942,13 +19942,13 @@ let g:phpcomplete_builtin['constants']['ibm_db2'] = {
 \ 'DB2_DEFERRED_PREPARE_ON': '',
 \ 'DB2_DEFERRED_PREPARE_OFF': '',
 \ }
-let g:phpcomplete_builtin['constants']['iconv'] = {
+let g:phpcd_builtin['constants']['iconv'] = {
 \ 'ICONV_IMPL': '',
 \ 'ICONV_VERSION': '',
 \ 'ICONV_MIME_DECODE_STRICT': '',
 \ 'ICONV_MIME_DECODE_CONTINUE_ON_ERROR': '',
 \ }
-let g:phpcomplete_builtin['constants']['iis'] = {
+let g:phpcd_builtin['constants']['iis'] = {
 \ 'IIS_READ': '',
 \ 'IIS_WRITE': '',
 \ 'IIS_EXECUTE': '',
@@ -19961,14 +19961,14 @@ let g:phpcomplete_builtin['constants']['iis'] = {
 \ 'IIS_PAUSED': '',
 \ 'IIS_RUNNING': '',
 \ }
-let g:phpcomplete_builtin['constants']['imagemagick'] = {
+let g:phpcd_builtin['constants']['imagemagick'] = {
 \ 'COMPRESSION': '',
 \ }
-let g:phpcomplete_builtin['constants']['phpini_directives'] = {
+let g:phpcd_builtin['constants']['phpini_directives'] = {
 \ 'PATH_SEPARATOR': '',
 \ 'PHP_INI_SYSTEM': '',
 \ }
-let g:phpcomplete_builtin['constants']['mhash'] = {
+let g:phpcd_builtin['constants']['mhash'] = {
 \ 'MHASH_TIGER': '',
 \ 'MHASH_ADLER32': '',
 \ 'MHASH_CRC32': '',
@@ -19997,24 +19997,24 @@ let g:phpcomplete_builtin['constants']['mhash'] = {
 \ 'MHASH_TIGER160': '',
 \ 'MHASH_WHIRLPOOL': '',
 \ }
-let g:phpcomplete_builtin['constants']['types'] = {
+let g:phpcd_builtin['constants']['types'] = {
 \ 'NAN': '',
 \ 'PHP_INT_SIZE': '',
 \ 'PHP_INT_MAX': '',
 \ }
-let g:phpcomplete_builtin['constants']['mailparse'] = {
+let g:phpcd_builtin['constants']['mailparse'] = {
 \ 'MAILPARSE_EXTRACT_OUTPUT': '',
 \ 'MAILPARSE_EXTRACT_STREAM': '',
 \ 'MAILPARSE_EXTRACT_RETURN': '',
 \ }
-let g:phpcomplete_builtin['constants']['mcve'] = {
+let g:phpcd_builtin['constants']['mcve'] = {
 \ 'M_PENDING': '',
 \ 'M_DONE': '',
 \ 'M_ERROR': '',
 \ 'M_FAIL': '',
 \ 'M_SUCCESS': '',
 \ }
-let g:phpcomplete_builtin['constants']['memcache'] = {
+let g:phpcd_builtin['constants']['memcache'] = {
 \ 'MEMCACHE_COMPRESSED': '',
 \ 'MEMCACHE_HAVE_SESSION': '',
 \ 'MEMCACHE_USER1': '',
@@ -20022,7 +20022,7 @@ let g:phpcomplete_builtin['constants']['memcache'] = {
 \ 'MEMCACHE_USER3': '',
 \ 'MEMCACHE_USER4': '',
 \ }
-let g:phpcomplete_builtin['constants']['migrating_from_php_4_to_php_50x'] = {
+let g:phpcd_builtin['constants']['migrating_from_php_4_to_php_50x'] = {
 \ 'DBX_RESULT_UNBUFFERED': '',
 \ 'PATH_TRANSLATED': '',
 \ 'SCRIPT_FILENAME': '',
@@ -20030,10 +20030,10 @@ let g:phpcomplete_builtin['constants']['migrating_from_php_4_to_php_50x'] = {
 \ 'T_COMMENT': '',
 \ 'T_DOC_COMMENT': '',
 \ }
-let g:phpcomplete_builtin['constants']['migrating_from_php_50x_to_php_51x'] = {
+let g:phpcd_builtin['constants']['migrating_from_php_50x_to_php_51x'] = {
 \ 'PDO_CLASS_CONSTANT': '',
 \ }
-let g:phpcomplete_builtin['constants']['migrating_from_php_51x_to_php_52x'] = {
+let g:phpcd_builtin['constants']['migrating_from_php_51x_to_php_52x'] = {
 \ 'M_EULER': '',
 \ 'M_LNPI': '',
 \ 'M_SQRT3': '',
@@ -20086,7 +20086,7 @@ let g:phpcomplete_builtin['constants']['migrating_from_php_51x_to_php_52x'] = {
 \ 'MSG_EAGAIN': '',
 \ 'MSG_ENOMSG': '',
 \ }
-let g:phpcomplete_builtin['constants']['migrating_from_php_52x_to_php_53x'] = {
+let g:phpcd_builtin['constants']['migrating_from_php_52x_to_php_53x'] = {
 \ 'INI_SCANNER_NORMAL': '',
 \ 'INI_SCANNER_RAW': '',
 \ 'PHP_MAXPATHLEN': '',
@@ -20165,7 +20165,7 @@ let g:phpcomplete_builtin['constants']['migrating_from_php_52x_to_php_53x'] = {
 \ 'TRAP_TRACE': '',
 \ 'O_NONBLOCK': '',
 \ }
-let g:phpcomplete_builtin['constants']['migrating_from_php_53x_to_php_54x'] = {
+let g:phpcd_builtin['constants']['migrating_from_php_53x_to_php_54x'] = {
 \ 'ENT_DISALLOWED': '',
 \ 'ENT_HTML401': '',
 \ 'ENT_HTML5': '',
@@ -20244,7 +20244,7 @@ let g:phpcomplete_builtin['constants']['migrating_from_php_53x_to_php_54x'] = {
 \ 'JSON_UNESCAPED_UNICODE': '',
 \ 'JSON_BIGINT_AS_STRING': '',
 \ }
-let g:phpcomplete_builtin['constants']['migrating_from_php_54x_to_php_55x'] = {
+let g:phpcd_builtin['constants']['migrating_from_php_54x_to_php_55x'] = {
 \ 'IMG_AFFINE_TRANSLATE': '',
 \ 'IMG_AFFINE_SCALE': '',
 \ 'IMG_AFFINE_ROTATE': '',
@@ -20283,7 +20283,7 @@ let g:phpcomplete_builtin['constants']['migrating_from_php_54x_to_php_55x'] = {
 \ 'JSON_ERROR_UNSUPPORTED_TYPE': '',
 \ 'MYSQLI_SERVER_PUBLIC_KEY': '',
 \ }
-let g:phpcomplete_builtin['constants']['migrating_from_php_55x_to_php_56x'] = {
+let g:phpcd_builtin['constants']['migrating_from_php_55x_to_php_56x'] = {
 \ 'CURLOPT_SAFE_UPLOAD': '',
 \ 'MCRYPT_DEV_URANDOM': '',
 \ 'MCRYPT_DEV_RANDOM': '',
@@ -20314,7 +20314,7 @@ let g:phpcomplete_builtin['constants']['migrating_from_php_55x_to_php_56x'] = {
 \ 'STREAM_CRYPTO_METHOD_TLS_CLIENT': '',
 \ 'STREAM_CRYPTO_METHOD_TLS_SERVER': '',
 \ }
-let g:phpcomplete_builtin['constants']['ming'] = {
+let g:phpcd_builtin['constants']['ming'] = {
 \ 'MING_NEW': '',
 \ 'MING_ZLIB': '',
 \ 'SWFBUTTON_HIT': '',
@@ -20354,7 +20354,7 @@ let g:phpcomplete_builtin['constants']['ming'] = {
 \ 'SWFACTION_KEYUP': '',
 \ 'SWFACTION_DATA': '',
 \ }
-let g:phpcomplete_builtin['constants']['mongo'] = {
+let g:phpcd_builtin['constants']['mongo'] = {
 \ 'MONGO_STREAMS': '',
 \ 'MONGO_SUPPORTS_STREAMS': '',
 \ 'MONGO_SUPPORTS_SSL': '',
@@ -20382,17 +20382,17 @@ let g:phpcomplete_builtin['constants']['mongo'] = {
 \ 'MONGO_STREAM_NOTIFY_LOG_CMD_DELETE': '',
 \ 'MONGO_STREAM_NOTIFY_LOG_WRITE_BATCH': '',
 \ }
-let g:phpcomplete_builtin['constants']['mysqlnd_memcache'] = {
+let g:phpcd_builtin['constants']['mysqlnd_memcache'] = {
 \ 'PHP_INI_SYSTEM': '',
 \ 'MYSQLND_MEMCACHE_DEFAULT_REGEXP': '',
 \ 'MYSQLND_MEMCACHE_VERSION': '',
 \ 'MYSQLND_MEMCACHE_VERSION_ID': '',
 \ }
-let g:phpcomplete_builtin['constants']['mysqlnd_mux'] = {
+let g:phpcd_builtin['constants']['mysqlnd_mux'] = {
 \ 'MYSQLND_MUX_VERSION': '',
 \ 'MYSQLND_MUX_VERSION_ID': '',
 \ }
-let g:phpcomplete_builtin['constants']['mysqlnd_uh'] = {
+let g:phpcd_builtin['constants']['mysqlnd_uh'] = {
 \ 'MYSQLND_UH_VERSION_STR': '',
 \ 'MYSQLND_UH_VERSION': '',
 \ 'MYSQLND_UH_VERSION_ID': '',
@@ -20482,7 +20482,7 @@ let g:phpcomplete_builtin['constants']['mysqlnd_uh'] = {
 \ 'MYSQLND_UH_MYSQLND_OPT_AUTH_PROTOCOL': '',
 \ 'MYSQLND_UH_MYSQLND_OPT_INT_AND_FLOAT_NATIVE': '',
 \ }
-let g:phpcomplete_builtin['constants']['gopher'] = {
+let g:phpcd_builtin['constants']['gopher'] = {
 \ 'GOPHER_DOCUMENT': '',
 \ 'GOPHER_DIRECTORY': '',
 \ 'GOPHER_BINHEX': '',
@@ -20493,7 +20493,7 @@ let g:phpcomplete_builtin['constants']['gopher'] = {
 \ 'GOPHER_HTTP': '',
 \ 'GOPHER_UNKNOWN': '',
 \ }
-let g:phpcomplete_builtin['constants']['yp_nis'] = {
+let g:phpcd_builtin['constants']['yp_nis'] = {
 \ 'YPERR_ACCESS': '',
 \ 'YPERR_BADARGS': '',
 \ 'YPERR_BADDB': '',
@@ -20511,7 +20511,7 @@ let g:phpcomplete_builtin['constants']['yp_nis'] = {
 \ 'YPERR_YPSERV': '',
 \ 'YPERR_VERS': '',
 \ }
-let g:phpcomplete_builtin['constants']['oggvorbis'] = {
+let g:phpcd_builtin['constants']['oggvorbis'] = {
 \ 'OGGVORBIS_PCM_U8': '',
 \ 'OGGVORBIS_PCM_S8': '',
 \ 'OGGVORBIS_PCM_U16_LE': '',
@@ -20519,13 +20519,13 @@ let g:phpcomplete_builtin['constants']['oggvorbis'] = {
 \ 'OGGVORBIS_PCM_S16_LE': '',
 \ 'OGGVORBIS_PCM_S16_BE': '',
 \ }
-let g:phpcomplete_builtin['constants']['4d_pdo'] = {
+let g:phpcd_builtin['constants']['4d_pdo'] = {
 \ 'PDO_ATTR_DRIVER_NAME': '',
 \ }
-let g:phpcomplete_builtin['constants']['pdo'] = {
+let g:phpcd_builtin['constants']['pdo'] = {
 \ 'PDO_PARAM_BOOL': '',
 \ }
-let g:phpcomplete_builtin['constants']['pthreads'] = {
+let g:phpcd_builtin['constants']['pthreads'] = {
 \ 'PTHREADS_INHERIT_ALL': '',
 \ 'PTHREADS_INHERIT_NONE': '',
 \ 'PTHREADS_INHERIT_INI': '',
@@ -20536,23 +20536,23 @@ let g:phpcomplete_builtin['constants']['pthreads'] = {
 \ 'PTHREADS_INHERIT_COMMENTS': '',
 \ 'PTHREADS_ALLOW_HEADERS': '',
 \ }
-let g:phpcomplete_builtin['constants']['cubrid_pdo'] = {
+let g:phpcd_builtin['constants']['cubrid_pdo'] = {
 \ 'PDO_ATTR_DRIVER_NAME': '',
 \ }
-let g:phpcomplete_builtin['constants']['firebird_pdo'] = {
+let g:phpcd_builtin['constants']['firebird_pdo'] = {
 \ 'PDO_ATTR_DRIVER_NAME': '',
 \ }
-let g:phpcomplete_builtin['constants']['mysql_pdo'] = {
+let g:phpcd_builtin['constants']['mysql_pdo'] = {
 \ 'PDO_ATTR_DRIVER_NAME': '',
 \ 'MYSQL_READ_DEFAULT_FILE': '',
 \ }
-let g:phpcomplete_builtin['constants']['odbc_and_db2_pdo'] = {
+let g:phpcd_builtin['constants']['odbc_and_db2_pdo'] = {
 \ 'SAMPLE': '',
 \ }
-let g:phpcomplete_builtin['constants']['ms_sql_server_pdo'] = {
+let g:phpcd_builtin['constants']['ms_sql_server_pdo'] = {
 \ 'PDO_ATTR_DRIVER_NAME': '',
 \ }
-let g:phpcomplete_builtin['constants']['list_of_reserved_words'] = {
+let g:phpcd_builtin['constants']['list_of_reserved_words'] = {
 \ 'PHP_VERSION': '',
 \ 'PHP_MAJOR_VERSION': '',
 \ 'PHP_MINOR_VERSION': '',
@@ -20583,7 +20583,7 @@ let g:phpcomplete_builtin['constants']['list_of_reserved_words'] = {
 \ 'PHP_CONFIG_FILE_SCAN_DIR': '',
 \ 'PHP_SHLIB_SUFFIX': '',
 \ }
-let g:phpcomplete_builtin['constants']['rpm_reader'] = {
+let g:phpcd_builtin['constants']['rpm_reader'] = {
 \ 'RPMREADER_MINIMUM': '',
 \ 'RPMREADER_NAME': '',
 \ 'RPMREADER_VERSION': '',
@@ -20702,7 +20702,7 @@ let g:phpcomplete_builtin['constants']['rpm_reader'] = {
 \ 'RPMREADER_POLICIES': '',
 \ 'RPMREADER_MAXIMUM': '',
 \ }
-let g:phpcomplete_builtin['constants']['sam'] = {
+let g:phpcd_builtin['constants']['sam'] = {
 \ 'SAM_AUTO': '',
 \ 'SAM_BOOLEAN': '',
 \ 'SAM_BUS': '',
@@ -20741,7 +20741,7 @@ let g:phpcomplete_builtin['constants']['sam'] = {
 \ 'SAM_WPM': '',
 \ 'SAM_TYPE': '',
 \ }
-let g:phpcomplete_builtin['constants']['soap'] = {
+let g:phpcd_builtin['constants']['soap'] = {
 \ 'WSDL_CACHE_NONE': '',
 \ 'WSDL_CACHE_DISK': '',
 \ 'WSDL_CACHE_MEMORY': '',
@@ -20821,13 +20821,13 @@ let g:phpcomplete_builtin['constants']['soap'] = {
 \ 'SOAP_WAIT_ONE_WAY_CALLS': '',
 \ 'SOAP_USE_XSI_ARRAY_TYPE': '',
 \ }
-let g:phpcomplete_builtin['constants']['solr'] = {
+let g:phpcd_builtin['constants']['solr'] = {
 \ 'SOLR_MAJOR_VERSION': '',
 \ 'SOLR_MINOR_VERSION': '',
 \ 'SOLR_PATCH_VERSION': '',
 \ 'SOLR_EXTENSION_VERSION': '',
 \ }
-let g:phpcomplete_builtin['constants']['sphinx'] = {
+let g:phpcd_builtin['constants']['sphinx'] = {
 \ 'SEARCHD_OK': '',
 \ 'SEARCHD_ERROR': '',
 \ 'SEARCHD_RETRY': '',
@@ -20865,7 +20865,7 @@ let g:phpcomplete_builtin['constants']['sphinx'] = {
 \ 'SPH_GROUPBY_ATTR': '',
 \ 'SPH_GROUPBY_ATTRPAIR': '',
 \ }
-let g:phpcomplete_builtin['constants']['sqlite3'] = {
+let g:phpcd_builtin['constants']['sqlite3'] = {
 \ 'SQLITE3_ASSOC': '',
 \ 'SQLITE3_NUM': '',
 \ 'SQLITE3_BOTH': '',
@@ -20878,7 +20878,7 @@ let g:phpcomplete_builtin['constants']['sqlite3'] = {
 \ 'SQLITE3_OPEN_READWRITE': '',
 \ 'SQLITE3_OPEN_CREATE': '',
 \ }
-let g:phpcomplete_builtin['constants']['list_of_parser_tokens'] = {
+let g:phpcd_builtin['constants']['list_of_parser_tokens'] = {
 \ 'T_FILE': '',
 \ 'T_TRAIT': '',
 \ 'T_ABSTRACT': '',
@@ -21013,7 +21013,7 @@ let g:phpcomplete_builtin['constants']['list_of_parser_tokens'] = {
 \ 'T_XOR_EQUAL': '',
 \ 'T_YIELD': '',
 \ }
-let g:phpcomplete_builtin['constants']['trader'] = {
+let g:phpcd_builtin['constants']['trader'] = {
 \ 'TRADER_MA_TYPE_SMA': '',
 \ 'TRADER_MA_TYPE_EMA': '',
 \ 'TRADER_MA_TYPE_WMA': '',
@@ -21072,10 +21072,10 @@ let g:phpcomplete_builtin['constants']['trader'] = {
 \ 'TRADER_ERR_INTERNAL_ERROR': '',
 \ 'TRADER_ERR_UNKNOWN_ERROR': '',
 \ }
-let g:phpcomplete_builtin['constants']['php_type_comparison_tables'] = {
+let g:phpcd_builtin['constants']['php_type_comparison_tables'] = {
 \ 'NAN': '',
 \ }
-let g:phpcomplete_builtin['constants']['uopz'] = {
+let g:phpcd_builtin['constants']['uopz'] = {
 \ 'ZEND_EXIT': '',
 \ 'ZEND_NEW': '',
 \ 'ZEND_THROW': '',
@@ -21100,7 +21100,7 @@ let g:phpcomplete_builtin['constants']['uopz'] = {
 \ 'ZEND_ACC_TRAIT': '',
 \ 'ZEND_ACC_FETCH': '',
 \ }
-let g:phpcomplete_builtin['constants']['varnish'] = {
+let g:phpcd_builtin['constants']['varnish'] = {
 \ 'VARNISH_STATUS_SYNTAX': '',
 \ 'VARNISH_STATUS_UNKNOWN': '',
 \ 'VARNISH_STATUS_UNIMPL': '',
@@ -21121,7 +21121,7 @@ let g:phpcomplete_builtin['constants']['varnish'] = {
 \ 'VARNISH_COMPAT_2': '',
 \ 'VARNISH_COMPAT_3': '',
 \ }
-let g:phpcomplete_builtin['constants']['supported_protocols_and_wrappers'] = {
+let g:phpcd_builtin['constants']['supported_protocols_and_wrappers'] = {
 \ 'OGGVORBIS_PCM_U8': '',
 \ 'OGGVORBIS_PCM_S8': '',
 \ 'OGGVORBIS_PCM_U16_BE': '',
@@ -21133,7 +21133,7 @@ let g:phpcomplete_builtin['constants']['supported_protocols_and_wrappers'] = {
 \ 'STDERR': '',
 \ 'SSH2_TERM_UNIT_CHARS': '',
 \ }
-let g:phpcomplete_builtin['constants']['xsl'] = {
+let g:phpcd_builtin['constants']['xsl'] = {
 \ 'XSL_CLONE_AUTO': '',
 \ 'XSL_CLONE_NEVER': '',
 \ 'XSL_CLONE_ALWAYS': '',
@@ -21147,7 +21147,7 @@ let g:phpcomplete_builtin['constants']['xsl'] = {
 \ 'XSL_SECPREF_READ_NETWORK': '',
 \ 'XSL_SECPREF_WRITE_NETWORK': '',
 \ }
-let g:phpcomplete_builtin['constants']['yaf'] = {
+let g:phpcd_builtin['constants']['yaf'] = {
 \ 'YAF_VERSION': '',
 \ 'YAF_ENVIRON': '',
 \ 'YAF_ERR_STARTUP_FAILED': '',
@@ -21161,7 +21161,7 @@ let g:phpcomplete_builtin['constants']['yaf'] = {
 \ 'YAF_ERR_CALL_FAILED': '',
 \ 'YAF_ERR_TYPE_ERROR': '',
 \ }
-let g:phpcomplete_builtin['constants']['yar'] = {
+let g:phpcd_builtin['constants']['yar'] = {
 \ 'YAR_VERSION': '',
 \ 'YAR_CLIENT_PROTOCOL_HTTP': '',
 \ 'YAR_CLIENT_OPT_PACKAGER': '',

@@ -16,7 +16,7 @@ fun! SetUp()
     " disable tags
     exe ':set tags='
     " set related options to it's default
-    let g:phpcomplete_min_num_of_chars_for_namespace_completion = 1
+    let g:phpcd_min_num_of_chars_for_namespace_completion = 1
 endf
 
 fun! TestCase_can_generates_empty_class() " {{{

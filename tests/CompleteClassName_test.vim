@@ -1,5 +1,5 @@
 fun! SetUp()
-    let g:phpcomplete_min_num_of_chars_for_namespace_completion = 1
+    let g:phpcd_min_num_of_chars_for_namespace_completion = 1
     " disable builtin information
     let g:php_builtin_classnames = { }
     " disable builtin information

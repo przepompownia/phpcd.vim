@@ -1,4 +1,4 @@
-let g:phpcomplete_builtin['classes']['xmlwriter'] = {
+let g:phpcd_builtin['classes']['xmlwriter'] = {
 \'xmlwriter': {
 \   'name': 'XMLWriter',
 \   'constants': {

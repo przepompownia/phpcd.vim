@@ -1,5 +1,5 @@
 fun! SetUp()
-    let g:phpcomplete_complete_for_unknown_classes = 1
+    let g:phpcd_complete_for_unknown_classes = 1
     " disable built-in functions
     let g:php_builtin_object_functions = {}
     " disable tags
@@ -122,7 +122,7 @@ endf
 fun! TestCase_returns_empty_list_when_unknown_class_completion_disabled()
     call SetUp()
 
-    let g:phpcomplete_complete_for_unknown_classes = 0
+    let g:phpcd_complete_for_unknown_classes = 0
     let res = phpcd#CompleteUnknownClass("setDat", "$d->")
     call VUAssertEquals([], res)
 endf

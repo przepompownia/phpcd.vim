@@ -1,6 +1,6 @@
 fun! SetUp()
-    " normalize g:phpcomplete_min_num_of_chars_for_namespace_completion option
-    let g:phpcomplete_min_num_of_chars_for_namespace_completion = 2
+    " normalize g:phpcd_min_num_of_chars_for_namespace_completion option
+    let g:phpcd_min_num_of_chars_for_namespace_completion = 2
     " disable built-in classes
     let g:php_builtin_classnames = {}
     " disable built-in interfaces
@@ -105,7 +105,7 @@ endf
 fun! TestCase_honors_the_min_num_of_chars_for_namespace_completion_setting_for_namespaces()
     call SetUp()
     exe ':set tags='.expand('%:p:h').'/'.'fixtures/CompleteUse/tags'
-    let g:phpcomplete_min_num_of_chars_for_namespace_completion = 99
+    let g:phpcd_min_num_of_chars_for_namespace_completion = 99
 
     let res = phpcd#CompleteUse('Assetic\')
     call VUAssertEquals([], res)
@@ -114,7 +114,7 @@ endf
 fun! TestCase_honors_the_min_num_of_chars_for_namespace_completion_setting_for_classnames()
     call SetUp()
     exe ':set tags='.expand('%:p:h').'/'.'fixtures/CompleteUse/tags'
-    let g:phpcomplete_min_num_of_chars_for_namespace_completion = 99
+    let g:phpcd_min_num_of_chars_for_namespace_completion = 99
 
     let res = phpcd#CompleteUse('Assetic\Asset\Ba')
     call VUAssertEquals([], res)

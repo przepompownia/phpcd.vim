@@ -4,7 +4,7 @@ fun! SetUp()
 
     " disable builtin variables
     let g:php_builtin_vars = {}
-    let g:phpcomplete_search_tags_for_variables = 0
+    let g:phpcd_search_tags_for_variables = 0
 endf
 
 fun! TestCase_complete_variables_from_current_file()
@@ -55,7 +55,7 @@ fun! TestCase_complete_variables_from_tags()
     call SetUp()
 
     " enable variable search in tags
-    let g:phpcomplete_search_tags_for_variables = 1
+    let g:phpcd_search_tags_for_variables = 1
     " set tags to a fixture
     exe ':set tags='.expand('%:p:h').'/'.'fixtures/CompleteVariable/tags'
 

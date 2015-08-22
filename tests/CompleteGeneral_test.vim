@@ -12,7 +12,7 @@ fun! SetUp()
     " disable tags
     exe ':set tags='
     " set related options to it's default
-    let g:phpcomplete_min_num_of_chars_for_namespace_completion = 1
+    let g:phpcd_min_num_of_chars_for_namespace_completion = 1
 endf
 
 fun! TestCase_completes_functions_from_local_file() " {{{
@@ -307,7 +307,7 @@ fun! TestCase_completes_class_names_from_tags_matching_namespaces() " {{{
 
     " this is where class name part must have at least the configured amount
     " of letters to start matching
-    let g:phpcomplete_min_num_of_chars_for_namespace_completion = 1
+    let g:phpcd_min_num_of_chars_for_namespace_completion = 1
 
     let res = phpcd#CompleteGeneral('F', 'NS1', {})
     call VUAssertEquals([{'word': 'Foo', 'kind': 'c', 'menu': ' - fixtures/CompleteGeneral/namespaced_foo.php', 'info': 'Foo - fixtures/CompleteGeneral/namespaced_foo.php'}], res)
@@ -343,7 +343,7 @@ fun! TestCase_completes_top_level_functions_from_tags_in_matching_namespaces() "
 
     " this is where function name part must have at least the configured amount
     " of letters to start matching
-    let g:phpcomplete_min_num_of_chars_for_namespace_completion = 1
+    let g:phpcd_min_num_of_chars_for_namespace_completion = 1
 
     let res = phpcd#CompleteGeneral('b', 'NS1', {})
     call VUAssertEquals([
