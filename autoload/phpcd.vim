@@ -3,176 +3,11 @@
 " Maintainer:	Mikolaj Machowski ( mikmach AT wp DOT pl )
 " Maintainer:	Shawn Biddle ( shawn AT shawnbiddle DOT com )
 " Maintainer:	Szabó Dávid ( complex857 AT gmail DOT com )
-"
-"	OPTIONS:
-"
-"		let g:phpcd_relax_static_constraint = 1/0  [default 0]
-"			Enables completion for non-static methods when completing for static context (::).
-"			This generates E_STRICT level warning, but php calls these methods nontheless.
-"
-"		let g:phpcd_complete_for_unknown_classes = 1/0 [default 0]
-"			Enables completion of variables and functions in "everything under the sun" fashion
-"			when completing for an instance or static class context but the code can't tell the class
-"			or locate the file that it lives in.
-"			The completion list generated this way is only filtered by the completion base
-"			and generally not much more accurate then simple keyword completion.
-"
-"		let g:phpcd_search_tags_for_variables = 1/0 [default 0]
-"			Enables use of tags when the plugin tries to find variables.
-"			When enabled the plugin will search for the variables in the tag files with kind 'v',
-"			lines like $some_var = new Foo; but these usually yield highly inaccurate results and
-"			can	be fairly slow.
-"
-"		let g:phpcd_min_num_of_chars_for_namespace_completion = n [default 1]
-"			This option controls the number of characters the user needs to type before
-"			the tags will be searched for namespaces and classes in typed out namespaces in
-"			"use ..." context. Setting this to 0 is not recommended because that means the code
-"			have to scan every tag, and vim's taglist() function runs extremly slow with a
-"			"match everything" pattern.
-"
-"		let g:phpcd_parse_docblock_comments = 1/0 [default 0]
-"			When enabled the preview window's content will include information
-"			extracted from docblock comments of the completions.
-"			Enabling this option will add return types to the completion menu for functions too.
-"
-"		let g:phpcd_cache_taglists = 1/0 [default 1]
-"			When enabled the taglist() lookups will be cached and subsequent searches
-"			for the same pattern will not check the tagfiles any more, thus making the
-"			lookups faster. Cache expiration is based on the mtimes of the tag files.
-"
-"		let g:phpcd_add_function_extensions = [...]
-"		let g:phpcd_add_class_extensions = [...]
-"		let g:phpcd_add_interface_extensions = [...]
-"		let g:phpcd_add_constant_extensions = [...]
-"		let g:phpcd_remove_function_extensions = [...]
-"		let g:phpcd_remove_class_extensions = [...]
-"		let g:phpcd_remove_interface_extensions = [...]
-"		let g:phpcd_remove_constant_extensions = [...]
-"			Built-in functions, classes, interfaces and constatns are grouped together by the extension.
-"			Only the enabled extensions will be loaded for the plugin, the defaultly enabled ones can be
-"			found in.
-"
-"				g:phpcd_active_function_extensions
-"				g:phpcd_active_class_extensions
-"				g:phpcd_active_interface_extensions
-"				g:phpcd_active_constant_extensions
-"
-"			If you want to enable an extension that is disabled you can add it to the enabled lists
-"			in your vimrc. Let's say you want to have the mongo extension's classes and functions
-"			to be completed by the plugin, you can add it like this (in your `.vimrc`):
-"
-"				let g:phpcd_add_class_extensions = ['mongo']
-"				let g:phpcd_add_function_extensions = ['mongo']
-"
-"			If you want to disable an otherwise enabled one, use the ..._remove_... version of these options:
-"
-"				let g:phpcd_remove_function_extensions = ['xslt_php_4']
-"				let g:phpcd_remove_constant_extensions = ['xslt_php_4']
-"
-"			For the available extension files, check the directories under `misc/`
-"
-"
-"	TODO:
-"	- Switching to HTML (XML?) completion (SQL) inside of phpStrings
-"	- allow also for XML completion <- better do html_flavor for HTML
-"	  completion
-"	- outside of <?php?> getting parent tag may cause problems. Heh, even in
-"	  perfect conditions GetLastOpenTag doesn't cooperate... Inside of
-"	  phpStrings this can be even a bonus but outside of <?php?> it is not the
-"	  best situation
-
-if !exists('g:phpcd_relax_static_constraint')
-	let g:phpcd_relax_static_constraint = 0
-endif
-
-if !exists('g:phpcd_complete_for_unknown_classes')
-	let g:phpcd_complete_for_unknown_classes = 0
-endif
-
-if !exists('g:phpcd_search_tags_for_variables')
-	let g:phpcd_search_tags_for_variables = 0
-endif
-
-if !exists('g:phpcd_min_num_of_chars_for_namespace_completion')
-	let g:phpcd_min_num_of_chars_for_namespace_completion = 1
-endif
-
-if !exists('g:phpcd_parse_docblock_comments')
-	let g:phpcd_parse_docblock_comments = 0
-endif
-
-if !exists('g:phpcd_cache_taglists')
-	let g:phpcd_cache_taglists = 1
-endif
-
-if !exists('s:cache_classstructures')
-	let s:cache_classstructures = {}
-endif
-
-if !exists('s:cache_tags')
-	let s:cache_tags = {}
-endif
-
-if !exists('s:cache_tags_checksum')
-	let s:cache_tags_checksum = ''
-endif
-
-
-let g:phpcd_active_function_extensions = [
-			\'apache', 'apc', 'apd', 'arrays', 'bc_math', 'bzip2', 'calendar', 'classes_objects', 'ctype', 'curl', 'date_time', 'dba', 'dbase',
-			\'directories', 'dom', 'enchant', 'error_handling', 'exif', 'fastcgi_process_manager', 'fileinfo', 'filesystem', 'filter', 'ftp',
-			\'function_handling', 'gd', 'geoip', 'gettext', 'gmp', 'hash', 'iconv', 'iis', 'json', 'ldap', 'libxml', 'mail', 'math', 'mcrypt',
-			\'memcache', 'mhash', 'misc', 'mongo', 'msql', 'mssql', 'multibyte_string', 'mysql', 'mysqli', 'network', 'nsapi', 'oci8', 'odbc',
-			\'openssl', 'output_control', 'parsekit', 'password_hashing', 'pcntl', 'pcre', 'php_options_info', 'posix', 'posix_regex', 'postgresql',
-			\'program_execution', 'ps', 'pspell', 'readline', 'recode', 'runkit', 'sessions', 'shared_memory', 'simplexml', 'snmp', 'soap', 'sockets',
-			\'solr', 'spl', 'sqlite', 'sqlsrv', 'streams', 'strings', 'tidy', 'tokenizer', 'urls', 'variable_handling', 'wddx', 'xml_parser',
-			\'xmlwriter', 'zip', 'zlib']
-let g:phpcd_active_class_extensions = [
-			\'apc', 'curl', 'date_time', 'directories', 'dom', 'fileinfo', 'imagemagick', 'libxml', 'memcache', 'memcached', 'mongo', 'mysqli', 'pdo', 'phar',
-			\'predefined_exceptions', 'predefined_interfaces_and_classes', 'reflection', 'sessions', 'simplexml', 'snmp', 'soap', 'solr', 'sphinx',
-			\'spl', 'sqlite3', 'streams', 'tidy', 'varnish', 'xmlreader', 'xmlwriter', 'xsl', 'zip']
-let g:phpcd_active_interface_extensions = [
-			\'json', 'predefined_interfaces_and_classes', 'spl', 'date_time', 'reflection']
-let g:phpcd_active_constant_extensions = [
-			\'apc', 'apd', 'arrays', 'calendar', 'classkit', 'command_line_usage', 'common', 'curl', 'date_time', 'directories', 'dom', 'error_handling', 'exif',
-			\'fileinfo', 'filesystem', 'filter', 'ftp', 'gd', 'geoip', 'gmp', 'handling_file_uploads', 'hash', 'iconv', 'iis', 'imagemagick', 'imap',
-			\'json', 'ldap', 'libxml', 'list_of_parser_tokens', 'list_of_reserved_words', 'math', 'mcrypt', 'memcache', 'mhash', 'misc', 'ms_sql_server_pdo',
-			\'msql', 'mssql', 'multibyte_string', 'mysql', 'mysql_pdo', 'mysqli', 'network', 'odbc', 'openssl', 'output_control', 'parsekit', 'password_hashing',
-			\'pcntl', 'pcre', 'pdo', 'php_options_info', 'phpini_directives', 'posix', 'posix_regex', 'postgresql', 'program_execution', 'pspell', 'runkit',
-			\'sessions', 'snmp', 'soap', 'sockets', 'solr', 'sphinx', 'spl', 'sqlite', 'sqlite3', 'sqlsrv', 'streams', 'strings', 'tidy', 'types', 'urls',
-			\'variable_handling', 'varnish', 'xml_parser', 'xsl', 'zlib']
-
-if exists('g:phpcd_add_function_extensions')
-	let g:phpcd_active_function_extensions += g:phpcd_add_function_extensions
-endif
-if exists('g:phpcd_remove_function_extensions')
-	call filter(g:phpcd_active_function_extensions, 'index(g:phpcd_remove_function_extensions, v:val) == -1')
-endif
-
-if exists('g:phpcd_add_class_extensions')
-	let g:phpcd_active_class_extensions += g:phpcd_add_class_extensions
-endif
-if exists('g:phpcd_remove_class_extensions')
-	call filter(g:phpcd_active_class_extensions, 'index(g:phpcd_remove_class_extensions, v:val) == -1')
-endif
-
-if exists('g:phpcd_add_interface_extensions')
-	let g:phpcd_active_interface_extensions += g:phpcd_add_interface_extensions
-endif
-if exists('g:phpcd_remove_interface_extensions')
-	call filter(g:phpcd_active_interface_extensions, 'index(g:phpcd_remove_interface_extensions, v:val) == -1')
-endif
-
-if exists('g:phpcd_add_constant_extensions')
-	let g:phpcd_active_constant_extensions += g:phpcd_add_constant_extensions
-endif
-if exists('g:phpcd_remove_constant_extensions')
-	call filter(g:phpcd_active_constant_extensions, 'index(g:phpcd_remove_constant_extensions, v:val) == -1')
-endif
 
 let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 function! phpcd#CompletePHP(findstart, base) " {{{
+	" we need to wait phpcd
 	if g:phpcd_channel_id < 0
 		return
 	endif
@@ -1453,23 +1288,19 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 		let function_name = matchstr(methodstack[0], '^\s*\zs'.function_name_pattern)
 		let function_file = phpcd#GetFunctionLocation(function_name, a:current_namespace)
 
-		if function_file == 'VIMPHP_BUILTINFUNCTION'
-			" built in function, grab the return type from the info string
-			let return_type = matchstr(g:php_builtin_functions[function_name.'('], '\v\|\s+\zs.+$')
-			let classname_candidate = return_type
-			let class_candidate_namespace = '\'
-		elseif function_file != '' && filereadable(function_file)
+		if function_file != '' && filereadable(function_file)
 			let file_lines = readfile(function_file)
 			let docblock_str = phpcd#GetDocBlock(file_lines, 'function\s*&\?\<'.function_name.'\>')
 			let docblock = phpcd#ParseDocBlock(docblock_str)
+
 			if has_key(docblock.return, 'type')
 				let classname_candidate = docblock.return.type
 				let [class_candidate_namespace, function_imports] = phpcd#GetCurrentNameSpace(file_lines)
 				" try to expand the classname of the returned type with the context got from the function's source file
-
-				let [classname_candidate, unused] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, function_imports)
+				let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, function_imports)
 			endif
 		endif
+
 		if classname_candidate != ''
 			let [classname_candidate, class_candidate_namespace] = phpcd#GetCallChainReturnType(classname_candidate, class_candidate_namespace, class_candidate_imports, methodstack)
 			" return absolute classname, without leading \
