@@ -204,7 +204,7 @@ class PHPCD
     {
         $items = [];
         foreach (get_defined_constants() as $name => $value) {
-            if ($pattern && strpos($name, $pattern) === false) {
+            if ($pattern && strpos($name, $pattern) !== 0) {
                 continue;
             }
 
@@ -221,7 +221,7 @@ class PHPCD
 
     private function getFunctionInfo($name, $pattern = null)
     {
-        if ($pattern && strpos($name, $pattern) === false) {
+        if ($pattern && strpos($name, $pattern) !== 0) {
             return null;
         }
 
@@ -242,7 +242,7 @@ class PHPCD
     private function getMethodInfo($method, $pattern = null)
     {
         $name = $method->getName();
-        if ($pattern && strpos($name, $pattern) === false) {
+        if ($pattern && strpos($name, $pattern) !== 0) {
             return null;
         }
         $params = array_map(function ($param) {
