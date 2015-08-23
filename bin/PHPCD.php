@@ -272,6 +272,15 @@ class PHPCD
 
     private function location($class_name, $method_name = null)
     {
+        if ($class_name) {
+            return $this->locationClass($class_name, $method_name);
+        } else {
+            return $this->locationFunction($method_name);
+        }
+    }
+
+    private function locationClass($class_name, $method_name = null)
+    {
         $class = new ReflectionClass($class_name);
         if (!$method_name) {
             return [
@@ -285,6 +294,15 @@ class PHPCD
         return [
             $method->getFileName(),
             $method->getStartLine(),
+        ];
+    }
+
+    private function locationFunction($name)
+    {
+        $func = new ReflectionFunction($name);
+        return [
+            $func->getFileName(),
+            $func->getStartLine(),
         ];
     }
 }

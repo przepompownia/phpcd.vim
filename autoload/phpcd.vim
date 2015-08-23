@@ -484,26 +484,6 @@ function! phpcd#CompleteVariable(base) " {{{
 		endif
 	endfor
 
-	call extend(int_vars, g:php_builtin_vars)
-
-	" ctags has support for PHP, use tags file for external variables
-	if  g:phpcd_search_tags_for_variables
-		let ext_vars = {}
-		let tags = phpcd#GetTaglist('\C^'.substitute(a:base, '^\$', '', ''))
-		for tag in tags
-			if tag.kind ==? 'v'
-				let item = tag.name
-				let m_menu = ''
-				if tag.cmd =~? tag['name'].'\s*=\s*new\s\+'
-					let m_menu = matchstr(tag.cmd,
-								\ '\c=\s*new\s\+\zs[a-zA-Z_0-9\x7f-\xff]\+\ze')
-				endif
-				let ext_vars['$'.item] = m_menu
-			endif
-		endfor
-		call extend(int_vars, ext_vars)
-	endif
-
 	for m in sort(keys(int_vars))
 		if m =~# '^\'.a:base
 			call add(res, m)
@@ -650,10 +630,6 @@ function! phpcd#JumpToDefinition(mode) " {{{
 		return
 	endif
 
-	if !exists('g:php_builtin_functions')
-		call phpcd#LoadData()
-	endif
-
 	let [symbol, symbol_context, symbol_namespace, current_imports] = phpcd#GetCurrentSymbolWithContext()
 	if symbol == ''
 		return
@@ -780,7 +756,8 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		endif
 	else
 		" it could be a function
-		" TODO impl
+		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', '', a:symbol)
+		return [path, line, 0]
 	endif
 
 	return unknow_location
