@@ -708,16 +708,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 
 		" Get location of class definition, we have to iterate through all
 		if classname != ''
-			let full_classname = classname
-			if classname =~ '\'
-				" split the last \ segment as a classname, everything else is the namespace
-				let classname_parts = split(classname, '\')
-				let namespace = join(classname_parts[0:-2], '\')
-				let classname = classname_parts[-1]
-			else
-				let namespace = '\'
-			endif
-			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, a:symbol)
+			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', classname, a:symbol)
 			return [path, line, 0]
 		endif
 	elseif a:symbol_context == 'new' || a:symbol_context =~ '^class '
@@ -1832,45 +1823,9 @@ endfunction
 function! phpcd#GetFunctionLocation(function_name, namespace) " {{{
 	" builtin functions doesn't need explicit \ in front of them even in namespaces,
 	" aliased built-in function names are not handled
-	if has_key(g:php_builtin_functions, a:function_name.'(')
-		return 'VIMPHP_BUILTINFUNCTION'
-	endif
-
-
 	" do in-file lookup for function definition
-	let i = 1
-	let buffer_lines = getline(1, line('$'))
-	for line in buffer_lines
-		if line =~? '^\s*function\s\+&\?'.a:function_name.'\s*('
-			return expand('%:p')
-		endif
-	endfor
-
-
-	if a:namespace == '' || a:namespace == '\'
-		let search_namespace = '\'
-	else
-		let search_namespace = tolower(a:namespace)
-	endif
-	let no_namespace_candidate = ''
-	let tags = phpcd#GetTaglist('\c^'.a:function_name.'$')
-
-	for tag in tags
-		if tag.kind == 'f'
-			if !has_key(tag, 'namespace')
-				let no_namespace_candidate = tag.filename
-			else
-				if search_namespace == tolower(tag.namespace)
-					return tag.filename
-				endif
-			endif
-		endif
-	endfor
-	if no_namespace_candidate != ''
-		return no_namespace_candidate
-	endif
-
-	return ''
+	let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', '', a:function_name)
+	return path
 endfunction
 " }}}
 

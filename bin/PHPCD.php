@@ -281,19 +281,29 @@ class PHPCD
 
     private function locationClass($class_name, $method_name = null)
     {
-        $class = new ReflectionClass($class_name);
-        if (!$method_name) {
-            return [
-                $class->getFileName(),
-                $class->getStartLine(),
-            ];
+        try {
+            $class = new ReflectionClass($class_name);
+            if (!$method_name) {
+                return [
+                    $class->getFileName(),
+                    $class->getStartLine(),
+                ];
+            }
+
+            $method  = $class->getMethod($method_name);
+
+            if ($method) {
+                return [
+                    $method->getFileName(),
+                    $method->getStartLine(),
+                ];
+            }
+        } catch (ReflectionException $e) {
         }
 
-        $method  = $class->getMethod($method_name);
-
         return [
-            $method->getFileName(),
-            $method->getStartLine(),
+            '',
+            null,
         ];
     }
 
