@@ -7,12 +7,12 @@
 let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 function! phpcd#CompletePHP(findstart, base) " {{{
-	" we need to wait phpcd
+	" we need to wait phpcd {{{
 	if g:phpcd_channel_id < 0
 		return
-	endif
+	endif " }}}
 
-	if a:findstart
+	if a:findstart " {{{
 		unlet! b:php_menu
 		" Check if we are inside of PHP markup
 		let pos = getpos('.')
@@ -43,16 +43,15 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			" We can be also inside of phpString with HTML tags. Deal with
 			" it later (time, not lines).
 		endif
-	endif
+	endif " }}}
 
-
-	" If exists b:php_menu it means completion was already constructed we
-	" don't need to do anything more
+	" If exists b:php_menu it means completion was already constructed {{{
+	" we don't need to do anything more
 	if exists("b:php_menu")
 		return b:php_menu
-	endif
+	endif " }}}
 
-	" a:base is very short - we need context
+	" a:base is very short - we need context {{{
 	if exists("b:compl_context")
 		let context = b:compl_context
 		unlet! b:compl_context
@@ -62,7 +61,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 		end
 	else
 		let context = ''
-	end
+	end " }}}
 
 	try
 		let winheight = winheight(0)
@@ -70,107 +69,35 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 
 		let [current_namespace, imports] = phpcd#GetCurrentNameSpace(getline(0, line('.')))
 
-		if context =~? '^use\s' || context ==? 'use'
-			return phpcd#CompleteUse(a:base)
-		endif
+		if context =~? '^use\s' || context ==? 'use' " {{{
+			" TODO complete use
+		endif " }}}
 
-		if context =~ '\(->\|::\)$'
+		if context =~ '\(->\|::\)$' " {{{
 			let classname = phpcd#GetClassName(line('.'), context, current_namespace, imports)
 			return rpcrequest(g:phpcd_channel_id, 'info', classname, a:base)
 		elseif context =~? 'implements'
-			return phpcd#CompleteClassName(a:base, ['i'], current_namespace, imports)
+			" TODO complete class Foo implements
 		elseif context =~? 'extends\s\+.\+$' && a:base == ''
-			return ['implements']
+			" TODO complete class Foo extends
 		elseif context =~? 'extends'
-			let kinds = context =~? 'class\s' ? ['c'] : ['i']
-			return phpcd#CompleteClassName(a:base, kinds, current_namespace, imports)
+			" TODO complete class Foo extends Prefix..
 		elseif context =~? 'class [a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*'
-			" special case when you've typed the class keyword and the name too, only extends and implements allowed there
+			" special case when you've typed the class keyword and the name too,
+			" only extends and implements allowed there
 			return filter(['extends', 'implements'], 'stridx(v:val, a:base) == 0')
 		elseif context =~? 'new'
-			return phpcd#CompleteClassName(a:base, ['c'], current_namespace, imports)
-		endif
+			" TODO complete $foo = new
+		endif " }}}
 
-		if a:base =~ '^\$'
+		if a:base =~ '^\$' " {{{
 			return phpcd#CompleteVariable(a:base)
 		else
 			return phpcd#CompleteGeneral(a:base, current_namespace, imports)
-		endif
-	finally
+		endif " }}}
+	finally " {{{
 		silent! exec winnr.'resize '.winheight
-	endtry
-endfunction
-" }}}
-
-function! phpcd#CompleteUse(base) " {{{
-	" completes builtin class names regadless of g:phpcd_min_num_of_chars_for_namespace_completion
-	" completes namespaces from tags
-	"   * requires patched ctags
-	" completes classnames from tags within the already typed out namespace using the "namespace" field of tags
-	"   * requires patched ctags
-
-	let res = []
-
-	" class and namespace names are always considered absoltute in use ... expressions, leading slash is not recommended
-	" by the php manual, so we gonna get rid of that
-	if a:base =~? '^\'
-		let base = substitute(a:base, '^\', '', '')
-	else
-		let base = a:base
-	endif
-
-	let namespace_match_pattern  = substitute(base, '\\', '\\\\', 'g')
-	let classname_match_pattern = matchstr(base, '[^\\]\+$')
-	let namespace_for_class = substitute(substitute(namespace_match_pattern, '\\\\', '\\', 'g'), '\\*'.classname_match_pattern.'$', '', '')
-
-	if len(namespace_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion
-		if len(classname_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion
-			let tags = phpcd#GetTaglist('^\('.namespace_match_pattern.'\|'.classname_match_pattern.'\)')
-		else
-			let tags = phpcd#GetTaglist('^'.namespace_match_pattern)
-		endif
-
-		let patched_ctags_detected = 0
-		let namespaced_matches = []
-		let no_namespace_matches = []
-		for tag in tags
-			if has_key(tag, 'namespace')
-				let patched_ctags_detected = 1
-			endif
-
-			if tag.kind ==? 'n' && tag.name =~? '^'.namespace_match_pattern
-				let patched_ctags_detected = 1
-				call add(namespaced_matches, {'word': tag.name, 'kind': 'n', 'menu': tag.filename, 'info': tag.filename })
-			elseif has_key(tag, 'namespace') && (tag.kind ==? 'c' || tag.kind ==? 'i' || tag.kind ==? 't') && tag.namespace ==? namespace_for_class
-				call add(namespaced_matches, {'word': namespace_for_class.'\'.tag.name, 'kind': tag.kind, 'menu': tag.filename, 'info': tag.filename })
-			elseif (tag.kind ==? 'c' || tag.kind ==? 'i' || tag.kind ==? 't')
-				call add(no_namespace_matches, {'word': namespace_for_class.'\'.tag.name, 'kind': tag.kind, 'menu': tag.filename, 'info': tag.filename })
-			endif
-		endfor
-		" if it seems that the tags file have namespace informations we can safely throw
-		" away namespaceless tag matches since we can be sure they are invalid
-		if patched_ctags_detected
-			no_namespace_matches = []
-		endif
-		let res += namespaced_matches + no_namespace_matches
-	endif
-
-	if base !~ '\'
-		let builtin_classnames = filter(keys(copy(g:php_builtin_classnames)), 'v:val =~? "^'.classname_match_pattern.'"')
-		for classname in builtin_classnames
-			call add(res, {'word': g:php_builtin_classes[tolower(classname)].name, 'kind': 'c'})
-		endfor
-		let builtin_interfacenames = filter(keys(copy(g:php_builtin_interfacenames)), 'v:val =~? "^'.classname_match_pattern.'"')
-		for interfacename in builtin_interfacenames
-			call add(res, {'word': g:php_builtin_interfaces[tolower(interfacename)].name, 'kind': 'i'})
-		endfor
-	endif
-
-	for comp in res
-		let comp.word = substitute(comp.word, '^\\', '', '')
-	endfor
-
-	return res
+	endtry " }}}
 endfunction
 " }}}
 
@@ -1217,13 +1144,12 @@ endfunction
 function! phpcd#GetClassName(start_line, context, current_namespace, imports) " {{{
 	" Get class name
 	" Class name can be detected in few ways:
-	" @var $myVar class
-	" @var class $myVar
-	" in the same line (php 5.4 (new Class)-> syntax)
-	" line above
-	" or line in tags file
+	" - @var $myVar class
+	" - @var class $myVar
+	" - in the same line (php 5.4 (new Class)-> syntax)
+	" - line above
 
-	let class_name_pattern = '[a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*'
+	let class_name_pattern = '[a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*' " {{{
 	let function_name_pattern = '[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*'
 	let function_invocation_pattern = '[a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*('
 	let variable_name_pattern = '\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*'
@@ -1231,9 +1157,9 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 	let classname_candidate = ''
 	let class_candidate_namespace = a:current_namespace
 	let class_candidate_imports = a:imports
-	let methodstack = phpcd#GetMethodStack(a:context)
+	let methodstack = phpcd#GetMethodStack(a:context) " }}}
 
-	if a:context =~? '\$this->' || a:context =~? '\(self\|static\)::' || a:context =~? 'parent::'
+	if a:context =~? '\$this->' || a:context =~? '\(self\|static\)::' || a:context =~? 'parent::' " {{{
 		let i = 1
 		while i < a:start_line
 			let line = getline(a:start_line - i)
@@ -1257,8 +1183,8 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 			endif
 
 			let i += 1
-		endwhile
-	elseif a:context =~ '\vpublic|protected|private|final|static'
+		endwhile " }}}
+	elseif a:context =~ '\vpublic|protected|private|final|static' " {{{
 		let i = 1
 		while i < a:start_line
 			let line = getline(a:start_line - i)
@@ -1278,13 +1204,13 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 			endif
 
 			let i += 1
-		endwhile
-	elseif a:context =~? '(\s*new\s\+'.class_name_pattern.'\s*)->'
+		endwhile " }}}
+	elseif a:context =~? '(\s*new\s\+'.class_name_pattern.'\s*)->' " {{{
 		let classname_candidate = matchstr(a:context, '\cnew\s\+\zs'.class_name_pattern.'\ze')
 		let [classname_candidate, class_candidate_namespace] = phpcd#GetCallChainReturnType(classname_candidate, class_candidate_namespace, class_candidate_imports, methodstack)
 		" return absolute classname, without leading \
-		return (class_candidate_namespace == '\' || class_candidate_namespace == '') ? classname_candidate : class_candidate_namespace.'\'.classname_candidate
-	elseif get(methodstack, 0) =~# function_invocation_pattern
+		return (class_candidate_namespace == '\' || class_candidate_namespace == '') ? classname_candidate : class_candidate_namespace.'\'.classname_candidate " }}}
+	elseif get(methodstack, 0) =~# function_invocation_pattern " {{{
 		let function_name = matchstr(methodstack[0], '^\s*\zs'.function_name_pattern)
 		let function_file = phpcd#GetFunctionLocation(function_name, a:current_namespace)
 
@@ -1305,8 +1231,8 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 			let [classname_candidate, class_candidate_namespace] = phpcd#GetCallChainReturnType(classname_candidate, class_candidate_namespace, class_candidate_imports, methodstack)
 			" return absolute classname, without leading \
 			return (class_candidate_namespace == '\' || class_candidate_namespace == '') ? classname_candidate : class_candidate_namespace.'\'.classname_candidate
-		endif
-	else
+		endif " }}}
+	else " {{{
 		" extract the variable name from the context
 		let object = methodstack[0]
 		let object_is_array = (object =~ '\v^[^[]+\[' ? 1 : 0)
@@ -1595,7 +1521,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 				endfor
 			endif
 		endif
-	endif
+	endif " }}}
 endfunction
 " }}}
 
