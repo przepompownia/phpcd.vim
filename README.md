@@ -63,12 +63,13 @@ msgpack.php_only = 0
  1. Install and configure the [Vim-Plug](https://github.com/junegunn/vim-plug) plugin manager, [follow the instructions here](https://github.com/junegunn/vim-plug/blob/master/README.md)
  2. Add the following line to your `.vimrc`:
 
-   Plug 'lvht/phpcd.vim'
+   `Plug 'lvht/phpcd.vim'`
+
  3. Source your `.vimrc` with `:so %` or otherwise reload your vim
  4. Run the `:PlugInstall` commmand
- 5. use phpcd to complete PHP
+ 5. use phpcd to complete PHP:
 
-   autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
+  `autocmd FileType php setlocal omnifunc=phpcd#CompletePHP`
 
 ## Usage
 
