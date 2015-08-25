@@ -5,6 +5,7 @@
 " Maintainer:	Szabó Dávid ( complex857 AT gmail DOT com )
 
 let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+let s:cache_classstructures = {}
 
 function! phpcd#CompletePHP(findstart, base) " {{{
 	" we need to wait phpcd {{{
@@ -968,49 +969,34 @@ function! phpcd#GetCallChainReturnType(classname_candidate, class_candidate_name
 	" Tries to get the classname and namespace for a chained method call like:
 	"	$this->foo()->bar()->baz()->
 
-	let classname_candidate = a:classname_candidate
+	let classname_candidate = a:classname_candidate " {{{
 	let class_candidate_namespace = a:class_candidate_namespace
 	let methodstack = a:methodstack
 	let unknown_result = ['', '']
 	let prev_method_is_array = (methodstack[0] =~ '\v^[^([]+\[' ? 1 : 0)
-	let classname_candidate_is_array = (classname_candidate =~ '\[\]$' ? 1 : 0)
+	let classname_candidate_is_array = (classname_candidate =~ '\[\]$' ? 1 : 0) " }}}
 
-	if prev_method_is_array
+	if prev_method_is_array " {{{
 		if classname_candidate_is_array
 			let classname_candidate = substitute(classname_candidate, '\[\]$', '', '')
 		else
 			return unknown_result
 		endif
-	endif
+	endif " }}}
 
-	if (len(methodstack) == 1)
+	if (len(methodstack) == 1) " {{{
 		let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, a:imports)
-		return [classname_candidate, class_candidate_namespace]
-	else
+		return [classname_candidate, class_candidate_namespace] " }}}
+	else " {{{
 		call remove(methodstack, 0)
 		let method_is_array = (methodstack[0] =~ '\v^[^[]+\[' ? 1 : 0)
 		let method = matchstr(methodstack[0], '\v^\$*\zs[^[(]+\ze')
 
+		let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, a:imports)
+
 		let classlocation = phpcd#GetClassLocation(classname_candidate, class_candidate_namespace)
 
-		if classlocation == 'VIMPHP_BUILTINOBJECT' && has_key(g:php_builtin_classes, tolower(classname_candidate))
-			let class_info = g:php_builtin_classes[tolower(classname_candidate)]
-			if has_key(class_info['methods'], method)
-				return phpcd#GetCallChainReturnType(class_info['methods'][method].return_type, '\', a:imports, methodstack)
-			endif
-			if has_key(class_info['properties'], method)
-				return phpcd#GetCallChainReturnType(class_info['properties'][method].type, '\', a:imports, methodstack)
-			endif
-			if has_key(class_info['static_methods'], method)
-				return phpcd#GetCallChainReturnType(class_info['static_methods'][method].return_type, '\', a:imports, methodstack)
-			endif
-			if has_key(class_info['static_properties'], method)
-				return phpcd#GetCallChainReturnType(class_info['static_properties'][method].type, '\', a:imports, methodstack)
-			endif
-
-			return unknown_result
-
-		elseif classlocation != '' && filereadable(classlocation)
+		if classlocation != '' && filereadable(classlocation) " {{{
 			" Read the next method from the stack and extract only the name
 
 			let classcontents = phpcd#GetCachedClassContents(classlocation, classname_candidate)
@@ -1068,11 +1054,11 @@ function! phpcd#GetCallChainReturnType(classname_candidate, class_candidate_name
 				endif
 			endif
 
+			return unknown_result " }}}
+		else " {{{
 			return unknown_result
-		else
-			return unknown_result
-		endif
-	endif
+		endif " }}}
+	endif " }}}
 endfunction " }}}
 
 function! phpcd#GetMethodStack(line) " {{{
@@ -1088,7 +1074,7 @@ function! phpcd#GetMethodStack(line) " {{{
 
 	let next_char = ''
 
-	while i	< end
+	while i < end
 		let current_char = a:line[i]
 		let next_char = i + 1 < end ? a:line[i + 1] : ''
 		let prev_char = i >= 1 ? a:line[i - 1] : ''
@@ -1249,7 +1235,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 			let classname_candidate = constant_object
 		endif
 
-		if classname_candidate == ''
+		if classname_candidate == '' " {{{
 			" scan the file backwards from current line for explicit type declaration (@var $variable Classname)
 			for line in lines
 				" in file lookup for /* @var $foo Class */
@@ -1265,13 +1251,14 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 					break
 				endif
 			endfor
-		endif
+		endif " }}}
 
-		if classname_candidate != ''
+		if classname_candidate != '' " {{{
 			let [classname_candidate, class_candidate_namespace] = phpcd#GetCallChainReturnType(classname_candidate, class_candidate_namespace, class_candidate_imports, methodstack)
 			" return absolute classname, without leading \
 			return (class_candidate_namespace == '\' || class_candidate_namespace == '') ? classname_candidate : class_candidate_namespace.'\'.classname_candidate
-		endif
+		endif " }}}
+
 		" scan the file backwards from the current line
 		let i = 1
 		for line in lines " {{{
@@ -1499,47 +1486,29 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 			let i += 1
 		endfor " }}}
 
-		if classname_candidate != ''
+		if classname_candidate != '' " {{{
 			let [classname_candidate, class_candidate_namespace] = phpcd#GetCallChainReturnType(classname_candidate, class_candidate_namespace, class_candidate_imports, methodstack)
 			" return absolute classname, without leading \
 			return (class_candidate_namespace == '\' || class_candidate_namespace == '') ? classname_candidate : class_candidate_namespace.'\'.classname_candidate
-		endif
+		endif " }}}
 
 		" OK, first way failed, now check tags file(s)
 		" This method is useless when local variables are not indexed by ctags and
 		" pretty inaccurate even if it is
-		if g:phpcd_search_tags_for_variables
-			let tags = phpcd#GetTaglist('^'.substitute(object, '^\$', '', ''))
-			if len(tags) == 0
-				return
-			else
-				for tag in tags
-					if tag.kind ==? 'v' && tag.cmd =~? '=\s*new\s\+\zs'.class_name_pattern.'\ze'
-						let classname = matchstr(tag.cmd, '=\s*new\s\+\zs'.class_name_pattern.'\ze')
-						return classname
-					endif
-				endfor
-			endif
-		endif
 	endif " }}}
 endfunction
 " }}}
 
 function! phpcd#GetClassLocation(classname, namespace) " {{{
-	" Check classname may be name of built in object
-	if has_key(g:php_builtin_classes, tolower(a:classname)) && (a:namespace == '' || a:namespace == '\')
-		return 'VIMPHP_BUILTINOBJECT'
-	endif
-	if has_key(g:php_builtin_interfaces, tolower(a:classname)) && (a:namespace == '' || a:namespace == '\')
-		return 'VIMPHP_BUILTINOBJECT'
-	endif
+	let full_classname = a:namespace . '\' . a:classname
+	let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, '')
+	return path
 
 	if a:namespace == '' || a:namespace == '\'
 		let search_namespace = '\'
 	else
 		let search_namespace = tolower(a:namespace)
 	endif
-	let [current_namespace, imports] = phpcd#GetCurrentNameSpace(getline(0, line('.')))
 
 	" do in-file lookup for class definition
 	let i = 1
@@ -1555,24 +1524,6 @@ function! phpcd#GetClassLocation(classname, namespace) " {{{
 
 	" Get class location from tags
 	let no_namespace_candidate = ''
-	let tags = phpcd#GetTaglist('^'.a:classname.'$')
-	for tag in tags
-		" We'll allow interfaces and traits to be handled classes since you
-		" can't have colliding names with different kinds anyway
-		if tag.kind == 'c' || tag.kind == 'i' || tag.kind == 't'
-			if !has_key(tag, 'namespace')
-				let no_namespace_candidate = tag.filename
-			else
-				if search_namespace == tolower(tag.namespace)
-					return tag.filename
-				endif
-			endif
-		endif
-	endfor
-	if no_namespace_candidate != ''
-		return no_namespace_candidate
-	endif
-
 	return ''
 endfunction
 " }}}
@@ -2172,8 +2123,11 @@ endfunction
 function! phpcd#ExpandClassName(classname, current_namespace, imports) " {{{
 	" if there's an imported class, just use that class's information
 	if has_key(a:imports, a:classname)
-		let namespace = has_key(a:imports[a:classname], 'namespace') ? a:imports[a:classname].namespace : ''
-		return [a:imports[a:classname].name, namespace]
+		let full_classname = a:imports[a:classname].name
+		let classname_parts = split(full_classname, '\\\+')
+		let namespace = join(classname_parts[0:-2], '\')
+		let classname = classname_parts[-1]
+		return [classname, namespace]
 	endif
 
 	" try to find relative namespace in imports, imported names takes precedence over
