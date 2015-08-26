@@ -1268,9 +1268,22 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 		" scan the file backwards from the current line
 		let i = 1
 		for line in lines " {{{
-			" do in-file lookup of $var = new Class
+			" do in-file lookup of $var = new Class or $var = new [s|S]tatic
 			if line =~# '^\s*'.object.'\s*=\s*new\s\+'.class_name_pattern && !object_is_array
 				let classname_candidate = matchstr(line, object.'\c\s*=\s*new\s*\zs'.class_name_pattern.'\ze')
+				if classname_candidate == 'static' || classname_candidate == 'Static' " {{{
+					let i = 1
+					while i < a:start_line
+						let line = getline(a:start_line - i)
+
+						if line =~? '\v^\s*(abstract\s+|final\s+)*\s*class\s'
+							let classname_candidate = matchstr(line, '\cclass\s\+\zs'.class_name_pattern.'\ze')
+							break
+						endif
+
+						let i += 1
+					endwhile
+				end " }}}
 				let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, a:current_namespace, a:imports)
 				break
 			endif
