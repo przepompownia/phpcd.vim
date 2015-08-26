@@ -465,7 +465,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 	endif
 
 	" are we looking for a method?
-	if a:symbol_context =~ '\(->\|::\)$'
+	if a:symbol_context =~ '\(->\|::\)$' " {{{
 		" Get name of the class
 		let classname = phpcd#GetClassName(line('.'), a:symbol_context, a:symbol_namespace, a:current_imports)
 
@@ -473,8 +473,8 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		if classname != ''
 			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', classname, a:symbol)
 			return [path, line, 0]
-		endif
-	elseif a:symbol_context == 'new' || a:symbol_context =~ '^class '
+		endif " }}}
+	elseif a:symbol_context == 'new' || a:symbol_context =~ '^class ' " {{{
 		if (has_key(a:current_imports, a:symbol))
 			let full_classname = a:current_imports[a:symbol]['name']
 		else
@@ -482,8 +482,8 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		endif
 
 		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, '')
-		return [path, line, 0]
-	elseif a:symbol_context != ''
+		return [path, line, 0] " }}}
+	elseif a:symbol_context != '' " {{{
 		" try to find interface method's implementation
 		let interface = phpcd#GetClassName(line('.'), a:symbol_context, a:symbol_namespace, a:current_imports)
 		if interface != '' && g:phpid_channel_id >= 0
@@ -507,12 +507,18 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 				let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', impl, a:symbol)
 				return [path, line, 0]
 			endif
-		endif
-	else
-		" it could be a function
-		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', '', a:symbol)
+		endif " }}}
+	else " {{{
+		if a:symbol[0] >= 'A' && a:symbol[0] <= 'Z'
+			let [classname, namespace] = phpcd#ExpandClassName(a:symbol, a:symbol_namespace, a:current_imports)
+			let full_classname = namespace . '\' . classname
+			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname)
+		else
+			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', '', a:symbol)
+		end
+
 		return [path, line, 0]
-	endif
+	endif " }}}
 
 	return unknow_location
 endfunction " }}}
