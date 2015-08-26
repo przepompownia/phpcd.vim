@@ -98,7 +98,6 @@ class PHPCD
 
     private function on($msg)
     {
-        var_dump($msg);
         $msg_id = null;
         if (count($msg) == 4) {
             // rpc request
@@ -160,8 +159,8 @@ class PHPCD
     {
         $reflection = new ReflectionClass($class_name);
         $items = [];
-        foreach ($reflection->getConstants() as $name => $value)
-        {
+
+        foreach ($reflection->getConstants() as $name => $value) {
             $items[] = [
                 'word' => $name,
                 'abbr' => "+ @ $name = $value",
@@ -172,6 +171,13 @@ class PHPCD
 
         foreach ($reflection->getMethods() as $method) {
             $info = $this->getMethodInfo($method, $pattern);
+            if ($info) {
+                $items[] = $info;
+            }
+        }
+
+        foreach ($reflection->getProperties() as $property) {
+            $info = $this->getPropertyInfo($property, $pattern);
             if ($info) {
                 $items[] = $info;
             }
@@ -239,6 +245,23 @@ class PHPCD
         ];
     }
 
+    private function getPropertyInfo($property, $pattern)
+    {
+        $name = $property->getName();
+        if ($pattern && strpos($name, $pattern) !== 0) {
+            return null;
+        }
+        $modifier = $this->getModifier($property);
+
+        return [
+            'word' => $name,
+            'abbr' => "$modifier $name",
+            'info' => preg_replace('#/?\*(\*|/)?#','', $property->getDocComment()),
+            'kind' => 'p',
+            'icase' => 1,
+        ];
+    }
+
     private function getMethodInfo($method, $pattern = null)
     {
         $name = $method->getName();
@@ -249,25 +272,34 @@ class PHPCD
             return $param->getName();
         }, $method->getParameters());
 
-        if ($method->isPublic()) {
-            $modifier = '+';
-        } elseif ($method->isProtected()) {
-            $modifier = '#';
-        } elseif ($method->isPrivate()) {
-            $modifier = '-';
-        } elseif ($method->isFinal()) {
-            $modifier = '!';
-        }
-
-        $static = $method->isStatic() ? '@' : ' ';
+        $modifier = $this->getModifier($method);
 
         return [
             'word' => $name,
-            'abbr' => "$modifier $static $name (" . join(', ', $params) . ')',
+            'abbr' => "$modifier $name (" . join(', ', $params) . ')',
             'info' => preg_replace('#/?\*(\*|/)?#','', $method->getDocComment()),
             'kind' => 'f',
             'icase' => 1,
         ];
+    }
+
+    private function getModifier($reflection)
+    {
+        $modifier = '';
+
+        if ($reflection->isPublic()) {
+            $modifier = '+';
+        } elseif ($reflection->isProtected()) {
+            $modifier = '#';
+        } elseif ($reflection->isPrivate()) {
+            $modifier = '-';
+        } elseif ($reflection->isFinal()) {
+            $modifier = '!';
+        }
+
+        $static = $reflection->isStatic() ? '@' : ' ';
+
+        return "$modifier $static";
     }
 
     private function location($class_name, $method_name = null)
