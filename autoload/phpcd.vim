@@ -3,6 +3,7 @@
 " Maintainer:	Mikolaj Machowski ( mikmach AT wp DOT pl )
 " Maintainer:	Shawn Biddle ( shawn AT shawnbiddle DOT com )
 " Maintainer:	Szabó Dávid ( complex857 AT gmail DOT com )
+" 维护人： 吕海涛 ( vim AT lvht DOT net )
 
 let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 let s:cache_classstructures = {}
@@ -1176,7 +1177,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 
 			let i += 1
 		endwhile " }}}
-	elseif a:context =~ '\vpublic|protected|private|final|static' " {{{
+	elseif a:context =~ 'public|protected|private|final|static' " {{{
 		let i = 1
 		while i < a:start_line
 			let line = getline(a:start_line - i)
@@ -1199,6 +1200,19 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 		endwhile " }}}
 	elseif a:context =~? '(\s*new\s\+'.class_name_pattern.'\s*)->' " {{{
 		let classname_candidate = matchstr(a:context, '\cnew\s\+\zs'.class_name_pattern.'\ze')
+		if classname_candidate == 'static' || classname_candidate == 'Static' " {{{
+			let i = 1
+			while i < a:start_line
+				let line = getline(a:start_line - i)
+
+				if line =~? '\v^\s*(abstract\s+|final\s+)*\s*class\s'
+					let classname_candidate = matchstr(line, '\cclass\s\+\zs'.class_name_pattern.'\ze')
+					break
+				endif
+
+				let i += 1
+			endwhile
+		end " }}}
 		let [classname_candidate, class_candidate_namespace] = phpcd#GetCallChainReturnType(classname_candidate, class_candidate_namespace, class_candidate_imports, methodstack)
 		" return absolute classname, without leading \
 		return (class_candidate_namespace == '\' || class_candidate_namespace == '') ? classname_candidate : class_candidate_namespace.'\'.classname_candidate " }}}
@@ -1269,7 +1283,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 		let i = 1
 		for line in lines " {{{
 			" do in-file lookup of $var = new Class or $var = new [s|S]tatic
-			if line =~# '^\s*'.object.'\s*=\s*new\s\+'.class_name_pattern && !object_is_array
+			if line =~# '^\s*'.object.'\s*=\s*new\s\+'.class_name_pattern && !object_is_array " {{{
 				let classname_candidate = matchstr(line, object.'\c\s*=\s*new\s*\zs'.class_name_pattern.'\ze')
 				if classname_candidate == 'static' || classname_candidate == 'Static' " {{{
 					let i = 1
@@ -1286,17 +1300,35 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 				end " }}}
 				let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, a:current_namespace, a:imports)
 				break
-			endif
+			endif " }}}
+
+			" do in-file lookup of $var = (new static)
+			if line =~# '^\s*'.object.'\s*=\s*(\s*new\s\+static\s*)' && !object_is_array " {{{
+				let classname_candidate = '' " {{{
+				let i = 1
+				while i < a:start_line
+					let line = getline(a:start_line - i)
+
+					if line =~? '\v^\s*(abstract\s+|final\s+)*\s*class\s'
+						let classname_candidate = matchstr(line, '\cclass\s\+\zs'.class_name_pattern.'\ze')
+						break
+					endif
+
+					let i += 1
+				endwhile " }}}
+				let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, a:current_namespace, a:imports)
+				break
+			end " }}}
 
 			" in-file lookup for Class::getInstance()
-			if line =~# '^\s*'.object.'\s*=&\?\s*'.class_name_pattern.'\s*::\s*getInstance' && !object_is_array
+			if line =~# '^\s*'.object.'\s*=&\?\s*'.class_name_pattern.'\s*::\s*getInstance' && !object_is_array " {{{
 				let classname_candidate = matchstr(line, object.'\s*=&\?\s*\zs'.class_name_pattern.'\ze\s*::\s*getInstance')
 				let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, a:current_namespace, a:imports)
 				break
-			endif
+			endif " }}}
 
 			" do in-file lookup for static method invocation of a built-in class, like: $d = DateTime::createFromFormat()
-			if line =~# '^\s*'.object.'\s*=&\?\s*'.class_name_pattern.'\s*::\s*$\?[a-zA-Z_0-9\x7f-\xff]\+'
+			if line =~# '^\s*'.object.'\s*=&\?\s*'.class_name_pattern.'\s*::\s*$\?[a-zA-Z_0-9\x7f-\xff]\+' " {{{
 				let classname  = matchstr(line, '^\s*'.object.'\s*=&\?\s*\zs'.class_name_pattern.'\ze\s*::')
 				if has_key(a:imports, classname) && a:imports[classname].kind == 'c'
 					let classname = a:imports[classname].name
@@ -1316,10 +1348,10 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 						\ sub_methodstack)
 					return (class_candidate_namespace == '\' || class_candidate_namespace == '') ? classname_candidate : class_candidate_namespace.'\'.classname_candidate
 				endif
-			endif
+			endif " }}}
 
 			" function declaration line
-			if line =~? 'function\(\s\+'.function_name_pattern.'\)\?\s*('
+			if line =~? 'function\(\s\+'.function_name_pattern.'\)\?\s*(' " {{{
 				let function_lines = join(reverse(copy(lines)), " ")
 				" search for type hinted arguments
 				if function_lines =~? 'function\(\s\+'.function_name_pattern.'\)\?\s*(.\{-}'.class_name_pattern.'\s\+'.object && !object_is_array
@@ -1354,10 +1386,10 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 						break
 					endif
 				endif
-			endif
+			endif " }}}
 
 			" assignment for the variable in question with a variable on the right hand side
-			if line =~# '^\s*'.object.'\s*=&\?\s\+\(clone\)\?\s*'.variable_name_pattern
+			if line =~# '^\s*'.object.'\s*=&\?\s\+\(clone\)\?\s*'.variable_name_pattern " {{{
 
 				" try to find the next non-comment or string ";" char
 				let start_col = match(line, '^\s*'.object.'\C\s*=\zs&\?\s\+\(clone\)\?\s*'.variable_name_pattern)
@@ -1402,10 +1434,10 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 					let class_candidate_namespace = '\'
 				endif
 				break
-			endif
+			endif " }}}
 
 			" assignment for the variable in question with a function on the right hand side
-			if line =~# '^\s*'.object.'\s*=&\?\s*'.function_invocation_pattern
+			if line =~# '^\s*'.object.'\s*=&\?\s*'.function_invocation_pattern " {{{
 				" try to find the next non-comment or string ";" char
 				let start_col = match(line, '\C^\s*'.object.'\s*=\zs&\?\s*'.function_invocation_pattern)
 				let filelines = reverse(copy(lines))
@@ -1463,10 +1495,10 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 						break
 					endif
 				endif
-			endif
+			endif " }}}
 
 			" foreach with the variable in question
-			if line =~? 'foreach\s*(.\{-}\s\+'.object.'\s*)'
+			if line =~? 'foreach\s*(.\{-}\s\+'.object.'\s*)' " {{{
 				let sub_context = matchstr(line, 'foreach\s*(\s*\zs.\{-}\ze\s\+as')
 				let prev_class = phpcd#GetClassName(a:start_line - i, sub_context, a:current_namespace, a:imports)
 
@@ -1486,10 +1518,10 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 					let class_candidate_namespace = '\'
 				endif
 				break
-			endif
+			endif " }}}
 
 			" catch clause with the variable in question
-			if line =~? 'catch\s*(\zs'.class_name_pattern.'\ze\s\+'.object
+			if line =~? 'catch\s*(\zs'.class_name_pattern.'\ze\s\+'.object " {{{
 				let classname = matchstr(line, 'catch\s*(\zs'.class_name_pattern.'\ze\s\+'.object)
 				if stridx(classname, '\') != -1
 					let classname_parts = split(classname, '\\\+')
@@ -1500,7 +1532,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 					let class_candidate_namespace = '\'
 				endif
 				break
-			endif
+			endif " }}}
 
 			let i += 1
 		endfor " }}}
@@ -1510,10 +1542,6 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 			" return absolute classname, without leading \
 			return (class_candidate_namespace == '\' || class_candidate_namespace == '') ? classname_candidate : class_candidate_namespace.'\'.classname_candidate
 		endif " }}}
-
-		" OK, first way failed, now check tags file(s)
-		" This method is useless when local variables are not indexed by ctags and
-		" pretty inaccurate even if it is
 	endif " }}}
 endfunction
 " }}}
