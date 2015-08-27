@@ -1177,7 +1177,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 
 			let i += 1
 		endwhile " }}}
-	elseif a:context =~ 'public|protected|private|final|static' " {{{
+	elseif a:context == 'public' " {{{
 		let i = 1
 		while i < a:start_line
 			let line = getline(a:start_line - i)
