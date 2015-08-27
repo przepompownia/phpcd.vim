@@ -65,7 +65,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 		let context = ''
 	end " }}}
 
-	try
+	try " {{{
 		let winheight = winheight(0)
 		let winnr = winnr()
 
@@ -97,7 +97,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 		else
 			return phpcd#CompleteGeneral(a:base, current_namespace, imports)
 		endif " }}}
-	finally " {{{
+	finally
 		silent! exec winnr.'resize '.winheight
 	endtry " }}}
 endfunction
@@ -123,88 +123,6 @@ function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{
 	let base = substitute(a:base, '^\\', '', '')
 	let [pattern, namespace] = phpcd#ExpandClassName(a:base, a:current_namespace, a:imports)
 	return rpcrequest(g:phpcd_channel_id, 'info', '', pattern)
-endfunction
-" }}}
-
-function! phpcd#CompleteUnknownClass(base, context) " {{{
-	let res = []
-
-	if g:phpcd_complete_for_unknown_classes != 1
-		return []
-	endif
-
-	if a:base =~ '^\$'
-		let adddollar = '$'
-	else
-		let adddollar = ''
-	endif
-
-	let file = getline(1, '$')
-
-	" Internal solution for finding object properties in current file.
-	if a:context =~ '::'
-		let variables = filter(deepcopy(file),
-					\ 'v:val =~ "^\\s*\\(static\\|static\\s\\+\\(public\\|var\\)\\|\\(public\\|var\\)\\s\\+static\\)\\s\\+\\$"')
-	elseif a:context =~ '->'
-		let variables = filter(deepcopy(file),
-					\ 'v:val =~ "^\\s*\\(public\\|var\\)\\s\\+\\$"')
-	endif
-	let jvars = join(variables, ' ')
-	let svars = split(jvars, '\$')
-	let int_vars = {}
-	for i in svars
-		let c_var = matchstr(i,
-					\ '^\zs[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*\ze')
-		if c_var != ''
-			let int_vars[adddollar.c_var] = ''
-		endif
-	endfor
-
-	" Internal solution for finding functions in current file.
-	call filter(deepcopy(file),
-			\ 'v:val =~ "function\\s\\+&\\?[a-zA-Z_\\x7f-\\xff][a-zA-Z_0-9\\x7f-\\xff]*\\s*("')
-	let jfile = join(file, ' ')
-	let int_values = split(jfile, 'function\s\+')
-	let int_functions = {}
-	for i in int_values
-		let f_name = matchstr(i,
-				\ '^&\?\zs[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*\ze')
-		let f_args = matchstr(i,
-				\ '^&\?[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*\s*(\zs.\{-}\ze)\_s*\(;\|{\|$\)')
-
-		let int_functions[f_name.'('] = f_args.')'
-	endfor
-
-	let all_values = {}
-	call extend(all_values, int_functions)
-	call extend(all_values, int_vars) " external variables are already in
-	call extend(all_values, g:php_builtin_object_functions)
-
-	for m in sort(keys(all_values))
-		if m =~ '\(^\|::\)'.a:base
-			call add(res, m)
-		endif
-	endfor
-
-	let start_list = res
-
-	let final_list = []
-	for i in start_list
-		if has_key(int_vars, i)
-			let class = ' '
-			if all_values[i] != ''
-				let class = i.' class '
-			endif
-			let final_list += [{'word':i, 'info':class.all_values[i], 'kind':'v'}]
-		else
-			let final_list +=
-					\ [{'word':substitute(i, '.*::', '', ''),
-					\	'info':i.all_values[i],
-					\	'menu':all_values[i],
-					\	'kind':'f'}]
-		endif
-	endfor
-	return final_list
 endfunction
 " }}}
 
@@ -251,84 +169,6 @@ function! phpcd#CompleteVariable(base) " {{{
 	endfor
 
 	return int_dict
-endfunction
-" }}}
-
-function! phpcd#CompleteClassName(base, kinds, current_namespace, imports) " {{{
-	let kinds = sort(a:kinds)
-	" Complete class name
-	let res = []
-	if a:base =~? '^\'
-		let leading_slash = '\'
-		let base = substitute(a:base, '^\', '', '')
-	else
-		let leading_slash = ''
-		let base = a:base
-	endif
-
-	" Internal solution for finding classes in current file.
-	let file = getline(1, '$')
-	let filterstr = ''
-
-	if kinds == ['c', 'i']
-		let filterstr = 'v:val =~? "\\(class\\|interface\\)\\s\\+[a-zA-Z_\\x7f-\\xff][a-zA-Z_0-9\\x7f-\\xff]*\\s*"'
-	elseif kinds == ['c']
-		let filterstr = 'v:val =~? "class\\s\\+[a-zA-Z_\\x7f-\\xff][a-zA-Z_0-9\\x7f-\\xff]*\\s*"'
-	elseif kinds == ['i']
-		let filterstr = 'v:val =~? "interface\\s\\+[a-zA-Z_\\x7f-\\xff][a-zA-Z_0-9\\x7f-\\xff]*\\s*"'
-	endif
-
-	call filter(file, filterstr)
-
-	for line in file
-		let c_name = matchstr(line, '\c\(class\|interface\)\s*\zs[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*')
-		let kind = (line =~? '^\s*class' ? 'c' : 'i')
-		if c_name != '' && c_name =~? '^'.base
-			call add(res, {'word': c_name, 'kind': kind})
-		endif
-	endfor
-
-	" resolve the typed in part with namespaces (if theres a \ in it)
-	let [tag_match_pattern, namespace_for_class] = phpcd#ExpandClassName(a:base, a:current_namespace, a:imports)
-
-	" look for built in classnames and interfaces
-	let base_parts = split(base, '\')
-	if a:current_namespace == '\' || (leading_slash == '\' && len(base_parts) < 2)
-		if index(kinds, 'c') != -1
-			let builtin_classnames = filter(keys(copy(g:php_builtin_classnames)), 'v:val =~? "^'.substitute(a:base, '\\', '', 'g').'"')
-			for classname in builtin_classnames
-				let menu = ''
-				" if we have a constructor for this class, add parameters as to the info
-				if has_key(g:php_builtin_classes[tolower(classname)].methods, '__construct')
-					let menu = g:php_builtin_classes[tolower(classname)]['methods']['__construct']['signature']
-				endif
-				call add(res, {'word': leading_slash.g:php_builtin_classes[tolower(classname)].name, 'kind': 'c', 'menu': menu})
-			endfor
-		endif
-
-		if index(kinds, 'i') != -1
-			let builtin_interfaces = filter(keys(copy(g:php_builtin_interfaces)), 'v:val =~? "^'.substitute(a:base, '\\', '', 'g').'"')
-			for interfacename in builtin_interfaces
-				call add(res, {'word': leading_slash.g:php_builtin_interfaces[interfacename]['name'], 'kind': 'i', 'menu': ''})
-			endfor
-		endif
-	endif
-
-	" add matching imported things
-	for [imported_name, import] in items(a:imports)
-		if imported_name =~? '^'.base && index(kinds, import.kind) != -1
-			let menu = import.name.(import.builtin ? ' - builtin' : '')
-			call add(res, {'word': imported_name, 'kind': import.kind, 'menu': menu})
-		endif
-	endfor
-
-	let res = sort(res, 'phpcd#CompareCompletionRow')
-	return res
-endfunction
-" }}}
-
-function! phpcd#CompareCompletionRow(i1, i2) " {{{
-	return a:i1.word == a:i2.word ? 0 : a:i1.word > a:i2.word ? 1 : -1
 endfunction
 " }}}
 
@@ -467,14 +307,6 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 	return unknow_location
 endfunction " }}}
 
-function! s:readfileToTmpbuffer(file) " {{{
-	let cfile = join(readfile(a:file), "\n")
-	silent! below 1new
-	silent! 0put =cfile
-	silent! exec "set ft=phpcompletetempbuffer"
-	return [bufnr('$'), bufname('%')]
-endfunction " }}}
-
 function! s:getNextCharWithPos(filelines, current_pos) " {{{
 	let line_no   = a:current_pos[0]
 	let col_no    = a:current_pos[1]
@@ -530,161 +362,6 @@ function! phpcd#EvaluateModifiers(modifiers, required_modifiers, prohibited_modi
 		" anything that is not explicitly required or prohibited is allowed
 		return 1
 	endif
-endfunction
-" }}}
-
-function! phpcd#CompleteUserClass(context, base, sccontent, visibility) " {{{
-	let final_list = []
-	let res  = []
-
-	let required_modifiers = []
-	let prohibited_modifiers = []
-
-	if a:visibility == 'public'
-		let prohibited_modifiers += ['private', 'protected']
-	endif
-
-	" limit based on context to static or normal methods
-	let static_con = ''
-	if a:context =~ '::$' && a:context !~? 'parent::$'
-		if g:phpcd_relax_static_constraint != 1
-			let required_modifiers += ['static']
-		endif
-	elseif a:context =~ '->$'
-		let prohibited_modifiers += ['static']
-	endif
-
-	let all_function = filter(deepcopy(a:sccontent),
-				\ 'v:val =~ "^\\s*\\(public\\s\\+\\|protected\\s\\+\\|private\\s\\+\\|final\\s\\+\\|abstract\\s\\+\\|static\\s\\+\\)*function"')
-
-	let functions = []
-	for i in all_function
-		let modifiers = split(matchstr(tolower(i), '\zs.\+\zefunction'), '\s\+')
-		if phpcd#EvaluateModifiers(modifiers, required_modifiers, prohibited_modifiers) == 1
-			call add(functions, i)
-		endif
-	endfor
-
-	let c_functions = {}
-	let c_doc = {}
-	for i in functions
-		let f_name = matchstr(i,
-					\ 'function\s*&\?\zs[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*\ze')
-		let f_args = matchstr(i,
-					\ 'function\s*&\?[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*\s*(\zs.\{-}\ze)\_s*\(;\|{\|\_$\)')
-		if f_name != '' && stridx(f_name, '__') != 0
-			let c_functions[f_name.'('] = f_args
-			if g:phpcd_parse_docblock_comments
-				let c_doc[f_name.'('] = phpcd#GetDocBlock(a:sccontent, 'function\s*&\?\<'.f_name.'\>')
-			endif
-		endif
-	endfor
-
-	" limit based on context to static or normal attributes
-	if a:context =~ '::$' && a:context !~? 'parent::$'
-		" variables must have static to be accessed as static unlike functions
-		let required_modifiers += ['static']
-	endif
-	let all_variable = filter(deepcopy(a:sccontent),
-					\ 'v:val =~ "^\\s*\\(var\\s\\+\\|public\\s\\+\\|protected\\s\\+\\|private\\s\\+\\|final\\s\\+\\|abstract\\s\\+\\|static\\s\\+\\)\\+\\$"')
-
-	let variables = []
-	for i in all_variable
-		let modifiers = split(matchstr(tolower(i), '\zs.\+\ze\$'), '\s\+')
-		if phpcd#EvaluateModifiers(modifiers, required_modifiers, prohibited_modifiers) == 1
-			call add(variables, i)
-		endif
-	endfor
-
-	let static_vars = split(join(variables, ' '), '\$')
-	let c_variables = {}
-
-	let var_index = 0
-	for i in static_vars
-		let c_var = matchstr(i,
-					\ '^\zs[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*\ze')
-		if c_var != ''
-			if a:context =~ '::$'
-				let c_var = '$'.c_var
-			endif
-			let c_variables[c_var] = ''
-			if g:phpcd_parse_docblock_comments && len(get(variables, var_index)) > 0
-				let c_doc[c_var] = phpcd#GetDocBlock(a:sccontent, variables[var_index])
-			endif
-			let var_index += 1
-		endif
-	endfor
-
-	let constants = filter(deepcopy(a:sccontent),
-				\ 'v:val =~ "^\\s*const\\s\\+"')
-
-	let jcons = join(constants, ' ')
-	let scons = split(jcons, 'const')
-
-	let c_constants = {}
-	let const_index = 0
-	for i in scons
-		let c_con = matchstr(i,
-					\ '^\s*\zs[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*\ze')
-		if c_con != ''
-			let c_constants[c_con] = ''
-			if g:phpcd_parse_docblock_comments && len(get(constants, const_index)) > 0
-				let c_doc[c_con] = phpcd#GetDocBlock(a:sccontent, constants[const_index])
-			endif
-			let const_index += 1
-		endif
-	endfor
-
-	let all_values = {}
-	call extend(all_values, c_functions)
-	call extend(all_values, c_variables)
-	call extend(all_values, c_constants)
-
-	for m in sort(keys(all_values))
-		if stridx(m, a:base) == 0
-			call add(res, m)
-		endif
-	endfor
-
-	let start_list = res
-
-	let final_list = []
-	for i in start_list
-		let docblock = phpcd#ParseDocBlock(get(c_doc, i, ''))
-		if has_key(c_variables, i)
-			let final_list +=
-						\ [{'word': i,
-						\	'info':phpcd#FormatDocBlock(docblock),
-						\	'menu':get(docblock.var, 'type', ''),
-						\	'kind':'v'}]
-		elseif has_key(c_constants, i)
-			let info = phpcd#FormatDocBlock(docblock)
-			if info != ''
-				let info = "\n".info
-			endif
-			let final_list +=
-						\ [{'word':i,
-						\	'info':i.info,
-						\	'menu':all_values[i],
-						\	'kind':'d'}]
-		else
-			let return_type = get(docblock.return, 'type', '')
-			if return_type != ''
-				let return_type = ' | '.return_type
-			endif
-			let info = phpcd#FormatDocBlock(docblock)
-			if info != ''
-				let info = "\n".info
-			endif
-			let final_list +=
-						\ [{'word':substitute(i, '.*::', '', ''),
-						\	'info':i.all_values[i].')'.info,
-						\	'menu':all_values[i].')'.return_type,
-						\	'kind':'f'}]
-		endif
-	endfor
-
-	return final_list
 endfunction
 " }}}
 
@@ -1646,16 +1323,6 @@ function! phpcd#GetClassContentsStructure(file_path, file_lines, class_name) " {
 endfunction
 " }}}
 
-function! phpcd#GetClassContents(classlocation, class_name) " {{{
-	let classcontents = phpcd#GetCachedClassContents(a:classlocation, a:class_name)
-	let result = []
-	for classstructure in classcontents
-		call add(result, classstructure.content)
-	endfor
-	return join(result, "\n")
-endfunction
-" }}}
-
 function! phpcd#GetDocBlock(sccontent, search) " {{{
 	let i = 0
 	let l = 0
@@ -1796,53 +1463,6 @@ function! phpcd#GetTypeFromDocBlockParam(docblock_type) " {{{
 	return types[0]
 
 endfunction
-" }}}
-
-function! phpcd#FormatDocBlock(info) " {{{
-	let res = ''
-	if len(a:info.description)
-		let res .= "Description:\n".join(map(split(a:info['description'], "\n"), '"\t".v:val'), "\n")."\n"
-	endif
-
-	if len(a:info.params)
-		let res .= "\nArguments:\n"
-		for arginfo in a:info.params
-			let res .= "\t".arginfo['name'].' '.arginfo['type']
-			if len(arginfo.description) > 0
-				let res .= ': '.arginfo['description']
-			endif
-			let res .= "\n"
-		endfor
-	endif
-
-	if has_key(a:info.return, 'type')
-		let res .= "\nReturn:\n\t".a:info['return']['type']
-		if len(a:info.return.description) > 0
-			let res .= ": ".a:info['return']['description']
-		endif
-		let res .= "\n"
-	endif
-
-	if len(a:info.throws)
-		let res .= "\nThrows:\n"
-		for excinfo in a:info.throws
-			let res .= "\t".excinfo['type']
-			if len(excinfo['description']) > 0
-				let res .= ": ".excinfo['description']
-			endif
-			let res .= "\n"
-		endfor
-	endif
-
-	if has_key(a:info.var, 'type')
-		let res .= "Type:\n\t".a:info['var']['type']."\n"
-		if len(a:info['var']['description']) > 0
-			let res .= ': '.a:info['var']['description']
-		endif
-	endif
-
-	return res
-endfunction!
 " }}}
 
 function! phpcd#GetCurrentNameSpace(file_lines) " {{{
