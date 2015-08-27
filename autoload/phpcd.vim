@@ -175,25 +175,6 @@ function! phpcd#CompleteUnknownClass(base, context) " {{{
 		let int_functions[f_name.'('] = f_args.')'
 	endfor
 
-	" collect external functions from tags
-	let ext_functions = {}
-	let tags = phpcd#GetTaglist('^'.substitute(a:base, '^\$', '', ''))
-	for tag in tags
-		if tag.kind ==? 'f'
-			let item = tag.name
-			if has_key(tag, 'signature')
-				let prototype = tag.signature[1:-2]
-			else
-				let prototype = matchstr(tag.cmd,
-						\ 'function\s\+&\?[^[:space:]]\+\s*(\s*\zs.\{-}\ze\s*)\s*{\?')
-			endif
-			let ext_functions[item.'('] = prototype.') - '.tag['filename']
-		endif
-	endfor
-
-	" All functions to one hash for later reference when deciding kind
-	call extend(int_functions, ext_functions)
-
 	let all_values = {}
 	call extend(all_values, int_functions)
 	call extend(all_values, int_vars) " external variables are already in
@@ -309,44 +290,6 @@ function! phpcd#CompleteClassName(base, kinds, current_namespace, imports) " {{{
 
 	" resolve the typed in part with namespaces (if theres a \ in it)
 	let [tag_match_pattern, namespace_for_class] = phpcd#ExpandClassName(a:base, a:current_namespace, a:imports)
-
-	let tags = []
-	if len(tag_match_pattern) >= g:phpcd_min_num_of_chars_for_namespace_completion
-		let tags = phpcd#GetTaglist('^\c'.tag_match_pattern)
-	endif
-
-	if len(tags)
-		let base_parts = split(a:base, '\')
-		if len(base_parts) > 1
-			let namespace_part = join(base_parts[0:-2], '\').'\'
-		else
-			let namespace_part = ''
-		endif
-		let no_namespace_matches = []
-		let namespaced_matches = []
-		let seen_namespaced_tag = 0
-		for tag in tags
-			if has_key(tag, 'namespace')
-				let seen_namespaced_tag = 1
-			endif
-			let relative_name = namespace_part.tag.name
-			" match base without the namespace part for namespaced base but not namespaced tags, for tagfiles with old ctags
-			if !has_key(tag, 'namespace') && index(kinds, tag.kind) != -1 && stridx(tolower(tag.name), tolower(base[len(namespace_part):])) == 0
-				call add(no_namespace_matches, {'word': leading_slash.relative_name, 'kind': tag.kind, 'menu': tag.filename, 'info': tag.filename })
-			endif
-			if has_key(tag, 'namespace') && index(kinds, tag.kind) != -1 && tag.namespace ==? namespace_for_class
-				let full_name = tag.namespace.'\'.tag.name " absolute namespaced name (without leading '\')
-				call add(namespaced_matches, {'word': leading_slash == '\' ? leading_slash.full_name : relative_name, 'kind': tag.kind, 'menu': tag.filename, 'info': tag.filename })
-			endif
-		endfor
-		" if there was a tag with namespace field, assume tag files with namespace support, so the matches
-		" without a namespace field are in the global namespace so if there were namespace in the base
-		" we should not add them to the matches
-		if seen_namespaced_tag && namespace_part != ''
-			let no_namespace_matches = []
-		endif
-		let res += no_namespace_matches + namespaced_matches
-	endif
 
 	" look for built in classnames and interfaces
 	let base_parts = split(base, '\')
@@ -782,35 +725,6 @@ function! phpcd#CompleteBuiltInClass(context, classname, base) " {{{
 		endfor
 	endif
 	return res
-endfunction
-" }}}
-
-function! phpcd#GetTaglist(pattern) " {{{
-	let cache_checksum = ''
-	if g:phpcd_cache_taglists == 1
-		" build a string with  format of "<tagfile>:<mtime>$<tagfile2>:<mtime2>..."
-		" to validate that the tags are not changed since the time we saved the results in cache
-		for tagfile in sort(tagfiles())
-			let cache_checksum .= fnamemodify(tagfile, ':p').':'.getftime(tagfile).'$'
-		endfor
-
-		if s:cache_tags_checksum != cache_checksum
-			" tag file(s) changed
-			" since we don't know where individual tags coming from when calling taglist() we zap the whole cache
-			" no way to clear only the entries originating from the changed tag file
-			let s:cache_tags = {}
-		endif
-
-		if has_key(s:cache_tags, a:pattern)
-			return s:cache_tags[a:pattern]
-		endif
-	endif
-
-	let tags = taglist(a:pattern)
-	let s:cache_tags[a:pattern] = tags
-	let has_key = has_key(s:cache_tags, a:pattern)
-	let s:cache_tags_checksum = cache_checksum
-	return tags
 endfunction
 " }}}
 
