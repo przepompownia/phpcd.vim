@@ -688,46 +688,6 @@ function! phpcd#CompleteUserClass(context, base, sccontent, visibility) " {{{
 endfunction
 " }}}
 
-function! phpcd#CompleteBuiltInClass(context, classname, base) " {{{
-	let class_info = g:php_builtin_classes[tolower(a:classname)]
-	let res = []
-	if a:context =~ '->$' " complete for everything instance related
-		" methods
-		for [method_name, method_info] in items(class_info.methods)
-			if stridx(method_name, '__') != 0 && (a:base == '' || method_name =~? '^'.a:base)
-				call add(res, {'word':method_name.'(', 'kind': 'f', 'menu': method_info.signature, 'info': method_info.signature })
-			endif
-		endfor
-		" properties
-		for [property_name, property_info] in items(class_info.properties)
-			if a:base == '' || property_name =~? '^'.a:base
-				call add(res, {'word':property_name, 'kind': 'v', 'menu': property_info.type, 'info': property_info.type })
-			endif
-		endfor
-	elseif a:context =~ '::$' " complete for everything static
-		" methods
-		for [method_name, method_info] in items(class_info.static_methods)
-			if a:base == '' || method_name =~? '^'.a:base
-				call add(res, {'word':method_name.'(', 'kind': 'f', 'menu': method_info.signature, 'info': method_info.signature })
-			endif
-		endfor
-		" properties
-		for [property_name, property_info] in items(class_info.static_properties)
-			if a:base == '' || property_name =~? '^'.a:base
-				call add(res, {'word':property_name, 'kind': 'v', 'menu': property_info.type, 'info': property_info.type })
-			endif
-		endfor
-		" constants
-		for [constant_name, constant_info] in items(class_info.constants)
-			if a:base == '' || constant_name =~? '^'.a:base
-				call add(res, {'word':constant_name, 'kind': 'd', 'menu': constant_info, 'info': constant_info})
-			endif
-		endfor
-	endif
-	return res
-endfunction
-" }}}
-
 function! phpcd#GetCurrentInstruction(line_number, col_number, phpbegin) " {{{
 	" locate the current instruction (up until the previous non comment or string ";" or php region start (<?php or <?) without newlines
 	let col_number = a:col_number
@@ -1391,13 +1351,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 
 				let function_file = phpcd#GetFunctionLocation(function_name, function_namespace)
 
-				if function_file == 'VIMPHP_BUILTINFUNCTION'
-					" built in function, grab the return type from the info string
-					let return_type = matchstr(g:php_builtin_functions[function_name.'('], '\v\|\s+\zs.+$')
-					let classname_candidate = return_type
-					let class_candidate_namespace = '\'
-					break
-				elseif function_file != '' && filereadable(function_file)
+				if function_file != '' && filereadable(function_file)
 					let file_lines = readfile(function_file)
 					let docblock_str = phpcd#GetDocBlock(file_lines, 'function\s*&\?\<'.function_name.'\>')
 					let docblock = phpcd#ParseDocBlock(docblock_str)
@@ -1678,14 +1632,7 @@ function! phpcd#GetClassContentsStructure(file_path, file_lines, class_name) " {
 				let namespace = '\'
 			endif
 			let classlocation = phpcd#GetClassLocation(class, namespace)
-			if classlocation == "VIMPHP_BUILTINOBJECT"
-				if has_key(g:php_builtin_classes, tolower(class))
-					let result += [phpcd#GenerateBuiltinClassStub('class', g:php_builtin_classes[tolower(class)])]
-				endif
-				if has_key(g:php_builtin_interfaces, tolower(class))
-					let result += [phpcd#GenerateBuiltinClassStub('interface', g:php_builtin_interfaces[tolower(class)])]
-				endif
-			elseif classlocation != '' && filereadable(classlocation)
+			if classlocation != '' && filereadable(classlocation)
 				let full_file_path = fnamemodify(classlocation, ':p')
 				let result += phpcd#GetClassContentsStructure(full_file_path, readfile(full_file_path), class)
 			elseif tolower(current_namespace) == tolower(namespace) && match(join(a:file_lines, "\n"), '\c\(class\|interface\|trait\)\_s\+'.class.'\(\>\|$\)') != -1
@@ -1708,61 +1655,6 @@ function! phpcd#GetClassContents(classlocation, class_name) " {{{
 	return join(result, "\n")
 endfunction
 " }}}
-
-function! phpcd#GenerateBuiltinClassStub(type, class_info) " {{{
-	let re = a:type.' '.a:class_info['name']." {"
-	if has_key(a:class_info, 'constants')
-		for [name, initializer] in items(a:class_info.constants)
-			let re .= "\n\tconst ".name." = ".initializer.";"
-		endfor
-	endif
-	if has_key(a:class_info, 'properties')
-		for [name, info] in items(a:class_info.properties)
-			let re .= "\n\t// @var $".name." ".info.type
-			let re .= "\n\tpublic $".name.";"
-		endfor
-	endif
-	if has_key(a:class_info, 'static_properties')
-		for [name, info] in items(a:class_info.static_properties)
-			let re .= "\n\t// @var ".name." ".info.type
-			let re .= "\n\tpublic static ".name." = ".info.initializer.";"
-		endfor
-	endif
-	if has_key(a:class_info, 'methods')
-		for [name, info] in items(a:class_info.methods)
-			if name =~ '^__'
-				continue
-			endif
-			let re .= "\n\t/**"
-			let re .= "\n\t * ".name
-			let re .= "\n\t *"
-			let re .= "\n\t * @return ".info.return_type
-			let re .= "\n\t */"
-			let re .= "\n\tpublic function ".name."(".info.signature."){"
-			let re .= "\n\t}"
-		endfor
-	endif
-	if has_key(a:class_info, 'static_methods')
-		for [name, info] in items(a:class_info.static_methods)
-			let re .= "\n\t/**"
-			let re .= "\n\t * ".name
-			let re .= "\n\t *"
-			let re .= "\n\t * @return ".info.return_type
-			let re .= "\n\t */"
-			let re .= "\n\tpublic static function ".name."(".info.signature."){"
-			let re .= "\n\t}"
-		endfor
-	endif
-	let re .= "\n}"
-
-	return { a:type : a:class_info['name'],
-				\ 'content': re,
-				\ 'namespace': '',
-				\ 'imports': {},
-				\ 'file': 'VIMPHP_BUILTINOBJECT',
-				\ 'mtime': 0,
-				\ }
-endfunction " }}}
 
 function! phpcd#GetDocBlock(sccontent, search) " {{{
 	let i = 0
