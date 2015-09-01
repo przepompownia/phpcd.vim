@@ -92,16 +92,55 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			" TODO complete $foo = new
 		endif " }}}
 
+		let line = getline('.')
+		if line =~ '* @$'
+			" TODO 根据输入过滤
+			return phpcd#CompleteDoc()
+		endif
+
 		if a:base =~ '^\$' " {{{
 			return phpcd#CompleteVariable(a:base)
 		else
 			return phpcd#CompleteGeneral(a:base, current_namespace, imports)
 		endif " }}}
-	finally
+	finally " {{{
 		silent! exec winnr.'resize '.winheight
 	endtry " }}}
 endfunction
 " }}}
+
+function! phpcd#CompleteDoc() " {{{
+	return [
+				\ 'api',
+				\ 'author',
+				\ 'category',
+				\ 'copyright',
+				\ 'deprecated',
+				\ 'example',
+				\ 'filesource',
+				\ 'global',
+				\ 'ignore',
+				\ 'internal',
+				\ 'license',
+				\ 'link',
+				\ 'method',
+				\ 'package',
+				\ 'param',
+				\ 'property',
+				\ 'property-read',
+				\ 'property-write',
+				\ 'return',
+				\ 'see',
+				\ 'since',
+				\ 'source',
+				\ 'subpackage',
+				\ 'throws',
+				\ 'todo',
+				\ 'uses',
+				\ 'var',
+				\ 'version'
+				\]
+endfunction
 
 function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{
 	" Complete everything
