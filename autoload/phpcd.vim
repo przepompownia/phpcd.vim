@@ -103,7 +103,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 		else
 			return phpcd#CompleteGeneral(a:base, current_namespace, imports)
 		endif " }}}
-	finally " {{{
+	finally
 		silent! exec winnr.'resize '.winheight
 	endtry " }}}
 endfunction
@@ -140,7 +140,7 @@ function! phpcd#CompleteDoc() " {{{
 				\ 'var',
 				\ 'version'
 				\]
-endfunction
+endfunction " }}}
 
 function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{
 	" Complete everything
