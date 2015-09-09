@@ -7,7 +7,7 @@ class PHPID extends PHPCD
 
     public function __construct($socket_path, $autoload_path, $map_file, $root)
     {
-        $this->map_file = $map_file;
+        $this->class_map = require $map_file;
         $this->root = $root;
 
         parent::__construct($socket_path, $autoload_path);
@@ -61,23 +61,50 @@ class PHPID extends PHPCD
 
         $this->initIndexDir();
 
-        $map = require "$this->map_file";
-        foreach ($map as $class_name => $file_path) {
+        $pipe_path = sys_get_temp_dir() . '/' . uniqid();
+        posix_mkfifo($pipe_path, 0600);
+
+        while ($this->class_map) {
             $pid = pcntl_fork();
+
             if ($pid == -1) {
                 die('could not fork');
-            } elseif ($pid) {
-                pcntl_wait($status);
+            } elseif ($pid > 0) {
+                // 父进程
+                $pipe = fopen($pipe_path, 'r');
+                $data = fgets($pipe);
+                $this->class_map = json_decode(trim($data), true);
             } else {
-                require $file_path;
-                list($parent, $interfaces) = $this->getClassInfo($class_name);
-                if ($parent) {
-                    $this->updateParentIndex($parent, $class_name);
-                }
-                foreach ($interfaces as $interface) {
-                    $this->updateInterfaceIndex($interface, $class_name);
-                }
+                // 子进程
+                $pipe = fopen($pipe_path, 'w');
+                register_shutdown_function(function () use ($pipe) {
+                    $data = json_encode($this->class_map, true);
+                    fwrite($pipe, "$data\n");
+                    fclose($pipe);
+                });
+                $this->_index();
+                fwrite($pipe, "[]\n");
+                fclose($pipe);
                 exit;
+            }
+        }
+        fclose($pipe);
+        unlink($pipe_path);
+    }
+
+    private function _index()
+    {
+        foreach ($this->class_map as $class_name => $file_path) {
+            // TODO 为什么不是先处理再删除呢？
+            unset($this->class_map[$class_name]);
+            require $file_path;
+            list($parent, $interfaces) = $this->getClassInfo($class_name);
+            echo getmypid() . " $parent " . json_encode($interfaces) . "\n";
+            // if ($parent) {
+            //     $this->updateParentIndex($parent, $class_name);
+            // }
+            foreach ($interfaces as $interface) {
+                $this->updateInterfaceIndex($interface, $class_name);
             }
         }
     }
