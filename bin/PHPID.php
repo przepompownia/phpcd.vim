@@ -69,6 +69,7 @@ class PHPID extends PHPCD
             } elseif ($pid) {
                 pcntl_wait($status);
             } else {
+                require $file_path;
                 list($parent, $interfaces) = $this->getClassInfo($class_name);
                 if ($parent) {
                     $this->updateParentIndex($parent, $class_name);
