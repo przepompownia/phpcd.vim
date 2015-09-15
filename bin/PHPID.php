@@ -78,6 +78,7 @@ class PHPID extends PHPCD
                 $pipe = fopen($pipe_path, 'r');
                 $data = fgets($pipe);
                 $this->class_map = json_decode(trim($data), true);
+                pcntl_waitpid($pid, $status);
             } else {
                 // 子进程
                 $pipe = fopen($pipe_path, 'w');
