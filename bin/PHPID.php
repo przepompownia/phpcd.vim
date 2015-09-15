@@ -61,6 +61,8 @@ class PHPID extends PHPCD
 
         $this->initIndexDir();
 
+        exec('cd ' . $this->root . ' && composer dump-autoload --optimize');
+
         $pipe_path = sys_get_temp_dir() . '/' . uniqid();
         posix_mkfifo($pipe_path, 0600);
 
