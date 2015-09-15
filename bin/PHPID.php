@@ -64,6 +64,10 @@ class PHPID extends PHPCD
         $pipe_path = sys_get_temp_dir() . '/' . uniqid();
         posix_mkfifo($pipe_path, 0600);
 
+        $class_num = count($this->class_map);
+        $cmd = 'let g:pb = vim#widgets#progressbar#NewSimpleProgressBar("Indexing:", ' . $class_num . ')';
+        $this->callRpc('vim_command',  $cmd);
+
         while ($this->class_map) {
             $pid = pcntl_fork();
 
@@ -90,6 +94,7 @@ class PHPID extends PHPCD
         }
         fclose($pipe);
         unlink($pipe_path);
+        $this->callRpc('vim_command',  'call g:pb.restore()');
     }
 
     private function _index()
@@ -97,12 +102,12 @@ class PHPID extends PHPCD
         foreach ($this->class_map as $class_name => $file_path) {
             // TODO 为什么不是先处理再删除呢？
             unset($this->class_map[$class_name]);
+            $this->callRpc('vim_command',  'call g:pb.incr()');
             require $file_path;
             list($parent, $interfaces) = $this->getClassInfo($class_name);
-            echo getmypid() . " $parent " . json_encode($interfaces) . "\n";
-            // if ($parent) {
-            //     $this->updateParentIndex($parent, $class_name);
-            // }
+            if ($parent) {
+                $this->updateParentIndex($parent, $class_name);
+            }
             foreach ($interfaces as $interface) {
                 $this->updateInterfaceIndex($interface, $class_name);
             }
