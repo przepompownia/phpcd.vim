@@ -178,8 +178,16 @@ class PHPID extends PHPCD
      * 更新特定类的继承关系和接口实现关系
      * @param string $class_name 全限定类名
      */
-    private function update($class_name)
+    public function update($class_name)
     {
+        list($parent, $interfaces) = $this->getClassInfo($class_name);
+
+        if ($parent) {
+            $this->updateParentIndex($parent, $class_name);
+        }
+        foreach ($interfaces as $interface) {
+            $this->updateInterfaceIndex($interface, $class_name);
+        }
     }
 
     public function ls($name, $is_interface = false)

@@ -115,7 +115,9 @@ class PHPCD
             $error = true;
         }
 
-        $this->sendResp($result, $msg_id, $error);
+        if (count($msg) == 4) {
+            $this->sendResp($result, $msg_id, $error);
+        }
     }
 
     private function sendResp($result, $msg_id = null, $error = null)

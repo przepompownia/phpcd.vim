@@ -63,6 +63,8 @@ if !exists('g:phpcd_job_id')
 		let phpid_path = expand('<sfile>:p:h:h') . '/bin/phpid_main.php'
 		let class_map_file = root . '/vendor/composer/autoload_classmap.php'
 		let g:phpid_job_id = jobstart(['php', phpid_path, $NVIM_LISTEN_ADDRESS, autoload_file, class_map_file, root])
+
+		call phpcd#initAutocmd()
 	endif
 endif
 

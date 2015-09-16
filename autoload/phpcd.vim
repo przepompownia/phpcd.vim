@@ -7,6 +7,7 @@
 
 let s:script_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 let s:cache_classstructures = {}
+let g:phpcd_need_update = 0
 
 function! phpcd#CompletePHP(findstart, base) " {{{
 	" we need to wait phpcd {{{
@@ -1129,6 +1130,29 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 	endif " }}}
 endfunction
 " }}}
+
+function! phpcd#GetCurrentClassName()
+	let [start_line, start_col] = searchpos('class', 'n')
+	let [current_namespace, imports] = phpcd#GetCurrentNameSpace(getline(0, start_line))
+	" 假设文件名就是类名，去掉 .php 后缀
+	let file_name = expand('%:t')[:-5]
+
+	return current_namespace . '\' . file_name
+endfunction
+
+function! phpcd#initAutocmd()
+	augroup phpcd
+		autocmd!
+		autocmd BufLeave,VimLeave *.php if g:phpcd_need_update > 0 | call phpcd#updateIndex() | endif
+		autocmd BufWritePost *.php let g:phpcd_need_update = 1
+	augroup END
+endfunction
+
+function! phpcd#updateIndex()
+	let g:phpcd_need_update = 0
+	let classname = phpcd#GetCurrentClassName()
+	return rpcrequest(g:phpid_channel_id, 'update', classname)
+endfunction
 
 function! phpcd#GetClassLocation(classname, namespace) " {{{
 	let full_classname = a:namespace . '\' . a:classname
