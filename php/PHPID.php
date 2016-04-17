@@ -73,6 +73,8 @@ class PHPID extends RpcServer
         $this->initIndexDir();
 
         exec('composer dump-autoload -o -d ' . $this->root . ' 2>&1 >/dev/null');
+        $this->notifyParentProcess('reloadClassLoader');
+
         $this->class_map = require $this->root
             . '/vendor/composer/autoload_classmap.php';
 
@@ -210,5 +212,26 @@ class PHPID extends RpcServer
     private function vimCloseProgressBar()
     {
         $this->call('vim_command', ['call g:pb.restore()']);
+    }
+
+    public function getAbsoluteClassesPaths($path_pattern)
+    {
+        // @todo reload class loader if needed
+        // $this->class_loader->addClassMap() will update info about newly added classes
+        // but not about deleted
+        $classmap = $this->class_loader->getClassMap();
+
+        $paths = [];
+
+        foreach ($classmap as $path => $file) {
+            if ($this->matchPattern($path_pattern, $path)) {
+                $paths[] = $path;
+            }
+        }
+
+        // @todo complete also built-in declared classes
+        // get_declared_classes() returns classes
+        // from phpcd's (not project's) environment
+        return $paths;
     }
 }

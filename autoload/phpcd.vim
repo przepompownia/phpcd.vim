@@ -55,7 +55,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 		let [current_namespace, imports] = phpcd#GetCurrentNameSpace()
 
 		if context =~? '^use\s' || context ==? 'use' " {{{
-			" TODO complete use
+			return phpcd#getAbsoluteClassesPaths(a:base)
 		endif " }}}
 
 		if context =~ '\(->\|::\)$' " {{{
@@ -99,6 +99,10 @@ endfunction " }}}
 
 function! phpcd#GetPsrNamespace() " {{{
 	return rpcrequest(g:phpcd_channel_id, 'psr4ns', expand('%:p'))
+endfunction " }}}
+
+function! phpcd#getAbsoluteClassesPaths(path) " {{{
+	return rpcrequest(g:phpid_channel_id, 'getAbsoluteClassesPaths', a:path)
 endfunction " }}}
 
 function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{

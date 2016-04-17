@@ -4,8 +4,9 @@ namespace PHPCD;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
+use PHPCD\ClassLoaderInterface;
 
-class RpcServer
+abstract class RpcServer
 {
     use LoggerAwareTrait;
 
@@ -22,6 +23,13 @@ class RpcServer
 
     private $request_callback = [];
 
+    private $ipc_sockets_pair = [];
+
+    /**
+     * @var ClassLoader
+     */
+    protected $class_loader;
+
     /**
      * Composer root dir(containing vendor)
      */
@@ -29,16 +37,49 @@ class RpcServer
 
     private $unpacker;
 
+    const MATCH_SUBSEQUENCE = 'match_subsequence';
+    const MATCH_HEAD        = 'match_head';
+
+    private $matchType;
+
+    /**
+     * Set type of matching
+     *
+     * @param string $matchType
+     * @return null;
+     */
+    public function setMatchType($matchType)
+    {
+        if ($matchType !== self::MATCH_SUBSEQUENCE && $matchType !== self::MATCH_HEAD) {
+            throw new \InvalidArgumentException('Wrong match type');
+        }
+
+        $this->matchType = $matchType;
+
+        return null;
+    }
+
     public function __construct(
         $root,
         \MessagePackUnpacker $unpacker,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ClassLoaderInterface $class_loader
     ) {
         $this->setRoot($root);
         $this->unpacker = $unpacker;
         $this->setLogger($logger);
+        $this->setClassLoader($class_loader);
 
         register_shutdown_function([$this, 'shutdown']);
+
+        /** Set default match type **/
+        $this->setMatchType(self::MATCH_SUBSEQUENCE);
+    }
+
+    protected function setClassLoader(ClassLoaderInterface $class_loader)
+    {
+        $this->class_loader = $class_loader;
+        return $this;
     }
 
     /**
@@ -57,6 +98,9 @@ class RpcServer
     public function loop()
     {
         $stdin = fopen('php://stdin', 'r');
+
+        $this->prepareIPCSocketsPair();
+
         while (true) {
             $buffer = fread($stdin, 1024);
             $this->unpacker->feed($buffer);
@@ -67,15 +111,86 @@ class RpcServer
 
                 $pid = pcntl_fork();
                 if ($pid == -1) {
-                    die('failed to fork');
+                    throw new Exception('failed to fork');
                 } elseif ($pid > 0) {
                     pcntl_waitpid($pid, $status);
+
+                    $child_notifications = $this->getNotificationFromChild();
+                    $this->processChildNotification($child_notifications);
                 } else {
                     $this->onMessage($message);
                     exit;
                 }
             }
         }
+    }
+
+    private function processChildNotification($child_notifications)
+    {
+        /**
+         * This is very primitive implementation
+         * It probably should use msgpack
+         */
+        $notifications = explode(PHP_EOL, $child_notifications);
+
+        foreach ($notifications as $message) {
+            if ($message === 'reloadClassLoader') {
+                $this->reloadClassLoader();
+            }
+        }
+    }
+
+    private function prepareIPCSocketsPair()
+    {
+        $domain = (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN' ? AF_INET : AF_UNIX);
+
+        $create_pair = socket_create_pair($domain, SOCK_STREAM, 0, $this->ipc_sockets_pair);
+
+        if ($create_pair === false) {
+            $error_message = sprintf(
+                'socket_create_pair failed. Reason: %s',
+                socket_strerror(socket_last_error())
+            );
+            throw new \Exception($error_message);
+        }
+
+        return true;
+    }
+
+    protected function notifyParentProcess($msg)
+    {
+        $msg .= PHP_EOL;
+        $write = socket_write($this->ipc_sockets_pair[1], $msg, strlen($msg));
+        if ($write === false) {
+            $error_message = sprintf(
+                'Failed to write to the socket: %s',
+                socket_strerror(socket_last_error($this->ipc_sockets_pair[1]))
+            );
+            throw new \Exception($error_message);
+        }
+
+        return true;
+    }
+
+    /**
+     * Retrieve raw content from socket
+     */
+    private function getNotificationFromChild()
+    {
+        $read = [$this->ipc_sockets_pair[0]];
+        $write = $except = null;
+        $num_changed_sockets = socket_select($read, $write, $except, 0);
+
+        if ($num_changed_sockets === false) {
+            throw new \Exception(socket_strerror(socket_last_error()));
+        }
+
+        if ($num_changed_sockets > 0) {
+            $socket_output = socket_read($read[0], 1024);
+            return $socket_output;
+        }
+
+        return null;
     }
 
     public function shutdown()
@@ -205,5 +320,36 @@ class RpcServer
     {
         $message = $this->getDirectionString($direction) . json_encode($message);
         $this->logger->info($message);
+    }
+    public function reloadClassLoader()
+    {
+        $this->class_loader->reload();
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function matchPattern($pattern, $fullString)
+    {
+        if (!$pattern) {
+            return true;
+        }
+
+        switch ($this->matchType) {
+            case self::MATCH_SUBSEQUENCE:
+                // @TODO Case sensitivity of matching should be probably configurable
+                // @TODO Quote characters that may be treat not literally
+                $regex = '/'.implode('.*', str_split($pattern)).'/i';
+
+                return (bool)preg_match($regex, $fullString);
+
+            case self::MATCH_HEAD:
+                return (stripos($fullString, $pattern) === 0);
+                break;
+        }
+
+        return false;
     }
 }

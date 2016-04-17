@@ -21,10 +21,13 @@ try {
             throw new \InvalidArgumentException('The second parameter should be PHPCD or PHPID');
     }
 
+    /** load autoloader for the project **/
+    $projectClassLoader = new \PHPCD\ComposerClassLoader($root, $logger);
+
     $daemon = '\\PHPCD\\'.$daemon;
     $unpacker = new \MessagePackUnpacker;
 
-    (new $daemon($root, $unpacker, $logger))->loop();
+    (new $daemon($root, $unpacker, $logger, $projectClassLoader))->loop();
 } catch (\Throwable $e) {
     $logger->error($e->getMessage(), $e->getTrace());
 } catch (\Exception $e) {
