@@ -9,22 +9,17 @@ require __DIR__ . '/../vendor/autoload.php';
 /** load autoloader for the project **/
 require $root . '/vendor/autoload.php';
 
+$factory = new \PHPCD\Factory;
+
 $log_path = getenv('HOME') . '/.phpcd.log';
 $logger = new PHPCD\Logger($log_path);
 
 try {
-    switch ($daemon) {
-        case 'PHPCD':
-        case 'PHPID':
-            break;
-        default:
-            throw new \InvalidArgumentException('The second parameter should be PHPCD or PHPID');
-    }
+    $unpacker = $factory->createMessageUnpacker();
 
-    $daemon = '\\PHPCD\\'.$daemon;
-    $unpacker = new \MessagePackUnpacker;
+    $daemon = $factory->createDaemon($daemon_name, $root, $unpacker, $logger);
 
-    (new $daemon($root, $unpacker, $logger))->loop();
+    $daemon->loop();
 } catch (\Throwable $e) {
     $logger->error($e->getMessage(), $e->getTrace());
 } catch (\Exception $e) {
