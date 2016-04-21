@@ -6,12 +6,12 @@ namespace PHPCD;
  * Null Object may be needed
  * when we want to use PHPCD without Composer's autoloader
  */
-class NullClassLoader implements ClassLoaderInterface
+class NullClassLoader implements CITInfoRepository
 {
     /**
      * @return array
      */
-    public function getClassMap()
+    public function find()
     {
         return [];
     }

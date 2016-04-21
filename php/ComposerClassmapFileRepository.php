@@ -5,7 +5,7 @@ namespace PHPCD;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 
-class ComposerClassLoader implements ClassLoaderInterface
+class ComposerClassmapFileRepository implements CITInfoRepository
 {
     use LoggerAwareTrait;
 
@@ -46,7 +46,7 @@ class ComposerClassLoader implements ClassLoaderInterface
     /**
      * @return array
      */
-    public function getClassMap()
+    public function find()
     {
         return $this->classmap;
     }

@@ -217,12 +217,14 @@ class PHPID extends RpcServer
     public function getAbsoluteClassesPaths($path_pattern)
     {
         // @todo reload class loader if needed
-        // $this->class_loader->addClassMap() will update info about newly added classes
+        // $this->cit_info_repository->addClassMap() will update info about newly added classes
         // but not about deleted
-        $classmap = $this->class_loader->getClassMap();
+        $classmap = $this->cit_info_repository->find();
 
         $paths = [];
 
+        // Filtering should move to repository implementation
+        // Probably the whole method should land there
         foreach ($classmap as $path => $file) {
             if ($this->matchPattern($path_pattern, $path)) {
                 $paths[] = $path;

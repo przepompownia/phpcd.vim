@@ -22,7 +22,7 @@ try {
     }
 
     /** load autoloader for the project **/
-    $projectClassLoader = new \PHPCD\ComposerClassLoader($root, $logger);
+    $projectClassLoader = new \PHPCD\ComposerClassmapFileRepository($root, $logger);
 
     $daemon = '\\PHPCD\\'.$daemon;
     $unpacker = new \MessagePackUnpacker;

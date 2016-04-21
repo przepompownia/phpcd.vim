@@ -4,7 +4,7 @@ namespace PHPCD;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
-use PHPCD\ClassLoaderInterface;
+use PHPCD\CITInfoRepository;
 
 abstract class RpcServer
 {
@@ -26,9 +26,9 @@ abstract class RpcServer
     private $ipc_sockets_pair = [];
 
     /**
-     * @var ClassLoader
+     * @var CITInfoRepository
      */
-    protected $class_loader;
+    protected $cit_info_repository;
 
     /**
      * Composer root dir(containing vendor)
@@ -63,12 +63,12 @@ abstract class RpcServer
         $root,
         \MessagePackUnpacker $unpacker,
         LoggerInterface $logger,
-        ClassLoaderInterface $class_loader
+        CITInfoRepository $cit_info_repository
     ) {
         $this->setRoot($root);
         $this->unpacker = $unpacker;
         $this->setLogger($logger);
-        $this->setClassLoader($class_loader);
+        $this->setClassLoader($cit_info_repository);
 
         register_shutdown_function([$this, 'shutdown']);
 
@@ -76,9 +76,9 @@ abstract class RpcServer
         $this->setMatchType(self::MATCH_SUBSEQUENCE);
     }
 
-    protected function setClassLoader(ClassLoaderInterface $class_loader)
+    protected function setClassLoader(CITInfoRepository $cit_info_repository)
     {
-        $this->class_loader = $class_loader;
+        $this->cit_info_repository = $cit_info_repository;
         return $this;
     }
 
@@ -323,7 +323,7 @@ abstract class RpcServer
     }
     public function reloadClassLoader()
     {
-        $this->class_loader->reload();
+        $this->cit_info_repository->reload();
 
         return true;
     }
