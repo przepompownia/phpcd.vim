@@ -9,10 +9,25 @@ class Logger extends AbstractLogger
 {
     private $log_file;
 
-    public function __construct($log_path)
+    private $log_path;
+
+    public function __construct($log_path = null)
     {
+        $this->setLogPath($log_path);
+
         // @todo handle bugs with opening log file
-        $this->log_file = fopen($log_path, 'a');
+        $this->log_file = fopen($this->log_path, 'a');
+    }
+
+    private function setLogPath($log_path = null)
+    {
+        if (!$log_path) {
+            $log_path = getenv('HOME') . '/.phpcd.log';
+        }
+
+        $this->log_path = $log_path;
+
+        return $this;
     }
 
     public function __destruct()
