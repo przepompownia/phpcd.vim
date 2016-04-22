@@ -25,7 +25,7 @@ class Factory
     /**
      * @return PHPCD|PHPID
      */
-    public function createDaemon($daemon_name, $root, $unpacker, $logger)
+    public function createDaemon($daemon_name, $root, $unpacker, $pattern_matcher, $logger)
     {
         switch ($daemon_name) {
             case 'PHPCD':
@@ -38,7 +38,7 @@ class Factory
         /** relative class path did used in variable was not recognized **/
         $daemon_name = __NAMESPACE__.'\\'.$daemon_name;
 
-        $daemon = new $daemon_name($root, $unpacker, $logger);
+        $daemon = new $daemon_name($root, $unpacker, $pattern_matcher, $logger);
 
         return $daemon;
     }
