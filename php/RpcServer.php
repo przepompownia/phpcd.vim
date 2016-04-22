@@ -5,8 +5,9 @@ namespace PHPCD;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
+use PHPCD\CITInfoRepository;
 
-class RpcServer
+abstract class RpcServer
 {
     use LoggerAwareTrait;
 
@@ -22,6 +23,13 @@ class RpcServer
     private $current_msg_id;
 
     private $request_callback = [];
+
+    private $ipc_sockets_pair = [];
+
+    /**
+     * @var CITInfoRepository
+     */
+    protected $cit_info_repository;
 
     /**
      * Composer root dir(containing vendor)
@@ -42,14 +50,22 @@ class RpcServer
         $root,
         \MessagePackUnpacker $unpacker,
         PatternMatcher $pattern_matcher,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        CITInfoRepository $cit_info_repository
     ) {
         $this->setRoot($root);
         $this->unpacker = $unpacker;
         $this->pattern_matcher = $pattern_matcher;
         $this->setLogger($logger);
+        $this->setClassLoader($cit_info_repository);
 
         register_shutdown_function([$this, 'shutdown']);
+    }
+
+    protected function setClassLoader(CITInfoRepository $cit_info_repository)
+    {
+        $this->cit_info_repository = $cit_info_repository;
+        return $this;
     }
 
     /**
@@ -68,6 +84,9 @@ class RpcServer
     public function loop()
     {
         $stdin = fopen('php://stdin', 'r');
+
+        $this->prepareIPCSocketsPair();
+
         while (true) {
             $buffer = fread($stdin, 1024);
             $this->unpacker->feed($buffer);
@@ -78,15 +97,86 @@ class RpcServer
 
                 $pid = pcntl_fork();
                 if ($pid == -1) {
-                    die('failed to fork');
+                    throw new Exception('failed to fork');
                 } elseif ($pid > 0) {
                     pcntl_waitpid($pid, $status);
+
+                    $child_notifications = $this->getNotificationFromChild();
+                    $this->processChildNotification($child_notifications);
                 } else {
                     $this->onMessage($message);
                     exit;
                 }
             }
         }
+    }
+
+    private function processChildNotification($child_notifications)
+    {
+        /**
+         * This is very primitive implementation
+         * It probably should use msgpack
+         */
+        $notifications = explode(PHP_EOL, $child_notifications);
+
+        foreach ($notifications as $message) {
+            if ($message === 'reloadClassLoader') {
+                $this->reloadClassLoader();
+            }
+        }
+    }
+
+    private function prepareIPCSocketsPair()
+    {
+        $domain = (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN' ? AF_INET : AF_UNIX);
+
+        $create_pair = socket_create_pair($domain, SOCK_STREAM, 0, $this->ipc_sockets_pair);
+
+        if ($create_pair === false) {
+            $error_message = sprintf(
+                'socket_create_pair failed. Reason: %s',
+                socket_strerror(socket_last_error())
+            );
+            throw new \Exception($error_message);
+        }
+
+        return true;
+    }
+
+    protected function notifyParentProcess($msg)
+    {
+        $msg .= PHP_EOL;
+        $write = socket_write($this->ipc_sockets_pair[1], $msg, strlen($msg));
+        if ($write === false) {
+            $error_message = sprintf(
+                'Failed to write to the socket: %s',
+                socket_strerror(socket_last_error($this->ipc_sockets_pair[1]))
+            );
+            throw new \Exception($error_message);
+        }
+
+        return true;
+    }
+
+    /**
+     * Retrieve raw content from socket
+     */
+    private function getNotificationFromChild()
+    {
+        $read = [$this->ipc_sockets_pair[0]];
+        $write = $except = null;
+        $num_changed_sockets = socket_select($read, $write, $except, 0);
+
+        if ($num_changed_sockets === false) {
+            throw new \Exception(socket_strerror(socket_last_error()));
+        }
+
+        if ($num_changed_sockets > 0) {
+            $socket_output = socket_read($read[0], 1024);
+            return $socket_output;
+        }
+
+        return null;
     }
 
     public function shutdown()
@@ -216,5 +306,11 @@ class RpcServer
     {
         $message = $this->getDirectionString($direction) . json_encode($message);
         $this->logger->info($message);
+    }
+    public function reloadClassLoader()
+    {
+        $this->cit_info_repository->reload();
+
+        return true;
     }
 }

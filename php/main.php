@@ -40,7 +40,10 @@ try {
         $options['completion']['case_sensitivity']
     );
 
-    $daemon = $factory->createDaemon($daemon_name, $root, $unpacker, $pattern_matcher, $logger);
+    /** load autoloader for the project **/
+    $projectClassLoader = new \PHPCD\ComposerClassmapFileRepository($root, $logger);
+
+    $daemon = $factory->createDaemon($daemon_name, $root, $unpacker, $pattern_matcher, $logger, $projectClassLoader);
 
     $daemon->loop();
 } catch (\Throwable $e) {

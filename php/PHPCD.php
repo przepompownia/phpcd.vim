@@ -2,8 +2,6 @@
 
 namespace PHPCD;
 
-use Psr\Log\LoggerInterface;
-
 class PHPCD extends RpcServer
 {
     /**
