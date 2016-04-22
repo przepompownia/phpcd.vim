@@ -15,6 +15,10 @@ class Factory
     public function createLogger($implementation, $parameters = [])
     {
         switch ($implementation) {
+            case '\\PHPCD\\Log\\DateTimeLogger':
+                $decoratedLogger = $this->createLogger('\\PHPCD\\Log\\Logger', $parameters);
+                return new Log\DateTimeLogger($decoratedLogger);
+            break;
             case '\\PHPCD\\Log\\NullLogger':
                 return new Log\NullLogger;
             break;
