@@ -50,4 +50,17 @@ class Factory
     {
         return new \MessagePackUnpacker;
     }
+    /**
+     * @return PHPCD\PatternMatcher\PatternMatcher
+     */
+    public function createPatternMatcher($match_type = 'head', $case_sensitivity = null)
+    {
+        $case_sensitivity = (bool)$case_sensitivity;
+
+        if ($match_type === 'subsequence') {
+            return new \PHPCD\PatternMatcher\SubsequencePatternMatcher($case_sensitivity);
+        }
+
+        return new \PHPCD\PatternMatcher\HeadPatternMatcher($case_sensitivity);
+    }
 }
