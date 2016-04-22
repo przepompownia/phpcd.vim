@@ -2,7 +2,6 @@
 
 namespace PHPCD;
 
-use Psr\Log\LoggerInterface;
 use Psr\Log\AbstractLogger;
 
 class Logger extends AbstractLogger
