@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD;
+namespace PHPCD\Log;
 
 use Psr\Log\AbstractLogger;
 
