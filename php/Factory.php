@@ -15,12 +15,12 @@ class Factory
     public function createLogger($implementation, $parameters = [])
     {
         switch ($implementation) {
-            case '\\PHPCD\\NullLogger':
-                return new NullLogger;
+            case '\\PHPCD\\Log\\NullLogger':
+                return new Log\NullLogger;
             break;
-            case '\\PHPCD\\Logger':
+            case '\\PHPCD\\Log\\Logger':
             default:
-                return new Logger($parameters[0]);
+                return new Log\Logger($parameters[0]);
             break;
         }
     }
