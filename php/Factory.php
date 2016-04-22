@@ -12,7 +12,7 @@ class Factory
      * @param array $parameters parameters to logger's constructor
      * @return \Psr\Log\LoggerInterface
      */
-    public function createLogger($implementation, $parameters)
+    public function createLogger($implementation, $parameters = [])
     {
         switch ($implementation) {
             case '\\PHPCD\\Logger':
