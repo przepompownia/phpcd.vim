@@ -2,10 +2,15 @@
 error_reporting(0);
 $root = $argv[1];
 $daemon_name = $argv[2];
+$input_options = [];
 
 /** @todo: update documentation about config variables **/
 
 $default_options = [
+    'logger' => [
+        'implementation'    => '\\PHPCD\\Logger',
+        'parameters'        => []
+    ],
     'completion' => [
         'match_type' => 'head',
         'case_sensitivity' => 0
@@ -21,8 +26,11 @@ require $root . '/vendor/autoload.php';
 
 $factory = new \PHPCD\Factory;
 
-$log_path = getenv('HOME') . '/.phpcd.log';
-$logger = new PHPCD\Logger($log_path);
+/** Instantiate daemon's logger **/
+$logger = $factory->createLogger(
+    $options['logger']['implementation'],
+    $options['logger']['parameters']
+);
 
 try {
     $unpacker = $factory->createMessageUnpacker();
