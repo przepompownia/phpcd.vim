@@ -64,7 +64,22 @@ class ComposerClassmapFileRepository implements CITInfoRepository
      */
     public function find($path_pattern, ClassFilter $filter = null, $add_leading_backslash = true)
     {
-        return $this->classmap;
+        $paths = [];
+
+        foreach ($this->classmap as $classpath => $file) {
+            if ($this->pattern_matcher->match($path_pattern, $classpath)) {
+                $class_info = $this->classInfoFactory->createClassInfo($classpath);
+
+                if ($filter === null || $class_info->matchesFilter($filter)) {
+                    $paths[] = ($add_leading_backslash ? '\\' : '') . $classpath;
+                }
+            }
+        }
+
+        // @todo complete also built-in declared classes
+        // get_declared_classes() returns classes
+        // from phpcd's (not project's) environment
+        return $paths;
     }
 
     public function reload()
