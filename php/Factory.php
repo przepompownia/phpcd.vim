@@ -70,4 +70,8 @@ class Factory
 
         return new \PHPCD\PatternMatcher\HeadPatternMatcher($case_sensitivity);
     }
+    public function createClassInfoRepository($root, $pattern_matcher, $classInfoFactory, $logger)
+    {
+        return new ComposerClassmapFileRepository($root, $pattern_matcher, $classInfoFactory, $logger);
+    }
 }

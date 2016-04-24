@@ -25,6 +25,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require $root . '/vendor/autoload.php';
 
 $factory = new \PHPCD\Factory;
+$classInfoFactory = new \PHPCD\ClassInfoFactory;
 
 /** Instantiate daemon's logger **/
 $logger = $factory->createLogger(
@@ -40,10 +41,9 @@ try {
         $options['completion']['case_sensitivity']
     );
 
-    /** load autoloader for the project **/
-    $projectClassLoader = new \PHPCD\ComposerClassmapFileRepository($root, $logger);
+    $classmapFileRepository = $factory->createClassInfoRepository($root, $pattern_matcher, $classInfoFactory, $logger);
 
-    $daemon = $factory->createDaemon($daemon_name, $root, $unpacker, $pattern_matcher, $logger, $projectClassLoader);
+    $daemon = $factory->createDaemon($daemon_name, $root, $unpacker, $pattern_matcher, $logger, $classmapFileRepository);
 
     $daemon->loop();
 } catch (\Throwable $e) {
