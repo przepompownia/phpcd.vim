@@ -1,9 +1,6 @@
 <?php
 
-namespace PHPCD\Reflection;
-
-use PHPCD\ClassInfo;
-use PHPCD\ClassFilter;
+namespace PHPCD\ClassInfo;
 
 class ReflectionClass extends \ReflectionClass implements ClassInfo
 {
@@ -86,7 +83,7 @@ class ReflectionClass extends \ReflectionClass implements ClassInfo
         return $this->isAbstract() && $this->isInstantiable();
     }
 
-    public function matchesFilter(\PHPCD\ClassFilter $classFilter)
+    public function matchesFilter(ClassFilter $classFilter)
     {
         $methods = $classFilter->getFieldNames();
 

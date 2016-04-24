@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD;
+namespace PHPCD\ClassInfo;
 
 class ClassInfoFactory
 {
@@ -9,6 +9,6 @@ class ClassInfoFactory
      */
     public function createClassInfo($class)
     {
-        return new Reflection\ReflectionClass($class);
+        return new namespace\ReflectionClass($class);
     }
 }

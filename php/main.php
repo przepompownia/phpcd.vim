@@ -25,7 +25,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require $root . '/vendor/autoload.php';
 
 $factory = new \PHPCD\Factory;
-$classInfoFactory = new \PHPCD\ClassInfoFactory;
+$classInfoFactory = new \PHPCD\ClassInfo\ClassInfoFactory;
 
 /** Instantiate daemon's logger **/
 $logger = $factory->createLogger(

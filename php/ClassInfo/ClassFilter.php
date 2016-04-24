@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD;
+namespace PHPCD\ClassInfo;
 
 class ClassFilter
 {

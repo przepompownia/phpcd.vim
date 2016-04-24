@@ -1,12 +1,12 @@
 <?php
 
-namespace PHPCD;
+namespace PHPCD\ClassInfo;
 
 /**
  * Null Object may be needed
  * when we want to use PHPCD without Composer's autoloader
  */
-class NullClassLoader implements ClassInfoRepository
+class NullClassInfoRepository implements ClassInfoRepository
 {
     /**
      * @param string $path_pattern Input pattern

@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD;
+namespace PHPCD\ClassInfo;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;

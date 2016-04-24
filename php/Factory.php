@@ -30,7 +30,7 @@ class Factory
     }
 
     /**
-     * @return PHPCD|PHPID
+     * @return \PHPCD|\PHPID
      */
     public function createDaemon($daemon_name, $root, $unpacker, $pattern_matcher, $logger, $projectClassLoader)
     {
@@ -58,7 +58,7 @@ class Factory
         return new \MessagePackUnpacker;
     }
     /**
-     * @return PHPCD\PatternMatcher\PatternMatcher
+     * @return \PHPCD\PatternMatcher\PatternMatcher
      */
     public function createPatternMatcher($match_type = 'head', $case_sensitivity = null)
     {
@@ -70,8 +70,12 @@ class Factory
 
         return new \PHPCD\PatternMatcher\HeadPatternMatcher($case_sensitivity);
     }
+
+    /**
+     * @return \PHPCD\ClassInfo\ClassInfo
+     */
     public function createClassInfoRepository($root, $pattern_matcher, $classInfoFactory, $logger)
     {
-        return new ComposerClassmapFileRepository($root, $pattern_matcher, $classInfoFactory, $logger);
+        return new \PHPCD\ClassInfo\ComposerClassmapFileRepository($root, $pattern_matcher, $classInfoFactory, $logger);
     }
 }

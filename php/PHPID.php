@@ -2,6 +2,8 @@
 
 namespace PHPCD;
 
+use PHPCD\ClassInfo\ClassFilter;
+
 class PHPID extends RpcServer
 {
     public function loop()

@@ -5,7 +5,7 @@ namespace PHPCD;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\ClassInfoRepository;
+use PHPCD\ClassInfo\ClassInfoRepository;
 
 abstract class RpcServer
 {
