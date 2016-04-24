@@ -216,24 +216,35 @@ class PHPID extends RpcServer
 
     public function getAbsoluteClassesPaths($path_pattern)
     {
-        // @todo reload class loader if needed
-        // $this->cit_info_repository->addClassMap() will update info about newly added classes
-        // but not about deleted
-        $classmap = $this->cit_info_repository->find();
+        return $this->cit_info_repository->find($path_pattern, null, true);
+    }
 
-        $paths = [];
+    public function getInterfaces($path_pattern)
+    {
+        $filter = new ClassFilter(['isInterface' => true]);
 
-        // Filtering should move to repository implementation
-        // Probably the whole method should land there
-        foreach ($classmap as $path => $file) {
-            if ($this->pattern_matcher->match($path_pattern, $path)) {
-                $paths[] = $path;
-            }
-        }
+        return $this->cit_info_repository->find($path_pattern, $filter, true);
+    }
 
-        // @todo complete also built-in declared classes
-        // get_declared_classes() returns classes
-        // from phpcd's (not project's) environment
-        return $paths;
+    public function getPotentialSuperclasses($path_pattern)
+    {
+        $filter = new ClassFilter(['isFinal' => false, 'isTrait' => false, 'isInterface' => false]);
+
+        return $this->cit_info_repository->find($path_pattern, $filter, true);
+    }
+
+    public function getInstantiableClasses($path_pattern)
+    {
+        $filter = new ClassFilter(['isInstantiable' => true]);
+
+        return $this->cit_info_repository->find($path_pattern, $filter, true);
+    }
+
+    public function getNamesToTypeDeclaration($path_pattern)
+    {
+        // @TODO add basic type here, not in repository
+        $filter = new ClassFilter(['isTrait' => false]);
+
+        return $this->cit_info_repository->find($path_pattern, $filter, true);
     }
 }

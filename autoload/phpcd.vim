@@ -54,6 +54,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 
 		let [current_namespace, imports] = phpcd#GetCurrentNameSpace()
 
+		" TODO distinguish import of trait inside a class
 		if context =~? '^use\s' || context ==? 'use' " {{{
 			return phpcd#getAbsoluteClassesPaths(a:base)
 		endif " }}}
@@ -76,17 +77,17 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 
 			return rpcrequest(g:phpcd_channel_id, 'info', classname, a:base, is_static, public_only)
 		elseif context =~? 'implements'
-			" TODO complete class Foo implements
+			return phpcd#getInterfaces(a:base)
 		elseif context =~? 'extends\s\+.\+$' && a:base == ''
 			" TODO complete class Foo extends
-		elseif context =~? 'extends'
-			" TODO complete class Foo extends Prefix..
+		elseif context =~? 'extends$'
+			return phpcd#getPotentialSuperclasses(a:base)
 		elseif context =~? 'class [a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*'
 			" special case when you've typed the class keyword and the name too,
 			" only extends and implements allowed there
 			return filter(['extends', 'implements'], 'stridx(v:val, a:base) == 0')
-		elseif context =~? 'new'
-			" TODO complete $foo = new
+		elseif context =~? 'new$'
+			return phpcd#getInstantiableClasses(a:base)
 		endif " }}}
 
 		if a:base =~ '^[^$]' " {{{
@@ -101,6 +102,17 @@ function! phpcd#GetPsrNamespace() " {{{
 	return rpcrequest(g:phpcd_channel_id, 'psr4ns', expand('%:p'))
 endfunction " }}}
 
+function! phpcd#getPotentialSuperclasses(path) " {{{
+	return rpcrequest(g:phpid_channel_id, 'getPotentialSuperclasses', a:path)
+endfunction " }}}
+
+function! phpcd#getInterfaces(path) " {{{
+	return rpcrequest(g:phpid_channel_id, 'getInterfaces', a:path)
+endfunction " }}}
+
+function! phpcd#getInstantiableClasses(path) " {{{
+	return rpcrequest(g:phpid_channel_id, 'getInstantiableClasses', a:path)
+endfunction " }}}
 function! phpcd#getAbsoluteClassesPaths(path) " {{{
 	return rpcrequest(g:phpid_channel_id, 'getAbsoluteClassesPaths', a:path)
 endfunction " }}}
