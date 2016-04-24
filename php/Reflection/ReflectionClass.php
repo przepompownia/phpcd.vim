@@ -2,7 +2,10 @@
 
 namespace PHPCD\Reflection;
 
+use PHPCD\ClassInfo;
 class ReflectionClass extends \ReflectionClass
+
+class ReflectionClass extends \ReflectionClass implements ClassInfo
 {
     /**
      * Get methods available for given class
