@@ -9,9 +9,12 @@ namespace PHPCD;
 class NullClassLoader implements CITInfoRepository
 {
     /**
+     * @param string $path_pattern Input pattern
+     * @param ClassFilter $filter criteria to search
+     * @param bool $add_leading_backslash prepend class path with backslash
      * @return array
      */
-    public function find()
+    public function find($path_pattern, ClassFilter $filter = null, $add_leading_backslash = true)
     {
         return [];
     }
