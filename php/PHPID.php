@@ -218,7 +218,7 @@ class PHPID extends RpcServer
 
     public function getAbsoluteClassesPaths($path_pattern)
     {
-        return $this->cit_info_repository->find($path_pattern, null, true);
+        return $this->cit_info_repository->find($path_pattern, null, false);
     }
 
     public function getInterfaces($path_pattern)
