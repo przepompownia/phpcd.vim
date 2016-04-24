@@ -5,7 +5,7 @@ namespace PHPCD;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\CITInfoRepository;
+use PHPCD\ClassInfoRepository;
 
 abstract class RpcServer
 {
@@ -27,7 +27,7 @@ abstract class RpcServer
     private $ipc_sockets_pair = [];
 
     /**
-     * @var CITInfoRepository
+     * @var ClassInfoRepository
      */
     protected $cit_info_repository;
 
@@ -51,7 +51,7 @@ abstract class RpcServer
         \MessagePackUnpacker $unpacker,
         PatternMatcher $pattern_matcher,
         LoggerInterface $logger,
-        CITInfoRepository $cit_info_repository
+        ClassInfoRepository $cit_info_repository
     ) {
         $this->setRoot($root);
         $this->unpacker = $unpacker;
@@ -62,7 +62,7 @@ abstract class RpcServer
         register_shutdown_function([$this, 'shutdown']);
     }
 
-    protected function setClassLoader(CITInfoRepository $cit_info_repository)
+    protected function setClassLoader(ClassInfoRepository $cit_info_repository)
     {
         $this->cit_info_repository = $cit_info_repository;
         return $this;

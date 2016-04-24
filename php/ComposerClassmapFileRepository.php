@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
 
-class ComposerClassmapFileRepository implements CITInfoRepository
+class ComposerClassmapFileRepository implements ClassInfoRepository
 {
     use LoggerAwareTrait;
 

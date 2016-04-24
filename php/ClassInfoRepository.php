@@ -13,7 +13,7 @@ namespace PHPCD;
  * This repository interface is still unstable.
  * It may change in some version.
  */
-interface CITInfoRepository
+interface ClassInfoRepository
 {
     /**
      * @param string $path_pattern Input pattern
