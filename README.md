@@ -45,7 +45,7 @@ PHPCD 目前只能配合[NeoVim](http://neovim.io/)工作，这是一个艰难�
 安装 Vim-Plug 后，添加：
 
 ```
-Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer install' }
+Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer install --no-dev' }
 Plug 'vim-scripts/progressbar-widget' " 用来显示索引进度的插件
 ```
 
@@ -61,7 +61,7 @@ autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
 
 ## 使用方法
 
-首先运行 `composer install` 更新依赖并生成自动加载文件，然后打开 NeoVim。
+首先运行 `composer install --no-dev` 更新依赖并生成自动加载文件，然后打开 NeoVim。
 
 打开一个 php 文件，如果一切正常的话，几秒钟后 NeoVim 状态栏会显示更新进度条。进度条走完则可开始使用。
 

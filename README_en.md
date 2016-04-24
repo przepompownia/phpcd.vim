@@ -48,7 +48,7 @@ We recommend you use [Vim-Plug](https://github.com/junegunn/vim-plug/blob/master
 With Vim-Plug installed, put the following lines in your vimrc,
 
 ```
-Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer install' }
+Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer install --no-dev' }
 Plug 'vim-scripts/progressbar-widget' " used for showing the index progress
 ```
 
@@ -56,7 +56,7 @@ And then execute `:PlugInstall` in the command mode.
 
 ### Enable PHPCD
 
-Before the first use PHPCD, in the phpcd.vim directory run `composer install`. This is needed to install dependences and generate the autoload file.
+Before the first use PHPCD, in the phpcd.vim directory run `composer install --no-dev`. This is needed to install dependences and generate the autoload file.
 
 Let PHPCD complete php,
 
@@ -66,7 +66,7 @@ autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
 
 ## Usage
 
-First, in the project directory, run `composer install` to install all the dependent packages and generate the autoload file.
+First, in the project directory, run `composer install --no-dev` to install all the dependent packages and generate the autoload file.
 
 The default PHP command used to run PHP parts of daemon is simply `php`. You may override it by assigning `g:phpcd_php_cli_executable` another value in your `vimrc`, for example:
 ```
