@@ -17,7 +17,19 @@ $default_options = [
     ]
 ];
 
-$options = $input_options + $default_options;
+$options = $default_options;
+
+foreach ($default_options as $option => $default_values) {
+    if (isset($input_options[$option])) {
+        if (is_array($input_options[$option]) && is_array($default_options[$option])) {
+            $options[$option] = $input_options[$option] + $default_options[$option];
+        }
+
+        if (is_string($input_options[$option]) && is_string($default_options[$option])) {
+            $options[$option] = $input_options[$option];
+        }
+    }
+}
 
 /** load autoloader for PHPCD **/
 require __DIR__ . '/../vendor/autoload.php';
