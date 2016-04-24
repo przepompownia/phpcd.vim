@@ -2,7 +2,7 @@
 error_reporting(0);
 $root = $argv[1];
 $daemon_name = $argv[2];
-$input_options = json_decode($argv[3], true);
+$input_options = json_decode($argv[3], true) ?: [];
 
 /** @todo: update documentation about config variables **/
 
@@ -17,7 +17,19 @@ $default_options = [
     ]
 ];
 
-$options = $input_options + $default_options;
+$options = $default_options;
+
+foreach ($default_options as $option => $default_values) {
+    if (isset($input_options[$option])) {
+        if (is_array($input_options[$option]) && is_array($default_options[$option])) {
+            $options[$option] = $input_options[$option] + $default_options[$option];
+        }
+
+        if (is_string($input_options[$option]) && is_string($default_options[$option])) {
+            $options[$option] = $input_options[$option];
+        }
+    }
+}
 
 /** load autoloader for PHPCD **/
 require __DIR__ . '/../vendor/autoload.php';

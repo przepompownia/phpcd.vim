@@ -24,7 +24,13 @@ class Factory
             break;
             case '\\PHPCD\\Log\\Logger':
             default:
-                return new Log\Logger($parameters[0]);
+                $path = null;
+
+                if (isset($parameters[0])) {
+                    $path = $parameters[0];
+                }
+
+                return new Log\Logger($path);
             break;
         }
     }
