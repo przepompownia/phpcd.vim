@@ -4,6 +4,7 @@ namespace PHPCD;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
+use PHPCD\PatternMatcher\PatternMatcher;
 
 class ComposerClassmapFileRepository implements CITInfoRepository
 {
@@ -15,10 +16,22 @@ class ComposerClassmapFileRepository implements CITInfoRepository
 
     private $classmap = [];
 
+    /** @var ClassInfoFactory **/
+    private $classInfoFactory;
+
+    /**
+     * @var PatternMatcher
+     */
+    private $pattern_matcher;
+
     public function __construct(
         $project_root,
+        PatternMatcher $pattern_matcher,
+        ClassInfoFactory $classInfoFactory,
         LoggerInterface $logger
     ) {
+        $this->pattern_matcher = $pattern_matcher;
+        $this->classInfoFactory = $classInfoFactory;
         $this->setLogger($logger);
         $this->setProjectRoot($project_root);
         $this->loadClassMap();
