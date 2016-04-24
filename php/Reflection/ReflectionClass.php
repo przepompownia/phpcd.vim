@@ -80,4 +80,9 @@ class ReflectionClass extends \ReflectionClass implements ClassInfo
         // $element is then private
         return $element->getDeclaringClass()->getName() === $this->getName();
     }
+
+    public function isAbstractClass()
+    {
+        return $this->isAbstract() && $this->isInstantiable();
+    }
 }
