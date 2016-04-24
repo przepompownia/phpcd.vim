@@ -3,7 +3,7 @@
 namespace PHPCD\Reflection;
 
 use PHPCD\ClassInfo;
-class ReflectionClass extends \ReflectionClass
+use PHPCD\ClassFilter;
 
 class ReflectionClass extends \ReflectionClass implements ClassInfo
 {
@@ -84,5 +84,20 @@ class ReflectionClass extends \ReflectionClass implements ClassInfo
     public function isAbstractClass()
     {
         return $this->isAbstract() && $this->isInstantiable();
+    }
+
+    public function matchesFilter(\PHPCD\ClassFilter $classFilter)
+    {
+        $methods = $classFilter->getFieldNames();
+
+        foreach ($methods as $method) {
+            if ($classFilter->$method() !== null) {
+                if ($classFilter->$method() !== $this->$method()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
