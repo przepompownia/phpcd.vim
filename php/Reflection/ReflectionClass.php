@@ -20,7 +20,7 @@ class ReflectionClass extends \ReflectionClass implements ClassInfo
         $methods = $this->getMethods();
 
         foreach ($methods as $key => $method) {
-            if (false === $this->filter($method, $static, $public_only)) {
+            if (false === $this->filterMethod($method, $static, $public_only)) {
                 unset($methods[$key]);
             }
         }
@@ -41,7 +41,7 @@ class ReflectionClass extends \ReflectionClass implements ClassInfo
         $properties = $this->getProperties();
 
         foreach ($properties as $key => $property) {
-            if (false === $this->filter($property, $static, $public_only)) {
+            if (false === $this->filterMethod($property, $static, $public_only)) {
                 unset($properties[$key]);
             }
         }
@@ -53,7 +53,7 @@ class ReflectionClass extends \ReflectionClass implements ClassInfo
      * @param \ReflectionMethod|\ReflectionProperty $element
      * @return bool
      */
-    private function filter($element, $static, $public_only)
+    private function filterMethod($element, $static, $public_only)
     {
         if (!$element instanceof \ReflectionMethod && !$element instanceof \ReflectionProperty) {
             throw new \InvalidArgumentException(
