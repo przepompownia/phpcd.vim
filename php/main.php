@@ -2,7 +2,7 @@
 error_reporting(0);
 $root = $argv[1];
 $daemon_name = $argv[2];
-$input_options = json_decode($argv[3], true);
+$input_options = json_decode($argv[3], true) ?: [];
 
 /** @todo: update documentation about config variables **/
 
