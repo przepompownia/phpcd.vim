@@ -9,7 +9,6 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 		" locate the start of the word
 		let line = getline('.')
 		let start = col('.') - 1
-		let compl_begin = col('.') - 2
 		while start >= 0 && line[start - 1] =~ '[\\a-zA-Z_0-9\x7f-\xff$]'
 			let start -= 1
 		endwhile
