@@ -79,6 +79,8 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			return phpcd#getInterfaces(a:base)
 		elseif context =~? 'extends\s\+.\+$' && a:base == ''
 			" TODO complete class Foo extends
+		elseif context =~? 'extends\s\+.\+$'
+			return phpcd#getPotentialSuperclasses(a:base)
 		elseif context =~? 'extends$'
 			return phpcd#getPotentialSuperclasses(a:base)
 		elseif context =~? 'class [a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*'
