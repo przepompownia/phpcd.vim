@@ -103,19 +103,54 @@ function! phpcd#GetPsrNamespace() " {{{
 	return rpcrequest(g:phpcd_channel_id, 'psr4ns', expand('%:p'))
 endfunction " }}}
 
+function s:remapClassInfoItem(class_item, make_use_entry) " {{{
+	let result = {}
+
+	if g:phpcd_insert_class_shortname == 1
+		let result.word = a:class_item.short_name
+		let result.abbr = a:class_item.full_name
+	else
+		let result.word = a:class_item.full_name
+	endif
+
+	" It is a fix of buggy behaviour:
+	" when the currently highlighted item has no info
+	" then the preview window displayed info of the previously highlighted one.
+	" This effect still remains after we hit back
+	" to the item with no completion
+	let result.info = empty(a:class_item.doc_comment) ? 'No doc comment' : a:class_item.doc_comment
+
+	return result
+endfunction " }}}
+
+function s:prepareClassInfoOutput(response, make_use_entry) " {{{
+	let result = []
+
+	for class_item in a:response
+		call add(result, s:remapClassInfoItem(class_item, a:make_use_entry))
+	endfor
+
+	return result
+endfunction  " }}}
+
 function! phpcd#getPotentialSuperclasses(path) " {{{
-	return rpcrequest(g:phpid_channel_id, 'getPotentialSuperclasses', a:path)
+	let class_info = rpcrequest(g:phpid_channel_id, 'getPotentialSuperclasses', a:path)
+	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
 endfunction " }}}
 
 function! phpcd#getInterfaces(path) " {{{
-	return rpcrequest(g:phpid_channel_id, 'getInterfaces', a:path)
+	let class_info = rpcrequest(g:phpid_channel_id, 'getInterfaces', a:path)
+	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
 endfunction " }}}
 
 function! phpcd#getInstantiableClasses(path) " {{{
-	return rpcrequest(g:phpid_channel_id, 'getInstantiableClasses', a:path)
+	let class_info = rpcrequest(g:phpid_channel_id, 'getInstantiableClasses', a:path)
+	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
 endfunction " }}}
+
 function! phpcd#getAbsoluteClassesPaths(path) " {{{
-	return rpcrequest(g:phpid_channel_id, 'getAbsoluteClassesPaths', a:path)
+	let class_info = rpcrequest(g:phpid_channel_id, 'getAbsoluteClassesPaths', a:path)
+	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
 endfunction " }}}
 
 function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{

@@ -28,4 +28,14 @@ interface ClassInfo
      * @return bool
      */
     public function isInterface();
+
+    /**
+     * @return string
+     */
+    public function getShortName();
+
+    /**
+     * @return string
+     */
+    public function getDocComment();
 }

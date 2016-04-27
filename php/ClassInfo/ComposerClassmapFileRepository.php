@@ -64,22 +64,29 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
      */
     public function find($path_pattern, ClassFilter $filter = null, $add_leading_backslash = true)
     {
-        $paths = [];
+        $result = [];
 
         foreach ($this->classmap as $classpath => $file) {
             if ($this->pattern_matcher->match($path_pattern, $classpath)) {
+                $item = [];
+
                 $class_info = $this->classInfoFactory->createClassInfo($classpath);
 
                 if ($filter === null || $class_info->matchesFilter($filter)) {
-                    $paths[] = ($add_leading_backslash ? '\\' : '') . $classpath;
+                    $item['full_name'] = ($add_leading_backslash ? '\\' : '') . $classpath;
+                    $item['short_name'] = $class_info->getShortName();
+                    $item['doc_comment'] = $class_info->getDocComment();
                 }
+
+                $result[] = $item;
             }
+
         }
 
         // @todo complete also built-in declared classes
         // get_declared_classes() returns classes
         // from phpcd's (not project's) environment
-        return $paths;
+        return $result;
     }
 
     public function reload()
