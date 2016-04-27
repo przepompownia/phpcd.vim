@@ -158,6 +158,8 @@ class PHPCD extends RpcServer
             '/^use\s+((?<type>(constant|function)) )?(?<left>[\\\\\w]+\\\\)?({)?(?<right>[\\\\,\w\s]+)(})?\s*;$/';
         $alias_pattern = '/(?<suffix>[\\\\\w]+)(\s+as\s+(?<alias>\w+))?/';
 
+        $class_pattern = '/^\s*\b(((final|abstract)?\s+)class|interface|trait)\s+(\S+)/i';
+
         $file = new \SplFileObject($path);
         $s = [
             'namespace' => '',
@@ -166,9 +168,11 @@ class PHPCD extends RpcServer
             'class' => '',
         ];
 
+        $search_for_aliases = true;
+
         foreach ($file as $line) {
-            if (preg_match('/^\s*\b(class|interface|trait)\s+(\S+)/i', $line, $matches)) {
-                $s['class'] = $matches[2];
+            if (preg_match($class_pattern, $line, $matches)) {
+                $s['class'] = $matches[4];
                 break;
             }
             $line = trim($line);
