@@ -153,7 +153,7 @@ class PHPCD extends RpcServer
      *   ]
      * ]
      */
-    public function nsuse($path, $specific_alias='')
+    public function nsuse($path, $specific_alias = '')
     {
         $use_pattern =
             '/^use\s+((?<type>(constant|function)) )?(?<left>[\\\\\w]+\\\\)?({)?(?<right>[\\\\,\w\s]+)(})?\s*;$/';
