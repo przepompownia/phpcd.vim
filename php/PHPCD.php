@@ -148,6 +148,7 @@ class PHPCD extends RpcServer
      *
      * @return [
      *   'namespace' => 'ns',
+     *   'class' => 'shortname'
      *   'imports' => [
      *     'alias1' => 'fqdn1',
      *   ]
