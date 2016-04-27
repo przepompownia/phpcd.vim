@@ -103,7 +103,7 @@ function! phpcd#GetPsrNamespace() " {{{
 	return rpcrequest(g:phpcd_channel_id, 'psr4ns', expand('%:p'))
 endfunction " }}}
 
-function s:remapClassInfoItem(class_item, make_use_entry) " {{{
+function! s:remapClassInfoItem(class_item, make_use_entry) " {{{
 	let result = {}
 
 	if g:phpcd_insert_class_shortname == 1
@@ -123,7 +123,7 @@ function s:remapClassInfoItem(class_item, make_use_entry) " {{{
 	return result
 endfunction " }}}
 
-function s:prepareClassInfoOutput(response, make_use_entry) " {{{
+function! s:prepareClassInfoOutput(response, make_use_entry) " {{{
 	let result = []
 
 	for class_item in a:response
