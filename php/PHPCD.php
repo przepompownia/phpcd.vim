@@ -143,7 +143,8 @@ class PHPCD extends RpcServer
     /**
      * Fetch the php script's namespace and imports(by use) list.
      *
-     * @param string $path the php scrpit path
+     * @param string $path the php script path
+     * @param string $specific_alias in not empty, do not get information about other aliases
      *
      * @return [
      *   'namespace' => 'ns',
@@ -152,10 +153,11 @@ class PHPCD extends RpcServer
      *   ]
      * ]
      */
-    public function nsuse($path)
+    public function nsuse($path, $specific_alias='')
     {
         $use_pattern =
             '/^use\s+((?<type>(constant|function)) )?(?<left>[\\\\\w]+\\\\)?({)?(?<right>[\\\\,\w\s]+)(})?\s*;$/';
+
         $alias_pattern = '/(?<suffix>[\\\\\w]+)(\s+as\s+(?<alias>\w+))?/';
 
         $class_pattern = '/^\s*\b(((final|abstract)?\s+)class|interface|trait)\s+(\S+)/i';
@@ -181,7 +183,7 @@ class PHPCD extends RpcServer
             }
             if (preg_match('/(<\?php)?\s*namespace\s+(.*);$/', $line, $matches)) {
                 $s['namespace'] = $matches[2];
-            } elseif (strtolower(substr($line, 0, 3) == 'use')) {
+            } elseif ($search_for_aliases === true && strtolower(substr($line, 0, 3) == 'use')) {
                 if (preg_match($use_pattern, $line, $use_matches) && !empty($use_matches)) {
                     $expansions = array_map([self, 'trim'], explode(',', $use_matches['right']));
 
@@ -191,16 +193,29 @@ class PHPCD extends RpcServer
                             $alias = $expansion_matches['alias'];
 
                             if (empty($alias)) {
+                                // Get default alias
                                 $suffix_parts = explode('\\', $suffix);
                                 $alias = array_pop($suffix_parts);
                             }
                         }
 
                         /** empty type means import of some class **/
-                        if (empty($use_matches['type'])) {
+                        if (empty($use_matches['type']) && (empty($specific_alias) || $alias === $specific_alias)) {
                             $s['imports'][$alias] = $use_matches['left'] . $suffix;
+
+                            // While this support for function|constant aliases is not done,
+                            // we want to prevent stop search alias for class
+                            // when it found the same alias, but for class.
+                            //
+                            // Ultimately, the below condition should be moved
+                            // into more correct place.
+                            if (!empty($specific_alias) && $alias === $specific_alias) {
+                                $search_for_aliases = false;
+                            }
                         }
                         // @todo case when $use_matches['type'] is 'constant' or 'function'
+                        // This requires change of the oputput format because
+                        // we can use the same alias string to some class and some function at once
                     }
                 }
             }
