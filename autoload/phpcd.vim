@@ -106,7 +106,7 @@ endfunction " }}}
 function! s:remapClassInfoItem(class_item, make_use_entry) " {{{
 	let result = {}
 
-	if g:phpcd_insert_class_shortname == 1
+	if a:make_use_entry == 1
 		let result.word = a:class_item.short_name
 		let result.abbr = a:class_item.full_name
 	else
