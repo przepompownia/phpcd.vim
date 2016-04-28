@@ -12,7 +12,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     const ALIAS_PATTERN = '/(?<suffix>[\\\\\w]+)(\s+as\s+(?<alias>\w+))?/';
 
-    const CLASS_PATTERN = '/^\s*\b((((final|abstract)?\s+)class)|interface|trait)\s+(?<class>\S+)/i';
+    const CLASS_PATTERN = '/^\s*\b((((final|abstract)\s+)?class)|interface|trait)\s+(?<class>\S+)/i';
 
     const NAMESPACE_PATTERN = '/(<\?php)?\s*namespace\s+(?<namespace>.*);$/';
 
