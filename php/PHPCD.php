@@ -154,80 +154,14 @@ class PHPCD extends RpcServer
      *   ]
      * ]
      */
-    public function nsuse($path, $specific_alias = '')
+    public function nsuse($path)
     {
-        $use_pattern =
-            '/^use\s+((?<type>(constant|function)) )?(?<left>[\\\\\w]+\\\\)?({)?(?<right>[\\\\,\w\s]+)(})?\s*;$/';
-
-        $alias_pattern = '/(?<suffix>[\\\\\w]+)(\s+as\s+(?<alias>\w+))?/';
-
-        $class_pattern = '/^\s*\b((((final|abstract)?\s+)class)|interface|trait)\s+(?<class>\S+)/i';
-
-        $file = new \SplFileObject($path);
-        $s = [
-            'namespace' => '',
-            'imports' => [
-            ],
-            'class' => '',
+        $file_info = $this->file_info_factory->createFileInfo($path);
+        return [
+            'namespace' => $file_info->getNamespace(),
+            'class' => $file_info->getClass(),
+            'imports' => $file_info->getImports()
         ];
-
-        $search_for_aliases = true;
-
-        foreach ($file as $line) {
-            if (preg_match($class_pattern, $line, $matches)) {
-                $s['class'] = $matches['class'];
-                break;
-            }
-            $line = trim($line);
-            if (!$line) {
-                continue;
-            }
-            if (preg_match('/(<\?php)?\s*namespace\s+(.*);$/', $line, $matches)) {
-                $s['namespace'] = $matches[2];
-            } elseif ($search_for_aliases === true && strtolower(substr($line, 0, 3) == 'use')) {
-                if (preg_match($use_pattern, $line, $use_matches) && !empty($use_matches)) {
-                    $expansions = array_map([self, 'trim'], explode(',', $use_matches['right']));
-
-                    foreach ($expansions as $expansion) {
-                        if (preg_match($alias_pattern, $expansion, $expansion_matches) && !empty($expansion_matches)) {
-                            $suffix = $expansion_matches['suffix'];
-                            $alias = $expansion_matches['alias'];
-
-                            if (empty($alias)) {
-                                // Get default alias
-                                $suffix_parts = explode('\\', $suffix);
-                                $alias = array_pop($suffix_parts);
-                            }
-                        }
-
-                        /** empty type means import of some class **/
-                        if (empty($use_matches['type']) && (empty($specific_alias) || $alias === $specific_alias)) {
-                            $s['imports'][$alias] = $use_matches['left'] . $suffix;
-
-                            // While this support for function|constant aliases is not done,
-                            // we want to prevent stop search alias for class
-                            // when it found the same alias, but for class.
-                            //
-                            // Ultimately, the below condition should be moved
-                            // into more correct place.
-                            if (!empty($specific_alias) && $alias === $specific_alias) {
-                                $search_for_aliases = false;
-                            }
-                        }
-                        // @todo case when $use_matches['type'] is 'constant' or 'function'
-                        // This requires change of the oputput format because
-                        // we can use the same alias string to some class and some function at once
-                    }
-                }
-            }
-        }
-
-        return $s;
-    }
-
-    private static function trim($str)
-    {
-        return trim($str, "\t\n\r\0\x0B\\ ");
     }
 
     /**

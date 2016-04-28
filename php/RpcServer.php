@@ -6,6 +6,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\ClassInfo\ClassInfoRepository;
+use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 
 abstract class RpcServer
 {
@@ -46,17 +47,29 @@ abstract class RpcServer
      */
     protected $pattern_matcher;
 
+    /*
+     * Probably it should be replaced by
+     * correctly implemented repository
+     * to avoid scanning each file each time
+     * even if such was not changed in meantime.
+     *
+     * @var PHPFileInfoFactory
+     */
+    protected $file_info_factory;
+
     public function __construct(
         $root,
         \MessagePackUnpacker $unpacker,
         PatternMatcher $pattern_matcher,
         LoggerInterface $logger,
+        PHPFileInfoFactory $file_info_factory,
         ClassInfoRepository $cit_info_repository
     ) {
         $this->setRoot($root);
         $this->unpacker = $unpacker;
         $this->pattern_matcher = $pattern_matcher;
         $this->setLogger($logger);
+        $this->file_info_factory = $file_info_factory;
         $this->setClassLoader($cit_info_repository);
 
         register_shutdown_function([$this, 'shutdown']);

@@ -38,6 +38,7 @@ require $root . '/vendor/autoload.php';
 
 $factory = new \PHPCD\Factory;
 $classInfoFactory = new \PHPCD\ClassInfo\ClassInfoFactory;
+$file_info_factory = new \PHPCD\PHPFileInfo\PHPFileInfoFactory;
 
 /** Instantiate daemon's logger **/
 $logger = $factory->createLogger(
@@ -55,7 +56,7 @@ try {
 
     $classmapFileRepository = $factory->createClassInfoRepository($root, $pattern_matcher, $classInfoFactory, $logger);
 
-    $daemon = $factory->createDaemon($daemon_name, $root, $unpacker, $pattern_matcher, $logger, $classmapFileRepository);
+    $daemon = $factory->createDaemon($daemon_name, $root, $unpacker, $pattern_matcher, $logger, $file_info_factory, $classmapFileRepository);
 
     $daemon->loop();
 } catch (\Throwable $e) {
