@@ -218,28 +218,28 @@ class PHPID extends RpcServer
 
     public function getAbsoluteClassesPaths($path_pattern)
     {
-        return $this->cit_info_repository->find($path_pattern, null, false);
+        return $this->class_info_repository->find($path_pattern, null, false);
     }
 
     public function getInterfaces($path_pattern)
     {
         $filter = new ClassFilter(['isInterface' => true]);
 
-        return $this->cit_info_repository->find($path_pattern, $filter, true);
+        return $this->class_info_repository->find($path_pattern, $filter, true);
     }
 
     public function getPotentialSuperclasses($path_pattern)
     {
         $filter = new ClassFilter(['isFinal' => false, 'isTrait' => false, 'isInterface' => false]);
 
-        return $this->cit_info_repository->find($path_pattern, $filter, true);
+        return $this->class_info_repository->find($path_pattern, $filter, true);
     }
 
     public function getInstantiableClasses($path_pattern)
     {
         $filter = new ClassFilter(['isInstantiable' => true]);
 
-        return $this->cit_info_repository->find($path_pattern, $filter, true);
+        return $this->class_info_repository->find($path_pattern, $filter, true);
     }
 
     public function getNamesToTypeDeclaration($path_pattern)
@@ -247,6 +247,6 @@ class PHPID extends RpcServer
         // @TODO add basic type here, not in repository
         $filter = new ClassFilter(['isTrait' => false]);
 
-        return $this->cit_info_repository->find($path_pattern, $filter, true);
+        return $this->class_info_repository->find($path_pattern, $filter, true);
     }
 }

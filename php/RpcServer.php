@@ -30,7 +30,7 @@ abstract class RpcServer
     /**
      * @var ClassInfoRepository
      */
-    protected $cit_info_repository;
+    protected $class_info_repository;
 
     /**
      * Composer root dir(containing vendor)
@@ -63,21 +63,21 @@ abstract class RpcServer
         PatternMatcher $pattern_matcher,
         LoggerInterface $logger,
         PHPFileInfoFactory $file_info_factory,
-        ClassInfoRepository $cit_info_repository
+        ClassInfoRepository $class_info_repository
     ) {
         $this->setRoot($root);
         $this->unpacker = $unpacker;
         $this->pattern_matcher = $pattern_matcher;
         $this->setLogger($logger);
         $this->file_info_factory = $file_info_factory;
-        $this->setClassLoader($cit_info_repository);
+        $this->setClassLoader($class_info_repository);
 
         register_shutdown_function([$this, 'shutdown']);
     }
 
-    protected function setClassLoader(ClassInfoRepository $cit_info_repository)
+    protected function setClassLoader(ClassInfoRepository $class_info_repository)
     {
-        $this->cit_info_repository = $cit_info_repository;
+        $this->class_info_repository = $class_info_repository;
         return $this;
     }
 
@@ -322,7 +322,7 @@ abstract class RpcServer
     }
     public function reloadClassLoader()
     {
-        $this->cit_info_repository->reload();
+        $this->class_info_repository->reload();
 
         return true;
     }
