@@ -150,7 +150,7 @@ endfunction " }}}
 
 function! phpcd#getAbsoluteClassesPaths(path) " {{{
 	let class_info = rpcrequest(g:phpid_channel_id, 'getAbsoluteClassesPaths', a:path)
-	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
+	return <SID>prepareClassInfoOutput(class_info, 0)
 endfunction " }}}
 
 function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{
