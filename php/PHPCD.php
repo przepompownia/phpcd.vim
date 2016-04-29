@@ -449,7 +449,7 @@ class PHPCD extends RpcServer
         $list = (array) @$composer['autoload']['psr-4'];
         foreach ((array) @$composer['autoload-dev']['psr-4'] as $namespace => $paths) {
             if (isset($list[$namespace])) {
-                $list[$namespace] = ((array)$list[$namespace]) + ((array) $paths);
+                $list[$namespace] = array_merge((array)$list[$namespace], (array) $paths);
             } else {
                 $list[$namespace] = (array) $paths;
             }
