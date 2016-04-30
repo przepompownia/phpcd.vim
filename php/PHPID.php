@@ -249,4 +249,11 @@ class PHPID extends RpcServer
 
         return $this->class_info_repository->find($path_pattern, $filter, true);
     }
+
+    public function getFixForNewClassUsage($path, array $new_class_params)
+    {
+        $info = $this->file_info_factory->createFileInfo($path);
+
+        return $info->getFixForNewClassUsage($new_class_params);
+    }
 }

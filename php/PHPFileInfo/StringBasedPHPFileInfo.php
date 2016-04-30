@@ -169,4 +169,119 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     {
         return $this->imports;
     }
+
+    public function getFullClassPath()
+    {
+        return $this->getNamespace().'\\'.$this->getClass();
+    }
+
+    public function hasAliasUsed($alias)
+    {
+        return !empty($this->imports[$alias]);
+    }
+
+    public function getUsedAliasesForPath($full_path)
+    {
+        $used = array_filter($this->imports, function ($value) use ($full_path) {
+            return $value === $full_path;
+        });
+
+        return array_keys($used);
+    }
+
+    public function getPathByAllias($alias)
+    {
+        if ($this->hasAliasUsed($alias)) {
+            return $this->imports[$alias];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $new_class_params {
+     *  @type string  $alias
+     *  @type string  $full_path
+     *  }
+     *
+     * @return array {
+     *  @type string        $alias        the original or modified alias
+     *  @type string|null   $full_path    null if we have no new import to do
+     *  }[]
+     */
+    public function getFixForNewClassUsage(array $new_class_params)
+    {
+        $new_alias  = $new_class_params['alias'];
+        $new_path   = trim($new_class_params['full_path'], '\\');
+
+        $used_aliases = $this->getUsedAliasesForPath($new_path);
+        if (!empty($used_aliases)) {
+            $suggestions = [];
+            foreach ($used_aliases as $alias) {
+                if ($alias === $new_alias) {
+                    // Nothing to do
+                    return [['alias' => null, 'full_path' => null ]];
+                }
+
+                $suggestions[] = [ 'alias' => $alias, 'full_path' => null ];
+
+                return $suggestions;
+            }
+        }
+
+        if (!empty($this->imports)) {
+            if ($this->hasAliasUsed($new_alias)) {
+                if ($this->extractNamespaceFromPath($new_path) === $this->getNamespace()) {
+                    return [['alias' => 'namespace\\'.$new_alias, 'full_path' => null ]];
+                }
+
+                // The path was not used,
+                // but an alternative alias is needed.
+                $new_alias = $this->generateNewAlias($new_alias);
+
+                return [['alias' => $new_alias, 'full_path' => $new_path ]];
+            }
+        }
+
+        if ($new_alias === $this->getClass()) {
+            // Although it is not an error, we encourage
+            // to not override the current class name with
+            // an the same named alias of another path.
+            $new_alias = $this->generateNewAlias($new_alias);
+
+            return [['alias' => $new_alias, 'full_path' => $new_path ]];
+        }
+
+        // The alias was not used, so it does not need change,
+        // the path need to insert
+        return [['alias' => null, 'full_path' => $new_path ]];
+    }
+
+    private function extractNamespaceFromPath($path)
+    {
+        return substr($path, 0, strrpos($path, '\\'));
+    }
+
+    private function generateNewAlias($alias)
+    {
+        $suffix = '1';
+
+        do {
+            ++$suffix;
+        } while ($this->canNewAliasConflict($alias.$suffix));
+
+        return $alias.$suffix;
+    }
+
+    public function canNewAliasConflict($alias)
+    {
+        if ($this->hasAliasUsed($alias) || $alias === $this->getClass()) {
+            return true;
+        }
+
+        // TODO: use an external knowledge from repository
+        // and check if there is no class in the current namespace
+        // whose name is the same as the newly generated alias.
+        return false;
+    }
 }
