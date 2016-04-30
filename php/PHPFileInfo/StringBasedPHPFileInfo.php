@@ -2,6 +2,8 @@
 
 namespace PHPCD\PHPFileInfo;
 
+use SplFileObject;
+
 /**
  *
  */
@@ -29,7 +31,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     public function __construct($path)
     {
-        $this->file = new \SplFileObject($path);
+        $this->file = new SplFileObject($path);
         $this->scanFile();
     }
 
@@ -119,17 +121,18 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
         if (strtolower(substr($line, 0, 3) == 'use')) {
             if (preg_match(self::USE_PATTERN, $line, $use_matches) && !empty($use_matches)) {
-                $expansions = array_map([self, 'trim'], explode(',', $use_matches['right']));
+                $expansions = array_map('self::trim', explode(',', $use_matches['right']));
 
                 foreach ($expansions as $expansion) {
                     if (preg_match(self::ALIAS_PATTERN, $expansion, $expansion_matches) && !empty($expansion_matches)) {
                         $suffix = $expansion_matches['suffix'];
-                        $alias = $expansion_matches['alias'];
 
-                        if (empty($alias)) {
+                        if (empty($expansion_matches['alias'])) {
                             // Get default alias
                             $suffix_parts = explode('\\', $suffix);
                             $alias = array_pop($suffix_parts);
+                        } else {
+                            $alias = $expansion_matches['alias'];
                         }
                     }
 
