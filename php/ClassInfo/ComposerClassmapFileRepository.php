@@ -78,7 +78,9 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
                     $item['doc_comment'] = $class_info->getDocComment();
                 }
 
-                $result[] = $item;
+                if (!empty($item)) {
+                    $result[] = $item;
+                }
             }
 
         }
