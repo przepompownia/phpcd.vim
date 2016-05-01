@@ -161,6 +161,112 @@ function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{
 	return rpcrequest(g:phpcd_channel_id, 'info', '', pattern)
 endfunction " }}}
 
+function! phpcd#completeDone() " {{{
+	if empty(v:completed_item)
+		return
+	endif
+
+	let current_line = getline('.')
+	if v:completed_item.kind == 'c'
+		" if inserted string is not an absolute path
+		if stridx(v:completed_item.word, '\') != 0
+			let new_alias = v:completed_item.word
+			let new_full_path = v:completed_item.abbr
+
+			" if not in line with "use" and not within class definition (case when use trait)
+			" TODO check if the cursor is inside a class
+			" inside_class || not "use"
+			if current_line !~ '^\s\+use\s\+'
+				let fixes = phpcd#getFixForNewClassUsage(new_alias, new_full_path)
+
+				if !empty(fixes)
+					let fix = phpcd#getSelectedItem(fixes)
+				endif
+
+				if fix.alias != v:null
+					" v:completed_item.word is intentionally used there
+					" as new_alias may be changed
+					let new_alias = phpcd#promptForChangeString(fix.alias)
+
+					echoerr
+					" TODO write loop 'phpcd#promptForChangeString; call phpcd#getFixForNewClassUsage
+					" to check if the new alias has any conflict'
+					"
+					" Assume we know that the changed alias is valid.
+					" We may replace v:completed_item.word with it
+					call phpcd#replaceCurrentWordAfterCompletion(v:completed_item.word, new_alias)
+				endif
+
+				if fix.full_path != v:null
+					call phpcd#putImport(fix.full_path, new_alias)
+				endif
+			endif
+		endif
+	endif
+endfunction " }}}
+
+function phpcd#getFixForNewClassUsage(new_alias, new_full_path) "{{{
+	 return rpcrequest(g:phpid_channel_id, 'getFixForNewClassUsage', expand('%:p'), { 'alias': a:new_alias, 'full_path': a:new_full_path })
+endfunction "}}}
+
+" TODO make it private after test
+function! phpcd#getSelectedItem(list) "{{{
+	if empty(a:list)
+		return {}
+	endif
+
+	if len(a:list) == 1
+		return a:list[0]
+	endif
+
+	" TODO if the list of fixes contains more than one elements
+	" then show user interface to select the one
+	" and eventually to edit the selected
+	return a:list[0]
+endf "}}}
+
+" TODO make it private after test
+function phpcd#putImport(classpath, alias) "{{{
+	if empty(a:alias)
+		let line = printf('use %s;', a:classpath)
+	else
+		let line = printf('use %s as %s;', a:classpath, a:alias)
+	endif
+
+	if phpcd#goToLineForNewUseStatement() == 0
+		exec 'normal! i'.line
+	endif
+endfunction "}}}
+
+function! phpcd#goToLineForNewUseStatement()
+	if searchdecl('use', 1) == 0
+		" cursor is at an existing use statement
+		exec 'normal! O'
+
+		return 0
+	else
+		" cursor somewhere else, try to search namespace declaration
+		if searchdecl('namespace', 1) == 0
+			exec 'normal 2o'
+
+			return 0
+		endif
+	endif
+
+	return 1
+endfunction
+
+function phpcd#promptForChangeString(string) "{{{
+	let string = a:string
+	return string
+endfunction "}}}
+
+" TODO make it private after test
+" TODO better implementation are welcome - the current assumes that the cursor
+" stays at the end of inserted word
+function! phpcd#replaceCurrentWordAfterCompletion(current_word, new_word) "{{{
+	exec 'normal! hv'. (len(a:current_word) - 1) .'hc'. a:new_word
+endfunction "}}}
 function! phpcd#JumpToDefinition(mode) " {{{
 	if g:phpcd_channel_id < 0
 		return
