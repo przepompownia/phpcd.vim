@@ -120,6 +120,8 @@ function! s:remapClassInfoItem(class_item, make_use_entry) " {{{
 	" to the item with no completion
 	let result.info = empty(a:class_item.doc_comment) ? 'No doc comment' : a:class_item.doc_comment
 
+	let result.kind = 'c'
+
 	return result
 endfunction " }}}
 
