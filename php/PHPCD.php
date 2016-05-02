@@ -1,10 +1,11 @@
 <?php
-
 namespace PHPCD;
 
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface as Logger;
+use Lvht\MsgpackRpc\Server as RpcServer;
+use Lvht\MsgpackRpc\Handler as RpcHandler;
 
-class PHPCD extends RpcServer
+class PHPCD implements RpcHandler
 {
     const MATCH_SUBSEQUENCE = 'match_subsequence';
     const MATCH_HEAD        = 'match_head';
@@ -12,10 +13,32 @@ class PHPCD extends RpcServer
     private $matchType;
 
     /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
+     * @var RpcServer
+     */
+    private $server;
+
+    private $root;
+
+    public function __construct($root, Logger $logger, $match_type = self::MATCH_HEAD)
+    {
+        $this->logger = $logger;
+        $this->root = $root;
+    }
+
+    public function setServer(RpcServer $server)
+    {
+        $this->server = $server;
+    }
+
+    /**
      * Set type of matching
      *
      * @param string $matchType
-     * @return null;
      */
     public function setMatchType($matchType)
     {
@@ -24,19 +47,6 @@ class PHPCD extends RpcServer
         }
 
         $this->matchType = $matchType;
-
-        return null;
-    }
-
-    public function __construct(
-        $root,
-        \MessagePackUnpacker $unpacker,
-        LoggerInterface $logger
-    ) {
-        parent::__construct($root, $unpacker, $logger);
-
-        /** Set default match type **/
-        $this->setMatchType(self::MATCH_SUBSEQUENCE);
     }
 
     /**

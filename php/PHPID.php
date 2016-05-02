@@ -1,13 +1,33 @@
 <?php
-
 namespace PHPCD;
 
-class PHPID extends RpcServer
+use Psr\Log\LoggerInterface as Logger;
+use Lvht\MsgpackRpc\Server as RpcServer;
+use Lvht\MsgpackRpc\Handler as RpcHandler;
+
+class PHPID implements RpcHandler
 {
-    public function loop()
+    /**
+     * @var RpcServer
+     */
+    private $server;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    private $root;
+
+    public function __construct($root, Logger $logger)
     {
-        $this->index();
-        parent::loop();
+        $this->root = $root;
+        $this->logger = $logger;
+    }
+
+    public function setServer(RpcServer $server)
+    {
+        $this->server = $server;
     }
 
     /**
@@ -199,16 +219,16 @@ class PHPID extends RpcServer
     private function vimOpenProgressBar($max)
     {
         $cmd = 'let g:pb = vim#widgets#progressbar#NewSimpleProgressBar("Indexing:", ' . $max . ')';
-        $this->call('vim_command', [$cmd]);
+        $this->server->call('vim_command', [$cmd]);
     }
 
     private function vimUpdateProgressBar()
     {
-        $this->call('vim_command', ['call g:pb.incr()']);
+        $this->server->call('vim_command', ['call g:pb.incr()']);
     }
 
     private function vimCloseProgressBar()
     {
-        $this->call('vim_command', ['call g:pb.restore()']);
+        $this->server->call('vim_command', ['call g:pb.restore()']);
     }
 }
