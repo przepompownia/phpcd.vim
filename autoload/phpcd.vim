@@ -211,20 +211,31 @@ endfunction "}}}
 
 " TODO make it private after test
 function! phpcd#getSelectedItem(list) "{{{
-	if empty(a:list)
+	let list = a:list
+
+	if empty(list)
 		return {}
 	endif
 
-	if len(a:list) == 1
-		return a:list[0]
+	if len(list) == 1
+		return list[0]
 	endif
 
-	" TODO if the list of fixes contains more than one elements
-	" then show user interface to select the one
-	" and eventually to edit the selected
-	return a:list[0]
+	let prompt = printf("%s: ", 'Select path')
+	return <SID>promptByInputList(list, prompt)
 endf "}}}
 
+function s:promptByInputList(list, msg) "{{{
+	let list = map(copy(a:list), '(v:key + 1) . ": " . (empty(v:val["alias"]) ? "" : v:val["alias"]) . (empty(v:val["full_path"]) ? "" : " ".v:val["full_path"])')
+	let list = insert(list, a:msg)
+	let item = 0
+
+	while (item <= 0 || item > len(a:list))
+		let item = inputlist(list)
+	endwhile
+
+	return a:list[item - 1]
+endfunction "}}}
 " TODO make it private after test
 function phpcd#putImport(classpath, alias) "{{{
 	if empty(a:alias)
