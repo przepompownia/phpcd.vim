@@ -176,7 +176,7 @@ function! phpcd#completeDone() " {{{
 			" if not in line with "use" and not within class definition (case when use trait)
 			" TODO check if the cursor is inside a class
 			" inside_class || not "use"
-			if current_line !~ '^\s\+use\s\+'
+			if current_line !~ '^\s*use\s\+'
 				let fixes = phpcd#getFixForNewClassUsage(new_alias, new_full_path)
 
 				if !empty(fixes)
