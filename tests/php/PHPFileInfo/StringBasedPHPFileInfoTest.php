@@ -51,12 +51,21 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
                 ['namespace\Image' => ['alias' => 'namespace\Image', 'full_path' => null]]
             ],
             [
-                // When the same path is aliased more than once
-                // give user the choice
+                // When the same path is aliased more than once, but one of alias is the same as inserted
+                // then do nothing
                 '\PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Category',
                 ['alias' => 'Image', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Image'],
                 [
-                    'Image' => ['alias' => 'Image', 'full_path' => null],
+                    null => ['alias' => null, 'full_path' => null]
+                ]
+            ],
+            [
+                // When the same path is aliased more than once, but differently than the inserted alias
+                // give user the choice from the list of used aliases
+                '\PHPCD\Fixtures\ClassNamesAndAliases\Models\Gallery',
+                ['alias' => 'Image', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Models\Image'],
+                [
+                    'Photo' => ['alias' => 'Photo', 'full_path' => null],
                     'Picture' => ['alias' => 'Picture', 'full_path' => null]
                 ]
             ]
