@@ -10,7 +10,7 @@
         "psr-4": {"PHPCD\\": "php/"}
     },
     "require": {
-        "psr/log": "1.0.0"
+        "psr/log": "^1.0"
     },
     "config": {
       "classmap-authoritative": true

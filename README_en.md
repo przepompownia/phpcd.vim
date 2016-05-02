@@ -48,7 +48,7 @@ We recommend you use [Vim-Plug](https://github.com/junegunn/vim-plug/blob/master
 With Vim-Plug installed, put the following lines in your vimrc,
 
 ```
-Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer install' }
+Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer update' }
 Plug 'vim-scripts/progressbar-widget' " used for showing the index progress
 ```
 
