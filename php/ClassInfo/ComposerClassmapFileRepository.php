@@ -82,7 +82,6 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
                     $result[] = $item;
                 }
             }
-
         }
 
         // @todo complete also built-in declared classes

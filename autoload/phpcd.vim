@@ -236,6 +236,7 @@ function s:promptByInputList(list, msg) "{{{
 
 	return a:list[item - 1]
 endfunction "}}}
+
 " TODO make it private after test
 function phpcd#putImport(classpath, alias) "{{{
 	if empty(a:alias)
