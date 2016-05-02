@@ -224,9 +224,9 @@ class StringBasedPHPFileInfo implements PHPFileInfo
                 }
 
                 $suggestions[] = [ 'alias' => $alias, 'full_path' => null ];
-
-                return $suggestions;
             }
+
+            return $suggestions;
         }
 
         if (!empty($this->imports)) {
