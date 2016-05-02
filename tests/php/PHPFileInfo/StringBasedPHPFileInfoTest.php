@@ -75,6 +75,12 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
 
         $fix = $file_info->getFixForNewClassUsage($input_class_info);
 
+        $this->assertEquals(
+            count($expected_suggestions),
+            count($fix),
+            'Count of fixes differs from expected.'
+        );
+
         foreach ($fix as $suggestion) {
             $new_alias = $suggestion['alias'];
 
