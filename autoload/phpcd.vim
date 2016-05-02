@@ -250,7 +250,7 @@ function phpcd#putImport(classpath, alias) "{{{
 	endif
 endfunction "}}}
 
-function! phpcd#goToLineForNewUseStatement()
+function! phpcd#goToLineForNewUseStatement() "{{{
 	if searchdecl('use', 1) == 0
 		" cursor is at an existing use statement
 		exec 'normal! O'
@@ -266,7 +266,7 @@ function! phpcd#goToLineForNewUseStatement()
 	endif
 
 	return 1
-endfunction
+endfunction "}}}
 
 function phpcd#promptForChangeString(msg, string) "{{{
 	let string = inputdialog(a:msg, a:string)
