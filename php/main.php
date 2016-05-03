@@ -1,5 +1,8 @@
 <?php
 error_reporting(0);
+set_error_handler(function ($severity, $message, $file, $line) {
+    throw new ErrorException($message, 0, $severity, $file, $line);
+});
 $root = $argv[1];
 $daemon_name = $argv[2];
 $input_options = json_decode($argv[3], true) ?: [];
@@ -8,7 +11,7 @@ $input_options = json_decode($argv[3], true) ?: [];
 
 $default_options = [
     'logger' => [
-        'implementation'    => '\\PHPCD\\Logger',
+        'implementation'    => '\\Monolog\\Logger',
         'parameters'        => []
     ],
     'completion' => [
@@ -33,12 +36,12 @@ foreach ($default_options as $option => $default_values) {
 
 /** load autoloader for PHPCD **/
 require __DIR__ . '/../vendor/autoload.php';
-/** load autoloader for the project **/
-require $root . '/vendor/autoload.php';
+
+use Lvht\MsgpackRpc\ForkServer;
+use Lvht\MsgpackRpc\DefaultMsgpacker;
+use Lvht\MsgpackRpc\StdIo;
 
 $factory = new \PHPCD\Factory;
-$classInfoFactory = new \PHPCD\ClassInfo\ClassInfoFactory;
-$file_info_factory = new \PHPCD\PHPFileInfo\PHPFileInfoFactory;
 
 /** Instantiate daemon's logger **/
 $logger = $factory->createLogger(
@@ -47,18 +50,21 @@ $logger = $factory->createLogger(
 );
 
 try {
-    $unpacker = $factory->createMessageUnpacker();
+    /** load autoloader for the project **/
+    require $root . '/vendor/autoload.php';
 
-    $pattern_matcher = $factory->createPatternMatcher(
-        $options['completion']['match_type'],
-        $options['completion']['case_sensitivity']
-    );
+    // $handler = $factory->createRpcHandler($daemon_name, $root, $logger, $pattern_matcher, $file_info_factory, $classmapFileRepository);
+    $handler = $factory->createRpcHandler($daemon_name, $root, $logger, $options);
 
-    $classmapFileRepository = $factory->createClassInfoRepository($root, $pattern_matcher, $classInfoFactory, $logger);
+    $packer = $factory->createMsgpacker();
+    $io  = $factory->createIo();
+    $server = $factory->createServer($packer, $io, $handler);
 
-    $daemon = $factory->createDaemon($daemon_name, $root, $unpacker, $pattern_matcher, $logger, $file_info_factory, $classmapFileRepository);
+    if ($daemon == 'PHPID') {
+        $handler->index();
+    }
 
-    $daemon->loop();
+    $server->loop();
 } catch (\Throwable $e) {
     $logger->error($e->getMessage(), $e->getTrace());
 } catch (\Exception $e) {

@@ -2,6 +2,14 @@
 
 namespace PHPCD;
 
+use Lvht\MsgpackRpc\Handler as RpcHandler;
+use Lvht\MsgpackRpc\Server;
+use Lvht\MsgpackRpc\ForkServer;
+use Lvht\MsgpackRpc\Msgpacker;
+use Lvht\MsgpackRpc\DefaultMsgpacker;
+use Lvht\MsgpackRpc\Io;
+use Lvht\MsgpackRpc\StdIo;
+
 /**
  * Simple factory to separate details of object creation
  */
@@ -22,6 +30,13 @@ class Factory
             case '\\PHPCD\\Log\\NullLogger':
                 return new Log\NullLogger;
             break;
+            case '\\Monolog\\Logger':
+                $path = ((isset($parameters[0]) && is_string($parameters[0])) ? $parameters[0] : getenv('HOME') . '/.phpcd.log');
+
+                $logger = new \Monolog\Logger('PHPCD');
+                $logger->pushHandler(new Monolog\Handler\StreamHandler($path, \Monolog\Logger::DEBUG));
+                return $logger;
+            break;
             case '\\PHPCD\\Log\\Logger':
             default:
                 $path = null;
@@ -36,45 +51,54 @@ class Factory
     }
 
     /**
-     * @return \PHPCD|\PHPID
+     * @return RpcHandler
      */
-    public function createDaemon(
+    public function createRpcHandler(
         $daemon_name,
         $root,
-        $unpacker,
-        $pattern_matcher,
         $logger,
-        $file_info_factory,
-        $projectClassLoader) {
+        $options
+    ) {
         switch ($daemon_name) {
             case 'PHPCD':
+                $pattern_matcher = $this->createPatternMatcher(
+                    $options['completion']['match_type'],
+                    $options['completion']['case_sensitivity']
+                );
+
+                $file_info_factory = new \PHPCD\PHPFileInfo\PHPFileInfoFactory;
+
+                return new PHPCD($root, $logger, $pattern_matcher, $file_info_factory);
             case 'PHPID':
-                break;
+                $class_info_factory = new \PHPCD\ClassInfo\ClassInfoFactory;
+
+                $clases_repository = $this->createClassInfoRepository(
+                    $root,
+                    $pattern_matcher,
+                    $class_info_factory,
+                    $logger
+                );
+
+                return new PHPCD($root, $logger, $clases_repository);
             default:
                 throw new \InvalidArgumentException('The daemon name should be PHPCD or PHPID');
         }
-
-        /** relative class path did used in variable was not recognized **/
-        $daemon_name = __NAMESPACE__.'\\'.$daemon_name;
-
-        $daemon = new $daemon_name(
-            $root,
-            $unpacker,
-            $pattern_matcher,
-            $logger,
-            $file_info_factory,
-            $projectClassLoader
-        );
-
-        return $daemon;
     }
 
     /**
-     * @return \MessagePackUnpacker
+     * @return Msgpacker
      */
-    public function createMessageUnpacker()
+    public function createMsgpacker()
     {
-        return new \MessagePackUnpacker;
+        return new DefaultMsgpacker;
+    }
+
+    /**
+     * @return Io
+     */
+    public function createIo()
+    {
+        return new StdIo;
     }
     /**
      * @return \PHPCD\PatternMatcher\PatternMatcher
@@ -96,5 +120,12 @@ class Factory
     public function createClassInfoRepository($root, $pattern_matcher, $classInfoFactory, $logger)
     {
         return new \PHPCD\ClassInfo\ComposerClassmapFileRepository($root, $pattern_matcher, $classInfoFactory, $logger);
+    }
+    /**
+     * @return Server
+     */
+    public function createServer(Msgpacker $packer, Io $io, RpcHandler $handler)
+    {
+        return new ForkServer($packer, $io, $handler);
     }
 }

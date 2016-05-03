@@ -13,7 +13,8 @@
         "psr-4": {"PHPCD\\": "tests/php/"}
     },
     "require": {
-        "psr/log": "1.0.0"
+        "psr/log": "^1.0",
+        "lvht/msgpack-rpc": "dev-master"
     },
     "config": {
       "classmap-authoritative": true

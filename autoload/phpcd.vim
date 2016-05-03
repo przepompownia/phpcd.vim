@@ -206,7 +206,7 @@ function! phpcd#completeDone() " {{{
 endfunction " }}}
 
 function phpcd#getFixForNewClassUsage(new_alias, new_full_path) "{{{
-	 return rpcrequest(g:phpid_channel_id, 'getFixForNewClassUsage', expand('%:p'), { 'alias': a:new_alias, 'full_path': a:new_full_path })
+	 return rpcrequest(g:phpcd_channel_id, 'getFixForNewClassUsage', expand('%:p'), { 'alias': a:new_alias, 'full_path': a:new_full_path })
 endfunction "}}}
 
 " TODO make it private after test

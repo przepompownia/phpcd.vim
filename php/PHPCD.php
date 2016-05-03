@@ -1,9 +1,69 @@
 <?php
-
 namespace PHPCD;
 
-class PHPCD extends RpcServer
+use Psr\Log\LoggerInterface as Logger;
+use Psr\Log\LoggerAwareTrait;
+use Lvht\MsgpackRpc\Server as RpcServer;
+use Lvht\MsgpackRpc\Handler as RpcHandler;
+use PHPCD\PatternMatcher\PatternMatcher;
+use PHPCD\PHPFileInfo\PHPFileInfoFactory;
+
+class PHPCD implements RpcHandler
 {
+    use LoggerAwareTrait;
+
+    /**
+     * @var RpcServer
+     */
+    private $server;
+
+    private $root;
+
+    /**
+     * @var PatternMatcher
+     */
+    private $pattern_matcher;
+
+    /*
+     * Probably it should be replaced by
+     * correctly implemented repository
+     * to avoid scanning each file each time
+     * even if such was not changed in meantime.
+     *
+     * @var PHPFileInfoFactory
+     */
+    private $file_info_factory;
+
+    public function __construct(
+        $root,
+        Logger $logger,
+        PatternMatcher $pattern_matcher,
+        PHPFileInfoFactory $file_info_factory
+    ) {
+        $this->setRoot($root);
+        $this->pattern_matcher = $pattern_matcher;
+        $this->setLogger($logger);
+        $this->file_info_factory = $file_info_factory;
+    }
+
+    /**
+     * Set the composer root dir
+     *
+     * @param string $root the path
+     * @return static
+     */
+    private function setRoot($root)
+    {
+        // @TODO do we need to validate this input variable?
+        $this->root = $root;
+        return $this;
+    }
+
+    public function setServer(RpcServer $server)
+    {
+        $this->server = $server;
+    }
+
     /**
      *  @param array Map between modifier numbers and displayed symbols
      */
@@ -304,6 +364,13 @@ class PHPCD extends RpcServer
             $this->logger->debug($e->getMessage());
             return [null, []];
         }
+    }
+
+    public function getFixForNewClassUsage($path, array $new_class_params)
+    {
+        $info = $this->file_info_factory->createFileInfo($path);
+
+        return $info->getFixForNewClassUsage($new_class_params);
     }
 
     private function functionOrConstantInfo($pattern)

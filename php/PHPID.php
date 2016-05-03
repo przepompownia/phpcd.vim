@@ -1,15 +1,61 @@
 <?php
-
 namespace PHPCD;
 
+use Psr\Log\LoggerInterface as Logger;
+use Psr\Log\LoggerAwareTrait;
+use Lvht\MsgpackRpc\Server as RpcServer;
+use Lvht\MsgpackRpc\Handler as RpcHandler;
 use PHPCD\ClassInfo\ClassFilter;
+use PHPCD\ClassInfo\ClassInfoRepository;
 
-class PHPID extends RpcServer
+class PHPID implements RpcHandler
 {
-    public function loop()
+    use LoggerAwareTrait;
+
+    /**
+     * @var RpcServer
+     */
+    private $server;
+
+    private $root;
+
+    /**
+     * @var ClassInfoRepository
+     */
+    private $classes_repository;
+
+    public function __construct(
+        $root,
+        Logger $logger,
+        ClassInfoRepository $classes_repository
+    ) {
+        $this->setRoot($root);
+        $this->setLogger($logger);
+        $this->setClassInfoRepository($classes_repository);
+    }
+
+    /**
+     * Set the composer root dir
+     *
+     * @param string $root the path
+     * @return static
+     */
+    private function setRoot($root)
     {
-        $this->index();
-        parent::loop();
+        // @TODO do we need to validate this input variable?
+        $this->root = $root;
+        return $this;
+    }
+
+    public function setServer(RpcServer $server)
+    {
+        $this->server = $server;
+    }
+
+    protected function setClassInfoRepository(ClassInfoRepository $classes_repository)
+    {
+        $this->classes_repository = $classes_repository;
+        return $this;
     }
 
     /**
@@ -75,7 +121,6 @@ class PHPID extends RpcServer
         $this->initIndexDir();
 
         exec('composer dump-autoload -o -d ' . $this->root . ' 2>&1 >/dev/null');
-        $this->notifyParentProcess('reloadClassLoader');
 
         $this->class_map = require $this->root
             . '/vendor/composer/autoload_classmap.php';
@@ -203,43 +248,43 @@ class PHPID extends RpcServer
     private function vimOpenProgressBar($max)
     {
         $cmd = 'let g:pb = vim#widgets#progressbar#NewSimpleProgressBar("Indexing:", ' . $max . ')';
-        $this->call('vim_command', [$cmd]);
+        $this->server->call('vim_command', [$cmd]);
     }
 
     private function vimUpdateProgressBar()
     {
-        $this->call('vim_command', ['call g:pb.incr()']);
+        $this->server->call('vim_command', ['call g:pb.incr()']);
     }
 
     private function vimCloseProgressBar()
     {
-        $this->call('vim_command', ['call g:pb.restore()']);
+        $this->server->call('vim_command', ['call g:pb.restore()']);
     }
 
     public function getAbsoluteClassesPaths($path_pattern)
     {
-        return $this->class_info_repository->find($path_pattern, null, false);
+        return $this->classes_repository->find($path_pattern, null, false);
     }
 
     public function getInterfaces($path_pattern)
     {
         $filter = new ClassFilter(['isInterface' => true]);
 
-        return $this->class_info_repository->find($path_pattern, $filter, true);
+        return $this->classes_repository->find($path_pattern, $filter, true);
     }
 
     public function getPotentialSuperclasses($path_pattern)
     {
         $filter = new ClassFilter(['isFinal' => false, 'isTrait' => false, 'isInterface' => false]);
 
-        return $this->class_info_repository->find($path_pattern, $filter, true);
+        return $this->classes_repository->find($path_pattern, $filter, true);
     }
 
     public function getInstantiableClasses($path_pattern)
     {
         $filter = new ClassFilter(['isInstantiable' => true]);
 
-        return $this->class_info_repository->find($path_pattern, $filter, true);
+        return $this->classes_repository->find($path_pattern, $filter, true);
     }
 
     public function getNamesToTypeDeclaration($path_pattern)
@@ -247,13 +292,6 @@ class PHPID extends RpcServer
         // @TODO add basic type here, not in repository
         $filter = new ClassFilter(['isTrait' => false]);
 
-        return $this->class_info_repository->find($path_pattern, $filter, true);
-    }
-
-    public function getFixForNewClassUsage($path, array $new_class_params)
-    {
-        $info = $this->file_info_factory->createFileInfo($path);
-
-        return $info->getFixForNewClassUsage($new_class_params);
+        return $this->classes_repository->find($path_pattern, $filter, true);
     }
 }
