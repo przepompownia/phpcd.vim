@@ -34,7 +34,7 @@ class Factory
                 $path = ((isset($parameters[0]) && is_string($parameters[0])) ? $parameters[0] : getenv('HOME') . '/.phpcd.log');
 
                 $logger = new \Monolog\Logger('PHPCD');
-                $logger->pushHandler(new Monolog\Handler\StreamHandler($path, \Monolog\Logger::DEBUG));
+                $logger->pushHandler(new \Monolog\Handler\StreamHandler($path, \Monolog\Logger::DEBUG));
                 return $logger;
             break;
             case '\\PHPCD\\Log\\Logger':
@@ -59,13 +59,13 @@ class Factory
         $logger,
         $options
     ) {
+        $pattern_matcher = $this->createPatternMatcher(
+            $options['completion']['match_type'],
+            $options['completion']['case_sensitivity']
+        );
+
         switch ($daemon_name) {
             case 'PHPCD':
-                $pattern_matcher = $this->createPatternMatcher(
-                    $options['completion']['match_type'],
-                    $options['completion']['case_sensitivity']
-                );
-
                 $file_info_factory = new \PHPCD\PHPFileInfo\PHPFileInfoFactory;
 
                 return new PHPCD($root, $logger, $pattern_matcher, $file_info_factory);
@@ -79,7 +79,7 @@ class Factory
                     $logger
                 );
 
-                return new PHPCD($root, $logger, $clases_repository);
+                return new PHPID($root, $logger, $clases_repository);
             default:
                 throw new \InvalidArgumentException('The daemon name should be PHPCD or PHPID');
         }

@@ -60,7 +60,7 @@ try {
     $io  = $factory->createIo();
     $server = $factory->createServer($packer, $io, $handler);
 
-    if ($daemon == 'PHPID') {
+    if ($daemon_name == 'PHPID') {
         $handler->index();
     }
 
