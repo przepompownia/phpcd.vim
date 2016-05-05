@@ -21,7 +21,7 @@ class ClassFilter
                 $this->validateField($criteria[$field]);
                 $this->criteria[$field] = $criteria[$field];
             } else {
-                 $criteria[$field] = null;
+                $this->criteria[$field] = null;
             }
         }
 
