@@ -189,7 +189,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
         return array_keys($used);
     }
 
-    public function getPathByAllias($alias)
+    public function getPathByAlias($alias)
     {
         if ($this->hasAliasUsed($alias)) {
             return $this->imports[$alias];
