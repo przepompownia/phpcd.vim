@@ -60,6 +60,13 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
             [
+                '\PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Category',
+                ['alias' => 'PHPUnit_Framework_TestCase', 'full_path' => '\PHPUnit_Framework_TestCase'],
+                [
+                    null => ['alias' => null, 'full_path' => 'PHPUnit_Framework_TestCase']
+                ]
+            ],
+            [
                 // When the same path is aliased more than once, but differently than the inserted alias
                 // give user the choice from the list of used aliases
                 '\PHPCD\Fixtures\ClassNamesAndAliases\Models\Gallery',

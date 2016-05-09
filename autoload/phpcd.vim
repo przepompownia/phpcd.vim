@@ -183,22 +183,22 @@ function! phpcd#completeDone() " {{{
 					let fix = phpcd#getSelectedItem(fixes)
 				endif
 
-				if fix.alias != v:null
+				if (fix.alias != v:null)
 					" v:completed_item.word is intentionally used there
 					" as new_alias may be changed
 					let prompt = 'Confirm the new alias lub enter any custom: '
-					let new_alias = phpcd#promptForChangeString(prompt, fix.alias)
+					let fix.alias = phpcd#promptForChangeString(prompt, fix.alias)
 
 					" TODO write loop 'phpcd#promptForChangeString; call phpcd#getFixForNewClassUsage'
 					" to check if the new alias is valid and has no conflicts
 					"
 					" Assume we know that the changed alias is valid.
 					" We may replace v:completed_item.word with it
-					call phpcd#replaceCurrentWordAfterCompletion(v:completed_item.word, new_alias)
+					call phpcd#replaceCurrentWordAfterCompletion(v:completed_item.word, fix.alias)
 				endif
 
-				if fix.full_path != v:null
-					call phpcd#putImport(fix.full_path, new_alias)
+				if (fix.full_path != v:null)
+					call phpcd#putImport(fix.full_path, fix.alias, 0)
 				endif
 			endif
 		endif
@@ -237,20 +237,29 @@ function s:promptByInputList(list, msg) "{{{
 	return a:list[item - 1]
 endfunction "}}}
 
-" TODO make it private after test
-function phpcd#putImport(classpath, alias) "{{{
+function s:makeImportLineText(classpath, alias) "{{{
 	if empty(a:alias)
 		let line = printf('use %s;', a:classpath)
 	else
 		let line = printf('use %s as %s;', a:classpath, a:alias)
 	endif
 
-	if phpcd#goToLineForNewUseStatement() == 0
-		exec 'normal! i'.line
+	return line
+endfunction "}}}
+
+" TODO make it private after test
+function phpcd#putImport(classpath, alias, stay_here) "{{{
+
+	if phpcd#goToLineForNewUseStatement(a:stay_here) == 0
+		exec 'normal! cc'.<SID>makeImportLineText(a:classpath, a:alias)
 	endif
 endfunction "}}}
 
-function! phpcd#goToLineForNewUseStatement() "{{{
+function! phpcd#goToLineForNewUseStatement(stay_here) "{{{
+	if a:stay_here == 1
+		return 0
+	endif
+
 	if searchdecl('use', 1) == 0
 		" cursor is at an existing use statement
 		exec 'normal! O'
