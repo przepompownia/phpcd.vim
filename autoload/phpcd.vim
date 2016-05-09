@@ -105,6 +105,7 @@ endfunction " }}}
 
 function! s:remapClassInfoItem(class_item, make_use_entry) " {{{
 	let result = {}
+	let result.menu = a:class_item.short_name
 
 	if a:make_use_entry == 1
 		let result.word = a:class_item.short_name
