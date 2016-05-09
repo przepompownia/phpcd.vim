@@ -198,7 +198,7 @@ function! phpcd#completeDone() " {{{
 				endif
 
 				if (fix.full_path != v:null)
-					call phpcd#putImport(fix.full_path, fix.alias)
+					call phpcd#putImport(fix.full_path, fix.alias, 0)
 				endif
 			endif
 		endif
@@ -248,14 +248,18 @@ function s:makeImportLineText(classpath, alias) "{{{
 endfunction "}}}
 
 " TODO make it private after test
-function phpcd#putImport(classpath, alias) "{{{
+function phpcd#putImport(classpath, alias, stay_here) "{{{
 
-	if phpcd#goToLineForNewUseStatement() == 0
-		exec 'normal! i'.<SID>makeImportLineText(a:classpath, a:alias)
+	if phpcd#goToLineForNewUseStatement(a:stay_here) == 0
+		exec 'normal! cc'.<SID>makeImportLineText(a:classpath, a:alias)
 	endif
 endfunction "}}}
 
-function! phpcd#goToLineForNewUseStatement() "{{{
+function! phpcd#goToLineForNewUseStatement(stay_here) "{{{
+	if a:stay_here == 1
+		return 0
+	endif
+
 	if searchdecl('use', 1) == 0
 		" cursor is at an existing use statement
 		exec 'normal! O'
