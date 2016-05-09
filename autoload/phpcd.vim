@@ -237,16 +237,21 @@ function s:promptByInputList(list, msg) "{{{
 	return a:list[item - 1]
 endfunction "}}}
 
-" TODO make it private after test
-function phpcd#putImport(classpath, alias) "{{{
+function s:makeImportLineText(classpath, alias) "{{{
 	if empty(a:alias)
 		let line = printf('use %s;', a:classpath)
 	else
 		let line = printf('use %s as %s;', a:classpath, a:alias)
 	endif
 
+	return line
+endfunction "}}}
+
+" TODO make it private after test
+function phpcd#putImport(classpath, alias) "{{{
+
 	if phpcd#goToLineForNewUseStatement() == 0
-		exec 'normal! i'.line
+		exec 'normal! i'.<SID>makeImportLineText(a:classpath, a:alias)
 	endif
 endfunction "}}}
 
