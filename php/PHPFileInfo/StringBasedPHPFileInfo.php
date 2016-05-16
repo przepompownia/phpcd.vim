@@ -31,8 +31,10 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     public function __construct($path)
     {
-        $this->file = new SplFileObject($path);
-        $this->scanFile();
+        if (file_exists($path) && is_readable($path)) {
+            $this->file = new SplFileObject($path);
+            $this->scanFile();
+        }
     }
 
     /**
