@@ -105,6 +105,7 @@ endfunction " }}}
 
 function! s:remapClassInfoItem(class_item, make_use_entry) " {{{
 	let result = {}
+	let result.menu = a:class_item.short_name
 
 	if a:make_use_entry == 1
 		let result.word = a:class_item.short_name
@@ -413,6 +414,10 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		let path = cwd.substitute(path, "'", '', 'g')
 		let path = fnamemodify(path, ':p:.')
 		return [path, '$', 0] "}}}
+	elseif a:symbol_context =~ '.\+@' " laravel route
+		let full_classname = strpart(a:symbol_context, 1, strlen(a:symbol_context)-2)
+		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, a:symbol)
+		return [path, line, 0] " }}}
 	else " {{{
 		if a:symbol =~ '\v\C^[A-Z]'
 			let [classname, namespace] = phpcd#ExpandClassName(a:symbol, a:symbol_namespace, a:current_imports)
