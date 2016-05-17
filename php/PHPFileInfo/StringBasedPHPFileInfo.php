@@ -23,7 +23,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
      */
     private $file;
 
-    private $namespace;
+    private $namespace = '';
 
     private $class;
 
