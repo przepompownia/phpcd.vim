@@ -8,7 +8,7 @@ $input_options = json_decode($argv[3], true) ?: [];
 
 $default_options = [
     'logger' => [
-        'implementation'    => '\\PHPCD\\Logger',
+        'implementation'    => '\\PHPCD\\Log\\Logger',
         'parameters'        => []
     ],
     'completion' => [
