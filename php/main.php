@@ -53,7 +53,6 @@ try {
     /** load autoloader for the project **/
     require $root . '/vendor/autoload.php';
 
-    // $handler = $factory->createRpcHandler($daemon_name, $root, $logger, $pattern_matcher, $file_info_factory, $classmapFileRepository);
     $handler = $factory->createRpcHandler($daemon_name, $root, $logger, $options);
 
     $packer = $factory->createMsgpacker();
