@@ -185,13 +185,17 @@ function! phpcd#completeDone() " {{{
 				endif
 
 				if (fix.alias != v:null)
-					" v:completed_item.word is intentionally used there
-					" as new_alias may be changed
-					let prompt = 'Confirm the new alias lub enter any custom: '
-					let fix.alias = phpcd#promptForChangeString(prompt, fix.alias)
+					if (fix.full_path != v:null)
+						" v:completed_item.word is intentionally used there
+						" as new_alias may be changed
+						let prompt = 'Confirm the new alias lub enter any custom: '
+						let fix.alias = phpcd#promptForChangeString(prompt, fix.alias)
 
-					" TODO write loop 'phpcd#promptForChangeString; call phpcd#getFixForNewClassUsage'
-					" to check if the new alias is valid and has no conflicts
+						" todo fix.alias is not any from
+
+						" TODO write loop 'phpcd#promptForChangeString; call phpcd#getFixForNewClassUsage'
+						" to check if the new alias is valid and has no conflicts
+					endif
 					"
 					" Assume we know that the changed alias is valid.
 					" We may replace v:completed_item.word with it
