@@ -224,9 +224,26 @@ function! phpcd#getSelectedItem(list) "{{{
 
 	let prompt = printf("%s: ", 'Select path')
 	return <SID>promptByInputList(list, prompt)
-endf "}}}
+endfunction "}}}
 
+" Select implementation of input list
 function s:promptByInputList(list, msg) "{{{
+	if exists('g:loaded_tlib')
+		return <SID>promptByTlibInputList(a:list, a:msg)
+	else
+		return <SID>promptByBuiltinInputList(a:list, a:msg)
+	endif
+endfunction "}}}
+
+function s:promptByTlibInputList(list, msg) "{{{
+	let list = map(copy(a:list), '(empty(v:val["alias"]) ? "" : v:val["alias"]) . (empty(v:val["full_path"]) ? "" : " ".v:val["full_path"])')
+
+	let item = tlib#input#List('si', a:msg, list)
+
+	return a:list[item - 1]
+endfunction "}}}
+
+function s:promptByBuiltinInputList(list, msg) "{{{
 	let list = map(copy(a:list), '(v:key + 1) . ": " . (empty(v:val["alias"]) ? "" : v:val["alias"]) . (empty(v:val["full_path"]) ? "" : " ".v:val["full_path"])')
 	let list = insert(list, a:msg)
 	let item = 0
