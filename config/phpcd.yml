@@ -1,0 +1,14 @@
+imports:
+    - { resource: common.yml }
+
+services:
+    file_info_factory:
+        class:              \PHPCD\PHPFileInfo\PHPFileInfoFactory
+
+    handler.phpcd:
+        class:              \PHPCD\PHPCD
+        arguments:          ['%root%', '@default_logger', '@default_pattern_matcher', '@file_info_factory']
+
+    server.phpcd:
+        class:              Lvht\MsgpackRpc\ForkServer
+        arguments:          [ '@packer', '@io', '@handler.phpcd' ]

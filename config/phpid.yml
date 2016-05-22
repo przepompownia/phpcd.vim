@@ -1,0 +1,20 @@
+imports:
+    - { resource: common.yml }
+
+services:
+    class_info_factory:
+        class:              \PHPCD\ClassInfo\ClassInfoFactory
+
+    classes_repository:
+        class:              \PHPCD\ClassInfo\ComposerClassmapFileRepository
+        arguments:          ['%root%', '@default_pattern_matcher', '@class_info_factory', '@default_logger']
+
+    handler.phpid:
+        class:              \PHPCD\PHPID
+        arguments:          ['%root%', '@default_logger', '@classes_repository']
+        calls:
+            - [ index ]
+
+    server.phpid:
+        class:              Lvht\MsgpackRpc\ForkServer
+        arguments:          [ '@packer', '@io', '@handler.phpid' ]

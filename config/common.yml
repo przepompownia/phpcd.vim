@@ -1,0 +1,40 @@
+parameters:
+    completion_case_sensitivity:       false
+    completion_match_type:             'subsequence'
+    logger_implementation:             '\Monolog\Logger'
+    logger_parameters:                 []
+
+services:
+    phpcd_factory:
+        class:              \PHPCD\Factory
+
+    default_logger:
+        class:              Psr\Log\LoggerInterface
+        factory:            ['@phpcd_factory', 'createLogger']
+        arguments:
+            - '%logger_implementation%'
+            - '%logger_parameters%'
+
+    default_pattern_matcher:
+        class:              \PHPCD\PatternMatcher\PatternMatcher
+        factory:             ['@phpcd_factory', 'createPatternMatcher']
+        arguments:           ['%completion_match_type%', '%completion_case_sensitivity%']
+
+    subsequence_pattern_matcher:
+        class:              \PHPCD\PatternMatcher\SubsequencePatternMatcher
+        arguments:           ['%completion_case_sensitivity%']
+        autowiring_types:   \PHPCD\PatternMatcher\PatternMatcher
+
+    head_pattern_matcher:
+        class:              \PHPCD\PatternMatcher\HeadPatternMatcher
+        arguments:           ['%completion_case_sensitivity%']
+        autowiring_types:   \PHPCD\PatternMatcher\PatternMatcher
+
+    packer:
+        class:              Lvht\MsgpackRpc\DefaultMsgpacker
+        autowiring_types:   Lvht\MsgpackRpc\Msgpacker
+
+    io:
+        class:              Lvht\MsgpackRpc\StdIo
+        autowiring_types:   Lvht\MsgpackRpc\Io
+

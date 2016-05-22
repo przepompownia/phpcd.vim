@@ -46,7 +46,7 @@ endif
 
 " Pass the server configuration only if json_encode function exists
 if exists('*json_encode')
-	let s:encoded_options = json_encode(g:phpcd_options)
+	let s:encoded_options = json_encode(g:phpcd_server_options)
 else
 	let s:encoded_options = ''
 endif
