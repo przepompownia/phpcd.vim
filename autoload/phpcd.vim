@@ -435,7 +435,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		let path = cwd.substitute(path, "'", '', 'g')
 		let path = fnamemodify(path, ':p:.')
 		return [path, '$', 0] "}}}
-	elseif a:symbol_context =~ '.\+@' " laravel route
+	elseif a:symbol_context =~ '.\+@' " laravel route {{{
 		let full_classname = strpart(a:symbol_context, 1, strlen(a:symbol_context)-2)
 		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, a:symbol)
 		return [path, line, 0] " }}}
@@ -670,10 +670,16 @@ function! phpcd#GetCallChainReturnType(classname_candidate, class_candidate_name
 	" Tries to get the classname and namespace for a chained method call like:
 	"	$this->foo()->bar()->baz()->
 
+	if a:class_candidate_namespace[0] == '\'
+		let imports = {}
+	else
+		let imports = a:imports
+	endif
+
 	let classname_candidate = a:classname_candidate " {{{
 	let class_candidate_namespace = a:class_candidate_namespace
 	let methodstack = a:methodstack
-	let unknown_result = ['', '']
+	let unknown_result = ''
 	let prev_method_is_array = (methodstack[0] =~ '\v^[^([]+\[' ? 1 : 0)
 	let classname_candidate_is_array = (classname_candidate =~ '\[\]$' ? 1 : 0) " }}}
 
@@ -686,18 +692,18 @@ function! phpcd#GetCallChainReturnType(classname_candidate, class_candidate_name
 	endif " }}}
 
 	if (len(methodstack) == 1) " {{{
-		let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, a:imports)
+		let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, imports)
 		return class_candidate_namespace . '\' . classname_candidate
 	endif " }}}
 
 	call remove(methodstack, 0)
 	let method = matchstr(methodstack[0], '\v^\$*\zs[^[(]+\ze')
-	let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, a:imports)
+	let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, imports)
 	let full_classname = class_candidate_namespace . '\' . classname_candidate
 	let return_types = rpcrequest(g:phpcd_channel_id, 'functype', full_classname, method)
 	if len(return_types) > 0
 		let return_type = phpcd#SelectOne(return_types)
-		return phpcd#GetCallChainReturnType(return_type, '', a:imports, methodstack)
+		return phpcd#GetCallChainReturnType(return_type, '', imports, methodstack)
 	endif
 
 	return unknown_result

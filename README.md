@@ -45,7 +45,7 @@ PHPCD 目前只能配合[NeoVim](http://neovim.io/)工作，这是一个艰难�
 安装 Vim-Plug 后，添加：
 
 ```
-Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer install --no-dev' }
+Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer update --no-dev' }
 Plug 'vim-scripts/progressbar-widget' " 用来显示索引进度的插件
 ```
 
