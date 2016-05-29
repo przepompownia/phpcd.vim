@@ -38,3 +38,7 @@ services:
         class:              Lvht\MsgpackRpc\StdIo
         autowiring_types:   Lvht\MsgpackRpc\Io
 
+    class_info_factory:
+        class:              \PHPCD\ClassInfo\ClassInfoFactory
+        arguments:          ['@default_pattern_matcher']
+

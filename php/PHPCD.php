@@ -5,8 +5,8 @@ use Psr\Log\LoggerInterface as Logger;
 use Psr\Log\LoggerAwareTrait;
 use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
-use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
+use PHPCD\ClassInfo\ClassInfoFactory;
 
 class PHPCD implements RpcHandler
 {
@@ -18,11 +18,6 @@ class PHPCD implements RpcHandler
     private $server;
 
     private $root;
-
-    /**
-     * @var PatternMatcher
-     */
-    private $pattern_matcher;
 
     /*
      * Probably it should be replaced by
@@ -37,12 +32,12 @@ class PHPCD implements RpcHandler
     public function __construct(
         $root,
         Logger $logger,
-        PatternMatcher $pattern_matcher,
+        ClassInfoFactory $class_info_factory,
         PHPFileInfoFactory $file_info_factory
     ) {
         $this->setRoot($root);
-        $this->pattern_matcher = $pattern_matcher;
         $this->setLogger($logger);
+        $this->class_info_factory = $class_info_factory;
         $this->file_info_factory = $file_info_factory;
     }
 
@@ -108,7 +103,7 @@ class PHPCD implements RpcHandler
     {
         if ($class_name) {
             $static_mode = $this->translateStaticMode($static_mode);
-            return $this->classInfo($class_name, $pattern, $static_mode, $public_only);
+            return $this->getMatchingClassDetails($class_name, $pattern, $static_mode, $public_only);
         }
 
         if ($pattern) {
@@ -322,41 +317,33 @@ class PHPCD implements RpcHandler
         'void'     => 1,
     ];
 
-    private function classInfo($class_name, $pattern, $is_static, $public_only)
+    private function getMatchingClassDetails($class_name, $pattern, $is_static, $public_only)
     {
         try {
-            $reflection = new \PHPCD\ClassInfo\ReflectionClass($class_name);
+            $reflection = $this->class_info_factory->createClassInfo($class_name);
             $items = [];
 
             if (false !== $is_static) {
-                foreach ($reflection->getConstants() as $name => $value) {
-                    if (!$pattern || $this->pattern_matcher->match($pattern, $name)) {
+                foreach ($reflection->getMatchingConstants($pattern) as $name => $value) {
                         $items[] = [
                             'word' => $name,
                             'abbr' => sprintf(" +@ %s %s", $name, $value),
                             'kind' => 'd',
                             'icase' => 1,
                         ];
-                    }
                 }
             }
 
-            $methods = $reflection->getAvailableMethods($is_static, $public_only);
+            $methods = $reflection->getAvailableMethods($is_static, $public_only, $pattern);
 
             foreach ($methods as $method) {
-                $info = $this->getMethodInfo($method, $pattern);
-                if ($info) {
-                    $items[] = $info;
-                }
+                $items[] = $this->getMethodInfo($method, $pattern);
             }
 
-            $properties = $reflection->getAvailableProperties($is_static, $public_only);
+            $properties = $reflection->getAvailableProperties($is_static, $public_only, $pattern);
 
             foreach ($properties as $property) {
-                $info = $this->getPropertyInfo($property, $pattern);
-                if ($info) {
-                    $items[] = $info;
-                }
+                $items[] = $this->getPropertyInfo($property);
             }
 
             return $items;
@@ -432,12 +419,9 @@ class PHPCD implements RpcHandler
         ];
     }
 
-    private function getPropertyInfo($property, $pattern)
+    private function getPropertyInfo($property)
     {
         $name = $property->getName();
-        if ($pattern && !$this->pattern_matcher->match($pattern, $name)) {
-            return null;
-        }
 
         $modifier = $this->getModifiers($property);
 
@@ -450,12 +434,9 @@ class PHPCD implements RpcHandler
         ];
     }
 
-    private function getMethodInfo($method, $pattern = null)
+    private function getMethodInfo($method)
     {
         $name = $method->getName();
-        if ($pattern && !$this->pattern_matcher->match($pattern, $name)) {
-            return null;
-        }
 
         $params = array_map(function ($param) {
             return $param->getName();

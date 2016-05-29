@@ -2,9 +2,6 @@ imports:
     - { resource: common.yml }
 
 services:
-    class_info_factory:
-        class:              \PHPCD\ClassInfo\ClassInfoFactory
-
     classes_repository:
         class:              \PHPCD\ClassInfo\ComposerClassmapFileRepository
         arguments:          ['%root%', '@default_pattern_matcher', '@class_info_factory', '@default_logger']

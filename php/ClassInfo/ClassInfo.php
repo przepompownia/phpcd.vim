@@ -38,4 +38,28 @@ interface ClassInfo
      * @return string
      */
     public function getDocComment();
+
+    public function getMatchingConstants($name_pattern);
+
+    /**
+     * Get methods available for given class
+     * depending on context
+     *
+     * @param bool|null $static Show static|non static|both types
+     * @param bool public_only restrict the result to public methods
+     * @return \ReflectionMethod[]
+     */
+    public function getAvailableMethods($static, $public_only = false, $name_pattern = null);
+
+    /**
+     * Get properties available for given class
+     * depending on context
+     *
+     * @param bool|null $static Show static|non static|both types
+     * @param bool public_only restrict the result to public properties
+     * @return \ReflectionProperty[]
+     */
+    public function getAvailableProperties($static, $public_only = false, $name_pattern = null);
+
+    public function matchesFilter(ClassFilter $classFilter);
 }
