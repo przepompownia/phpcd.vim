@@ -12,6 +12,7 @@ $parameters['root'] = $root;
 
 /** load autoloader for PHPCD **/
 require __DIR__ . '/../vendor/autoload.php';
+<<<<<<< HEAD
 
 $factory = new \PHPCD\Factory;
 
