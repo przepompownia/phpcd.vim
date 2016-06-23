@@ -906,9 +906,10 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 					break
 				endif
 				" in file lookup for function (Foo $foo)
-				if line =~# 'function\s\+('.class_name_pattern . '\s\+' . object
+				if line =~# 'function\s*('.class_name_pattern . '\s\+' . object
 					let classname_candidate = matchstr(line, class_name_pattern . '\ze\s\+' . object)
 					let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, a:current_namespace, a:imports)
+					break
 				endif
 			endfor
 		endif " }}}
