@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPCD;
 
 use Psr\Log\LoggerInterface as Logger;
@@ -7,6 +8,7 @@ use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
 use PHPCD\ClassInfo\ClassFilter;
 use PHPCD\ClassInfo\ClassInfoRepository;
+use PHPCD\ClassInfo\ClassInfoCollection;
 
 class PHPID implements RpcHandler
 {
@@ -263,28 +265,36 @@ class PHPID implements RpcHandler
 
     public function getAbsoluteClassesPaths($path_pattern)
     {
-        return $this->classes_repository->find($path_pattern, null, false);
+        $collection = $this->classes_repository->find($path_pattern, null);
+
+        return $this->prepareOutputFromClassInfoCollection($collection, false);
     }
 
     public function getInterfaces($path_pattern)
     {
         $filter = new ClassFilter(['isInterface' => true]);
 
-        return $this->classes_repository->find($path_pattern, $filter, true);
+        $collection = $this->classes_repository->find($path_pattern, $filter);
+
+        return $this->prepareOutputFromClassInfoCollection($collection, true);
     }
 
     public function getPotentialSuperclasses($path_pattern)
     {
         $filter = new ClassFilter(['isFinal' => false, 'isTrait' => false, 'isInterface' => false]);
 
-        return $this->classes_repository->find($path_pattern, $filter, true);
+        $collection = $this->classes_repository->find($path_pattern, $filter);
+
+        return $this->prepareOutputFromClassInfoCollection($collection, true);
     }
 
     public function getInstantiableClasses($path_pattern)
     {
         $filter = new ClassFilter(['isInstantiable' => true]);
 
-        return $this->classes_repository->find($path_pattern, $filter, true);
+        $collection = $this->classes_repository->find($path_pattern, $filter);
+
+        return $this->prepareOutputFromClassInfoCollection($collection, true);
     }
 
     public function getNamesToTypeDeclaration($path_pattern)
@@ -292,6 +302,31 @@ class PHPID implements RpcHandler
         // @TODO add basic type here, not in repository
         $filter = new ClassFilter(['isTrait' => false]);
 
-        return $this->classes_repository->find($path_pattern, $filter, true);
+        $collection = $this->classes_repository->find($path_pattern, $filter);
+
+        return $this->prepareOutputFromClassInfoCollection($collection, true);
+    }
+
+    /**
+     * Prepare single element of completion output
+     * @param ClassInfo $class_info
+     * @param bool $leading_backslash prepend class path with backslash
+     * @return array
+     */
+    private function prepareOutputFromClassInfoCollection(
+        ClassInfoCollection $collection,
+        $leading_backslash = true
+    ) {
+        $result = [];
+
+        foreach ($collection as $class_info) {
+            $result[] = [
+                'full_name' => ($leading_backslash ? '\\' : '') . $class_info->getName(),
+                'short_name' => $class_info->getShortName(),
+                'doc_comment' => $class_info->getDocComment()
+            ];
+        }
+
+        return $result;
     }
 }
