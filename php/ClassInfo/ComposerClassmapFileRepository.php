@@ -88,6 +88,23 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
         // get_declared_classes() returns classes
         // from phpcd's (not project's) environment
         return $result;
+    /**
+     * Check if getting information about classes cause no problem
+     * Examples:
+     *  - file has syntax errors
+     *  - superclass is not defined
+     *
+     *  @return bool
+     */
+    private function isValid($classpath)
+    {
+        // @todo inject ClassLoader
+        // $loader->findFile()
+        // check syntax for file
+        // log invalid classes
+        return true;
+    }
+
     }
 
     public function reload()
