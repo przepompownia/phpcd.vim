@@ -28,4 +28,9 @@ class ClassInfoFactory
     {
         return new namespace\ReflectionClass($class, $this->pattern_matcher);
     }
+
+    public function createClassInfoCollection()
+    {
+        return new ClassInfoCollection;
+    }
 }
