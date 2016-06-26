@@ -59,27 +59,18 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     /**
      * @param string $path_pattern Input pattern
      * @param ClassFilter $filter criteria to search
-     * @param bool $add_leading_backslash prepend class path with backslash
-     * @return array
+     * @return ClassInfoCollection
      */
-    public function find($path_pattern, ClassFilter $filter = null, $add_leading_backslash = true)
+    public function find($path_pattern, ClassFilter $filter = null)
     {
-        $result = [];
+        $collection = $this->classInfoFactory->createClassInfoCollection();
 
-        foreach ($this->classmap as $classpath => $file) {
+        foreach (array_keys($this->classmap) as $classpath) {
             if ($this->pattern_matcher->match($path_pattern, $classpath)) {
-                $item = [];
-
-                $class_info = $this->classInfoFactory->createClassInfo($classpath);
+                $class_info = $this->get($classpath);
 
                 if ($filter === null || $class_info->matchesFilter($filter)) {
-                    $item['full_name'] = ($add_leading_backslash ? '\\' : '') . $classpath;
-                    $item['short_name'] = $class_info->getShortName();
-                    $item['doc_comment'] = $class_info->getDocComment();
-                }
-
-                if (!empty($item)) {
-                    $result[] = $item;
+                    $collection->add($class_info);
                 }
             }
         }
@@ -87,7 +78,9 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
         // @todo complete also built-in declared classes
         // get_declared_classes() returns classes
         // from phpcd's (not project's) environment
-        return $result;
+        return $collection;
+    }
+
     /**
      * Check if getting information about classes cause no problem
      * Examples:
