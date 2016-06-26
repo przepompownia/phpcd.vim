@@ -13,6 +13,11 @@ $parameters['root'] = $root;
 /** load autoloader for PHPCD **/
 require __DIR__ . '/../vendor/autoload.php';
 
+/** load autoloader for the project **/
+$class_loader = require $root . '/vendor/autoload.php';
+
+$parameters['class_loader'] = $class_loader;
+
 $factory = new \PHPCD\Factory;
 
 $configdir = __DIR__.'/../config/';
@@ -26,9 +31,6 @@ try {
     if ($handler_name !== 'phpcd' && $handler_name !== 'phpid') {
         throw new \InvalidArgumentException('The daemon name should be PHPCD or PHPID');
     }
-
-    /** load autoloader for the project **/
-    require $root . '/vendor/autoload.php';
 
     $server = $dIContainer->get('server.'. $handler_name);
     $server->loop();

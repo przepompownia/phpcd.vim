@@ -5,6 +5,7 @@ namespace PHPCD\ClassInfo;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
+use Composer\Autoload\ClassLoader;
 
 class ComposerClassmapFileRepository implements ClassInfoRepository
 {
@@ -13,6 +14,8 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     private $relative_classmap_path = '/vendor/composer/autoload_classmap.php';
 
     private $project_root;
+
+    private $classLoader;
 
     private $classmap = [];
 
@@ -26,11 +29,13 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
 
     public function __construct(
         $project_root,
+        ClassLoader $classLoader,
         PatternMatcher $pattern_matcher,
         ClassInfoFactory $classInfoFactory,
         LoggerInterface $logger
     ) {
         $this->pattern_matcher = $pattern_matcher;
+        $this->classLoader = $classLoader;
         $this->classInfoFactory = $classInfoFactory;
         $this->setLogger($logger);
         $this->setProjectRoot($project_root);
@@ -91,8 +96,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
      */
     private function isValid($classpath)
     {
-        // @todo inject ClassLoader
-        // $loader->findFile()
+        $filePath = $this->classLoader->findFile($classpath);
         // check syntax for file
         // log invalid classes
         return true;
