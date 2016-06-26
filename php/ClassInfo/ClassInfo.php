@@ -61,5 +61,13 @@ interface ClassInfo
      */
     public function getAvailableProperties($static, $public_only = false, $name_pattern = null);
 
+    /**
+     * @return bool
+     */
     public function matchesFilter(ClassFilter $classFilter);
+
+    /**
+     * @return string
+     */
+    public function getName();
 }
