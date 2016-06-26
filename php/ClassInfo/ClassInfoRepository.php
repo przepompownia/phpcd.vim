@@ -32,4 +32,12 @@ interface ClassInfoRepository
      * and should be removed.
      */
     public function reload();
+
+    /**
+     * Get ClassInfo based on class name
+     *
+     * @param string class path
+     * @return ClassInfo|null
+     */
+    public function get($path);
 }

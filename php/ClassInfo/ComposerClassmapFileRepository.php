@@ -105,6 +105,19 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
         return true;
     }
 
+    /**
+     * Get ClassInfo based on class name
+     *
+     * @param string class path
+     * @return ClassInfo|null
+     */
+    public function get($classpath)
+    {
+        if ($this->isValid($classpath)) {
+            return $this->classInfoFactory->createClassInfo($classpath);
+        }
+
+        return null;
     }
 
     public function reload()
