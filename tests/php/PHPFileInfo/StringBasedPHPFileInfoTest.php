@@ -111,6 +111,22 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testScanFileWithoutErrors()
+    {
+        $path = 'Fixtures/StringBasedPHPFileInfo/ExampleWithourErrors.php';
+
+        $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
+
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertEquals('PHPCD\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
+        $this->assertEquals('ExampleWithourErrors', $fileInfo->getClass());
+        $this->assertEquals('Cat', $fileInfo->getSuperclass());
+
+        $interfaces = $fileInfo->getInterfaces();
+
+        $this->assertEquals(['I1', 'I2'], $interfaces);
+    }
+
     private function getAbsoluteFilePath($relativePath)
     {
         return sprintf("%s/%s/%s", realpath('.'), 'tests/php', $relativePath);

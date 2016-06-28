@@ -16,6 +16,10 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     const CLASS_PATTERN = '/^\s*\b((((final|abstract)\s+)?class)|interface|trait)\s+(?<class>\S+)/i';
 
+    const EXTENDS_PATTERN = '/\s*\bextends\s+(?<superclass>\S+)\b/i';
+
+    const IMPLEMENTS_PATTERN = '/\s*\bimplements\s+(?<interfaces>(\w+(,\s+)?)+)/i';
+
     const NAMESPACE_PATTERN = '/(<\?php)?\s*namespace\s+(?<namespace>.*);$/';
 
     /*
@@ -26,6 +30,10 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     private $namespace = '';
 
     private $class;
+
+    private $superclass;
+
+    private $interfaces = [];
 
     private $imports = [];
 
@@ -43,6 +51,8 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     /**
      * Scan the file to retrieve informations
      * about its namespace, imports and class.
+     *
+     * @todo scan multiline declarations correctly
      */
     public function scanFile()
     {
@@ -52,6 +62,17 @@ class StringBasedPHPFileInfo implements PHPFileInfo
             $class = $this->scanLineForClassDeclaration($line);
             if ($class) {
                 $this->setClass($class);
+
+                $superclass = $this->scanLineForSuperclass($line);
+                if (!empty($superclass)) {
+                    $this->setSuperclass($superclass);
+                }
+
+                $interfaces = $this->scanLineForInterfaces($line);
+                if (!empty($interfaces)) {
+                    $this->setInterfaces($interfaces);
+                }
+
                 break;
             }
 
@@ -72,7 +93,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
             }
         }
 
-        $this->file->rewind();
+        $this->rewindFile();
     }
 
     /**
@@ -81,6 +102,23 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     private function setClass($class)
     {
         $this->class = $class;
+
+        return $this;
+    }
+
+    /**
+     * @var string
+     */
+    private function setSuperclass($class)
+    {
+        $this->superclass = $class;
+
+        return $this;
+    }
+
+    private function setInterfaces($interfaces)
+    {
+        $this->interfaces = $interfaces;
 
         return $this;
     }
@@ -116,8 +154,28 @@ class StringBasedPHPFileInfo implements PHPFileInfo
         if (preg_match(self::CLASS_PATTERN, $line, $matches)) {
             return $matches['class'];
         }
+    }
 
-        return null;
+    private function scanLineForSuperclass($line)
+    {
+        if (preg_match(self::EXTENDS_PATTERN, $line, $matches)) {
+            return $matches['superclass'];
+        }
+    }
+
+    private function scanLineForInterfaces($line)
+    {
+        $interfaces = [];
+
+        if (preg_match(self::IMPLEMENTS_PATTERN, $line, $matches)) {
+            $matches = explode(',', $matches['interfaces']);
+
+            foreach ($matches as $interface) {
+                $interfaces[] = trim($interface);
+            }
+        }
+
+        return $interfaces;
     }
 
     private function scanLineForImports($line)
@@ -168,6 +226,16 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     public function getClass()
     {
         return $this->class;
+    }
+
+    public function getSuperclass()
+    {
+        return $this->superclass;
+    }
+
+    public function getInterfaces()
+    {
+        return $this->interfaces;
     }
 
     public function getImports()
