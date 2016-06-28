@@ -45,12 +45,6 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
                 ['Cat' => ['alias' => 'Cat', 'full_path' => null]]
             ],
             [
-                // new used class is the current class, suggest nothing
-                '\PHPCD\Fixtures\ClassNamesAndAliases\Services\Image',
-                ['alias' => 'Image', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Services\Image'],
-                ['namespace\Image' => ['alias' => 'namespace\Image', 'full_path' => null]]
-            ],
-            [
                 // When the same path is aliased more than once, but one of alias is the same as inserted
                 // then do nothing
                 '\PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Category',
