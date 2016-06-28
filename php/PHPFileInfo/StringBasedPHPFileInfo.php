@@ -29,12 +29,15 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     private $imports = [];
 
-    public function __construct($path)
+    public function __construct(SplFileObject $file)
     {
-        if (file_exists($path) && is_readable($path)) {
-            $this->file = new SplFileObject($path);
-            $this->scanFile();
-        }
+        $this->file = $file;
+        $this->scanFile();
+    }
+
+    private function rewindFile()
+    {
+        $this->file->rewind();
     }
 
     /**
@@ -43,7 +46,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
      */
     public function scanFile()
     {
-        $this->file->rewind();
+        $this->rewindFile();
 
         foreach ($this->file as $line) {
             $class = $this->scanLineForClassDeclaration($line);

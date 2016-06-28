@@ -10,7 +10,9 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
     private function getFileInfo($class_path)
     {
         $reflection = new \ReflectionClass($class_path);
-        return new StringBasedPHPFileInfo($reflection->getFileName());
+        $factory = new PHPFileInfoFactory;
+
+        return $factory->createFileInfo($reflection->getFileName());
     }
 
     public function newUsedClassInputAndFixProvider()
