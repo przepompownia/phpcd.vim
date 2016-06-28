@@ -82,7 +82,7 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
         $input_class_info,
         $expected_suggestions
     ) {
-        $file_path = sprintf("%s/%s/%s", realpath('.'), 'tests/php', $where);
+        $file_path = $this->getAbsoluteFilePath($where);
 
         $file_info = $this->getFileInfo($file_path);
 
@@ -109,5 +109,10 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
                 'Paths are not equal.'
             );
         }
+    }
+
+    private function getAbsoluteFilePath($relativePath)
+    {
+        return sprintf("%s/%s/%s", realpath('.'), 'tests/php', $relativePath);
     }
 }
