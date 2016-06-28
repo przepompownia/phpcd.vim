@@ -7,12 +7,11 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
     /**
      * @return StringBasedPHPFileInfo
      */
-    private function getFileInfo($class_path)
+    private function getFileInfo($file_path)
     {
-        $reflection = new \ReflectionClass($class_path);
         $factory = new PHPFileInfoFactory;
 
-        return $factory->createFileInfo($reflection->getFileName());
+        return $factory->createFileInfo($file_path);
     }
 
     public function newUsedClassInputAndFixProvider()
@@ -21,42 +20,42 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
             [
                 // Alias Image is the same as the current class so suggest its change
                 // The path is not used, suggest to add it
-                '\PHPCD\Fixtures\ClassNamesAndAliases\Models\Image',
+                'Fixtures/ClassNamesAndAliases/Models/Image.php',
                 ['alias' => 'Image', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Image'],
                 ['Image2' => ['alias' => 'Image2', 'full_path' => 'PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Image']]
             ],
             [
                 // Alias Image is already used, the path is not used
                 // Suggest both to change alias and to add the path to imports
-                '\PHPCD\Fixtures\ClassNamesAndAliases\Services\Image',
+                'Fixtures/ClassNamesAndAliases/Services/Image.php',
                 ['alias' => 'Image', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Models\Image'],
                 ['Image2' => ['alias' => 'Image2', 'full_path' => 'PHPCD\Fixtures\ClassNamesAndAliases\Models\Image']]
             ],
             [
                 // inserted alias may be used (expect null),
                 //  the path does not exist yet (expect that it will be suggested to adding)
-                '\PHPCD\Fixtures\ClassNamesAndAliases\Services\Image',
+                'Fixtures/ClassNamesAndAliases/Services/Image.php',
                 ['alias' => 'Image3', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Models\Image'],
                 [null => ['alias' => null, 'full_path' => 'PHPCD\Fixtures\ClassNamesAndAliases\Models\Image']]
             ],
             [
                 // the path is already used but with another alias
                 // so suggest change the alias only
-                '\PHPCD\Fixtures\ClassNamesAndAliases\Services\Image',
+                'Fixtures/ClassNamesAndAliases/Services/Image.php',
                 ['alias' => 'Category', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Category'],
                 ['Cat' => ['alias' => 'Cat', 'full_path' => null]]
             ],
             [
                 // When the same path is aliased more than once, but one of alias is the same as inserted
                 // then do nothing
-                '\PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Category',
+                'Fixtures/ClassNamesAndAliases/Repositories/Category.php',
                 ['alias' => 'Image', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Image'],
                 [
                     null => ['alias' => null, 'full_path' => null]
                 ]
             ],
             [
-                '\PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Category',
+                'Fixtures/ClassNamesAndAliases/Repositories/Category.php',
                 ['alias' => 'PHPUnit_Framework_TestCase', 'full_path' => '\PHPUnit_Framework_TestCase'],
                 [
                     null => ['alias' => null, 'full_path' => 'PHPUnit_Framework_TestCase']
@@ -65,7 +64,7 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
             [
                 // When the same path is aliased more than once, but differently than the inserted alias
                 // give user the choice from the list of used aliases
-                '\PHPCD\Fixtures\ClassNamesAndAliases\Models\Gallery',
+                'Fixtures/ClassNamesAndAliases/Models/Gallery.php',
                 ['alias' => 'Image', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Models\Image'],
                 [
                     'Photo' => ['alias' => 'Photo', 'full_path' => null],
@@ -83,7 +82,9 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
         $input_class_info,
         $expected_suggestions
     ) {
-        $file_info = $this->getFileInfo($where);
+        $file_path = sprintf("%s/%s/%s", realpath('.'), 'tests/php', $where);
+
+        $file_info = $this->getFileInfo($file_path);
 
         $fix = $file_info->getFixForNewClassUsage($input_class_info);
 
