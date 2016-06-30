@@ -5,6 +5,7 @@ namespace PHPCD\ClassInfo;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
+use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use Composer\Autoload\ClassLoader;
 
 class ComposerClassmapFileRepository implements ClassInfoRepository
@@ -23,6 +24,11 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     private $classInfoFactory;
 
     /**
+     * @var PHPFileInfoFactory
+     */
+    private $fileInfoFactory;
+
+    /**
      * @var PatternMatcher
      */
     private $pattern_matcher;
@@ -32,11 +38,13 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
         ClassLoader $classLoader,
         PatternMatcher $pattern_matcher,
         ClassInfoFactory $classInfoFactory,
+        PHPFileInfoFactory $fileInfoFactory,
         LoggerInterface $logger
     ) {
         $this->pattern_matcher = $pattern_matcher;
         $this->classLoader = $classLoader;
         $this->classInfoFactory = $classInfoFactory;
+        $this->fileInfoFactory = $fileInfoFactory;
         $this->setLogger($logger);
         $this->setProjectRoot($project_root);
         $this->loadClassMap();
@@ -74,7 +82,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
             if ($this->pattern_matcher->match($path_pattern, $classpath)) {
                 $class_info = $this->get($classpath);
 
-                if ($filter === null || $class_info->matchesFilter($filter)) {
+                if ($class_info !== null && ($filter === null || $class_info->matchesFilter($filter))) {
                     $collection->add($class_info);
                 }
             }
@@ -97,9 +105,10 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     private function isValid($classpath)
     {
         $filePath = $this->classLoader->findFile($classpath);
-        // check syntax for file
-        // log invalid classes
-        return true;
+
+        $fileInfo = $this->fileInfoFactory->createFileInfo($filePath);
+
+        return !$fileInfo->hasErrors();
     }
 
     /**
