@@ -17,6 +17,46 @@ interface PHPFileInfo
     /**
      * @return string
      */
+    public function getSuperclass();
+
+    /**
+     * @return array
+     */
+    public function getInterfaces();
+
+    /**
+     * @return string
+     */
+    public function getFullClassPath();
+
+    /**
+     * @return bool
+     */
+    public function hasAliasUsed($alias);
+
+    /**
+     * @return bool
+     */
+    public function hasErrors();
+
+    /**
+     * @return array
+     */
+    public function getErrors();
+
+    /**
+     * @return array
+     */
+    public function getUsedAliasesForPath($full_path);
+
+    /**
+     * @return string
+     */
+    public function getPathByAlias($alias);
+
+    /**
+     * @return string
+     */
     public function getImports();
 
     /**

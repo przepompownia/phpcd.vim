@@ -127,6 +127,33 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['I1', 'I2'], $interfaces);
     }
 
+    /**
+     * @markTestSuiteSkipped
+     */
+    public function testScanFileWithSyntaxErrors()
+    {
+        $path = 'Fixtures/StringBasedPHPFileInfo/ExampleWithSyntaxError.php';
+
+        $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
+
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertTrue($fileInfo->hasErrors());
+    }
+
+    public function testScanFileWithNonexistingSuperclass()
+    {
+        $path = 'Fixtures/StringBasedPHPFileInfo/ExampleWithNonExistingSuperclass.php';
+
+        $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
+
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertTrue($fileInfo->hasErrors());
+
+        $errors = $fileInfo->getErrors();
+        $this->assertCount(1, $errors);
+        $this->assertEquals('Class A\\X1234 does not exist.', $errors[0]);
+    }
+
     private function getAbsoluteFilePath($relativePath)
     {
         return sprintf("%s/%s/%s", realpath('.'), 'tests/php', $relativePath);

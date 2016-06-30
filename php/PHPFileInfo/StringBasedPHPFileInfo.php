@@ -37,10 +37,28 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     private $imports = [];
 
+    private $errors;
+
     public function __construct(SplFileObject $file)
     {
-        $this->file = $file;
-        $this->scanFile();
+        try {
+            $this->file = $file;
+
+            $this->validateSyntax();
+
+            $this->scanFile();
+
+            if (!empty($this->getSuperclass())) {
+                $this->classExists($this->getSuperclass());
+            }
+
+            foreach ($this->getInterfaces() as $interface) {
+                $this->classExists($interface);
+            }
+        } catch (FileInfoException $e) {
+            $this->addError($e->getMessage());
+            return;
+        }
     }
 
     private function rewindFile()
@@ -253,6 +271,23 @@ class StringBasedPHPFileInfo implements PHPFileInfo
         return !empty($this->imports[$alias]);
     }
 
+    public function hasErrors()
+    {
+        return ! empty($this->errors);
+    }
+
+    private function addError($error)
+    {
+        $this->errors[] = $error;
+
+        return $this;
+    }
+
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
     public function getUsedAliasesForPath($full_path)
     {
         $used = array_filter($this->imports, function ($value) use ($full_path) {
@@ -356,5 +391,38 @@ class StringBasedPHPFileInfo implements PHPFileInfo
         // and check if there is no class in the current namespace
         // whose name is the same as the newly generated alias.
         return false;
+    }
+
+    private function validateSyntax()
+    {
+        $path = $this->file->getPathName();
+        $php_cmd = sprintf('/usr/bin/php -l %s >/dev/null 2>&1', $path);
+
+        system($php_cmd, $return_code);
+
+        if ($return_code !== 0) {
+            throw new FileInfoException('Syntax error');
+        }
+
+        return (! $return_code);
+    }
+
+    /**
+     * Check if given class exists
+     * @return bool
+     */
+    private function classExists($className)
+    {
+        if ($this->hasAliasUsed($className)) {
+            $className = $this->getPathByAlias($className);
+        }
+
+        $exists = class_exists($className);
+
+        if (!$exists) {
+            throw new FileInfoException(sprintf('Class %s does not exist.', $className));
+        }
+
+        return $exists;
     }
 }
