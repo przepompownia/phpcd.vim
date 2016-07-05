@@ -154,6 +154,20 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Class A\\X1234 does not exist.', $errors[0]);
     }
 
+    public function testScanFileWithNonexistingInterface()
+    {
+        $path = 'Fixtures/StringBasedPHPFileInfo/ExampleWithNonExistingInterface.php';
+
+        $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
+
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertTrue($fileInfo->hasErrors());
+
+        $errors = $fileInfo->getErrors();
+        $this->assertCount(1, $errors);
+        $this->assertEquals('Interface A\\X456 does not exist.', $errors[0]);
+    }
+
     private function getAbsoluteFilePath($relativePath)
     {
         return sprintf("%s/%s/%s", realpath('.'), 'tests/php', $relativePath);

@@ -53,7 +53,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
             }
 
             foreach ($this->getInterfaces() as $interface) {
-                $this->classExists($interface);
+                $this->interfaceExists($interface);
             }
         } catch (FileInfoException $e) {
             $this->addError($e->getMessage());
@@ -263,7 +263,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     public function getFullClassPath()
     {
-        return $this->getNamespace().'\\'.$this->getClass();
+        return $this->getFullPath($this->getClass());
     }
 
     public function hasAliasUsed($alias)
@@ -413,9 +413,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
      */
     private function classExists($className)
     {
-        if ($this->hasAliasUsed($className)) {
-            $className = $this->getPathByAlias($className);
-        }
+        $className = $this->getFullPath($className);
 
         $exists = class_exists($className);
 
@@ -424,5 +422,35 @@ class StringBasedPHPFileInfo implements PHPFileInfo
         }
 
         return $exists;
+    }
+
+    /**
+     * Check if given interface exists
+     * @return bool
+     */
+    private function interfaceExists($interfaceName)
+    {
+        $interfaceName = $this->getFullPath($interfaceName);
+
+        $exists = interface_exists($interfaceName);
+
+        if (!$exists) {
+            throw new FileInfoException(sprintf('Interface %s does not exist.', $interfaceName));
+        }
+
+        return $exists;
+    }
+
+    private function getFullPath($className)
+    {
+        if ($className !== $this->getClass() && $this->hasAliasUsed($className)) {
+            return $this->getPathByAlias($className);
+        }
+
+        if (strpos($className, '\\') !== 0) {
+            $className = sprintf('%s\%s', $this->getNamespace(), $className);
+        }
+
+        return $className;
     }
 }
