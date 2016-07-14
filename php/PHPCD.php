@@ -439,6 +439,9 @@ class PHPCD implements RpcHandler
         $name = $property->getName();
 
         $modifier = $this->getModifiers($property);
+        if ($property->getModifiers() & \ReflectionMethod::IS_STATIC) {
+            $name = '$'.$name;
+        }
 
         return [
             'word' => $name,

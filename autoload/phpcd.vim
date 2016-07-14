@@ -380,7 +380,8 @@ function! phpcd#GetCurrentSymbolWithContext() " {{{
 	let word = substitute(word, '\v\c[^\\a-zA-Z_0-9$]*$', '', '')
 
 	let current_instruction = phpcd#GetCurrentInstruction(line('.'), max([0, col('.') - 2]), phpbegin)
-	let context = substitute(current_instruction, '\s*[$a-zA-Z_0-9\\\x7f-\xff]*$', '', '')
+	let context = substitute(current_instruction, 'clone ', '', '')
+	let context = substitute(context, '\s*[$a-zA-Z_0-9\\\x7f-\xff]*$', '', '')
 	let context = substitute(context, '\s\+\([\-:]\)', '\1', '')
 
 	let [current_namespace, current_imports] = phpcd#GetCurrentNameSpace()
@@ -445,7 +446,10 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 			let full_classname = namespace . '\' . classname
 			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname)
 		else
-			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', '', a:symbol)
+			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', '', a:symbol_namespace.'\'.a:symbol)
+			if path == ''
+				let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', '', a:symbol)
+			endif
 		end
 
 		return [path, line, 0]
@@ -783,7 +787,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 	" - line above
 
 	let class_name_pattern = '[a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*' " {{{
-	let function_name_pattern = '[a-zA-Z_\x7f-\xff][a-zA-Z_0-9\x7f-\xff]*'
+	let function_name_pattern = '[a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*'
 	let function_invocation_pattern = '[a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*('
 	let variable_name_pattern = '\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*'
 
