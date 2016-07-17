@@ -1,6 +1,6 @@
 function! phpcd#CompletePHP(findstart, base) " {{{
 	" we need to wait phpcd {{{
-	if g:phpcd_channel_id < 0
+	if !exists('g:phpcd_channel_id')
 		return
 	endif " }}}
 
@@ -24,12 +24,12 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 
 	" If exists b:php_menu it means completion was already constructed {{{
 	" we don't need to do anything more
-	if exists("b:php_menu")
+	if exists('b:php_menu')
 		return b:php_menu
 	endif " }}}
 
 	" a:base is very short - we need context {{{
-	if exists("b:compl_context")
+	if exists('b:compl_context')
 		let context = b:compl_context
 		unlet! b:compl_context
 		" chop of the "base" from the end of the current instruction
@@ -74,11 +74,10 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 				endif
 			endif
 
-			return rpcrequest(g:phpcd_channel_id, 'info', classname, a:base, is_static, public_only)
+			return rpc#request(g:phpcd_channel_id, 'info', classname, a:base, is_static, public_only)
 		elseif context =~? 'implements'
 			return phpcd#getInterfaces(a:base)
 		elseif context =~? 'extends\s\+.\+$' && a:base == ''
-			" TODO complete class Foo extends
 		elseif context =~? 'extends\s\+.\+$'
 			return phpcd#getPotentialSuperclasses(a:base)
 		elseif context =~? 'extends$'
@@ -100,7 +99,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 endfunction " }}}
 
 function! phpcd#GetPsrNamespace() " {{{
-	return rpcrequest(g:phpcd_channel_id, 'psr4ns', expand('%:p'))
+	return rpc#request(g:phpcd_channel_id, 'psr4ns', expand('%:p'))
 endfunction " }}}
 
 function! s:remapClassInfoItem(class_item, make_use_entry) " {{{
@@ -137,29 +136,29 @@ function! s:prepareClassInfoOutput(response, make_use_entry) " {{{
 endfunction  " }}}
 
 function! phpcd#getPotentialSuperclasses(path) " {{{
-	let class_info = rpcrequest(g:phpid_channel_id, 'getPotentialSuperclasses', a:path)
+	let class_info = rpc#request(g:phpid_channel_id, 'getPotentialSuperclasses', a:path)
 	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
 endfunction " }}}
 
 function! phpcd#getInterfaces(path) " {{{
-	let class_info = rpcrequest(g:phpid_channel_id, 'getInterfaces', a:path)
+	let class_info = rpc#request(g:phpid_channel_id, 'getInterfaces', a:path)
 	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
 endfunction " }}}
 
 function! phpcd#getInstantiableClasses(path) " {{{
-	let class_info = rpcrequest(g:phpid_channel_id, 'getInstantiableClasses', a:path)
+	let class_info = rpc#request(g:phpid_channel_id, 'getInstantiableClasses', a:path)
 	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
 endfunction " }}}
 
 function! phpcd#getAbsoluteClassesPaths(path) " {{{
-	let class_info = rpcrequest(g:phpid_channel_id, 'getAbsoluteClassesPaths', a:path)
+	let class_info = rpc#request(g:phpid_channel_id, 'getAbsoluteClassesPaths', a:path)
 	return <SID>prepareClassInfoOutput(class_info, 0)
 endfunction " }}}
 
 function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{
 	let base = substitute(a:base, '^\\', '', '')
 	let [pattern, namespace] = phpcd#ExpandClassName(a:base, a:current_namespace, a:imports)
-	return rpcrequest(g:phpcd_channel_id, 'info', '', pattern, 0, 0)
+	return rpc#request(g:phpcd_channel_id, 'info', '', pattern)
 endfunction " }}}
 
 function! phpcd#completeDone() " {{{
@@ -211,7 +210,7 @@ function! phpcd#completeDone() " {{{
 endfunction " }}}
 
 function phpcd#getFixForNewClassUsage(new_alias, new_full_path) "{{{
-	 return rpcrequest(g:phpcd_channel_id, 'getFixForNewClassUsage', expand('%:p'), { 'alias': a:new_alias, 'full_path': a:new_full_path })
+	 return rpc#request(g:phpcd_channel_id, 'getFixForNewClassUsage', expand('%:p'), { 'alias': a:new_alias, 'full_path': a:new_full_path })
 endfunction "}}}
 
 " TODO make it private after test
@@ -311,7 +310,7 @@ function! phpcd#replaceCurrentWordAfterCompletion(current_word, new_word) "{{{
 	exec 'normal! hv'. (len(a:current_word) - 1) .'hc'. a:new_word
 endfunction "}}}
 function! phpcd#JumpToDefinition(mode) " {{{
-	if g:phpcd_channel_id < 0
+	if !exists('g:phpcd_channel_id')
 		return
 	endif
 
@@ -404,12 +403,12 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 
 		" Get location of class definition, we have to iterate through all
 		if classname != ''
-			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', classname, a:symbol)
+			let [path, line] = rpc#request(g:phpcd_channel_id, 'location', classname, a:symbol)
 			return [path, line, 0]
 		endif " }}}
 	elseif a:symbol_context == 'new' || a:symbol_context =~ '\vimplements|extends'" {{{
 		let full_classname = a:symbol_namespace . '\' . a:symbol
-		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, '')
+		let [path, line] = rpc#request(g:phpcd_channel_id, 'location', full_classname, '')
 		return [path, line, 0] " }}}
 	elseif a:symbol_context =~ 'function' " {{{
 		" try to find interface method's implementation
@@ -421,12 +420,12 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		if a:symbol_context =~ '^abstract'
 			let is_interface = 0
 		endif
-		if interface != '' && g:phpid_channel_id >= 0
-			let impls = rpcrequest(g:phpid_channel_id, 'ls', interface, is_interface)
+		if interface != '' && exists('g:phpid_channel_id')
+			let impls = rpc#request(g:phpid_channel_id, 'ls', interface, is_interface)
 			let impl = phpcd#SelectOne(impls)
 
 			if impl != ''
-				let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', impl, a:symbol)
+				let [path, line] = rpc#request(g:phpcd_channel_id, 'location', impl, a:symbol)
 				return [path, line, 0]
 			endif
 		endif " }}}
@@ -438,17 +437,17 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		return [path, '$', 0] "}}}
 	elseif a:symbol_context =~ '.\+@' " laravel route {{{
 		let full_classname = strpart(a:symbol_context, 1, strlen(a:symbol_context)-2)
-		let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname, a:symbol)
+		let [path, line] = rpc#request(g:phpcd_channel_id, 'location', full_classname, a:symbol)
 		return [path, line, 0] " }}}
 	else " {{{
 		if a:symbol =~ '\v\C^[A-Z]'
 			let [classname, namespace] = phpcd#ExpandClassName(a:symbol, a:symbol_namespace, a:current_imports)
 			let full_classname = namespace . '\' . classname
-			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', full_classname)
+			let [path, line] = rpc#request(g:phpcd_channel_id, 'location', full_classname)
 		else
-			let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', '', a:symbol_namespace.'\'.a:symbol)
+			let [path, line] = rpc#request(g:phpcd_channel_id, 'location', '', a:symbol_namespace.'\'.a:symbol)
 			if path == ''
-				let [path, line] = rpcrequest(g:phpcd_channel_id, 'location', '', a:symbol)
+				let [path, line] = rpc#request(g:phpcd_channel_id, 'location', '', a:symbol)
 			endif
 		end
 
@@ -704,7 +703,7 @@ function! phpcd#GetCallChainReturnType(classname_candidate, class_candidate_name
 	let method = matchstr(methodstack[0], '\v^\$*\zs[^[(]+\ze')
 	let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, imports)
 	let full_classname = class_candidate_namespace . '\' . classname_candidate
-	let return_types = rpcrequest(g:phpcd_channel_id, 'functype', full_classname, method)
+	let return_types = rpc#request(g:phpcd_channel_id, 'functype', full_classname, method)
 	if len(return_types) > 0
 		let return_type = phpcd#SelectOne(return_types)
 		return phpcd#GetCallChainReturnType(return_type, '', imports, methodstack)
@@ -872,7 +871,7 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 			return class_candidate_namespace . '\' . classname_candidate
 		endif " }}}
 		let function_name = matchstr(methodstack[0], '^\s*\zs'.function_name_pattern)
-		let return_types = rpcrequest(g:phpcd_channel_id, 'functype', '', function_name)
+		let return_types = rpc#request(g:phpcd_channel_id, 'functype', '', function_name)
 		if len(return_types) > 0
 			let return_type = phpcd#SelectOne(return_types)
 			return phpcd#GetCallChainReturnType(return_type, '', class_candidate_imports, methodstack)
@@ -1123,22 +1122,22 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 endfunction " }}}
 
 function! phpcd#UpdateIndex() " {{{
-	if g:phpid_channel_id < 0
+	if !exists('g:phpid_channel_id')
 		return
 	endif
 
 	let g:phpcd_need_update = 0
-	let nsuse = rpcrequest(g:phpcd_channel_id, 'nsuse', expand('%:p'))
+	let nsuse = rpc#request(g:phpcd_channel_id, 'nsuse', expand('%:p'))
 	let classname = nsuse.namespace . '\' . nsuse.class
-	return rpcnotify(g:phpid_channel_id, 'update', classname)
+	return rpc#notify(g:phpid_channel_id, 'update', classname)
 endfunction " }}}
 
 function! phpcd#Reindex() "{{{
-	if g:phpid_channel_id < 0
+	if !exists('g:phpid_channel_id')
 		return
 	endif
 
-	call rpcnotify(g:phpid_channel_id, 'index', 1)
+	call rpc#notify(g:phpid_channel_id, 'index', 1)
 endfunction " }}}
 
 function! phpcd#GetDocBlock(sccontent, search) " {{{
@@ -1280,7 +1279,7 @@ function! phpcd#GetTypeFromDocBlockParam(docblock_type) " {{{
 endfunction " }}}
 
 function! phpcd#GetCurrentNameSpace() " {{{
-	let nsuse = rpcrequest(g:phpcd_channel_id, 'nsuse', expand('%:p'))
+	let nsuse = rpc#request(g:phpcd_channel_id, 'nsuse', expand('%:p'))
 
 	let imports = {}
 	if len(nsuse.imports) > 0

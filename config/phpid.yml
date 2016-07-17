@@ -14,4 +14,4 @@ services:
 
     server.phpid:
         class:              Lvht\MsgpackRpc\ForkServer
-        arguments:          [ '@packer', '@io', '@handler.phpid' ]
+        arguments:          [ '@messenger', '@handler.phpid' ]

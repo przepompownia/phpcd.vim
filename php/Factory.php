@@ -5,6 +5,9 @@ namespace PHPCD;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Lvht\MsgpackRpc\JsonMessenger;
+use Lvht\MsgpackRpc\Io;
+use Lvht\MsgpackRpc\MsgpackMessenger;
 
 /**
  * Simple factory to separate details of object creation
@@ -78,5 +81,14 @@ class Factory
         }
 
         return new \PHPCD\PatternMatcher\HeadPatternMatcher($case_sensitivity);
+    }
+
+    public function createMessenger(IO $io, $messengerType = null)
+    {
+        if ($messengerType === 'json') {
+            return new JsonMessenger($io);
+        } else {
+            return new MsgpackMessenger($io);
+        }
     }
 }

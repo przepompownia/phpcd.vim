@@ -10,8 +10,6 @@ if (!exists('g:phpcd_server_options.completion_match_type'))
 endif
 
 let g:phpcd_need_update = 0
-let g:phpcd_channel_id = -1
-let g:phpid_channel_id = -1
 
 if (!exists('g:phpcd_insert_class_shortname'))
 	let g:phpcd_insert_class_shortname = 0

@@ -30,12 +30,10 @@ PHPCD 目前只能配合[NeoVim](http://neovim.io/)工作，这是一个艰难�
 ## 安装指南
 
 ### 环境要求
- 1. PHP 5.3+
- 2. ~~[socket](http://php.net/manual/en/book.sockets.php) 扩展~~
- 3. [PCNTL](http://php.net/manual/en/book.pcntl.php) 扩展
- 4. [Msgpack 0.5.7+](https://github.com/msgpack/msgpack-php) 扩展
- 5. [Composer](https://getcomposer.org/) 支持
- 6. NeoVim
+ 1. [PHP 5.3+](http://php.net/)
+ 2. [PCNTL](http://php.net/manual/en/book.pcntl.php) 扩展
+ 3. [Msgpack 0.5.7+(NeoVim)](https://github.com/msgpack/msgpack-php) 扩展或者[JSON(Vim 7.4+)](http://php.net/manual/en/intro.json.php) 扩展
+ 4. [Composer](https://getcomposer.org/) 支持
 
 
 ### 安装 PHPCD
@@ -46,7 +44,6 @@ PHPCD 目前只能配合[NeoVim](http://neovim.io/)工作，这是一个艰难�
 
 ```
 Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer update --no-dev' }
-Plug 'vim-scripts/progressbar-widget' " 用来显示索引进度的插件
 ```
 
 然后执行`:PlugInstall`进行安装。
@@ -62,7 +59,5 @@ autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
 ## 使用方法
 
 首先运行 `composer install --no-dev` 更新依赖并生成自动加载文件，然后打开 NeoVim。
-
-打开一个 php 文件，如果一切正常的话，几秒钟后 NeoVim 状态栏会显示更新进度条。进度条走完则可开始使用。
 
 补全按<kbd>Ctrl</kbd>+<kbd>x</kbd><kbd>Ctrl</kbd>+<kbd>o</kbd>，跳转按<kbd>ctrl</kbd>+<kbd>]</kbd>。

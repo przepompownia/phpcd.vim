@@ -14,7 +14,10 @@ $parameters['root'] = $root;
 require __DIR__ . '/../vendor/autoload.php';
 
 /** load autoloader for the project **/
-$class_loader = require $root . '/vendor/autoload.php';
+$composer_autoload_file = $root . '/vendor/autoload.php';
+if (is_readable($composer_autoload_file)) {
+    $class_loader = require $composer_autoload_file;
+}
 
 $parameters['class_loader'] = $class_loader;
 

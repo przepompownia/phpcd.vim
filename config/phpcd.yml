@@ -8,4 +8,4 @@ services:
 
     server.phpcd:
         class:              Lvht\MsgpackRpc\ForkServer
-        arguments:          [ '@packer', '@io', '@handler.phpcd' ]
+        arguments:          [ '@messenger', '@handler.phpcd' ]

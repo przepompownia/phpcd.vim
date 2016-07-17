@@ -26,23 +26,12 @@ endfunction " }}}
 
 let s:root = GetComposerRoot()
 
-if s:root == '/'
-	let &cpo = s:save_cpo
-	unlet s:save_cpo
-	finish
-endif
-
 silent! nnoremap <silent> <unique> <buffer> <C-]>
 			\ :<C-u>call phpcd#JumpToDefinition('normal')<CR>
 silent! nnoremap <silent> <unique> <buffer> <C-W><C-]>
 			\ :<C-u>call phpcd#JumpToDefinition('split')<CR>
 silent! nnoremap <silent> <unique> <buffer> <C-W><C-\>
 			\ :<C-u>call phpcd#JumpToDefinition('vsplit')<CR>
-
-let s:phpcd_path = expand('<sfile>:p:h:h') . '/php/main.php'
-if g:phpcd_channel_id != -1
-	call rpcstop(g:phpcd_channel_id)
-endif
 
 " Pass the server configuration only if json_encode function exists
 if exists('*json_encode')
@@ -51,13 +40,31 @@ else
 	let s:encoded_options = ''
 endif
 
-let g:phpcd_channel_id = rpcstart(g:phpcd_php_cli_executable, [s:phpcd_path, s:root, 'PHPCD', s:encoded_options])
+if has('nvim')
+	let messenger = 'msgpack'
+else
+	let messenger = 'json'
+end
 
-if g:phpid_channel_id != -1
-	call rpcstop(g:phpid_channel_id)
+let g:phpcd_server_options['messenger'] = messenger
+
+let s:phpcd_path = expand('<sfile>:p:h:h') . '/php/main.php'
+if exists('g:phpcd_channel_id')
+	call rpc#stop(g:phpcd_channel_id)
+endif
+let g:phpcd_channel_id = rpc#start(g:phpcd_php_cli_executable, [s:phpcd_path, s:root, 'PHPCD', s:encoded_options])
+
+if s:root == '/'
+	let &cpo = s:save_cpo
+	unlet s:save_cpo
+	finish
 endif
 
-let g:phpid_channel_id = rpcstart(g:phpcd_php_cli_executable, [s:phpcd_path, s:root, 'PHPID', s:encoded_options])
+if exists('g:phpid_channel_id')
+	call rpc#stop(g:phpid_channel_id)
+endif
+
+let g:phpid_channel_id = rpc#start(g:phpcd_php_cli_executable, [s:phpcd_path, s:root, 'PHPID', s:encoded_options])
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
