@@ -57,7 +57,6 @@ class StringBasedPHPFileInfo implements PHPFileInfo
             }
         } catch (FileInfoException $e) {
             $this->addError($e->getMessage());
-            return;
         }
     }
 
