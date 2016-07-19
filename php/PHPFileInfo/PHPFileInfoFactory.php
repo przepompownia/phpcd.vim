@@ -13,7 +13,7 @@ class PHPFileInfoFactory
      */
     public function createFileInfo($path)
     {
-        if (file_exists($path) && is_readable($path)) {
+        if (is_readable($path)) {
             $file = new SplFileObject($path);
 
             return new StringBasedPHPFileInfo($file);
