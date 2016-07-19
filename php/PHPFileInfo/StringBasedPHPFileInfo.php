@@ -307,6 +307,15 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     }
 
     /**
+     * Given an initial alias of class and class path corresponding to it
+     * check that that alias can be used then return array of arrays consisting of:
+     *  - alias: null if we can use initial alias, otherwise generated alternative alias
+     *  - full_path: null if there is no need to make new import,
+     *      otherwise path to import associated with the above alias
+     *
+     * Sometimes the same path may associated with more than one aliases (see unit test)
+     * so this function returns array of suggestions to be used by client.
+     *
      * @param array $new_class_params {
      *  @type string  $alias
      *  @type string  $full_path
