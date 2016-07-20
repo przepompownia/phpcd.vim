@@ -172,4 +172,15 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
     {
         return sprintf("%s/%s/%s", realpath('.'), 'tests/php', $relativePath);
     }
+
+    public function testScanSuperInterface()
+    {
+        $path = 'Fixtures/StringBasedPHPFileInfo/Subinterface.php';
+
+        $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
+
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertFalse($fileInfo->hasErrors(), implode(',', $fileInfo->getErrors()));
+        $this->assertTrue($fileInfo->isInterface());
+    }
 }

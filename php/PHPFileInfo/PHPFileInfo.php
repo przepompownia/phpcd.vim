@@ -71,4 +71,19 @@ interface PHPFileInfo
      *  }
      */
     public function getFixForNewClassUsage(array $new_class_params);
+
+    /**
+     * @return bool
+     */
+    public function isClass();
+
+    /**
+     * @return bool
+     */
+    public function isInterface();
+
+    /**
+     * @return bool
+     */
+    public function isTrait();
 }
