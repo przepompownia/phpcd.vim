@@ -27,4 +27,9 @@ class ClassInfoCollection implements IteratorAggregate
     {
         return (new ArrayObject($this->collection))->getIterator();
     }
+
+    public function isEmpty()
+    {
+        return empty($this->collection);
+    }
 }
