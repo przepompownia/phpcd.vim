@@ -27,10 +27,12 @@ class ComposerClassmapFileRepositoryTest extends TestCase
 
         $classLoader = Mockery::mock(ClassLoader::class);
 
-        $exampleWithNonExistingSuperclassPath = 'examplePath.php';
-        $classLoader->shouldReceive('findFile')->andReturn($exampleWithNonExistingSuperclassPath);
+        $classMap = [
+            'Any\\Class' => 'ExampleFile.php'
+        ];
 
-        $project_root =  dirname(__FILE__).'/../Fixtures/ClassInfoRepository/Fakeroot/ExampleWithNonExistingSuperclass';
+        $classLoader->shouldReceive('findFile')->with(key($classMap))->once()->andReturn(current($classMap));
+        $classLoader->shouldReceive('getClassMap')->andReturn($classMap);
 
         $classInfoFactory = new ClassInfoFactory($pattern_matcher);
 
@@ -45,7 +47,6 @@ class ComposerClassmapFileRepositoryTest extends TestCase
         $logger->shouldReceive('warning')->andReturnNull();
 
         $repository = new ComposerClassmapFileRepository(
-            $project_root,
             $classLoader,
             $pattern_matcher,
             $classInfoFactory,
@@ -55,9 +56,7 @@ class ComposerClassmapFileRepositoryTest extends TestCase
 
         $this->assertInstanceOf(ComposerClassmapFileRepository::class, $repository);
 
-        $className = 'PHPCD\\Fixtures\\StringBasedPHPFileInfo\\A';
-
-        $collection = $repository->find($className);
+        $collection = $repository->find(key($classMap));
 
         $this->assertInstanceOf(ClassInfoCollection::class, $collection);
 

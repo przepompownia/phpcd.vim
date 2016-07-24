@@ -34,7 +34,6 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     private $pattern_matcher;
 
     public function __construct(
-        $project_root,
         ClassLoader $classLoader,
         PatternMatcher $pattern_matcher,
         ClassInfoFactory $classInfoFactory,
@@ -46,25 +45,12 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
         $this->classInfoFactory = $classInfoFactory;
         $this->fileInfoFactory = $fileInfoFactory;
         $this->setLogger($logger);
-        $this->setProjectRoot($project_root);
         $this->loadClassMap();
-    }
-
-    private function setProjectRoot($project_root)
-    {
-        $this->project_root = $project_root;
-
-        return $this;
-    }
-
-    private function getClassmapPath()
-    {
-        return $this->project_root . $this->relative_classmap_path;
     }
 
     private function loadClassMap()
     {
-        $this->classmap = require $this->getClassmapPath();
+        $this->classmap = $this->classLoader->getClassmap();
 
         return $this;
     }
