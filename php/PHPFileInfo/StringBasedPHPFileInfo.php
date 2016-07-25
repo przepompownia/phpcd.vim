@@ -5,7 +5,9 @@ namespace PHPCD\PHPFileInfo;
 use SplFileObject;
 
 /**
- *
+ * @TODO fix for aliased namespaces (example in Mockery\Exception\InvalidOrderException)
+ * @TODO fix validation when there exists class in the current namespace
+ *      and built-in with the same name (e.g. Exception)
  */
 class StringBasedPHPFileInfo implements PHPFileInfo
 {
