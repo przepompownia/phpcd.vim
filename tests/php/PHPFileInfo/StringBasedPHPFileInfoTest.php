@@ -117,7 +117,7 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
 
         $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
 
-        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
         $this->assertEquals('PHPCD\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
         $this->assertEquals('ExampleWithourErrors', $fileInfo->getClass());
         $this->assertEquals('Cat', $fileInfo->getSuperclass());
@@ -136,7 +136,7 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
 
         $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
 
-        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
         $this->assertTrue($fileInfo->hasErrors());
     }
 
@@ -146,7 +146,7 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
 
         $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
 
-        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
         $this->assertTrue($fileInfo->hasErrors());
 
         $errors = $fileInfo->getErrors();
@@ -160,7 +160,7 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
 
         $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
 
-        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
         $this->assertTrue($fileInfo->hasErrors());
 
         $errors = $fileInfo->getErrors();
@@ -179,7 +179,7 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
 
         $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
 
-        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
         $this->assertFalse($fileInfo->hasErrors(), implode(',', $fileInfo->getErrors()));
         $this->assertTrue($fileInfo->isInterface());
     }
@@ -190,7 +190,7 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
 
         $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
 
-        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
 
         $this->assertFalse($fileInfo->hasErrors(), implode(',', $fileInfo->getErrors()));
 
