@@ -86,4 +86,11 @@ interface PHPFileInfo
      * @return bool
      */
     public function isTrait();
+
+    /**
+     * Get type
+     *
+     * @return string|null
+     */
+    public function getType();
 }

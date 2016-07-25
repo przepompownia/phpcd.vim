@@ -39,6 +39,7 @@ class ComposerClassmapFileRepositoryTest extends TestCase
         $fileInfo = Mockery::mock(PHPFileInfo::class);
         $fileInfo->shouldReceive('hasErrors')->once()->andReturn(true);
         $fileInfo->shouldReceive('getErrors')->once()->andReturn(['Some syntax error']);
+        $fileInfo->shouldReceive('getType')->once()->andReturn('class');
 
         $fileInfoFactory = Mockery::mock(PHPFileInfoFactory::class);
         $fileInfoFactory->shouldReceive('createFileInfo')->once()->andReturn($fileInfo);

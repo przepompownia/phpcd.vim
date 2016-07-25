@@ -14,7 +14,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     const ALIAS_PATTERN = '/(?<suffix>[\\\\\w]+)(\s+as\s+(?<alias>\w+))?/';
 
-    const CLASS_PATTERN = '/^\s*\b(?<type>(((final|abstract)\s+)?class)|interface|trait)\s+(?<name>\S+)/i';
+    const CLASS_PATTERN = '/^\s*\b(?<type>(((final|abstract)\s+)?(?<isClass>class))|interface|trait)\s+(?<name>\S+)/i';
 
     const EXTENDS_PATTERN = '/\s*\bextends\s+(?<superclass>\S+)\b/i';
 
@@ -165,6 +165,16 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     }
 
     /**
+     * Get type
+     *
+     * @return string|null
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
      * @var string $class
      * @return $this
      */
@@ -211,9 +221,14 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     private function scanLineForClassDeclaration($line)
     {
         if (preg_match(self::CLASS_PATTERN, $line, $matches)) {
+            $type = $matches['type'];
+            if (!empty($matches['isClass'])) {
+                $type = 'class';
+            }
+
             return [
                 'name' => $matches['name'],
-                'type' => $matches['type']
+                'type' => $type
             ];
         }
     }
