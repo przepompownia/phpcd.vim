@@ -183,4 +183,17 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($fileInfo->hasErrors(), implode(',', $fileInfo->getErrors()));
         $this->assertTrue($fileInfo->isInterface());
     }
+
+    public function testScanClassThatImplementsQualifiedName()
+    {
+        $path = 'Fixtures/StringBasedPHPFileInfo/ClassImplementsQualifiedName.php';
+
+        $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
+
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\StringBasedPHPFileInfo', $fileInfo);
+
+        $this->assertFalse($fileInfo->hasErrors(), implode(',', $fileInfo->getErrors()));
+
+        $this->assertTrue($fileInfo->isClass());
+    }
 }

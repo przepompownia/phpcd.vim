@@ -18,7 +18,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     const EXTENDS_PATTERN = '/\s*\bextends\s+(?<superclass>\S+)\b/i';
 
-    const IMPLEMENTS_PATTERN = '/\s*\bimplements\s+(?<interfaces>(\w+(,\s+)?)+)/i';
+    const IMPLEMENTS_PATTERN = '/\s*\bimplements\s+(?<interfaces>([\w\\\\]+(,\s+)?)+)/i';
 
     const NAMESPACE_PATTERN = '/(<\?php)?\s*namespace\s+(?<namespace>.*);$/';
 
