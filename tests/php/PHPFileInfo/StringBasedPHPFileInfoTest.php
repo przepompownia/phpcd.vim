@@ -196,4 +196,18 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($fileInfo->isClass());
     }
+
+    /**
+     * @test
+     */
+    public function scanClassWithAliasedNamespace()
+    {
+        $path = 'Fixtures/StringBasedPHPFileInfo/ExampleWithAliasedNamespace.php';
+
+        $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
+
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
+
+        $this->assertFalse($fileInfo->hasErrors(), implode(',', $fileInfo->getErrors()));
+    }
 }
