@@ -5,7 +5,6 @@ namespace PHPCD\PHPFileInfo;
 use SplFileObject;
 
 /**
- * @TODO fix for aliased namespaces (example in Mockery\Exception\InvalidOrderException)
  * @TODO fix validation when there exists class in the current namespace
  *      and built-in with the same name (e.g. Exception)
  */
@@ -513,12 +512,15 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     private function getFullPath($className)
     {
-        if ($className !== $this->getClass() && $this->hasAliasUsed($className)) {
-            return $this->getPathByAlias($className);
-        }
-
         if (strpos($className, '\\') !== 0) {
-            $className = sprintf('%s\%s', $this->getNamespace(), $className);
+            $path = explode('\\', $className);
+            $first = array_shift($path);
+
+            if ($this->hasAliasUsed($first)) {
+                return implode('\\', array_merge(explode('\\', $this->getPathByAlias($first)), $path));
+            }
+
+            return sprintf('%s\%s', $this->getNamespace(), $className);
         }
 
         return $className;
