@@ -113,18 +113,40 @@ class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testScanFileWithoutErrors()
     {
-        $path = 'Fixtures/StringBasedPHPFileInfo/ExampleWithourErrors.php';
+        $path = 'Fixtures/StringBasedPHPFileInfo/ExampleWithoutErrors.php';
 
         $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
 
         $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
         $this->assertEquals('PHPCD\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
-        $this->assertEquals('ExampleWithourErrors', $fileInfo->getClass());
+        $this->assertEquals('ExampleWithoutErrors', $fileInfo->getClass());
         $this->assertEquals('Cat', $fileInfo->getSuperclass());
 
         $interfaces = $fileInfo->getInterfaces();
+        $this->assertFalse($fileInfo->hasErrors());
+    }
 
+    /**
+     * @test
+     */
+    public function scanFileWithNonExistingInterface()
+    {
+        $path = 'Fixtures/StringBasedPHPFileInfo/ExampleWithNonExistingInterfaces.php';
+
+        $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
+
+        $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
+        $this->assertEquals('PHPCD\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
+        $this->assertEquals('ExampleWithNonExistingInterfaces', $fileInfo->getClass());
+        $this->assertNull($fileInfo->getSuperclass());
+
+        $interfaces = $fileInfo->getInterfaces();
         $this->assertEquals(['I1', 'I2'], $interfaces);
+
+        $this->assertTrue($fileInfo->hasErrors());
+        $errors = $fileInfo->getErrors();
+        $this->assertEquals('Interface PHPCD\Fixtures\StringBasedPHPFileInfo\I1 does not exist.', current($errors));
+
     }
 
     /**
