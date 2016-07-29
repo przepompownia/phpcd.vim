@@ -114,12 +114,8 @@ class PHPID implements RpcHandler
      *
      * @param bool $is_force overwrite the exists index
      */
-    public function index($is_force = false)
+    public function index()
     {
-        if (is_dir($this->getIndexDir()) && !$is_force) {
-            return;
-        }
-
         $this->initIndexDir();
 
         exec('composer dump-autoload -o -d ' . $this->root . ' 2>&1 >/dev/null');

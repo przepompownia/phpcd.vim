@@ -9,8 +9,8 @@ services:
     handler.phpid:
         class:              \PHPCD\PHPID
         arguments:          ['%root%', '@default_logger', '@classes_repository']
-        calls:
-            - [ index ]
+        # calls:
+        #     - [ index ]
 
     server.phpid:
         class:              Lvht\MsgpackRpc\ForkServer

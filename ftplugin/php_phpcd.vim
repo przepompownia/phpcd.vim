@@ -33,13 +33,6 @@ silent! nnoremap <silent> <unique> <buffer> <C-W><C-]>
 silent! nnoremap <silent> <unique> <buffer> <C-W><C-\>
 			\ :<C-u>call phpcd#JumpToDefinition('vsplit')<CR>
 
-" Pass the server configuration only if json_encode function exists
-if exists('*json_encode')
-	let s:encoded_options = json_encode(g:phpcd_server_options)
-else
-	let s:encoded_options = ''
-endif
-
 if has('nvim')
 	let messenger = 'msgpack'
 else
@@ -48,11 +41,20 @@ end
 
 let g:phpcd_server_options['messenger'] = messenger
 
+" Pass the server configuration only if json_encode function exists
+if exists('*json_encode')
+	let s:encoded_options = json_encode(g:phpcd_server_options)
+else
+	let s:encoded_options = ''
+endif
+command! -nargs=0 PHPID call phpcd#Index()
+
 let s:phpcd_path = expand('<sfile>:p:h:h') . '/php/main.php'
 if exists('g:phpcd_channel_id')
 	call rpc#stop(g:phpcd_channel_id)
 endif
-let g:phpcd_channel_id = rpc#start(g:phpcd_php_cli_executable, [s:phpcd_path, s:root, 'PHPCD', s:encoded_options])
+let g:phpcd_channel_id = rpc#start(g:phpcd_php_cli_executable,
+			\ [s:phpcd_path, s:root, 'PHPCD', s:encoded_options])
 
 if s:root == '/'
 	let &cpo = s:save_cpo
@@ -64,7 +66,8 @@ if exists('g:phpid_channel_id')
 	call rpc#stop(g:phpid_channel_id)
 endif
 
-let g:phpid_channel_id = rpc#start(g:phpcd_php_cli_executable, [s:phpcd_path, s:root, 'PHPID', s:encoded_options])
+let g:phpid_channel_id = rpc#start(g:phpcd_php_cli_executable,
+			\ [s:phpcd_path, s:root, 'PHPID', s:encoded_options])
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

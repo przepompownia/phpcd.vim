@@ -1132,12 +1132,12 @@ function! phpcd#UpdateIndex() " {{{
 	return rpc#notify(g:phpid_channel_id, 'update', classname)
 endfunction " }}}
 
-function! phpcd#Reindex() "{{{
+function! phpcd#Index() "{{{
 	if !exists('g:phpid_channel_id')
 		return
 	endif
 
-	call rpc#notify(g:phpid_channel_id, 'index', 1)
+	call rpc#notify(g:phpid_channel_id, 'index')
 endfunction " }}}
 
 function! phpcd#GetDocBlock(sccontent, search) " {{{

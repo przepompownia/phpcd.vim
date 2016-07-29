@@ -17,10 +17,24 @@ function! rpc#notify(...) " {{{
 		return call('rpcnotify', a:000)
 	else
 		let channel = job_getchannel(a:1)
-		let notice = [2, 1, a:2, a:000[2:]]
+		let notice = [2, a:2, a:000[2:]]
 		call ch_sendraw(channel, json_encode(notice)."\n")
 	end
 endfunction " }}}
+
+function! s:OnCall(status, response)
+	let msg = json_decode(a:response)
+	if len(msg) != 3
+		return
+	endif
+
+	let [type, method, params] = msg
+	if method != 'vim_command' || len(params) != 1
+		return
+	endif
+
+	execute params[0]
+endfunction
 
 function! rpc#start(...) " {{{
 	if has('nvim')
@@ -28,7 +42,7 @@ function! rpc#start(...) " {{{
 	else
 		let args = a:2
 		call insert(args, a:1, 0)
-		return job_start(args)
+		return job_start(args, {'out_cb': function('s:OnCall')})
 	end
 endfunction " }}}
 
