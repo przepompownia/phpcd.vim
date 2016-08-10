@@ -12,7 +12,7 @@ PHPCD 的 VimL 部分基于[phpcomplete.vim](https://github.com/shawncplus/phpco
 
 因为 PHPCD 利用 PHP 的[反射机制](http://php.net/manual/en/book.reflection.php)进行补全和跳转，所以 PHPCD 几乎不需要事先生成索引文件，启动速度、补全速度和跳转速度都非常快，代码也非常简洁。
 
-PHPCD 目前只能配合[NeoVim](http://neovim.io/)工作，这是一个艰难的抉择。
+~~PHPCD 目前只能配合[NeoVim](http://neovim.io/)工作，这是一个艰难的抉择。~~
 
 ##  特色
  * 快、轻、强
