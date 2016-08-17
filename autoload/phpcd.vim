@@ -407,7 +407,11 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 			return [path, line, 0]
 		endif " }}}
 	elseif a:symbol_context == 'new' || a:symbol_context =~ '\vimplements|extends'" {{{
-		let full_classname = a:symbol_namespace . '\' . a:symbol
+		if (a:symbol_namespace == '\')
+			let full_classname = a:symbol
+		else
+			let full_classname = a:symbol_namespace . '\' . a:symbol
+		endif
 		let [path, line] = rpc#request(g:phpcd_channel_id, 'location', full_classname, '')
 		return [path, line, 0] " }}}
 	elseif a:symbol_context =~ 'function' " {{{
@@ -442,7 +446,11 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 	else " {{{
 		if a:symbol =~ '\v\C^[A-Z]'
 			let [classname, namespace] = phpcd#ExpandClassName(a:symbol, a:symbol_namespace, a:current_imports)
-			let full_classname = namespace . '\' . classname
+			if namespace == '\'
+				let full_classname = classname
+			else
+				let full_classname = namespace . '\' . classname
+			endif
 			let [path, line] = rpc#request(g:phpcd_channel_id, 'location', full_classname)
 		else
 			let [path, line] = rpc#request(g:phpcd_channel_id, 'location', '', a:symbol_namespace.'\'.a:symbol)
@@ -696,7 +704,13 @@ function! phpcd#GetCallChainReturnType(classname_candidate, class_candidate_name
 
 	if (len(methodstack) == 1) " {{{
 		let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, imports)
-		return class_candidate_namespace . '\' . classname_candidate
+		if (class_candidate_namespace == '\')
+			let return_type = '\' . classname_candidate
+		else
+			let return_type = class_candidate_namespace . '\' . classname_candidate
+		endif
+
+		return return_type
 	endif " }}}
 
 	call remove(methodstack, 0)
@@ -1281,20 +1295,13 @@ endfunction " }}}
 function! phpcd#GetCurrentNameSpace() " {{{
 	let nsuse = rpc#request(g:phpcd_channel_id, 'nsuse', expand('%:p'))
 
-	let imports = {}
-	if len(nsuse.imports) > 0
-		for [alias, fqdn] in items(nsuse.imports)
-			let imports[alias] = {'name': fqdn, 'kind': ''}
-		endfor
-	endif
-
-	return [nsuse.namespace, imports]
+	return [nsuse.namespace, nsuse.imports]
 endfunction " }}}
 
 function! phpcd#GetCurrentFunctionBoundaries() " {{{
 	let old_cursor_pos = [line('.'), col('.')]
 	let current_line_no = old_cursor_pos[0]
-	let function_pattern = '\c\(.*\%#\)\@!\_^\s*\zs\(abstract\s\+\|final\s\+\|private\s\+\|protected\s\+\|public\s\+\|static\s\+\)*function\_.\{-}(\_.\{-})\_.\{-}{'
+	let function_pattern = '\<function\s\+('
 
 	let func_start_pos = searchpos(function_pattern, 'Wbc')
 	if func_start_pos == [0, 0]
@@ -1336,7 +1343,7 @@ function! phpcd#ExpandClassName(classname, current_namespace, imports) " {{{
 
 	let parts = split(a:classname, '\\\+')
 	if has_key(a:imports, parts[0])
-		let parts[0] = a:imports[parts[0]].name
+		let parts[0] = a:imports[parts[0]]
 	else
 		call insert(parts, a:current_namespace, 0)
 	endif
