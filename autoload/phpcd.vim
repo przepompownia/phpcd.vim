@@ -1301,7 +1301,7 @@ endfunction " }}}
 function! phpcd#GetCurrentFunctionBoundaries() " {{{
 	let old_cursor_pos = [line('.'), col('.')]
 	let current_line_no = old_cursor_pos[0]
-	let function_pattern = '\<function\s\+('
+	let function_pattern = '\<function\s\+.*('
 
 	let func_start_pos = searchpos(function_pattern, 'Wbc')
 	if func_start_pos == [0, 0]
