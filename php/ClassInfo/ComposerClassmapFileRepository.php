@@ -12,10 +12,6 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
 {
     use LoggerAwareTrait;
 
-    private $relative_classmap_path = '/vendor/composer/autoload_classmap.php';
-
-    private $project_root;
-
     private $classLoader;
 
     private $classmap = [];
