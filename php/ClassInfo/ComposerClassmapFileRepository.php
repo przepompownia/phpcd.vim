@@ -115,11 +115,4 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
 
         return null;
     }
-
-    public function reload()
-    {
-        $this->loadClassMap();
-
-        return true;
-    }
 }
