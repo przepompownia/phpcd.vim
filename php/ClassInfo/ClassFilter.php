@@ -4,14 +4,20 @@ namespace PHPCD\ClassInfo;
 
 class ClassFilter
 {
+    const IS_ABSTRACT_CLASS   = 'isAbstractClass';
+    const IS_FINAL            = 'isFinal';
+    const IS_TRAIT            = 'isTrait';
+    const IS_INSTANTIABLE     = 'isInstantiable';
+    const IS_INTERFACE        = 'isInterface';
+
     private $criteria = [];
 
     private $fields = [
-        'isAbstractClass',
-        'isFinal',
-        'isTrait',
-        'isInstantiable',
-        'isInterface'
+        self::IS_ABSTRACT_CLASS,
+        self::IS_FINAL,
+        self::IS_TRAIT,
+        self::IS_INSTANTIABLE,
+        self::IS_INTERFACE
     ];
 
     public function __construct(array $criteria)
@@ -51,16 +57,16 @@ class ClassFilter
     private function validate()
     {
         $wrongCombinations = [
-            ['isAbstractClass' => true, 'isTrait' => true],
-            ['isAbstractClass' => true, 'isInterface' => true],
-            ['isAbstractClass' => true, 'isFinal' => true],
-            ['isAbstractClass' => true, 'isInstantiable' => true],
-            ['isInstantiable' => true, 'isTrait' => true],
-            ['isInstantiable' => true, 'isInterface' => true],
-            ['isTrait' => true, 'isInterface' => true],
-            ['isTrait' => true, 'isFinal' => true],
-            ['isInterface' => true, 'isFinal' => true],
-            ['isInstantiable' => false, 'isFinal' => true]
+            [self::IS_ABSTRACT_CLASS => true, self::IS_TRAIT => true],
+            [self::IS_ABSTRACT_CLASS => true, self::IS_INTERFACE => true],
+            [self::IS_ABSTRACT_CLASS => true, self::IS_FINAL => true],
+            [self::IS_ABSTRACT_CLASS => true, self::IS_INSTANTIABLE => true],
+            [self::IS_INSTANTIABLE => true, self::IS_TRAIT => true],
+            [self::IS_INSTANTIABLE => true, self::IS_INTERFACE => true],
+            [self::IS_TRAIT => true, self::IS_INTERFACE => true],
+            [self::IS_TRAIT => true, self::IS_FINAL => true],
+            [self::IS_INTERFACE => true, self::IS_FINAL => true],
+            [self::IS_INSTANTIABLE => false, self::IS_FINAL => true]
         ];
 
         foreach ($wrongCombinations as $combination) {
@@ -88,7 +94,7 @@ class ClassFilter
      */
     public function isAbstractClass()
     {
-        return $this->criteria['isAbstractClass'];
+        return $this->criteria[self::IS_ABSTRACT_CLASS];
     }
 
     /**
@@ -96,7 +102,7 @@ class ClassFilter
      */
     public function isFinal()
     {
-        return $this->criteria['isFinal'];
+        return $this->criteria[self::IS_FINAL];
     }
 
     /**
@@ -104,7 +110,7 @@ class ClassFilter
      */
     public function isTrait()
     {
-        return $this->criteria['isTrait'];
+        return $this->criteria[self::IS_TRAIT];
     }
 
     /**
@@ -112,7 +118,7 @@ class ClassFilter
      */
     public function isInstantiable()
     {
-        return $this->criteria['isInstantiable'];
+        return $this->criteria[self::IS_INSTANTIABLE];
     }
 
     /**
@@ -120,6 +126,6 @@ class ClassFilter
      */
     public function isInterface()
     {
-        return $this->criteria['isInterface'];
+        return $this->criteria[self::IS_INTERFACE];
     }
 }

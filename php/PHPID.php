@@ -268,7 +268,7 @@ class PHPID implements RpcHandler
 
     public function getInterfaces($path_pattern)
     {
-        $filter = new ClassFilter(['isInterface' => true]);
+        $filter = new ClassFilter([ClassFilter::IS_INTERFACE => true]);
 
         $collection = $this->classes_repository->find($path_pattern, $filter);
 
@@ -277,7 +277,11 @@ class PHPID implements RpcHandler
 
     public function getPotentialSuperclasses($path_pattern)
     {
-        $filter = new ClassFilter(['isFinal' => false, 'isTrait' => false, 'isInterface' => false]);
+        $filter = new ClassFilter([
+            ClassFilter::IS_FINAL => false,
+            ClassFilter::IS_TRAIT => false,
+            ClassFilter::IS_INTERFACE => false
+        ]);
 
         $collection = $this->classes_repository->find($path_pattern, $filter);
 
@@ -286,7 +290,7 @@ class PHPID implements RpcHandler
 
     public function getInstantiableClasses($path_pattern)
     {
-        $filter = new ClassFilter(['isInstantiable' => true]);
+        $filter = new ClassFilter([ClassFilter::IS_INSTANTIABLE => true]);
 
         $collection = $this->classes_repository->find($path_pattern, $filter);
 
@@ -296,7 +300,7 @@ class PHPID implements RpcHandler
     public function getNamesToTypeDeclaration($path_pattern)
     {
         // @TODO add basic type here, not in repository
-        $filter = new ClassFilter(['isTrait' => false]);
+        $filter = new ClassFilter([ClassFilter::IS_TRAIT => false]);
 
         $collection = $this->classes_repository->find($path_pattern, $filter);
 
