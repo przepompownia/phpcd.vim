@@ -12,7 +12,7 @@ class ClassFilter
 
     private $criteria = [];
 
-    private $fields = [
+    private $criteriaNames = [
         self::IS_ABSTRACT_CLASS,
         self::IS_FINAL,
         self::IS_TRAIT,
@@ -22,7 +22,7 @@ class ClassFilter
 
     public function __construct(array $criteria)
     {
-        foreach ($this->fields as $field) {
+        foreach ($this->criteriaNames as $field) {
             if (isset($criteria[$field])) {
                 $this->validateField($criteria[$field]);
                 $this->criteria[$field] = $criteria[$field];
@@ -35,9 +35,9 @@ class ClassFilter
         $this->validate();
     }
 
-    public function getFieldNames()
+    public function getCriteriaNames()
     {
-        return $this->fields;
+        return $this->criteriaNames;
     }
 
     private function validateField($field)
@@ -70,17 +70,17 @@ class ClassFilter
         ];
 
         foreach ($wrongCombinations as $combination) {
-            $fields = [];
+            $criteriaNames = [];
             foreach ($combination as $field => $value) {
                 if ($this->criteria[$field] === $value) {
-                    $fields[] = $field;
+                    $criteriaNames[] = $field;
                 }
             }
 
-            if (count($fields) === count($combination)) {
+            if (count($criteriaNames) === count($combination)) {
                 $message = sprintf(
                     'Bad search criteria: [%s] used at once.',
-                    implode(',', $fields)
+                    implode(',', $criteriaNames)
                 );
                 throw new \InvalidArgumentException($message);
             }

@@ -120,7 +120,7 @@ class ReflectionClass extends \ReflectionClass implements ClassInfo
 
     public function matchesFilter(ClassFilter $classFilter)
     {
-        $methods = $classFilter->getFieldNames();
+        $methods = $classFilter->getCriteriaNames();
 
         foreach ($methods as $method) {
             if ($classFilter->$method() !== null) {
