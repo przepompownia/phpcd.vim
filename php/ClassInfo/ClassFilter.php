@@ -12,6 +12,11 @@ class ClassFilter
 
     private $criteria = [];
 
+    /**
+     * @var string|null
+     */
+    private $pattern;
+
     private $criteriaNames = [
         self::IS_ABSTRACT_CLASS,
         self::IS_FINAL,
@@ -20,8 +25,11 @@ class ClassFilter
         self::IS_INTERFACE
     ];
 
-    public function __construct(array $criteria)
+    public function __construct(array $criteria, $pattern = null)
     {
+        $this->validatePattern($pattern);
+        $this->pattern = $pattern;
+
         foreach ($this->criteriaNames as $field) {
             if (isset($criteria[$field])) {
                 $this->validateField($criteria[$field]);
@@ -35,9 +43,26 @@ class ClassFilter
         $this->validate();
     }
 
+    /**
+     * Get regex pattern to match against class name
+     *
+     * @return string|null
+     */
+    public function getPattern()
+    {
+        return $this->pattern;
+    }
+
     public function getCriteriaNames()
     {
         return $this->criteriaNames;
+    }
+
+    private function validatePattern($pattern)
+    {
+        if (!is_string($pattern)) {
+            throw new \InvalidArgumentException('Class name pattern must be string.');
+        }
     }
 
     private function validateField($field)

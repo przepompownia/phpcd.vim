@@ -16,11 +16,10 @@ namespace PHPCD\ClassInfo;
 interface ClassInfoRepository
 {
     /**
-     * @param string $path_pattern Input pattern
      * @param ClassFilter $filter criteria to search
      * @return ClassInfoCollection
      */
-    public function find($path_pattern, ClassFilter $filter = null);
+    public function find(ClassFilter $filter);
 
     /**
      * Update whole repository

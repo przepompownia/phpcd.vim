@@ -8,6 +8,7 @@ use Composer\Autoload\ClassLoader;
 use Psr\Log\LoggerInterface;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use PHPCD\ClassInfo\ClassInfoFactory;
+use PHPCD\ClassInfo\ClassFilter;
 use PHPCD\ClassInfo\ComposerClassmapFileRepository;
 use PHPCD\ClassInfo\ClassInfoCollection;
 use PHPCD\PHPFileInfo\PHPFileInfo;
@@ -57,7 +58,7 @@ class ComposerClassmapFileRepositoryTest extends TestCase
 
         $this->assertInstanceOf(ComposerClassmapFileRepository::class, $repository);
 
-        $collection = $repository->find(key($classMap));
+        $collection = $repository->find(new ClassFilter([], key($classMap)));
 
         $this->assertInstanceOf(ClassInfoCollection::class, $collection);
 

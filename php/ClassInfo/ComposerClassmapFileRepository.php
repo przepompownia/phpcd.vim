@@ -52,16 +52,15 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     }
 
     /**
-     * @param string $path_pattern Input pattern
      * @param ClassFilter $filter criteria to search
      * @return ClassInfoCollection
      */
-    public function find($path_pattern, ClassFilter $filter = null)
+    public function find(ClassFilter $filter)
     {
         $collection = $this->classInfoFactory->createClassInfoCollection();
 
         foreach (array_keys($this->classmap) as $classpath) {
-            if ($this->pattern_matcher->match($path_pattern, $classpath)) {
+            if ($this->pattern_matcher->match($filter->getPattern(), $classpath)) {
                 $class_info = $this->get($classpath);
 
                 if ($class_info !== null && ($filter === null || $class_info->matchesFilter($filter))) {
