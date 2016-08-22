@@ -7,6 +7,7 @@ use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use Composer\Autoload\ClassLoader;
+use PHPCD\Filter\ClassFilter;
 
 class ComposerClassmapFileRepository implements ClassInfoRepository
 {

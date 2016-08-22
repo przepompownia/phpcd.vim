@@ -8,7 +8,7 @@ use Composer\Autoload\ClassLoader;
 use Psr\Log\LoggerInterface;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use PHPCD\ClassInfo\ClassInfoFactory;
-use PHPCD\ClassInfo\ClassFilter;
+use PHPCD\Filter\ClassFilter;
 use PHPCD\ClassInfo\ComposerClassmapFileRepository;
 use PHPCD\ClassInfo\ClassInfoCollection;
 use PHPCD\PHPFileInfo\PHPFileInfo;

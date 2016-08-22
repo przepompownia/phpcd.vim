@@ -2,6 +2,8 @@
 
 namespace PHPCD\ClassInfo;
 
+use PHPCD\Filter\ClassFilter;
+
 interface ClassInfo
 {
     /**

@@ -3,6 +3,7 @@
 namespace PHPCD\ClassInfo;
 
 use PHPCD\PatternMatcher\PatternMatcher;
+use PHPCD\Filter\ClassFilter;
 
 class ReflectionClass extends \ReflectionClass implements ClassInfo
 {

@@ -2,6 +2,8 @@
 
 namespace PHPCD\ClassInfo;
 
+use PHPCD\Filter\ClassFilter;
+
 /**
  * Repository to store and retrieve information
  * about classes, interfaces and traits

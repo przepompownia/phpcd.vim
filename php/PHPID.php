@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface as Logger;
 use Psr\Log\LoggerAwareTrait;
 use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
-use PHPCD\ClassInfo\ClassFilter;
+use PHPCD\Filter\ClassFilter;
 use PHPCD\ClassInfo\ClassInfoRepository;
 use PHPCD\ClassInfo\ClassInfoCollection;
 
