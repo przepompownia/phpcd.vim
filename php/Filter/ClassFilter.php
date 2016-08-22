@@ -2,7 +2,7 @@
 
 namespace PHPCD\Filter;
 
-class ClassFilter
+class ClassFilter extends AbstractFilter
 {
     const IS_ABSTRACT_CLASS   = 'isAbstractClass';
     const IS_FINAL            = 'isFinal';
@@ -10,70 +10,13 @@ class ClassFilter
     const IS_INSTANTIABLE     = 'isInstantiable';
     const IS_INTERFACE        = 'isInterface';
 
-    private $criteria = [];
-
-    /**
-     * @var string|null
-     */
-    private $pattern;
-
-    private $criteriaNames = [
+    protected $criteriaNames = [
         self::IS_ABSTRACT_CLASS,
         self::IS_FINAL,
         self::IS_TRAIT,
         self::IS_INSTANTIABLE,
         self::IS_INTERFACE
     ];
-
-    public function __construct(array $criteria, $pattern = null)
-    {
-        $this->validatePattern($pattern);
-        $this->pattern = $pattern;
-
-        foreach ($this->criteriaNames as $field) {
-            if (isset($criteria[$field])) {
-                $this->validateField($criteria[$field]);
-                $this->criteria[$field] = $criteria[$field];
-            } else {
-                $this->criteria[$field] = null;
-            }
-        }
-
-        // @todo Disable it to normal usage
-        $this->validate();
-    }
-
-    /**
-     * Get regex pattern to match against class name
-     *
-     * @return string|null
-     */
-    public function getPattern()
-    {
-        return $this->pattern;
-    }
-
-    public function getCriteriaNames()
-    {
-        return $this->criteriaNames;
-    }
-
-    private function validatePattern($pattern)
-    {
-        if (!is_string($pattern)) {
-            throw new \InvalidArgumentException('Class name pattern must be string.');
-        }
-    }
-
-    private function validateField($field)
-    {
-        if ($field !== true && $field !== false && $field !== null) {
-            $message = sprintf('%s must be set to true, false or null.', (string)$field);
-            throw new \InvalidArgumentException($message);
-        }
-
-        return true;
-    }
 
     /**
      * Probably usable only as remainder

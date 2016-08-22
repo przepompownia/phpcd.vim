@@ -2,7 +2,9 @@
 
 namespace PHPCD\PHPFileInfo;
 
-class StringBasedPHPFileInfoTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class StringBasedPHPFileInfoTest extends TestCase
 {
     /**
      * @return StringBasedPHPFileInfo

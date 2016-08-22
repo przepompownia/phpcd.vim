@@ -3,6 +3,7 @@
 namespace PHPCD\ClassInfo;
 
 use PHPCD\PatternMatcher\PatternMatcher;
+use PHPCD\Filter\ClassElementFilter;
 
 class ClassInfoFactory
 {
@@ -32,5 +33,14 @@ class ClassInfoFactory
     public function createClassInfoCollection()
     {
         return new ClassInfoCollection;
+    }
+
+    public function createReflectionClassFromFilter(ClassElementFilter $filter)
+    {
+        if (empty($filter->getClass())) {
+            throw new \InvalidArgumentException(sprintf('%s needs class name to find method.', self::class));
+        }
+
+        return new \ReflectionClass($filter->getClass());
     }
 }

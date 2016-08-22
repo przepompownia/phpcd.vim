@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+error_reporting(-1);
 set_error_handler(function ($severity, $message, $file, $line) {
     throw new ErrorException($message, 0, $severity, $file, $line);
 });
@@ -31,6 +31,7 @@ $configfile =  $handler_name.'.yml';
 $dIContainer = $factory->createDIContainer($configfile, $configdir, $parameters);
 
 $logger = $dIContainer->get('default_logger');
+$logger->debug('args:', $argv);
 
 try {
     if ($handler_name !== 'phpcd' && $handler_name !== 'phpid') {

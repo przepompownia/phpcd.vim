@@ -2,15 +2,14 @@
 
 namespace PHPCD\ClassInfo;
 
-use ArrayObject;
-use IteratorAggregate;
+use PHPCD\Collection;
 
-class ClassInfoCollection implements IteratorAggregate
+class ClassInfoCollection extends Collection
 {
     /**
      * @var ClassInfo[]
      */
-    private $collection = [];
+    protected $collection = [];
 
     /**
      * @param ClassInfo $class_info
@@ -21,15 +20,5 @@ class ClassInfoCollection implements IteratorAggregate
         $this->collection[$class_info->getName()] = $class_info;
 
         return $this;
-    }
-
-    public function getIterator()
-    {
-        return (new ArrayObject($this->collection))->getIterator();
-    }
-
-    public function isEmpty()
-    {
-        return empty($this->collection);
     }
 }
