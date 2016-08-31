@@ -74,7 +74,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 				endif
 			endif
 
-			return rpc#request(g:phpcd_channel_id, 'info', classname, a:base, is_static, public_only)
+			return rpc#request(g:phpcd_channel_id, 'getMatchingClassDetails', classname, a:base, is_static, public_only)
 		elseif context =~? 'implements'
 			return phpcd#getInterfaces(a:base)
 		elseif context =~? 'extends\s\+.\+$' && a:base == ''
@@ -91,7 +91,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 		endif " }}}
 
 		if a:base =~ '^[^$]' " {{{
-			return phpcd#CompleteGeneral(a:base, current_namespace, imports)
+			return phpcd#CompleteDefault(a:base, current_namespace, imports)
 		endif " }}}
 	finally
 		silent! exec winnr.'resize '.winheight
@@ -155,10 +155,10 @@ function! phpcd#getAbsoluteClassesPaths(path) " {{{
 	return <SID>prepareClassInfoOutput(class_info, 0)
 endfunction " }}}
 
-function! phpcd#CompleteGeneral(base, current_namespace, imports) " {{{
+function! phpcd#CompleteDefault(base, current_namespace, imports) " {{{
 	let base = substitute(a:base, '^\\', '', '')
 	let [pattern, namespace] = phpcd#ExpandClassName(a:base, a:current_namespace, a:imports)
-	return rpc#request(g:phpcd_channel_id, 'info', '', pattern)
+	return rpc#request(g:phpcd_channel_id, 'getFunctionsAndConstants', pattern)
 endfunction " }}}
 
 function! phpcd#completeDone() " {{{

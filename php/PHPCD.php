@@ -86,34 +86,6 @@ class PHPCD implements RpcHandler
     }
 
     /**
-     * Fetch the completion list.
-     *
-     * If both $class_name and $pattern are setted, it will list the class's
-     * methods, constants, and properties, filted by pattern.
-     *
-     * If only $pattern is setted, it will list all the defined function
-     * (including the PHP's builtin function', filted by pattern.
-     *
-     * @var string $class_name
-     * @var string $pattern
-     * @var string $static_mode see translateStaticMode method
-     * @var bool $public_only
-     */
-    public function info($class_name, $pattern, $static_mode = 'both', $public_only = true)
-    {
-        if ($class_name) {
-            $static_mode = $this->translateStaticMode($static_mode);
-            return $this->getMatchingClassDetails($class_name, $pattern, $static_mode, $public_only);
-        }
-
-        if ($pattern) {
-            return $this->functionOrConstantInfo($pattern);
-        }
-
-        return [];
-    }
-
-    /**
      * Fetch function or class method's source file path
      * and their defination line number.
      *
@@ -351,8 +323,10 @@ class PHPCD implements RpcHandler
         'void'     => 1,
     ];
 
-    private function getMatchingClassDetails($class_name, $pattern, $is_static, $public_only)
+    public function getMatchingClassDetails($class_name, $pattern, $is_static = 'both', $public_only = true)
     {
+        $is_static = $this->translateStaticMode($is_static);
+
         try {
             $reflection = $this->class_info_factory->createClassInfo($class_name);
             $items = [];
@@ -394,7 +368,7 @@ class PHPCD implements RpcHandler
         return $info->getFixForNewClassUsage($new_class_params);
     }
 
-    private function functionOrConstantInfo($pattern)
+    public function getFunctionsAndConstants($pattern)
     {
         $items = [];
         $funcs = get_defined_functions();
