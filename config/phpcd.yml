@@ -4,7 +4,14 @@ imports:
 services:
     handler.phpcd:
         class:              \PHPCD\PHPCD
-        arguments:          ['%root%', '@default_logger', '@class_info_factory', '@file_info_factory']
+        arguments:
+            - '%root%'
+            - '@default_logger'
+            - '@class_info_factory'
+            - '@constant_info_repository'
+            - '@property_info_repository'
+            - '@method_info_repository'
+            - '@file_info_factory'
 
     server.phpcd:
         class:              Lvht\MsgpackRpc\ForkServer

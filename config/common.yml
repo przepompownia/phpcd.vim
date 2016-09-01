@@ -47,3 +47,15 @@ services:
         class:              \PHPCD\ClassInfo\ClassInfoFactory
         arguments:          ['@default_pattern_matcher']
 
+    constant_info_repository:
+        class:              \PHPCD\ConstantInfo\ReflectionConstantInfoRepository
+        arguments:          ['@default_pattern_matcher', '@class_info_factory']   
+
+    method_info_repository:
+        class:              \PHPCD\ObjectElementInfo\ReflectionMethodInfoRepository
+        arguments:          ['@default_pattern_matcher', '@class_info_factory']   
+
+    property_info_repository:
+        class:              \PHPCD\ObjectElementInfo\ReflectionPropertyInfoRepository
+        arguments:          ['@default_pattern_matcher', '@class_info_factory']   
+

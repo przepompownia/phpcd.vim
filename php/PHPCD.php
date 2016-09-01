@@ -7,6 +7,14 @@ use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use PHPCD\ClassInfo\ClassInfoFactory;
+use PHPCD\ConstantInfo\ConstantInfoRepository;
+use PHPCD\Filter\ConstantFilter;
+use PHPCD\Filter\MethodFilter;
+use PHPCD\Filter\PropertyFilter;
+// use PHPCD\Filter\
+// TODO:            ^ complete there!
+use PHPCD\ObjectElementInfo\MethodInfoRepository;
+use PHPCD\ObjectElementInfo\PropertyInfoRepository;
 
 class PHPCD implements RpcHandler
 {
@@ -18,6 +26,15 @@ class PHPCD implements RpcHandler
     private $server;
 
     private $root;
+
+    /** @var ConstantInfoRepository */
+    private $constantInfoRepository;
+
+    /** @var PropertyInfoRepository **/
+    private $propertyInfoRepository;
+
+    /** @var MethodInfoRepository **/
+    private $methodInfoRepository;
 
     /*
      * Probably it should be replaced by
@@ -33,12 +50,18 @@ class PHPCD implements RpcHandler
         $root,
         Logger $logger,
         ClassInfoFactory $class_info_factory,
+        ConstantInfoRepository $constantInfoRepository,
+        PropertyInfoRepository $propertyInfoRepository,
+        MethodInfoRepository $methodInfoRepository,
         PHPFileInfoFactory $file_info_factory
     ) {
         $this->setRoot($root);
         $this->setLogger($logger);
         $this->class_info_factory = $class_info_factory;
         $this->file_info_factory = $file_info_factory;
+        $this->constantInfoRepository = $constantInfoRepository;
+        $this->propertyInfoRepository = $propertyInfoRepository;
+        $this->methodInfoRepository = $methodInfoRepository;
     }
 
     /**
@@ -332,10 +355,13 @@ class PHPCD implements RpcHandler
             $items = [];
 
             if (false !== $is_static) {
-                foreach ($reflection->getMatchingConstants($pattern) as $name => $value) {
+                $constantFilter = new ConstantFilter([ConstantFilter::CLASS_NAME => $class_name], $pattern);
+                $constants = $this->constantInfoRepository->find($constantFilter);
+
+                foreach ($constants as $constant) {
                         $items[] = [
-                            'word' => $name,
-                            'abbr' => sprintf(" +@ %s %s", $name, $value),
+                            'word' => $constant->getName(),
+                            'abbr' => sprintf(" +@ %s %s", $constant->getName(), $constant->getValue()),
                             'kind' => 'd',
                             'icase' => 1,
                         ];
@@ -343,6 +369,14 @@ class PHPCD implements RpcHandler
             }
 
             $methods = $reflection->getAvailableMethods($is_static, $public_only, $pattern);
+
+            $methodFilter = new MethodFilter([
+                MethodFilter::CLASS_NAME    => $class_name,
+                MethodFilter::PUBLIC_ONLY   => $public_only,
+                MethodFilter::STATIC_ONLY   => $is_static,
+            ], $pattern);
+
+            // $methods = $this->methodInfoRepository->find($methodFilter, $pattern);
 
             foreach ($methods as $method) {
                 $items[] = $this->getMethodInfo($method, $pattern);
