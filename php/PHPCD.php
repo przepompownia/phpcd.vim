@@ -11,8 +11,6 @@ use PHPCD\ConstantInfo\ConstantInfoRepository;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\Filter\PropertyFilter;
-// use PHPCD\Filter\
-// TODO:            ^ complete there!
 use PHPCD\ObjectElementInfo\MethodInfoRepository;
 use PHPCD\ObjectElementInfo\PropertyInfoRepository;
 
