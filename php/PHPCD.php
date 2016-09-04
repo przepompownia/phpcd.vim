@@ -500,8 +500,8 @@ class PHPCD implements RpcHandler
 
     private function clearDoc($doc)
     {
-        $doc = preg_replace('/[ \t]*\* ?/m','', $doc);
-        return preg_replace('#\s*\/|/\s*#','', $doc);
+        $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
+        return preg_replace('#\s*\/|/\s*#', '', $doc);
     }
 
     /**
