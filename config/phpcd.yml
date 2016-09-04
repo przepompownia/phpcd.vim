@@ -2,10 +2,15 @@ imports:
     - { resource: common.yml }
 
 services:
+    nsinfo:
+        class:              \PHPCD\NamespaceInfo
+        arguments:
+            - '%root%'
+
     handler.phpcd:
         class:              \PHPCD\PHPCD
         arguments:
-            - '%root%'
+            - '@nsinfo'
             - '@default_logger'
             - '@class_info_factory'
             - '@constant_info_repository'

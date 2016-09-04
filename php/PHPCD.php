@@ -23,7 +23,10 @@ class PHPCD implements RpcHandler
      */
     private $server;
 
-    private $root;
+    /**
+     * @var NamespaceInfo
+     */
+    private $nsinfo;
 
     /** @var ConstantInfoRepository */
     private $constantInfoRepository;
@@ -45,7 +48,7 @@ class PHPCD implements RpcHandler
     private $file_info_factory;
 
     public function __construct(
-        $root,
+        NamespaceInfo $nsinfo,
         Logger $logger,
         ClassInfoFactory $class_info_factory,
         ConstantInfoRepository $constantInfoRepository,
@@ -53,26 +56,13 @@ class PHPCD implements RpcHandler
         MethodInfoRepository $methodInfoRepository,
         PHPFileInfoFactory $file_info_factory
     ) {
-        $this->setRoot($root);
+        $this->nsinfo = $nsinfo;
         $this->setLogger($logger);
         $this->class_info_factory = $class_info_factory;
         $this->file_info_factory = $file_info_factory;
         $this->constantInfoRepository = $constantInfoRepository;
         $this->propertyInfoRepository = $propertyInfoRepository;
         $this->methodInfoRepository = $methodInfoRepository;
-    }
-
-    /**
-     * Set the composer root dir
-     *
-     * @param string $root the path
-     * @return static
-     */
-    private function setRoot($root)
-    {
-        // @TODO do we need to validate this input variable?
-        $this->root = $root;
-        return $this;
     }
 
     public function setServer(RpcServer $server)
@@ -374,7 +364,7 @@ class PHPCD implements RpcHandler
                 MethodFilter::STATIC_ONLY   => $is_static,
             ], $pattern);
 
-            // $methods = $this->methodInfoRepository->find($methodFilter, $pattern);
+            $methods = $this->methodInfoRepository->find($methodFilter, $pattern);
 
             foreach ($methods as $method) {
                 $items[] = $this->getMethodInfo($method, $pattern);
@@ -519,47 +509,6 @@ class PHPCD implements RpcHandler
      */
     public function psr4ns($path)
     {
-        $dir = dirname($path);
-
-        $composer_path = $this->root . '/composer.json';
-        $composer = json_decode(file_get_contents($composer_path), true);
-
-        if (isset($composer['autoload']['psr-4'])) {
-            $list = $composer['autoload']['psr-4'];
-        } else {
-            $list = [];
-        }
-
-        if (isset($composer['autoload-dev']['psr-4'])) {
-            $list_dev = $composer['autoload-dev']['psr-4'];
-        } else {
-            $list_dev = [];
-        }
-
-        foreach ($list_dev as $namespace => $paths) {
-            if (isset($list[$namespace])) {
-                $list[$namespace] = array_merge((array)$list[$namespace], (array) $paths);
-            } else {
-                $list[$namespace] = (array) $paths;
-            }
-        }
-
-        $namespaces = [];
-        foreach ($list as $namespace => $paths) {
-            foreach ((array)$paths as $path) {
-                $path = realpath($this->root.'/'.$path);
-                if (strpos($dir, $path) === 0) {
-                    $sub_path = str_replace($path, '', $dir);
-                    $sub_path = str_replace('/', '\\', $sub_path);
-                    $sub_namespace = trim(ucwords($sub_path, '\\'), '\\');
-                    if ($sub_namespace) {
-                        $sub_namespace = '\\' . $sub_namespace;
-                    }
-                    $namespaces[] = trim($namespace, '\\').$sub_namespace;
-                }
-            }
-        }
-
-        return $namespaces;
+        return $this->nsinfo->getByPath($path);
     }
 }
