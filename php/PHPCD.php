@@ -531,7 +531,7 @@ class PHPCD implements RpcHandler
         }
 
         if (isset($composer['autoload-dev']['psr-4'])) {
-            $list_dev = $composer['autoload']['psr-4'];
+            $list_dev = $composer['autoload-dev']['psr-4'];
         } else {
             $list_dev = [];
         }
