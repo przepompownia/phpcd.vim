@@ -38,4 +38,9 @@ abstract class ReflectionObjectElementInfo implements ObjectElementInfo
     {
         return $this->objectElement->getDocComment();
     }
+
+    public function getModifiers()
+    {
+        return \Reflection::getModifierNames($this->objectElement->getModifiers());
+    }
 }

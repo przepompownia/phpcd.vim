@@ -10,4 +10,9 @@ class ReflectionMethodInfo extends ReflectionObjectElementInfo implements Method
     {
         $this->objectElement = $method;
     }
+
+    public function getParameters()
+    {
+        return $this->objectElement->getParameters();
+    }
 }

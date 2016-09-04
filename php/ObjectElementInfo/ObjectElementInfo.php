@@ -15,4 +15,6 @@ interface ObjectElementInfo
     public function getClass();
 
     public function getDocComment();
+
+    public function getModifiers();
 }

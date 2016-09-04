@@ -4,4 +4,5 @@ namespace PHPCD\ObjectElementInfo;
 
 interface MethodInfo extends ObjectElementInfo
 {
+    public function getParameters();
 }

@@ -496,21 +496,12 @@ class PHPCD implements RpcHandler
         ];
     }
 
-    /**
-     *
-     * @return array
-     */
-    private function getModifierSymbols()
-    {
-        return $this->modifier_symbols;
-    }
-
     private function getModifiers($reflection)
     {
         $signs = '';
 
         $modifiers = $reflection->getModifiers();
-        $symbols = $this->getModifierSymbols();
+        $symbols = $this->modifier_symbols;
 
         foreach ($symbols as $number => $sign) {
             if ($number & $modifiers) {
