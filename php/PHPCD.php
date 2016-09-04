@@ -461,16 +461,11 @@ class PHPCD implements RpcHandler
 
     private function getPropertyInfo($property)
     {
-        $name = $property->getName();
-
         $modifier = $this->getModifiers($property);
-        if ($property->getModifiers() & \ReflectionMethod::IS_STATIC) {
-            $name = '$'.$name;
-        }
 
         return [
-            'word' => $name,
-            'abbr' => sprintf("%3s %s", $modifier, $name),
+            'word' => $property->getName(),
+            'abbr' => sprintf("%3s %s", $modifier, $property->getName()),
             'info' => preg_replace('#/?\*(\*|/)?#', '', $property->getDocComment()),
             'kind' => 'p',
             'icase' => 1,
@@ -479,17 +474,18 @@ class PHPCD implements RpcHandler
 
     private function getMethodInfo($method)
     {
-        $name = $method->getName();
-
         $params = array_map(function ($param) {
             return $param->getName();
         }, $method->getParameters());
 
-        $modifier = $this->getModifiers($method);
-
         return [
-            'word' => $name,
-            'abbr' => sprintf("%3s %s (%s)", $modifier, $name, join(', ', $params)),
+            'word' => $method->getName(),
+            'abbr' => sprintf(
+                "%3s %s (%s)",
+                $this->getModifiers($method),
+                $method->getName(),
+                join(', ', $params)
+            ),
             'info' => $this->clearDoc($method->getDocComment()),
             'kind' => 'f',
             'icase' => 1,
