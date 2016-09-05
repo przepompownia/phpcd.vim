@@ -50,7 +50,6 @@ class PHPCD implements RpcHandler
     public function __construct(
         NamespaceInfo $nsinfo,
         Logger $logger,
-        ClassInfoFactory $class_info_factory,
         ConstantInfoRepository $constantInfoRepository,
         PropertyInfoRepository $propertyInfoRepository,
         MethodInfoRepository $methodInfoRepository,
@@ -58,7 +57,6 @@ class PHPCD implements RpcHandler
     ) {
         $this->nsinfo = $nsinfo;
         $this->setLogger($logger);
-        $this->class_info_factory = $class_info_factory;
         $this->file_info_factory = $file_info_factory;
         $this->constantInfoRepository = $constantInfoRepository;
         $this->propertyInfoRepository = $propertyInfoRepository;
@@ -74,11 +72,11 @@ class PHPCD implements RpcHandler
      *  @param array Map between modifier numbers and displayed symbols
      */
     private $modifier_symbols = [
-        \ReflectionMethod::IS_FINAL      => '!',
-        \ReflectionMethod::IS_PRIVATE    => '-',
-        \ReflectionMethod::IS_PROTECTED  => '#',
-        \ReflectionMethod::IS_PUBLIC     => '+',
-        \ReflectionMethod::IS_STATIC     => '@'
+       'final'     => '!',
+       'private'    => '-',
+       'protected'  => '#',
+       'public'     => '+',
+       'static'     => '@'
     ];
 
     /**
@@ -339,7 +337,6 @@ class PHPCD implements RpcHandler
         $is_static = $this->translateStaticMode($is_static);
 
         try {
-            $reflection = $this->class_info_factory->createClassInfo($class_name);
             $items = [];
 
             if (false !== $is_static) {
@@ -356,21 +353,25 @@ class PHPCD implements RpcHandler
                 }
             }
 
-            $methods = $reflection->getAvailableMethods($is_static, $public_only, $pattern);
-
             $methodFilter = new MethodFilter([
                 MethodFilter::CLASS_NAME    => $class_name,
                 MethodFilter::PUBLIC_ONLY   => $public_only,
                 MethodFilter::STATIC_ONLY   => $is_static,
             ], $pattern);
 
-            $methods = $this->methodInfoRepository->find($methodFilter, $pattern);
+            $methods = $this->methodInfoRepository->find($methodFilter);
 
             foreach ($methods as $method) {
                 $items[] = $this->getMethodInfo($method, $pattern);
             }
 
-            $properties = $reflection->getAvailableProperties($is_static, $public_only, $pattern);
+            $propertyFilter = new PropertyFilter([
+                PropertyFilter::CLASS_NAME    => $class_name,
+                PropertyFilter::PUBLIC_ONLY   => $public_only,
+                PropertyFilter::STATIC_ONLY   => $is_static,
+            ], $pattern);
+
+            $properties = $this->propertyInfoRepository->find($propertyFilter);
 
             foreach ($properties as $property) {
                 $items[] = $this->getPropertyInfo($property);
@@ -482,20 +483,9 @@ class PHPCD implements RpcHandler
         ];
     }
 
-    private function getModifiers($reflection)
+    private function getModifiers($objectElement)
     {
-        $signs = '';
-
-        $modifiers = $reflection->getModifiers();
-        $symbols = $this->modifier_symbols;
-
-        foreach ($symbols as $number => $sign) {
-            if ($number & $modifiers) {
-                $signs .= $sign;
-            }
-        }
-
-        return $signs;
+        return implode('', array_intersect_key($this->modifier_symbols, array_flip($objectElement->getModifiers())));
     }
 
     private function clearDoc($doc)

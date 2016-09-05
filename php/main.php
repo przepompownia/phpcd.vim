@@ -31,7 +31,6 @@ $configfile =  $handler_name.'.yml';
 $dIContainer = $factory->createDIContainer($configfile, $configdir, $parameters);
 
 $logger = $dIContainer->get('default_logger');
-$logger->debug('args:', $argv);
 
 try {
     if ($handler_name !== 'phpcd' && $handler_name !== 'phpid') {

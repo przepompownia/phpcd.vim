@@ -12,7 +12,6 @@ services:
         arguments:
             - '@nsinfo'
             - '@default_logger'
-            - '@class_info_factory'
             - '@constant_info_repository'
             - '@property_info_repository'
             - '@method_info_repository'
