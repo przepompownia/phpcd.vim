@@ -50,16 +50,16 @@ class PHPCD implements RpcHandler
     public function __construct(
         NamespaceInfo $nsinfo,
         Logger $logger,
-        ConstantInfoRepository $constantInfoRepository,
-        PropertyInfoRepository $propertyInfoRepository,
+        ConstantInfoRepository $constantRepository,
+        PropertyInfoRepository $propertyRepository,
         MethodInfoRepository $methodInfoRepository,
         PHPFileInfoFactory $file_info_factory
     ) {
         $this->nsinfo = $nsinfo;
         $this->setLogger($logger);
         $this->file_info_factory = $file_info_factory;
-        $this->constantInfoRepository = $constantInfoRepository;
-        $this->propertyInfoRepository = $propertyInfoRepository;
+        $this->constantInfoRepository = $constantRepository;
+        $this->propertyInfoRepository = $propertyRepository;
         $this->methodInfoRepository = $methodInfoRepository;
     }
 
@@ -276,7 +276,9 @@ class PHPCD implements RpcHandler
         }
     }
 
-    private function typeByDoc($path, $doc) {
+    private function typeByDoc($class_name, $name)
+    {
+        list($path, $doc) = $this->doc($class_name, $name);
         $has_doc = preg_match('/@(return|var)\s+(\S+)/m', $doc, $matches);
         if (!$has_doc) {
             return [];
@@ -290,7 +292,7 @@ class PHPCD implements RpcHandler
                 continue;
             }
 
-            if (in_array(strtolower($type) , ['static', '$this', 'self'])) {
+            if (in_array(strtolower($type), ['static', '$this', 'self'])) {
                 $type = $nsuse['namespace'] . '\\' . $nsuse['class'];
             } elseif ($type[0] != '\\') {
                 $parts = explode('\\', $type);
@@ -444,7 +446,7 @@ class PHPCD implements RpcHandler
         return [
             'word' => $name,
             'abbr' => "$name(" . join(', ', $params) . ')',
-            'info' => preg_replace('#/?\*(\*|/)?#','', $reflection->getDocComment()),
+            'info' => preg_replace('#/?\*(\*|/)?#', '', $reflection->getDocComment()),
             'kind' => 'f',
             'icase' => 1,
         ];

@@ -45,7 +45,6 @@ services:
 
     class_info_factory:
         class:              \PHPCD\ClassInfo\ClassInfoFactory
-        arguments:          ['@default_pattern_matcher']
 
     constant_info_repository:
         class:              \PHPCD\ConstantInfo\ReflectionConstantInfoRepository
