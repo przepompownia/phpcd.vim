@@ -419,7 +419,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 
 		" Get location of class definition, we have to iterate through all
 		if classname != ''
-			let [path, line] = rpc#request(g:phpcd_channel_id, 'location', classname, a:symbol)
+			let [path, line] = rpc#request(g:phpcd_channel_id, 'locateMethodOrConstantDeclaration', classname, a:symbol)
 			return [path, line, 0]
 		endif " }}}
 	elseif a:symbol_context == 'new' || a:symbol_context =~ '\vimplements|extends'" {{{
@@ -428,7 +428,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		else
 			let full_classname = a:symbol_namespace . '\' . a:symbol
 		endif
-		let [path, line] = rpc#request(g:phpcd_channel_id, 'location', full_classname, '')
+		let [path, line] = rpc#request(g:phpcd_channel_id, 'locateClassDeclaration', full_classname)
 		return [path, line, 0] " }}}
 	elseif a:symbol_context =~ 'function' " {{{
 		" try to find interface method's implementation
@@ -445,7 +445,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 			let impl = phpcd#SelectOne(impls)
 
 			if impl != ''
-				let [path, line] = rpc#request(g:phpcd_channel_id, 'location', impl, a:symbol)
+				let [path, line] = rpc#request(g:phpcd_channel_id, 'locateMethodOrConstantDeclaration', impl, a:symbol)
 				return [path, line, 0]
 			endif
 		endif " }}}
@@ -457,7 +457,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		return [path, '$', 0] "}}}
 	elseif a:symbol_context =~ '.\+@' " laravel route {{{
 		let full_classname = strpart(a:symbol_context, 1, strlen(a:symbol_context)-2)
-		let [path, line] = rpc#request(g:phpcd_channel_id, 'location', full_classname, a:symbol)
+		let [path, line] = rpc#request(g:phpcd_channel_id, 'locateMethodOrConstantDeclaration', full_classname, a:symbol)
 		return [path, line, 0] " }}}
 	else " {{{
 		if a:symbol =~ '\v\C^[A-Z]'
@@ -467,11 +467,11 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 			else
 				let full_classname = namespace . '\' . classname
 			endif
-			let [path, line] = rpc#request(g:phpcd_channel_id, 'location', full_classname)
+			let [path, line] = rpc#request(g:phpcd_channel_id, 'locateClassDeclaration', full_classname)
 		else
-			let [path, line] = rpc#request(g:phpcd_channel_id, 'location', '', a:symbol_namespace.'\'.a:symbol)
+			let [path, line] = rpc#request(g:phpcd_channel_id, 'locateFunctionDeclaration', a:symbol_namespace.'\'.a:symbol)
 			if path == ''
-				let [path, line] = rpc#request(g:phpcd_channel_id, 'location', '', a:symbol)
+				let [path, line] = rpc#request(g:phpcd_channel_id, 'locateFunctionDeclaration', a:symbol)
 			endif
 		end
 

@@ -12,8 +12,6 @@ use PHPCD\Filter\ClassFilter;
 use PHPCD\ClassInfo\ComposerClassmapFileRepository;
 use PHPCD\ClassInfo\ClassInfoCollection;
 use PHPCD\PHPFileInfo\PHPFileInfo;
-// Mockery has IMHO more clear syntax
-// and more clear error messages than PHPUnit's mocks
 use Mockery;
 
 class ComposerClassmapFileRepositoryTest extends TestCase

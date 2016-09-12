@@ -232,7 +232,8 @@ class PHPID implements RpcHandler
         return str_replace("\\", '_', $name);
     }
 
-    private function getClassInfo($name) {
+    private function getClassInfo($name)
+    {
         try {
             $reflection = new \ReflectionClass($name);
 

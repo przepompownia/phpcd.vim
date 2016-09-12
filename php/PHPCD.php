@@ -103,23 +103,37 @@ class PHPCD implements RpcHandler
      *
      * @return [path, line]
      */
-    public function location($class_name, $method_name = null)
+    public function locateMethodOrConstantDeclaration($class_name, $method_name)
     {
         try {
-            if ($class_name) {
-                $reflection = new \ReflectionClass($class_name);
-                if ($method_name) {
-                    if ($reflection->hasMethod($method_name)) {
-                        $reflection = $reflection->getMethod($method_name);
-                    } elseif ($reflection->hasConstant($method_name)) {
-                        // 常量则返回 [ path, 'const CONST_NAME' ]
-                        return [$this->getConstPath($method_name, $reflection), 'const ' . $method_name];
-                    }
-                }
-            } else {
-                $reflection = new \ReflectionFunction($method_name);
+            $reflection = new \ReflectionClass($class_name);
+
+            if ($reflection->hasMethod($method_name)) {
+                $reflection = $reflection->getMethod($method_name);
+            } elseif ($reflection->hasConstant($method_name)) {
+                return [$this->getConstPath($method_name, $reflection), 'const ' . $method_name];
             }
 
+            return [$reflection->getFileName(), $reflection->getStartLine()];
+        } catch (\ReflectionException $e) {
+            return ['', null];
+        }
+    }
+
+    public function locateClassDeclaration($class)
+    {
+        try {
+            $reflection = new \ReflectionClass($class);
+            return [$reflection->getFileName(), $reflection->getStartLine()];
+        } catch (\ReflectionException $e) {
+            return ['', null];
+        }
+    }
+
+    public function locateFunctionDeclaration($name)
+    {
+        try {
+            $reflection = new \ReflectionFunction($name);
             return [$reflection->getFileName(), $reflection->getStartLine()];
         } catch (\ReflectionException $e) {
             return ['', null];
