@@ -50,4 +50,14 @@ interface ClassInfo
      * @return string
      */
     public function getName();
+
+    /**
+     * @return string
+     */
+    public function getFileName();
+
+    /**
+     * @return int
+     */
+    public function getStartLine();
 }
