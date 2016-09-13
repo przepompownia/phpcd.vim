@@ -64,13 +64,13 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			" TODO Fix it for variables with reference to $this etc.
 			let public_only = (context !~# '^\(\$this\|self\|static\|parent\)' )
 
-			let is_static = 'only_nonstatic'
+			let is_static = v:false
 
 			if strridx(context, '::') == strlen(context) - 2 " context =~ '::$'
 				if stridx(context, 'parent') != 0
-					let is_static = 'only_static'
+					let is_static = v:true
 				else
-					let is_static = 'both'
+					let is_static = v:null
 				endif
 			endif
 

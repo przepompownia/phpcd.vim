@@ -80,21 +80,6 @@ class PHPCD implements RpcHandler
     ];
 
     /**
-     * @param string $mode
-     * @return bool|null
-     */
-    private function translateStaticMode($mode)
-    {
-        $map = [
-            'both'           => null,
-            'only_nonstatic' => false,
-            'only_static'    => true
-        ];
-
-        return isset($map[$mode]) ? $map[$mode] : null;
-    }
-
-    /**
      * Fetch function or class method's source file path
      * and their defination line number.
      *
@@ -338,10 +323,8 @@ class PHPCD implements RpcHandler
         'void'     => 1,
     ];
 
-    public function getMatchingClassDetails($class_name, $pattern, $is_static = 'both', $public_only = true)
+    public function getMatchingClassDetails($class_name, $pattern, $is_static, $public_only = true)
     {
-        $is_static = $this->translateStaticMode($is_static);
-
         try {
             $items = [];
 
