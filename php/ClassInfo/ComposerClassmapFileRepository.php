@@ -88,7 +88,15 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     {
         $filePath = $this->classLoader->findFile($classpath);
 
-        $fileInfo = $this->fileInfoFactory->createFileInfo($filePath);
+        if (false === $filePath) {
+            return false;
+        }
+
+        try {
+            $fileInfo = $this->fileInfoFactory->createFileInfo($filePath);
+        } catch (\Exception $e) {
+            $this->logger->warning($e->getMessage(), $e->getTrace());
+        }
 
         if ($fileInfo->hasErrors()) {
             $message = '%s %s did not pass validation and then cannot be added to class info repository. Reason:';
