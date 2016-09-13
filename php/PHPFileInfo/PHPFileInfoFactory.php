@@ -19,6 +19,6 @@ class PHPFileInfoFactory
             return new StringBasedPHPFileInfo($file);
         }
 
-        throw new Exception(sprintf('File %s does not exist.', $path));
+        throw new \Exception(sprintf('File %s does not exist.', $path));
     }
 }
