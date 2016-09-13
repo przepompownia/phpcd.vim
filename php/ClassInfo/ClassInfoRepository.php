@@ -26,7 +26,7 @@ interface ClassInfoRepository
      * Get ClassInfo based on class name
      *
      * @param string class path
-     * @return ClassInfo|null
+     * @return ClassInfo
      */
     public function get($path);
 }

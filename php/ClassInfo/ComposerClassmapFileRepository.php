@@ -114,7 +114,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
      * Get ClassInfo based on class name
      *
      * @param string class path
-     * @return ClassInfo|null
+     * @return ClassInfo
      */
     public function get($classpath)
     {
@@ -122,6 +122,6 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
             return $this->classInfoFactory->createClassInfo($classpath);
         }
 
-        return null;
+        throw new \Exception(sprintf('Cannot find class %s in repository', $classpath));
     }
 }
