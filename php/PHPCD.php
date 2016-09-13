@@ -120,16 +120,6 @@ class PHPCD implements RpcHandler
         }
     }
 
-    public function locateClassDeclaration($class)
-    {
-        try {
-            $reflection = new \ReflectionClass($class);
-            return [$reflection->getFileName(), $reflection->getStartLine()];
-        } catch (\ReflectionException $e) {
-            return ['', null];
-        }
-    }
-
     public function locateFunctionDeclaration($name)
     {
         try {

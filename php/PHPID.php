@@ -338,4 +338,17 @@ class PHPID implements RpcHandler
 
         return $result;
     }
+
+    public function locateClassDeclaration($className)
+    {
+        try {
+            $class = $this->classes_repository->get($className);
+
+            return [$class->getFileName(), $class->getStartLine()];
+        } catch (\Exception $e) {
+            $this->logger->warning($e->getMessage(), $e->getTrace());
+
+            return ['', null];
+        }
+    }
 }

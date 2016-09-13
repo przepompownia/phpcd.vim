@@ -428,7 +428,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		else
 			let full_classname = a:symbol_namespace . '\' . a:symbol
 		endif
-		let [path, line] = rpc#request(g:phpcd_channel_id, 'locateClassDeclaration', full_classname)
+		let [path, line] = rpc#request(g:phpid_channel_id, 'locateClassDeclaration', full_classname)
 		return [path, line, 0] " }}}
 	elseif a:symbol_context =~ 'function' " {{{
 		" try to find interface method's implementation
@@ -467,7 +467,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 			else
 				let full_classname = namespace . '\' . classname
 			endif
-			let [path, line] = rpc#request(g:phpcd_channel_id, 'locateClassDeclaration', full_classname)
+			let [path, line] = rpc#request(g:phpid_channel_id, 'locateClassDeclaration', full_classname)
 		else
 			let [path, line] = rpc#request(g:phpcd_channel_id, 'locateFunctionDeclaration', a:symbol_namespace.'\'.a:symbol)
 			if path == ''
