@@ -44,12 +44,11 @@ end
 let g:phpcd_server_options['messenger'] = messenger
 let g:phpcd_server_options['autoload_path'] = s:root.'/'.g:phpcd_autoload_path
 
-" Pass the server configuration only if json_encode function exists
-if exists('*json_encode')
-	let s:encoded_options = json_encode(g:phpcd_server_options)
-else
-	let s:encoded_options = ''
+if ! exists('*json_encode')
+	echoerr 'Function json_encode is not defined.'
 endif
+
+let s:encoded_options = json_encode(g:phpcd_server_options)
 command! -nargs=0 PHPID call phpcd#Index()
 
 let s:phpcd_path = expand('<sfile>:p:h:h') . '/php/main.php'
