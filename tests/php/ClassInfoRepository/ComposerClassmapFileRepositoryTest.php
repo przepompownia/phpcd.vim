@@ -21,45 +21,41 @@ class ComposerClassmapFileRepositoryTest extends TestCase
      */
     public function testTryToFindNotValidClass()
     {
-        $pattern_matcher = Mockery::mock(PatternMatcher::class);
-        $pattern_matcher->shouldReceive('match')->andReturn(true);
-
-        $classLoader = Mockery::mock(ClassLoader::class);
+        $classLoader        = Mockery::mock(ClassLoader::class);
+        $logger             = Mockery::mock(LoggerInterface::class);
+        $pattern_matcher    = Mockery::mock(PatternMatcher::class);
+        $fileInfoFactory    = Mockery::mock(PHPFileInfoFactory::class);
+        $fileInfo           = Mockery::mock(PHPFileInfo::class);
+        $classInfoFactory   = new ClassInfoFactory($pattern_matcher);
 
         $classMap = [
             'Any\\Class' => 'ExampleFile.php'
         ];
-
-        $classLoader->shouldReceive('findFile')->with(key($classMap))->once()->andReturn(current($classMap));
         $classLoader->shouldReceive('getClassMap')->andReturn($classMap);
 
-        $classInfoFactory = new ClassInfoFactory($pattern_matcher);
-
-        $fileInfo = Mockery::mock(PHPFileInfo::class);
-        $fileInfo->shouldReceive('hasErrors')->once()->andReturn(true);
-        $fileInfo->shouldReceive('getErrors')->once()->andReturn(['Some syntax error']);
-        $fileInfo->shouldReceive('getType')->once()->andReturn('class');
-
-        $fileInfoFactory = Mockery::mock(PHPFileInfoFactory::class);
-        $fileInfoFactory->shouldReceive('createFileInfo')->once()->andReturn($fileInfo);
-
-        $logger = Mockery::mock(LoggerInterface::class);
-        $logger->shouldReceive('warning')->once()->andReturnNull();
-
-        $repository = new ComposerClassmapFileRepository(
+        $repository         = new ComposerClassmapFileRepository(
             $classLoader,
             $pattern_matcher,
             $classInfoFactory,
             $fileInfoFactory,
             $logger
         );
-
         $this->assertInstanceOf(ComposerClassmapFileRepository::class, $repository);
 
+        $pattern_matcher->shouldReceive('match')->times(count($classMap))->andReturn(true);
+
+        $classLoader->shouldReceive('findFile')->with(key($classMap))->once()->andReturn(current($classMap));
+
+        $fileInfoFactory->shouldReceive('createFileInfo')->once()->andReturn($fileInfo);
+        $fileInfo->shouldReceive('hasErrors')->once()->andReturn(true);
+
+        $logger->shouldReceive('warning')->once()->andReturnNull();
+
+        $fileInfo->shouldReceive('getType')->once()->andReturn('class');
+        $fileInfo->shouldReceive('getErrors')->once()->andReturn(['Some syntax error']);
+
         $collection = $repository->find(new ClassFilter([], key($classMap)));
-
         $this->assertInstanceOf(ClassInfoCollection::class, $collection);
-
         $this->assertTrue($collection->isEmpty());
     }
 }
