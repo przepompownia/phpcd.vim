@@ -44,7 +44,7 @@ class ComposerClassmapFileRepositoryTest extends TestCase
         $fileInfoFactory->shouldReceive('createFileInfo')->once()->andReturn($fileInfo);
 
         $logger = Mockery::mock(LoggerInterface::class);
-        $logger->shouldReceive('warning')->andReturnNull();
+        $logger->shouldReceive('warning')->once()->andReturnNull();
 
         $repository = new ComposerClassmapFileRepository(
             $classLoader,

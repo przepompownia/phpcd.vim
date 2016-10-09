@@ -62,7 +62,11 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
 
         foreach (array_keys($this->classmap) as $classpath) {
             if ($this->pattern_matcher->match($filter->getPattern(), $classpath)) {
-                $class_info = $this->get($classpath);
+                try {
+                    $class_info = $this->get($classpath);
+                } catch (\Exception $e) {
+                    $class_info = null;
+                }
 
                 if ($class_info !== null && ($filter === null || $class_info->matchesFilter($filter))) {
                     $collection->add($class_info);
