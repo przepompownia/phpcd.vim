@@ -52,16 +52,6 @@ Plug 'vim-scripts/progressbar-widget' " used for showing the index progress
 
 And then execute `:PlugInstall` in the command mode.
 
-### Enable PHPCD
-
-Before the first use PHPCD, in the phpcd.vim directory run `composer install --no-dev`. This is needed to install dependencies and generate the autoload file.
-
-Let PHPCD complete php:
-
-```
-autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
-```
-
 ## Usage
 
 First, in the project directory, run `composer install --no-dev` to install all the dependent packages and generate the autoload file.
@@ -71,8 +61,8 @@ The default PHP command used to run PHP parts of daemon is simply `php`. You may
 let g:phpcd_php_cli_executable = 'php7.0'
 ```
 
-Then, use NeoVim to open a php file. You will see a progress bar several seconds later.
-When the bar finish, you could enjoy you PHP coding.
+Use <kbd>Ctrl</kbd>+<kbd>x</kbd><kbd>Ctrl</kbd>+<kbd>o</kbd> to complete and use <kbd>ctrl</kbd>+<kbd>]</kbd> to go to the defination.
+
 
 Use <kbd>Ctrl</kbd>+<kbd>x</kbd><kbd>Ctrl</kbd>+<kbd>o</kbd> to complete and use <kbd>ctrl</kbd>+<kbd>]</kbd> to go to the defination.
 

@@ -48,14 +48,6 @@ Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer update --no-dev' }
 
 然后执行`:PlugInstall`进行安装。
 
-### 启用 PHPCD
-
-在配置文件中指定 PHPCD 为 PHP 的 omni 补全引擎：
-
-```
-autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
-```
-
 ## 使用方法
 
 首先运行 `composer install --no-dev` 更新依赖并生成自动加载文件，然后打开 NeoVim。

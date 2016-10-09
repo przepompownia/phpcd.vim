@@ -210,6 +210,12 @@ class PHPID implements RpcHandler
 
     private function saveChild($index_file, $child)
     {
+        $index_directory = dirname($index_file);
+
+        if (!is_dir($index_directory)) {
+            mkdir($index_directory, 0755, true);
+        }
+
         if (is_file($index_file)) {
             $childs = json_decode(file_get_contents($index_file));
         } else {

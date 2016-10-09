@@ -17,6 +17,7 @@ endif
 
 autocmd BufLeave,VimLeave *.php if g:phpcd_need_update > 0 | call phpcd#UpdateIndex() | endif
 autocmd BufWritePost *.php let g:phpcd_need_update = 1
+autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
