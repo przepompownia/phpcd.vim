@@ -2,6 +2,9 @@ imports:
     - { resource: common.yml }
 
 services:
+    view:
+        class:              \PHPCD\View\VimMenuItemView
+
     nsinfo:
         class:              \PHPCD\NamespaceInfo
         arguments:
@@ -16,6 +19,7 @@ services:
             - '@property_info_repository'
             - '@method_info_repository'
             - '@file_info_factory'
+            - '@view'
 
     server.phpcd:
         class:              Lvht\MsgpackRpc\ForkServer

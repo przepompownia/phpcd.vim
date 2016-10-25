@@ -13,6 +13,8 @@ use PHPCD\Filter\MethodFilter;
 use PHPCD\Filter\PropertyFilter;
 use PHPCD\ObjectElementInfo\MethodInfoRepository;
 use PHPCD\ObjectElementInfo\PropertyInfoRepository;
+use PHPCD\View\View;
+use PHPCD\FunctionInfo\FunctionInfo;
 
 class PHPCD implements RpcHandler
 {
@@ -37,6 +39,9 @@ class PHPCD implements RpcHandler
     /** @var MethodInfoRepository **/
     private $methodInfoRepository;
 
+    /** @var View **/
+    private $view;
+
     /*
      * Probably it should be replaced by
      * correctly implemented repository
@@ -53,7 +58,8 @@ class PHPCD implements RpcHandler
         ConstantInfoRepository $constantRepository,
         PropertyInfoRepository $propertyRepository,
         MethodInfoRepository $methodInfoRepository,
-        PHPFileInfoFactory $file_info_factory
+        PHPFileInfoFactory $file_info_factory,
+        View $view
     ) {
         $this->nsinfo = $nsinfo;
         $this->setLogger($logger);
@@ -61,23 +67,13 @@ class PHPCD implements RpcHandler
         $this->constantInfoRepository = $constantRepository;
         $this->propertyInfoRepository = $propertyRepository;
         $this->methodInfoRepository = $methodInfoRepository;
+        $this->view = $view;
     }
 
     public function setServer(RpcServer $server)
     {
         $this->server = $server;
     }
-
-    /**
-     *  @param array Map between modifier numbers and displayed symbols
-     */
-    private $modifier_symbols = [
-       'final'     => '!',
-       'private'    => '-',
-       'protected'  => '#',
-       'public'     => '+',
-       'static'     => '@'
-    ];
 
     /**
      * Fetch function or class method's source file path
@@ -189,24 +185,12 @@ class PHPCD implements RpcHandler
      * Fetch the php script's namespace and imports(by use) list.
      *
      * @param string $path the php script path
-     * @param string $specific_alias in not empty, do not get information about other aliases
      *
-     * @return [
-     *   'namespace' => 'ns',
-     *   'class' => 'shortname'
-     *   'imports' => [
-     *     'alias1' => 'fqdn1',
-     *   ]
-     * ]
      */
     public function nsuse($path)
     {
         $file_info = $this->file_info_factory->createFileInfo($path);
-        return [
-            'namespace' => $file_info->getNamespace(),
-            'class' => $file_info->getClass(),
-            'imports' => $file_info->getImports()
-        ];
+        return $this->view->renderPHPFileInfo($file_info);
     }
 
     /**
@@ -333,12 +317,7 @@ class PHPCD implements RpcHandler
                 $constants = $this->constantInfoRepository->find($constantFilter);
 
                 foreach ($constants as $constant) {
-                        $items[] = [
-                            'word' => $constant->getName(),
-                            'abbr' => sprintf(" +@ %s %s", $constant->getName(), $constant->getValue()),
-                            'kind' => 'd',
-                            'icase' => 1,
-                        ];
+                        $items[] = $this->view->renderConstantInfo($constant);
                 }
             }
 
@@ -351,7 +330,7 @@ class PHPCD implements RpcHandler
             $methods = $this->methodInfoRepository->find($methodFilter);
 
             foreach ($methods as $method) {
-                $items[] = $this->getMethodInfo($method, $pattern);
+                $items[] = $this->view->renderMethodInfo($method);
             }
 
             $propertyFilter = new PropertyFilter([
@@ -363,7 +342,7 @@ class PHPCD implements RpcHandler
             $properties = $this->propertyInfoRepository->find($propertyFilter);
 
             foreach ($properties as $property) {
-                $items[] = $this->getPropertyInfo($property);
+                $items[] = $this->view->renderPropertyInfo($property);
             }
 
             return $items;
@@ -384,13 +363,8 @@ class PHPCD implements RpcHandler
     {
         $items = [];
         $funcs = get_defined_functions();
-        foreach ($funcs['internal'] as $func) {
-            $info = $this->getFunctionInfo($func, $pattern);
-            if ($info) {
-                $items[] = $info;
-            }
-        }
-        foreach ($funcs['user'] as $func) {
+        $funcs = array_merge($funcs['internal'], $funcs['user']);
+        foreach ($funcs as $func) {
             $info = $this->getFunctionInfo($func, $pattern);
             if ($info) {
                 $items[] = $info;
@@ -408,12 +382,9 @@ class PHPCD implements RpcHandler
                 continue;
             }
 
-            $items[] = [
-                'word' => $name,
-                'abbr' => "@ $name = $value",
-                'kind' => 'd',
-                'icase' => 0,
-            ];
+            $constantInfo = new ConstantInfo($name, $value);
+
+            $items[] = $this->view->renderConstantInfo($constantInfo);
         }
 
         return $items;
@@ -425,62 +396,9 @@ class PHPCD implements RpcHandler
             return null;
         }
 
-        $reflection = new \ReflectionFunction($name);
-        $params = array_map(function ($param) {
-            return $param->getName();
-        }, $reflection->getParameters());
+        $functionInfo = new FunctionInfo(new \ReflectionFunction($name));
 
-        return [
-            'word' => $name,
-            'abbr' => "$name(" . join(', ', $params) . ')',
-            'info' => preg_replace('#/?\*(\*|/)?#', '', $reflection->getDocComment()),
-            'kind' => 'f',
-            'icase' => 1,
-        ];
-    }
-
-    private function getPropertyInfo($property)
-    {
-        $modifier = $this->getModifiers($property);
-
-        return [
-            'word' => $property->getName(),
-            'abbr' => sprintf("%3s %s", $modifier, $property->getName()),
-            'info' => preg_replace('#/?\*(\*|/)?#', '', $property->getDocComment()),
-            'kind' => 'p',
-            'icase' => 1,
-        ];
-    }
-
-    private function getMethodInfo($method)
-    {
-        $params = array_map(function ($param) {
-            return $param->getName();
-        }, $method->getParameters());
-
-        return [
-            'word' => $method->getName(),
-            'abbr' => sprintf(
-                "%3s %s (%s)",
-                $this->getModifiers($method),
-                $method->getName(),
-                join(', ', $params)
-            ),
-            'info' => $this->clearDoc($method->getDocComment()),
-            'kind' => 'f',
-            'icase' => 1,
-        ];
-    }
-
-    private function getModifiers($objectElement)
-    {
-        return implode('', array_intersect_key($this->modifier_symbols, array_flip($objectElement->getModifiers())));
-    }
-
-    private function clearDoc($doc)
-    {
-        $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
-        return preg_replace('#\s*\/|/\s*#', '', $doc);
+        return $this->view->renderFunctionInfo($functionInfo);
     }
 
     /**
