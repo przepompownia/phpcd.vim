@@ -10,6 +10,11 @@ if (!exists('g:phpcd_server_options.completion_match_type'))
 endif
 
 let g:phpcd_need_update = 0
+let g:phpcd_jump_stack = []
+
+if !exists('g:phpcd_autoload_path')
+	let g:phpcd_autoload_path = 'vendor/autoload.php'
+endif
 
 if (!exists('g:phpcd_insert_class_shortname'))
 	let g:phpcd_insert_class_shortname = 0

@@ -15,8 +15,10 @@ require __DIR__ . '/../vendor/autoload.php';
 
 /** load autoloader for the project **/
 $composer_autoload_file = $root . '/vendor/autoload.php';
-if (is_readable($composer_autoload_file)) {
-    $class_loader = require $composer_autoload_file;
+$autoload_file = empty($parameters['autoload_file']) ? $composer_autoload_file : $parameters['autoload_file'];
+if (is_readable($autoload_file)) {
+    $class_loader = require $autoload_file;
+    // @TODO non-composer class loader
 }
 
 $parameters['class_loader'] = $class_loader;

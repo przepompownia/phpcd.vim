@@ -330,6 +330,9 @@ function! phpcd#JumpToDefinition(mode) " {{{
 		let edit_cmd = a:mode . " +"
 	endif
 
+	let cur_pos = getcurpos()
+	let cur_pos[0] = bufnr('%')
+	call add(g:phpcd_jump_stack, cur_pos)
 	if str2nr(symbol_line) > 0
 		silent! execute edit_cmd . symbol_line . ' ' . symbol_file
 	else
@@ -341,6 +344,19 @@ function! phpcd#JumpToDefinition(mode) " {{{
 	normal! zv
 	normal! zz
 endfunction " }}}
+
+function! phpcd#JumpBack() "{{{"
+	if len(g:phpcd_jump_stack) == 0
+		return
+	endif
+
+	let prev_pos = g:phpcd_jump_stack[-1]
+	let prev_buf = prev_pos[0]
+	let prev_pos[0] = 0
+	unlet g:phpcd_jump_stack[-1]
+	exec 'buffer '.prev_buf
+	call setpos('.', prev_pos)
+endfunction "}}}"
 
 function! phpcd#GetCurrentSymbolWithContext() " {{{
 	" Check if we are inside of PHP markup
@@ -714,10 +730,17 @@ function! phpcd#GetCallChainReturnType(classname_candidate, class_candidate_name
 	endif " }}}
 
 	call remove(methodstack, 0)
-	let method = matchstr(methodstack[0], '\v^\$*\zs[^[(]+\ze')
 	let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, imports)
 	let full_classname = class_candidate_namespace . '\' . classname_candidate
-	let return_types = rpc#request(g:phpcd_channel_id, 'functype', full_classname, method)
+
+	if methodstack[0] =~ '('
+		let method = matchstr(methodstack[0], '\v^\$*\zs[^[(]+\ze')
+		let return_types = rpc#request(g:phpcd_channel_id, 'functype', full_classname, method)
+	else
+		let prop = matchstr(methodstack[0], '\v^\$*\zs[^[(]+\ze')
+		let return_types = rpc#request(g:phpcd_channel_id, 'proptype', full_classname, prop)
+	endif
+
 	if len(return_types) > 0
 		let return_type = phpcd#SelectOne(return_types)
 		return phpcd#GetCallChainReturnType(return_type, '', imports, methodstack)

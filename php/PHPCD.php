@@ -177,18 +177,27 @@ class PHPCD implements RpcHandler
      * @param string $class_name for function set this args to empty
      * @param string $name
      */
-    private function doc($class_name, $name)
+    private function doc($class_name, $name, $is_method = true)
     {
         try {
             $reflection_class = null;
             if ($class_name) {
+                $this->logger->debug('hehe2');
                 $reflection = new \ReflectionClass($class_name);
-                if ($reflection->hasProperty($name)) {
+                if (!$is_method) {
                     $reflection_class = $reflection;
                     // ReflectionProperty does not have the getFileName method
                     // use ReflectionClass instead
                     $reflection = $reflection->getProperty($name);
                 } else {
+                    $interfaces = $reflection->getInterfaces();
+                    foreach ($interfaces as $interface) {
+                        if ($interface->hasMethod($name)) {
+                            $reflection = $interface;
+                            break;
+                        }
+                    }
+
                     $reflection = $reflection->getMethod($name);
                 }
             } else {
@@ -232,7 +241,6 @@ class PHPCD implements RpcHandler
 
     /**
      * Fetch the function or class method return value's type
-     * and class attribute's type.
      *
      * For PHP7 or newer version, it tries to use the return type gramar
      * to fetch the real return type.
@@ -251,7 +259,19 @@ class PHPCD implements RpcHandler
             }
         }
 
-        return $this->typeByDoc($class_name, $name);
+        list($path, $doc) = $this->doc($class_name, $name);
+        return $this->typeByDoc($path, $doc);
+    }
+
+    /**
+     * Fetch class attribute's type by @var annotation
+     *
+     * @return [type1, type2, ...]
+     */
+    public function proptype($class_name, $name)
+    {
+        list($path, $doc) = $this->doc($class_name, $name, false);
+        return $this->typeByDoc($path, $doc);
     }
 
     private function typeByReturnType($class_name, $name)
@@ -275,8 +295,7 @@ class PHPCD implements RpcHandler
         }
     }
 
-    private function typeByDoc($class_name, $name) {
-        list($path, $doc) = $this->doc($class_name, $name);
+    private function typeByDoc($path, $doc) {
         $has_doc = preg_match('/@(return|var)\s+(\S+)/m', $doc, $matches);
         if (!$has_doc) {
             return [];

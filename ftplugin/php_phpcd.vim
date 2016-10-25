@@ -32,6 +32,8 @@ silent! nnoremap <silent> <unique> <buffer> <C-W><C-]>
 			\ :<C-u>call phpcd#JumpToDefinition('split')<CR>
 silent! nnoremap <silent> <unique> <buffer> <C-W><C-\>
 			\ :<C-u>call phpcd#JumpToDefinition('vsplit')<CR>
+silent! nnoremap <silent> <unique> <buffer> <C-t>
+			\ :<C-u>call phpcd#JumpBack()<CR>
 
 if has('nvim')
 	let messenger = 'msgpack'
@@ -40,6 +42,7 @@ else
 end
 
 let g:phpcd_server_options['messenger'] = messenger
+let g:phpcd_server_options['autoload_path'] = s:root.'/'.g:phpcd_autoload_path
 
 " Pass the server configuration only if json_encode function exists
 if exists('*json_encode')
