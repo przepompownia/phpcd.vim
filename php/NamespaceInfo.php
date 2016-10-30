@@ -4,57 +4,79 @@ namespace PHPCD;
 
 class NamespaceInfo
 {
-    private $root;
+    private $projectRoot;
 
-    public function __construct($root)
+    private $prefixes = [];
+
+    public function __construct($projectRoot)
     {
-        $this->setRoot($root);
+        $this->setProjectRoot($projectRoot);
     }
 
     /**
-     * Set the composer root dir
+     * Set the composer projectRoot dir
      *
-     * @param string $root the path
+     * @param string $projectRoot the path
      * @return static
      */
-    private function setRoot($root)
+    private function setProjectRoot($projectRoot)
     {
         // @TODO do we need to validate this input variable?
-        $this->root = $root;
+        $this->projectRoot = $projectRoot;
+
         return $this;
+    }
+
+    public function getPrefixesFromComposerJson($json)
+    {
+        $composer = json_decode($json, true);
+
+        if (isset($composer['autoload']['psr-4'])) {
+            $list = $composer['autoload']['psr-4'];
+        }
+
+        $unify = function (&$path) {
+            if (! is_array($path)) {
+                $path = [$path];
+            }
+        };
+
+        array_walk($list, $unify);
+
+        if (! isset($composer['autoload-dev']['psr-4'])) {
+            return $list;
+        }
+
+        $list_dev = $composer['autoload-dev']['psr-4'];
+
+        foreach ($list_dev as $namespace => $paths) {
+            if (! isset($list[$namespace])) {
+                $list[$namespace] = [];
+            }
+            $list[$namespace] = array_merge($list[$namespace], (array) $paths);
+        }
+
+        return $list;
+    }
+
+    public function loadPrefixesFromComposerJson($json)
+    {
+        $this->prefixes = $this->getPrefixesFromComposerJson($json);
+    }
+
+    public function getPrefixes()
+    {
+        return $this->prefixes;
     }
 
     public function getByPath($path)
     {
         $dir = dirname($path);
 
-        $composer_path = $this->root . '/composer.json';
-        $composer = json_decode(file_get_contents($composer_path), true);
-
-        if (isset($composer['autoload']['psr-4'])) {
-            $list = $composer['autoload']['psr-4'];
-        } else {
-            $list = [];
-        }
-
-        if (isset($composer['autoload-dev']['psr-4'])) {
-            $list_dev = $composer['autoload-dev']['psr-4'];
-        } else {
-            $list_dev = [];
-        }
-
-        foreach ($list_dev as $namespace => $paths) {
-            if (isset($list[$namespace])) {
-                $list[$namespace] = array_merge((array)$list[$namespace], (array) $paths);
-            } else {
-                $list[$namespace] = (array) $paths;
-            }
-        }
-
         $namespaces = [];
-        foreach ($list as $namespace => $paths) {
-            foreach ((array)$paths as $path) {
-                $path = realpath($this->root.'/'.$path);
+        foreach ($this->prefixes as $namespace => $paths) {
+            foreach ($paths as $path) {
+                $path = realpath($this->projectRoot.'/'.$path);
                 if (strpos($dir, $path) === 0) {
                     $sub_path = str_replace($path, '', $dir);
                     $sub_path = str_replace('/', '\\', $sub_path);

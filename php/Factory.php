@@ -2,6 +2,7 @@
 
 namespace PHPCD;
 
+use PHPCD\NamespaceInfo;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -90,5 +91,19 @@ class Factory
         } else {
             return new MsgpackMessenger($io);
         }
+    }
+
+    public function createNamespaceInfo($projectRoot)
+    {
+        $nsinfo = new NamespaceInfo($projectRoot);
+
+        $composerPath = $projectRoot . '/composer.json';
+
+        if (file_exists($composerPath) && is_readable($composerPath)) {
+            $json = file_get_contents($composerPath);
+            $nsinfo->loadPrefixesFromComposerJson($json);
+        }
+
+        return $nsinfo;
     }
 }
