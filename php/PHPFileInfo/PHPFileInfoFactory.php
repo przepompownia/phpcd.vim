@@ -3,6 +3,7 @@
 namespace PHPCD\PHPFileInfo;
 
 use SplFileObject;
+use SplTempFileObject;
 
 class PHPFileInfoFactory
 {
@@ -13,12 +14,16 @@ class PHPFileInfoFactory
      */
     public function createFileInfo($path)
     {
-        if (is_readable($path)) {
-            $file = new SplFileObject($path);
+        if (! is_readable($path)) {
+            if (file_exists($path)) {
+                throw new \Exception(sprintf('Cannot read file %s.', $path));
+            }
 
-            return new StringBasedPHPFileInfo($file);
+            return new StringBasedPHPFileInfo(new SplTempFileObject(0));
         }
 
-        throw new \Exception(sprintf('File %s does not exist.', $path));
+        $file = new SplFileObject($path);
+
+        return new StringBasedPHPFileInfo($file);
     }
 }
