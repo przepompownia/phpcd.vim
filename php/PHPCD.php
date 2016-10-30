@@ -148,10 +148,9 @@ class PHPCD implements RpcHandler
         try {
             $reflection_class = null;
             if ($class_name) {
-                $this->logger->debug('hehe2');
                 $reflection = new \ReflectionClass($class_name);
+                $reflection_class = $reflection;
                 if (!$is_method) {
-                    $reflection_class = $reflection;
                     // ReflectionProperty does not have the getFileName method
                     // use ReflectionClass instead
                     $reflection = $reflection->getProperty($name);
@@ -170,13 +169,16 @@ class PHPCD implements RpcHandler
                 $reflection = new \ReflectionFunction($name);
             }
 
-            $path = $reflection_class ? $reflection_class->getFileName()
-                : $reflection->getFileName();
             $doc = $reflection->getDocComment();
+            if (preg_match('/@return\s+(static|self|\$this)/i', $doc) && $reflection_class) {
+                $path = $reflection_class->getFileName();
+            } else {
+                $path = $reflection->getFileName();
+            }
 
             return [$path, $this->clearDoc($doc)];
         } catch (\ReflectionException $e) {
-            $this->logger->debug((string) $e);
+            $this->logger->debug($e->getMessage());
             return [null, null];
         }
     }
@@ -225,7 +227,27 @@ class PHPCD implements RpcHandler
     public function proptype($class_name, $name)
     {
         list($path, $doc) = $this->doc($class_name, $name, false);
-        return $this->typeByDoc($path, $doc);
+        $types = $this->typeByDoc($path, $doc);
+
+        if (!$types) {
+            $types = $this->typeByPropertyRead($class_name, $name);
+        }
+
+        return $types;
+    }
+
+    private function typeByPropertyRead($class_name, $name)
+    {
+        $reflection = new \ReflectionClass($class_name);
+        $doc = $reflection->getDocComment();
+        $path = $reflection->getFileName();
+        $has_doc = preg_match('/@property-read\s+(\S+)\s+\$?'.$name.'/mi', $doc, $matches);
+        if ($has_doc) {
+            $types = [$matches[1]];
+            return $this->fixRelativeType($path, $types);
+        }
+
+        return [];
     }
 
     private function typeByReturnType($class_name, $name)
@@ -253,16 +275,25 @@ class PHPCD implements RpcHandler
     {
         list($path, $doc) = $this->doc($class_name, $name);
         $has_doc = preg_match('/@(return|var)\s+(\S+)/m', $doc, $matches);
-        if (!$has_doc) {
-            return [];
+        if ($has_doc) {
+            return $this->fixRelativeType($path, explode('|', $matches[2]));
         }
 
-        $nsuse = $this->nsuse($path);
+        return [];
+    }
+
+    private function fixRelativeType($path, $names)
+    {
+        $nsuse = null;
 
         $types = [];
-        foreach (explode('|', $matches[2]) as $type) {
+        foreach ($names as $type) {
             if (isset($this->primitive_types[$type])) {
                 continue;
+            }
+
+            if (!$nsuse && $type[0] != '\\') {
+                $nsuse = $this->nsuse($path);
             }
 
             if (in_array(strtolower($type), ['static', '$this', 'self'])) {

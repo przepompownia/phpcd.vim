@@ -25,7 +25,7 @@ class ReflectionPropertyInfoRepositoryTest extends TestCase
 
         $this->assertFalse($properties->isEmpty());
 
-        $this->assertCount(5, $properties);
+        $this->assertCount(7, $properties);
         $property = $properties->getIterator()->current();
         $this->assertEquals('pub1', $property->getName());
         $this->assertTrue($property->isPublic());
@@ -55,6 +55,6 @@ class ReflectionPropertyInfoRepositoryTest extends TestCase
         ], 'mocked');
 
         $properties = $repository->find($filter);
-        $this->assertCount(2, $properties);
+        $this->assertCount(5, $properties);
     }
 }

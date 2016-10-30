@@ -2,6 +2,11 @@
 
 namespace PHPCD\MethodInfoRepository;
 
+/**
+ * @property-read \SplFileObject $file
+ * @property-write \SplFileObject $pub2
+ * @property \ReflectionClass $pub7
+ */
 class Test1 extends Sup implements ITest1
 {
     const ZZZ = 'vvv';
