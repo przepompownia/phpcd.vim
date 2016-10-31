@@ -1371,6 +1371,9 @@ function! phpcd#ExpandClassName(classname, current_namespace, imports) " {{{
 		call insert(parts, a:current_namespace, 0)
 	endif
 
+	if len(parts) == 1
+		let parts = split(parts[0], '\\\+')
+	endif
 	let classname = parts[-1]
 	let namespace = join(parts[0:-2], '\')
 	return [classname, namespace]
