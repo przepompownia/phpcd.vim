@@ -1318,7 +1318,7 @@ endfunction " }}}
 function! phpcd#GetCurrentNameSpace() " {{{
 	let nsuse = rpc#request(g:phpcd_channel_id, 'nsuse', expand('%:p'))
 
-	return [nsuse.namespace, nsuse.imports]
+	return [nsuse.namespace, empty(nsuse.imports) ? {} : nsuse.imports]
 endfunction " }}}
 
 function! phpcd#GetCurrentFunctionBoundaries() " {{{
