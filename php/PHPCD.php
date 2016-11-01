@@ -241,9 +241,9 @@ class PHPCD implements RpcHandler
         $reflection = new \ReflectionClass($class_name);
         $doc = $reflection->getDocComment();
         $path = $reflection->getFileName();
-        $has_doc = preg_match('/@property-read\s+(\S+)\s+\$?'.$name.'/mi', $doc, $matches);
+        $has_doc = preg_match('/@property(-read|-write)?\s+(\S+)\s+\$?'.$name.'/mi', $doc, $matches);
         if ($has_doc) {
-            $types = [$matches[1]];
+            $types = [$matches[2]];
             return $this->fixRelativeType($path, $types);
         }
 
