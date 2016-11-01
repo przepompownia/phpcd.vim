@@ -8,7 +8,7 @@ $handler_name = $argv[2];
 $root = $argv[1];
 $parameters = (empty($argv[3]) ? '' : $argv[3]);
 $parameters = json_decode($parameters, true) ?: [];
-$parameters['root'] = $root;
+$parameters['root'] = realpath($root);
 
 /** load autoloader for PHPCD **/
 require __DIR__ . '/../vendor/autoload.php';

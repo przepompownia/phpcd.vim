@@ -11,8 +11,8 @@ class NamespaceInfoTest extends TestCase
     {
         return [
             [
-                '{"autoload": {"psr-4": {"PHPCD\\\\": "php/"}}, "autoload-dev": {"psr-4": {"PHPCD\\\\": "tests/php/"}}}',
-                ['PHPCD\\' => ['php/', 'tests/php/']]
+                '{"autoload": {"psr-4": {"PHPCD\\\\": "php/"}}, "autoload-dev": {"psr-4": {"PHPCD\\\\": "test/php/"}}}',
+                ['PHPCD\\' => ['php/', 'test/php/']]
             ],
             [
                 '{"autoload": {"psr-4": {"": "src/"}}}',
@@ -37,9 +37,15 @@ class NamespaceInfoTest extends TestCase
     {
         return [
             [
-                '{"autoload": {"psr-4": {"PHPCD\\\\": "php/"}}, "autoload-dev": {"psr-4": {"PHPCD\\\\": "tests/php/"}}}',
+                '{"autoload": {"psr-4": {"PHPCD\\\\": "php/"}}, "autoload-dev": {"psr-4": {"PHPCD\\\\": "test/php/"}}}',
                 '/root',
-                '/root/src/Foo/NewClass.php',
+                '/root/php/X.php',
+                ['PHPCD']
+            ],
+            [
+                '{"autoload": {"psr-4": {"PHPCD\\\\": "php/"}}, "autoload-dev": {"psr-4": {"PHPCD\\\\": "test/php/"}}}',
+                '/root',
+                '/root/php/Foo/NewClass.php',
                 ['PHPCD\\Foo']
             ],
             [
@@ -55,12 +61,11 @@ class NamespaceInfoTest extends TestCase
      * @test
      * @dataProvider getByPathDataProvider
      */
-    public function getByPath($json, $root, $path, $namespace)
+    public function getByPath($json, $root, $path, $expectedNamespace)
     {
-        $this->markTestSkipped('Test skipped because of using realpath()');
         $nsinfo = new NamespaceInfo($root);
         $nsinfo->loadPrefixesFromComposerJson($json);
 
-        $this->assertSame($namespace, $nsinfo->getByPath($path));
+        $this->assertSame($expectedNamespace, $nsinfo->getByPath($path));
     }
 }

@@ -4,6 +4,8 @@ namespace PHPCD;
 
 class NamespaceInfo
 {
+    const NAMESPACE_SEPARATOR = '\\';
+
     private $projectRoot;
 
     private $prefixes = [];
@@ -69,26 +71,36 @@ class NamespaceInfo
         return $this->prefixes;
     }
 
-    public function getByPath($path)
+    public function getByPath($classFile)
     {
-        $dir = dirname($path);
+        $classFileDir = dirname($classFile);
 
         $namespaces = [];
-        foreach ($this->prefixes as $namespace => $paths) {
-            foreach ($paths as $path) {
-                $path = realpath($this->projectRoot.'/'.$path);
-                if (strpos($dir, $path) === 0) {
-                    $sub_path = str_replace($path, '', $dir);
-                    $sub_path = str_replace('/', '\\', $sub_path);
-                    $sub_namespace = trim(ucwords($sub_path, '\\'), '\\');
-                    if ($sub_namespace) {
-                        $sub_namespace = '\\' . $sub_namespace;
+        foreach ($this->prefixes as $prefix => $namespaceRoots) {
+            foreach ($namespaceRoots as $namespaceRoot) {
+                $absoluteNsRoot = sprintf('%s%s%s',
+                    rtrim($this->projectRoot, DIRECTORY_SEPARATOR),
+                    DIRECTORY_SEPARATOR,
+                    trim($namespaceRoot, DIRECTORY_SEPARATOR)
+                );
+
+                if (strpos($classFileDir, $absoluteNsRoot) === 0) {
+                    $relativeClassFileDir = str_replace($absoluteNsRoot, '', $classFileDir);
+
+                    $path = array_filter(explode(DIRECTORY_SEPARATOR, $relativeClassFileDir), 'strlen');
+                    array_walk($path, function (&$word) {
+                        return ucwords($word);
+                    });
+
+                    if (! empty($prefix)) {
+                        array_unshift($path, trim($prefix, self::NAMESPACE_SEPARATOR));
                     }
-                    $namespaces[] = trim($namespace, '\\').$sub_namespace;
+
+                    $namespaces[] = implode(self::NAMESPACE_SEPARATOR, $path);
                 }
             }
         }
 
-        return $namespaces;
+        return array_unique($namespaces);
     }
 }
