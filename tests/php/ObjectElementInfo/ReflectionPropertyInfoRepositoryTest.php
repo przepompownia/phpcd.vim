@@ -2,11 +2,13 @@
 
 namespace PHPCD\ObjectElementInfo;
 
+use PHPCD\ObjectElementInfo\PropertyPath;
 use PHPUnit\Framework\TestCase;
 use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Filter\PropertyFilter;
 use PHPCD\ObjectElementInfo\ReflectionPropertyInfoRepository;
+use PHPCD\ObjectElementInfo\PropertyInfo;
 use Mockery;
 
 class ReflectionPropertyInfoRepositoryTest extends TestCase
@@ -56,5 +58,34 @@ class ReflectionPropertyInfoRepositoryTest extends TestCase
 
         $properties = $repository->find($filter);
         $this->assertCount(5, $properties);
+    }
+
+    /**
+     * @test
+     * @expectedException PHPCD\NotFoundException
+     */
+    public function getByPathOfNonexistingProperty()
+    {
+        $className =  \PHPCD\MethodInfoRepository\Test1::class;
+        $propertyName = 'doesnotexist';
+        $path = new PropertyPath($className, $propertyName);
+        $repository = $this->getRepositoryWithTrivialMatcher($className);
+
+        $property = $repository->getByPath($path);
+    }
+
+    /**
+     * @test
+     */
+    public function getByPath()
+    {
+        $className =  \PHPCD\MethodInfoRepository\Test1::class;
+        $propertyName = 'pub1';
+        $path = new PropertyPath($className, $propertyName);
+        $repository = $this->getRepositoryWithTrivialMatcher($className);
+
+        $property = $repository->getByPath($path);
+        $this->assertInstanceof(PropertyInfo::class, $property);
+        $this->assertEquals($propertyName, $property->getName());
     }
 }

@@ -13,8 +13,8 @@ interface PropertyInfoRepository
     public function find(PropertyFilter $filter);
 
     /**
-     * @var string $path
+     * @var PropertyPath $path
      * @return PropertyInfo
      */
-    public function getByPath($path);
+    public function getByPath(PropertyPath $path);
 }

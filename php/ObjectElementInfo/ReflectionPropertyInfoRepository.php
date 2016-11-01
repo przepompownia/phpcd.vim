@@ -2,13 +2,14 @@
 
 namespace PHPCD\ObjectElementInfo;
 
+use PHPCD\NotFoundException;
 use PHPCD\Filter\PropertyFilter;
 use PHPCD\ObjectElementInfo\PropertyInfoCollection;
 use PHPCD\ObjectElementInfo\GenericPropertyInfo;
 
 class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoRepository implements PropertyInfoRepository
 {
-    const VIRTUAL_PROPRTY_READ_REGEX = '/@property(|-write|-read)\s+(?<paths>\S+)\s+\$?(?<names>\S+)/m';
+    const VIRTUAL_PROPERTY_READ_REGEX = '/@property(|-write|-read)\s+(?<paths>\S+)\s+\$?(?<names>\S+)/m';
 
     /**
      * @return PropertyInfoCollection
@@ -39,7 +40,7 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
     {
         $properties = [];
 
-        if (! preg_match_all(self::VIRTUAL_PROPRTY_READ_REGEX, $reflection->getDocComment(), $matches)) {
+        if (! preg_match_all(self::VIRTUAL_PROPERTY_READ_REGEX, $reflection->getDocComment(), $matches)) {
             return [];
         }
 
@@ -51,10 +52,17 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
     }
 
     /**
-     * @var string $path
+     * @var PropertyPath $path
      * @return PropertyInfo
      */
-    public function getByPath($path)
+    public function getByPath(PropertyPath $path)
     {
+        try {
+            $property = new \ReflectionProperty($path->getClassName(), $path->getPropertyName());
+        } catch (\ReflectionException $e) {
+            throw new NotFoundException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return new ReflectionPropertyInfo($property);
     }
 }

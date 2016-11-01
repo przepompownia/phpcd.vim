@@ -8,6 +8,7 @@ use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use Composer\Autoload\ClassLoader;
 use PHPCD\Filter\ClassFilter;
+use PHPCD\NotFoundException;
 
 class ComposerClassmapFileRepository implements ClassInfoRepository
 {
@@ -126,6 +127,6 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
             return $this->classInfoFactory->createClassInfo($classpath);
         }
 
-        throw new \Exception(sprintf('Cannot find class %s in repository', $classpath));
+        throw new NotFoundException(sprintf('Cannot find class %s in repository', $classpath));
     }
 }
