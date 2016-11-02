@@ -11,8 +11,14 @@ class Test1 extends Sup implements ITest1
 {
     const ZZZ = 'vvv';
 
+    /**
+     * @var int|$this|\PHPCD\PHPCD|Sup|self[] Chaos
+     */
     public $pub1;
 
+    /**
+     * @var \PHPCD\PHPID
+     */
     protected $pub2;
 
     private $pub3;

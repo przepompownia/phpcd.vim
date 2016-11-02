@@ -19,7 +19,8 @@
         "symfony/config": "^3.0",
         "symfony/yaml": "^3.0",
         "monolog/monolog": "^1.20",
-        "ext-json": "*"
+        "ext-json": "*",
+        "phpdocumentor/reflection-docblock": "^3.1"
     },
     "config": {
       "classmap-authoritative": true

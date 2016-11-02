@@ -46,15 +46,25 @@ services:
     class_info_factory:
         class:              \PHPCD\ClassInfo\ClassInfoFactory
 
+    docblock_factory:
+        class:              \phpDocumentor\Reflection\DocBlockFactory
+        factory:            ['phpDocumentor\Reflection\DocBlockFactory', 'createInstance']
+
     constant_info_repository:
         class:              \PHPCD\ConstantInfo\ReflectionConstantInfoRepository
-        arguments:          ['@default_pattern_matcher', '@class_info_factory']   
+        arguments:          ['@default_pattern_matcher', '@class_info_factory']
 
     method_info_repository:
         class:              \PHPCD\ObjectElementInfo\ReflectionMethodInfoRepository
-        arguments:          ['@default_pattern_matcher', '@class_info_factory']   
+        arguments:
+            - '@default_pattern_matcher'
+            - '@class_info_factory'
+            - '@docblock_factory'
 
     property_info_repository:
         class:              \PHPCD\ObjectElementInfo\ReflectionPropertyInfoRepository
-        arguments:          ['@default_pattern_matcher', '@class_info_factory']   
+        arguments:
+            - '@default_pattern_matcher'
+            - '@class_info_factory'
+            - '@docblock_factory'
 

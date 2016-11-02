@@ -21,7 +21,7 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
         $collection = new PropertyInfoCollection();
 
         foreach ($reflectionClass->getProperties() as $property) {
-            $property = new ReflectionPropertyInfo($property);
+            $property = new ReflectionPropertyInfo($property, $this->docBlockFactory);
             if (true === $this->filter($property, $filter)) {
                 $collection->add($property);
             }
@@ -63,6 +63,6 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
             throw new NotFoundException($e->getMessage(), $e->getCode(), $e);
         }
 
-        return new ReflectionPropertyInfo($property);
+        return new ReflectionPropertyInfo($property, $this->docBlockFactory);
     }
 }
