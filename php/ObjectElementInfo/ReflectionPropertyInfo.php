@@ -3,19 +3,19 @@
 namespace PHPCD\ObjectElementInfo;
 
 use PHPCD\ObjectElementInfo\PropertyInfo;
-use phpDocumentor\Reflection\DocBlockFactory;
+use PHPCD\DocBlock\DocBlock;
 
 class ReflectionPropertyInfo extends ReflectionObjectElementInfo implements PropertyInfo
 {
     /**
-     * @var DocBlockFactory
+     * @var DocBlock
      */
-    protected $docBlockFactory;
+    protected $docBlock;
 
-    public function __construct(\ReflectionProperty $property, DocBlockFactory $docBlockFactory)
+    public function __construct(\ReflectionProperty $property, DocBlock $docBlock)
     {
         $this->objectElement = $property;
-        $this->docBlockFactory = $docBlockFactory;
+        $this->docBlock = $docBlock;
     }
 
     /**
@@ -23,13 +23,9 @@ class ReflectionPropertyInfo extends ReflectionObjectElementInfo implements Prop
      */
     public function getAllowedTypes()
     {
-        $commentText = $this->getDocComment();
-        $comment = $this->docBlockFactory->create($commentText);
-        $tags = $comment->getTagsByName('var');
+        $docBlock = $this->getDocComment();
 
-        // Get only the first @var line
-        $tag = $tags[0];
-        return $tag;
+        return $this->docBlock->getTypesFromDocBlock($docBlock);
     }
 
     /**

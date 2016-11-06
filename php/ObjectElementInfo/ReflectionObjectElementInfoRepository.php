@@ -5,7 +5,7 @@ namespace PHPCD\ObjectElementInfo;
 use PHPCD\Filter\ObjectElementFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\ClassInfo\ClassInfoFactory;
-use phpDocumentor\Reflection\DocBlockFactory;
+use PHPCD\DocBlock\DocBlock;
 
 abstract class ReflectionObjectElementInfoRepository
 {
@@ -20,9 +20,9 @@ abstract class ReflectionObjectElementInfoRepository
     protected $classInfoFactory;
 
     /**
-     * @var DocBlockFactory
+     * @var DocBlock
      */
-    protected $docBlockFactory;
+    protected $docBlock;
 
     /**
      * @param PatternMatcher $pattern_matcher
@@ -30,11 +30,11 @@ abstract class ReflectionObjectElementInfoRepository
     public function __construct(
         PatternMatcher $pattern_matcher,
         ClassInfoFactory $factory,
-        DocBlockFactory $docBlockFactory
+        DocBlock $docBlock
     ) {
         $this->pattern_matcher = $pattern_matcher;
         $this->classInfoFactory = $factory;
-        $this->docBlockFactory = $docBlockFactory;
+        $this->docBlock = $docBlock;
     }
 
     /**

@@ -50,6 +50,11 @@ services:
         class:              \phpDocumentor\Reflection\DocBlockFactory
         factory:            ['phpDocumentor\Reflection\DocBlockFactory', 'createInstance']
 
+    docblock:
+        class:              PHPCD\DocBlock\DocBlock
+        arguments:
+            - '@docblock_factory'
+
     constant_info_repository:
         class:              \PHPCD\ConstantInfo\ReflectionConstantInfoRepository
         arguments:          ['@default_pattern_matcher', '@class_info_factory']
@@ -59,12 +64,12 @@ services:
         arguments:
             - '@default_pattern_matcher'
             - '@class_info_factory'
-            - '@docblock_factory'
+            - '@docblock'
 
     property_info_repository:
         class:              \PHPCD\ObjectElementInfo\ReflectionPropertyInfoRepository
         arguments:
             - '@default_pattern_matcher'
             - '@class_info_factory'
-            - '@docblock_factory'
+            - '@docblock'
 

@@ -17,19 +17,10 @@ class ReflectionPropertyInfoTest extends TestCase
         $docBlockFactory = DocBlockFactory::createInstance();
         $property = new \ReflectionProperty($class, $method);
         $propertyInfo = new ReflectionPropertyInfo($property, $docBlockFactory);
-        $types = $propertyInfo->getAllowedTypes()->getType();
-
-        var_dump(explode('|', (string)$types));
+        $types = $propertyInfo->getAllowedTypes();
 
 
-        $index = 0;
-        while ($types->has($index)) {
-            $type = $types->get($index);
-            var_dump(sprintf("%s: %s\n", get_class($type), (string)$type));
-            ++$index;
-        }
-
-        // var_dump($types);
+        var_dump($types);
     }
 
     public function getAllowedTypesDataProvider()
