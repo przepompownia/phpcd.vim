@@ -77,11 +77,21 @@ class Factory
     {
         $case_sensitivity = (bool)$case_sensitivity;
 
-        if ($match_type === 'subsequence') {
-            return new \PHPCD\PatternMatcher\SubsequencePatternMatcher($case_sensitivity);
+        switch ($match_type) {
+            case 'subsequence':
+                return new \PHPCD\PatternMatcher\SubsequencePatternMatcher($case_sensitivity);
+                break;
+            case 'head_or_subsequence_of_last_part':
+                return new \PHPCD\PatternMatcher\HeadOrSubsequenceOfLastPart(
+                    new \PHPCD\PatternMatcher\HeadPatternMatcher($case_sensitivity),
+                    new \PHPCD\PatternMatcher\SubsequencePatternMatcher($case_sensitivity),
+                    $case_sensitivity
+                );
+                break;
+            case 'head':
+            default:
+                return new \PHPCD\PatternMatcher\HeadPatternMatcher($case_sensitivity);
         }
-
-        return new \PHPCD\PatternMatcher\HeadPatternMatcher($case_sensitivity);
     }
 
     public function createMessenger(IO $io, $messengerType = null)
