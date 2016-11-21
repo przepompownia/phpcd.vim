@@ -9,6 +9,30 @@ if (!exists('g:phpcd_server_options.completion_match_type'))
 	let g:phpcd_server_options.completion_match_type = 'head'
 endif
 
+let g:phpcd_root = '/'
+
+function! GetRoot() " {{{
+	let root = expand("%:p:h")
+
+	if g:phpcd_root != '/' && stridx(root, g:phpcd_root) == 0
+		return g:phpcd_root
+	endif
+
+	while root != "/"
+		if (filereadable(root . "/vendor/autoload.php") || filereadable(root.'/.phpcd.vim'))
+			break
+		endif
+		let root = fnamemodify(root, ":h")
+	endwhile
+	let g:phpcd_root = root
+	return root
+endfunction " }}}
+
+let s:root = GetRoot()
+if filereadable(s:root.'/.phpcd.vim')
+	exec 'source '.s:root.'/.phpcd.vim'
+endif
+
 let g:phpcd_need_update = 0
 let g:phpcd_jump_stack = []
 

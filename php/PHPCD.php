@@ -170,7 +170,8 @@ class PHPCD implements RpcHandler
             }
 
             $doc = $reflection->getDocComment();
-            if (preg_match('/@return\s+(static|self|\$this)/i', $doc) && $reflection_class) {
+            // use reflection_class to fetch the property's file path
+            if (preg_match('/@return\s+(static|self|\$this)/i', $doc) || $reflection_class) {
                 $path = $reflection_class->getFileName();
             } else {
                 $path = $reflection->getFileName();
@@ -216,7 +217,7 @@ class PHPCD implements RpcHandler
         }
 
         list($path, $doc) = $this->doc($class_name, $name);
-        return $this->typeByDoc($path, $doc);
+        return $this->typeByDoc($path, $doc, $class_name);
     }
 
     /**
@@ -227,7 +228,7 @@ class PHPCD implements RpcHandler
     public function proptype($class_name, $name)
     {
         list($path, $doc) = $this->doc($class_name, $name, false);
-        $types = $this->typeByDoc($path, $doc);
+        $types = $this->typeByDoc($path, $doc, $class_name);
 
         if (!$types) {
             $types = $this->typeByPropertyRead($class_name, $name);
@@ -241,10 +242,11 @@ class PHPCD implements RpcHandler
         $reflection = new \ReflectionClass($class_name);
         $doc = $reflection->getDocComment();
         $path = $reflection->getFileName();
-        $has_doc = preg_match('/@property(-read|-write)?\s+(\S+)\s+\$?'.$name.'/mi', $doc, $matches);
+        $has_doc = preg_match('/@property(|-read|-write)\s+(?<type>\S+)\s+\$?'.$name.'/i', $doc, $matches);
         if ($has_doc) {
-            $types = [$matches[2]];
-            return $this->fixRelativeType($path, $types);
+            $types = [$matches['type']];
+            $t = $this->fixRelativeType($path, $types);
+            return $t;
         }
 
         return [];
@@ -271,15 +273,14 @@ class PHPCD implements RpcHandler
         }
     }
 
-    private function typeByDoc($class_name, $name)
+    private function typeByDoc($path, $doc, $class_name)
     {
-        list($path, $doc) = $this->doc($class_name, $name);
         $has_doc = preg_match('/@(return|var)\s+(\S+)/m', $doc, $matches);
         if ($has_doc) {
             return $this->fixRelativeType($path, explode('|', $matches[2]));
         }
 
-        return [];
+        return [$class_name];
     }
 
     private function fixRelativeType($path, $names)

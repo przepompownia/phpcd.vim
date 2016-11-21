@@ -320,12 +320,14 @@ function! phpcd#JumpToDefinition(mode) " {{{
 	endif
 
 	let [symbol_file, symbol_line, symbol_col] = phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_imports)
-	if symbol_file == ''
+	if symbol_file == '' || symbol_file == v:false
 		return
 	endif
 
 	if a:mode == 'normal'
 		let edit_cmd = "e +"
+	elseif a:mode == 'preview'
+		let edit_cmd = "pedit +"
 	else
 		let edit_cmd = a:mode . " +"
 	endif
@@ -333,6 +335,7 @@ function! phpcd#JumpToDefinition(mode) " {{{
 	let cur_pos = getcurpos()
 	let cur_pos[0] = bufnr('%')
 	call add(g:phpcd_jump_stack, cur_pos)
+
 	if str2nr(symbol_line) > 0
 		silent! execute edit_cmd . symbol_line . ' ' . symbol_file
 	else
@@ -1056,10 +1059,10 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 			endif " }}}
 
 			" assignment for the variable in question with a variable on the right hand side
-			if line =~# '^\s*'.object.'\s*=&\?\s\+\(clone\)\?\s*'.variable_name_pattern " {{{
+			if line =~# '^\s*'.object.'\s*=&\?\s*\(clone\s\+\)\?\s*'.class_name_pattern" {{{
 
 				" try to find the next non-comment or string ";" char
-				let start_col = match(line, '^\s*'.object.'\C\s*=\zs&\?\s\+\(clone\)\?\s*'.variable_name_pattern)
+				let start_col = match(line, '^\s*'.object.'\C\s*=\zs&\?\s\+\(clone\)\?\s*'.class_name_pattern)
 				let filelines = reverse(copy(lines))
 				let [pos, char] = s:getNextCharWithPos(filelines, [len(filelines) - i, start_col])
 				let chars_read = 1

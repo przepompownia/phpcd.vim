@@ -1,5 +1,3 @@
-[![Join the chat at https://gitter.im/phpvim/phpcd.vim](https://badges.gitter.im/phpvim/phpcd.vim.svg)](https://gitter.im/phpvim/phpcd.vim?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 - 中文
 - [English](./README_en.md)
 
@@ -43,7 +41,7 @@ PHPCD 的 VimL 部分基于[phpcomplete.vim](https://github.com/shawncplus/phpco
 安装 Vim-Plug 后，添加：
 
 ```
-Plug 'phpvim/phpcd.vim', { 'for': 'php' , 'do': 'composer update --no-dev' }
+Plug 'php-vim/phpcd.vim', { 'for': 'php' , 'do': 'composer update --no-dev' }
 ```
 
 然后执行`:PlugInstall`进行安装。
