@@ -426,11 +426,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 			return [path, line, 0]
 		endif " }}}
 	elseif a:symbol_context == 'new' || a:symbol_context =~ '\vimplements|extends'" {{{
-		if (a:symbol_namespace == '\')
-			let full_classname = a:symbol
-		else
-			let full_classname = a:symbol_namespace . '\' . a:symbol
-		endif
+		let full_classname = s:GetFullName(a:symbol_namespace, a:symbol)
 		let [path, line] = rpc#request(g:phpid_channel_id, 'locateClassDeclaration', full_classname)
 		return [path, line, 0] " }}}
 	elseif a:symbol_context =~ 'function' " {{{
@@ -465,11 +461,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 	else " {{{
 		if a:symbol =~ '\v\C^[A-Z]'
 			let [classname, namespace] = phpcd#ExpandClassName(a:symbol, a:symbol_namespace, a:current_imports)
-			if namespace == '\'
-				let full_classname = classname
-			else
-				let full_classname = namespace . '\' . classname
-			endif
+			let full_classname = s:GetFullName(namespace, classname)
 			let [path, line] = rpc#request(g:phpid_channel_id, 'locateClassDeclaration', full_classname)
 		else
 			let [path, line] = rpc#request(g:phpcd_channel_id, 'locateFunctionDeclaration', a:symbol_namespace.'\'.a:symbol)
@@ -723,18 +715,14 @@ function! phpcd#GetCallChainReturnType(classname_candidate, class_candidate_name
 
 	if (len(methodstack) == 1) " {{{
 		let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, imports)
-		if (class_candidate_namespace == '\')
-			let return_type = '\' . classname_candidate
-		else
-			let return_type = class_candidate_namespace . '\' . classname_candidate
-		endif
+		let return_type = s:GetFullName(class_candidate_namespace, classname_candidate)
 
 		return return_type
 	endif " }}}
 
 	call remove(methodstack, 0)
 	let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(classname_candidate, class_candidate_namespace, imports)
-	let full_classname = class_candidate_namespace . '\' . classname_candidate
+	let full_classname = s:GetFullName(class_candidate_namespace, classname_candidate)
 
 	if methodstack[0] =~ '('
 		let method = matchstr(methodstack[0], '\v^\$*\zs[^[(]+\ze')
@@ -835,6 +823,14 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 	let class_candidate_imports = a:imports
 	let methodstack = phpcd#GetMethodStack(a:context) " }}}
 
+	if methodstack[-1] =~# '\vmake|app|get' " {{{
+		" just for laravel and container-interop
+		let container_interface = matchstr(methodstack[-1], '^\(make\|app\|get\)(\zs.\+\ze::class)')
+		if container_interface != ''
+			let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(container_interface, a:current_namespace, a:imports)
+			return s:GetFullName(class_candidate_namespace, classname_candidate)
+		endif " }}}
+	endif
 	if a:context =~? '^\$this->' || a:context =~? '^\(self\|static\)::' || a:context =~? 'parent::' " {{{
 		let i = 1
 		while i < a:start_line
@@ -904,12 +900,6 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 		end " }}}
 		return phpcd#GetCallChainReturnType(classname_candidate, class_candidate_namespace, class_candidate_imports, methodstack) " }}}
 	elseif get(methodstack, 0) =~# function_invocation_pattern " {{{
-		" just for laravel {{{
-		let laravel_interface = matchstr(methodstack[0], '^app(\zs.\+\ze::class)$')
-		if laravel_interface != ''
-			let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(laravel_interface, a:current_namespace, a:imports)
-			return class_candidate_namespace . '\' . classname_candidate
-		endif " }}}
 		let function_name = matchstr(methodstack[0], '^\s*\zs'.function_name_pattern)
 		let return_types = rpc#request(g:phpcd_channel_id, 'functype', '', function_name)
 		if len(return_types) > 0
@@ -1391,5 +1381,15 @@ function! phpcd#GetCallChainReturnTypeAt(line) " {{{
 	q
 	return classname
 endfunction " }}}
+
+function! s:GetFullName(namespace, classname)
+	if a:namespace == '\'
+		let full_classname = a:classname
+	else
+		let full_classname = a:namespace . '\' . a:classname
+	endif
+
+	return full_classname
+endfunction
 
 " vim: foldmethod=marker:noexpandtab:ts=2:sts=2:sw=2

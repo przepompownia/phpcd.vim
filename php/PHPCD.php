@@ -84,7 +84,7 @@ class PHPCD implements RpcHandler
      *
      * @return [path, line]
      */
-    public function locateMethodOrConstantDeclaration($class_name, $method_name)
+    public function locateMethodOrConstantDeclaration($class_name, $method_name = '__construct')
     {
         try {
             $reflection = new \ReflectionClass($class_name);
