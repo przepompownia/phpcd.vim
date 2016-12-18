@@ -454,7 +454,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		let path = cwd.substitute(path, "'", '', 'g')
 		let path = fnamemodify(path, ':p:.')
 		return [path, '$', 0] "}}}
-	elseif a:symbol_context =~ '.\+@' " laravel route {{{
+	elseif a:symbol_context =~ '\v.+(\@|:)' " pattern like 'class@method' or 'class:method' {{{
 		let full_classname = strpart(a:symbol_context, 1, strlen(a:symbol_context)-2)
 		let [path, line] = rpc#request(g:phpcd_channel_id, 'locateMethodOrConstantDeclaration', full_classname, a:symbol)
 		return [path, line, 0] " }}}
@@ -829,8 +829,8 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 		if container_interface != ''
 			let [classname_candidate, class_candidate_namespace] = phpcd#ExpandClassName(container_interface, a:current_namespace, a:imports)
 			return s:GetFullName(class_candidate_namespace, classname_candidate)
-		endif " }}}
-	endif
+		endif
+	endif " }}}
 	if a:context =~? '^\$this->' || a:context =~? '^\(self\|static\)::' || a:context =~? 'parent::' " {{{
 		let i = 1
 		while i < a:start_line
