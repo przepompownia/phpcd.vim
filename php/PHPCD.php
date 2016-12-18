@@ -150,20 +150,24 @@ class PHPCD implements RpcHandler
             if ($class_name) {
                 $reflection = new \ReflectionClass($class_name);
                 $reflection_class = $reflection;
-                if (!$is_method) {
-                    // ReflectionProperty does not have the getFileName method
-                    // use ReflectionClass instead
-                    $reflection = $reflection->getProperty($name);
-                } else {
-                    $interfaces = $reflection->getInterfaces();
-                    foreach ($interfaces as $interface) {
-                        if ($interface->hasMethod($name)) {
-                            $reflection = $interface;
-                            break;
+                try {
+                    if (!$is_method) {
+                        // ReflectionProperty does not have the getFileName method
+                        // use ReflectionClass instead
+                        $reflection = $reflection->getProperty($name);
+                    } else {
+                        $interfaces = $reflection->getInterfaces();
+                        foreach ($interfaces as $interface) {
+                            if ($interface->hasMethod($name)) {
+                                $reflection = $interface;
+                                break;
+                            }
                         }
-                    }
 
-                    $reflection = $reflection->getMethod($name);
+                        $reflection = $reflection->getMethod($name);
+                    }
+                } catch (\ReflectionException $e) {
+                    $this->logger->debug($e->getMessage());
                 }
             } else {
                 $reflection = new \ReflectionFunction($name);
@@ -231,20 +235,17 @@ class PHPCD implements RpcHandler
         $types = $this->typeByDoc($path, $doc, $class_name);
 
         if (!$types) {
-            $types = $this->typeByPropertyRead($class_name, $name);
+            $types = $this->typeByPropertyRead($doc, $path, $name);
         }
 
         return $types;
     }
 
-    private function typeByPropertyRead($class_name, $name)
+    private function typeByPropertyRead($doc, $path, $name)
     {
-        $reflection = new \ReflectionClass($class_name);
-        $doc = $reflection->getDocComment();
-        $path = $reflection->getFileName();
-        $has_doc = preg_match('/@property(|-read|-write)\s+(?<type>\S+)\s+\$?'.$name.'/i', $doc, $matches);
+        $has_doc = preg_match('/@property(|-read|-write)\s+(?<type>\S+)\s+\$?'.$name.'\b/i', $doc, $matches);
         if ($has_doc) {
-            $types = [$matches['type']];
+            $types = explode('|', $matches['type']);
             $t = $this->fixRelativeType($path, $types);
             return $t;
         }
@@ -280,7 +281,7 @@ class PHPCD implements RpcHandler
             return $this->fixRelativeType($path, explode('|', $matches[2]));
         }
 
-        return [$class_name];
+        return [];
     }
 
     private function fixRelativeType($path, $names)
@@ -320,7 +321,17 @@ class PHPCD implements RpcHandler
             }
         }
 
-        return $types;
+        return self::arrayUnique($types);
+    }
+
+    private static function arrayUnique($array)
+    {
+        $_ = [];
+        foreach ($array as $a) {
+            $_[$a] = 1;
+        }
+
+        return array_keys($_);
     }
 
     private $primitive_types = [

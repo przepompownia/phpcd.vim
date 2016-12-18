@@ -1,53 +1,66 @@
-- 中文
-- [English](./README_en.md)
+- [中文](./README.md)
+- English
 
 [![asciicast](https://asciinema.org/a/4dzyyjymrguylqt21igxlhhqx.png)](https://asciinema.org/a/4dzyyjymrguylqt21igxlhhqx)
 
-## 简介
-PHPCD，全称 PHP Completion Daemon，译为 PHP 补全服务。PHPCD 实现了 Vim 的 omni 补全接口，提供 PHP 相关的智能补全和定义跳转服务。
+## Introduction
 
-PHPCD 的 VimL 部分基于[phpcomplete.vim](https://github.com/shawncplus/phpcomplete.vim)，感谢原项目贡献者的努力。原项目的 3k+ 行代码已经被裁剪为 1.5k 行，可维护性大为增强。
+PHPCD (PHP Completion Daemon) is another Vim omni complete engine for PHP.
 
-因为 PHPCD 利用 PHP 的[反射机制](http://php.net/manual/en/book.reflection.php)进行补全和跳转，所以 PHPCD 几乎不需要事先生成索引文件，启动速度、补全速度和跳转速度都非常快，代码也非常简洁。
+PHPCD is based on [phpcomplete.vim](https://github.com/shawncplus/phpcomplete.vim) but is faster.
 
-~~PHPCD 目前只能配合[NeoVim](http://neovim.io/)工作，这是一个艰难的抉择。~~
+While phpcomplete.vim uses the tags file to fetch the context info, PHPCD uses PHP's Reflection mechanism to fetch the context info, and this is why PHPCD is faster. All the phpcomplete VimL code related the tags file has been droped and reimplemented.
 
-##  特色
- * 快、轻、强
- * 静态调用`Class::method()`显示静态成员和方法；动态调用`$class->method()`显示非静态成员变量和方法
- * 真正识别`self`，`static`和`$this`上下文环境
- * 支持通过多种方式推断变量类型：
-     - 变量类型注解 `/* @var $yourvar YourClass */`、 `/* @var YourClass $yourvar */`
-     - 使用 `new` 初始化类实例 `$instance = new Class;`
-     - 函数（全局函数、成员函数和匿名函数）参数的类型提示 `function (Foo $foo) { // ..  }`
-     - 使用函数块注释中 `@return` 制定函数返回值的类型
- * 补全成员方法和成员属性的时候自动显示块注释
- * 支持内建类的方法、属性、常量的补全
- * 增强型定义跳转<kbd>ctrl</kbd>+<kbd>]</kbd>
+PHPCD consists of two parts. On part is written in VimL (mainly based on phpcomplete.vim), and the other in PHP. ~~The communication between the VimL part and the PHP part relies on NeoVim's MsgPack-RPC mechanism. This is why NeoVim is needed.~~ Both NeoVim and Vim 7.4+ are supported now. Thanks to NoeVims's MsgPack-RPC and Vim's Channel.
 
-## 安装指南
+##  Feature
+ * Fast, Lightweight, Powerful
+ * Correct restriction of static or standard methods based on context (show only static methods with `::` and only standard with `->`)
+ * Real support for `self::`, `static::`, `parent::` and `$this->` with the aforementioned context restriction
+ * Better class detection
+     - Recognize `/* @var $yourvar YourClass */`、 `/* @var YourClass $yourvar */` type mark comments
+     - Recognize `$instance = new Class;` class instantiations
+     - Recognize `$instance = Class::foo()->bar();` method call chain return type use `bar`'s `@return` docblocks
+     - Recognize `$date = DateTime::createFromFormat(...)` built-in class return types
+     - Recognize type hinting in function prototypes
+     - Recognize types in `@param` lines in function docblocks
+     - Recognize array of objects via docblock like `$foo[42]->` or for variables created in `foreach`
+ * Displays docblock info in the preview for methods and properties
+ * Support built-in class support with constants, methods and properties
+ * Enhanced jump-to-definition on <kbd>ctrl</kbd>+<kbd>]</kbd>
 
-### 环境要求
+## Installation & Usage
+
+### System requirement
+
  1. [PHP 5.3+](http://php.net/)
- 2. [PCNTL](http://php.net/manual/en/book.pcntl.php) 扩展
- 3. [Msgpack 0.5.7+(NeoVim)](https://github.com/msgpack/msgpack-php) 扩展或者[JSON(Vim 7.4+)](http://php.net/manual/en/intro.json.php) 扩展
- 4. [Composer](https://getcomposer.org/) 支持
+ 2. [PCNTL](http://php.net/manual/en/book.pcntl.php) Extension
+ 3. [Msgpack 0.5.7+(for NeoVim)](https://github.com/msgpack/msgpack-php) Extension or [JSON(for Vim 7.4+)](http://php.net/manual/en/intro.json.php) Extension
+ 4. [Composer](https://getcomposer.org/) Project
 
 
-### 安装 PHPCD
+### Install PHPCD
 
-推荐使用[Vim-Plug](https://github.com/junegunn/vim-plug/blob/master/README.md)管理 Vim 插件。
+We recommend you use [Vim-Plug](https://github.com/junegunn/vim-plug/blob/master/README.md) to manage your vim plugins.
 
-安装 Vim-Plug 后，添加：
+With Vim-Plug installed, put the following lines in your vimrc:
 
 ```
 Plug 'php-vim/phpcd.vim', { 'for': 'php' , 'do': 'composer update --no-dev' }
 ```
 
-然后执行`:PlugInstall`进行安装。
+And then execute `:PlugInstall` in the command mode.
 
-## 使用方法
+## Usage
+
+First, in the project directory, run `composer install` to install all the dependent packages and generate the autoload file.
+
+The default PHP command used to run PHP parts of daemon is simply `php`. You may override it by assigning `g:phpcd_php_cli_executable` another value in your `vimrc`, for example:
+```
+let g:phpcd_php_cli_executable = 'php7.0'
+```
 
 首先运行 `composer install --no-dev` 更新依赖并生成自动加载文件，然后打开 NeoVim。
+Use <kbd>Ctrl</kbd>+<kbd>x</kbd><kbd>Ctrl</kbd>+<kbd>o</kbd> to complete and use <kbd>ctrl</kbd>+<kbd>]</kbd> to go to the defination.
 
-补全按<kbd>Ctrl</kbd>+<kbd>x</kbd><kbd>Ctrl</kbd>+<kbd>o</kbd>，跳转按<kbd>ctrl</kbd>+<kbd>]</kbd>。
+Good luck :)
