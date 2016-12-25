@@ -146,48 +146,56 @@ class PHPCD implements RpcHandler
     public function doc($class_name, $name, $is_method = true)
     {
         try {
-            $reflection_class = null;
-            if ($class_name) {
-                $reflection = new \ReflectionClass($class_name);
-                $reflection_class = $reflection;
-                try {
-                    if (!$is_method) {
-                        // ReflectionProperty does not have the getFileName method
-                        // use ReflectionClass instead
-                        $reflection = $reflection->getProperty($name);
-                    } else {
-                        $interfaces = $reflection->getInterfaces();
-                        foreach ($interfaces as $interface) {
-                            if ($interface->hasMethod($name)) {
-                                $reflection = $interface;
-                                break;
-                            }
-                        }
-
-                        $reflection = $reflection->getMethod($name);
-                    }
-                } catch (\ReflectionException $e) {
-                    $this->logger->debug($e->getMessage());
-                }
-            } else {
-                $reflection = new \ReflectionFunction($name);
-            }
-
-            $doc = $reflection->getDocComment();
-            // use reflection_class to fetch the property's file path
-            if (preg_match('/@return\s+(static|self|\$this)/i', $doc) || $reflection_class) {
-                $path = $reflection_class->getFileName();
-            } else {
-                $path = $reflection->getFileName();
+            if (!$class_name) {
+                return $this->docFunction($name);
             }
             $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
             $doc = preg_replace('#\s*\/|/\s*#', '', $doc);
 
-            return [$path, $doc];
+            return $this->docClass($class_name, $name, $is_method);
         } catch (\ReflectionException $e) {
             $this->logger->debug($e->getMessage());
             return [null, null];
         }
+    }
+
+    private function docFunction($name)
+    {
+        $reflection = new \ReflectionFunction($name);
+        $doc = $reflection->getDocComment();
+        $path = $reflection->getFileName();
+
+        return [$path, $this->clearDoc($doc)];
+    }
+
+    private function docClass($class_name, $name, $is_method)
+    {
+        $reflection_class = new \ReflectionClass($class_name);
+
+        if ($is_method) {
+            $reflection = $reflection_class->getMethod($name);
+        } else {
+            if ($reflection_class->hasProperty($name)) {
+                $reflection = $reflection_class->getProperty($name);
+            } else {
+                $class_doc = $reflection_class->getDocComment();
+
+                $has_pseudo_property = preg_match('/@property(|-read|-write)\s+(?<type>\S+)\s+\$?'.$name.'/mi', $class_doc, $matches);
+                if ($has_pseudo_property) {
+                    return [$reflection_class->getFileName(), '@var '.$matches['type']];
+                }
+            }
+        }
+
+        $doc = $reflection->getDocComment();
+
+        if (preg_match('/@(return|var)\s+static/i', $doc)) {
+            $path = $reflection_class->getFileName();
+        } else {
+            $path = $reflection->getDeclaringClass()->getFileName();
+        }
+
+        return [$path, $this->clearDoc($doc)];
     }
 
     /**
@@ -236,23 +244,7 @@ class PHPCD implements RpcHandler
         list($path, $doc) = $this->doc($class_name, $name, false);
         $types = $this->typeByDoc($path, $doc, $class_name);
 
-        if (!$types) {
-            $types = $this->typeByPropertyRead($doc, $path, $name);
-        }
-
         return $types;
-    }
-
-    private function typeByPropertyRead($doc, $path, $name)
-    {
-        $has_doc = preg_match('/@property(|-read|-write)\s+(?<type>\S+)\s+\$?'.$name.'\b/i', $doc, $matches);
-        if ($has_doc) {
-            $types = explode('|', $matches['type']);
-            $t = $this->fixRelativeType($path, $types);
-            return $t;
-        }
-
-        return [];
     }
 
     private function typeByReturnType($class_name, $name)
