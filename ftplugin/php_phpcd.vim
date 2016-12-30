@@ -22,9 +22,9 @@ else
 	let messenger = 'json'
 end
 
-let s:root = GetRoot()
 let g:phpcd_server_options['messenger'] = messenger
-let g:phpcd_server_options['autoload_path'] = s:root.'/'.g:phpcd_autoload_path
+let g:php_autoload_path = g:phpcd_root.'/'.g:phpcd_autoload_path
+let g:phpcd_server_options['autoload_path'] = g:php_autoload_path
 
 if ! exists('*json_encode')
 	echoerr 'Function json_encode is not defined.'
@@ -38,7 +38,7 @@ if exists('g:phpcd_channel_id')
 	call rpc#stop(g:phpcd_channel_id)
 endif
 let g:phpcd_channel_id = rpc#start(g:phpcd_php_cli_executable,
-			\ [s:phpcd_path, g:phpcd_root, 'PHPCD', s:encoded_options])
+			\ s:phpcd_path, g:phpcd_root, 'PHPCD', s:encoded_options)
 
 if g:phpcd_root == '/'
 	let &cpo = s:save_cpo
@@ -51,7 +51,7 @@ if exists('g:phpid_channel_id')
 endif
 
 let g:phpid_channel_id = rpc#start(g:phpcd_php_cli_executable,
-			\ [s:phpcd_path, g:phpcd_root, 'PHPID', s:encoded_options])
+			\ s:phpcd_path, g:phpcd_root, 'PHPID', s:encoded_options)
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

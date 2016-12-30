@@ -22,7 +22,7 @@ function! rpc#notify(...) " {{{
 	end
 endfunction " }}}
 
-function! s:OnCall(status, response)
+function! s:OnCall(status, response) " {{{
 	let msg = json_decode(a:response)
 	if len(msg) != 3
 		return
@@ -34,15 +34,13 @@ function! s:OnCall(status, response)
 	endif
 
 	execute params[0]
-endfunction
+endfunction " }}}
 
 function! rpc#start(...) " {{{
 	if has('nvim')
-		return call('rpcstart', a:000)
+		return jobstart(a:000, {'rpc': v:true})
 	else
-		let args = a:2
-		call insert(args, a:1, 0)
-		return job_start(args, {'out_cb': function('s:OnCall')})
+		return job_start(a:000, {'out_cb': function('s:OnCall')})
 	end
 endfunction " }}}
 
