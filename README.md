@@ -1,4 +1,4 @@
-- [中文](./README.md)
+- [中文](./README_zh.md)
 - English
 
 [![asciicast](https://asciinema.org/a/4dzyyjymrguylqt21igxlhhqx.png)](https://asciinema.org/a/4dzyyjymrguylqt21igxlhhqx)

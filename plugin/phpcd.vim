@@ -15,21 +15,33 @@ function! GetRoot(globalRoot) " {{{
 	let root = expand("%:p:h")
 
 	if a:globalRoot != '/' && stridx(root, a:globalRoot) == 0
-		return [a:globalRoot, root]
+		return a:globalRoot
 	endif
 
+	let g:isFoundPHPCD = 0
 	while root != "/"
-		if (filereadable(root . "/vendor/autoload.php") || filereadable(root.'/.phpcd.vim'))
+		if (filereadable(root.'/.phpcd.vim'))
+			let g:isFoundPHPCD = 1
 			break
 		endif
 		let root = fnamemodify(root, ":h")
 	endwhile
-	return [a:globalRoot, root]
+
+	if g:isFoundPHPCD != 1
+		let root = expand("%:p:h")
+		while root != "/"
+			if (filereadable(root . "/vendor/autoload.php"))
+				break
+			endif
+			let root = fnamemodify(root, ":h")
+		endwhile
+	endif
+	return root
 endfunction " }}}
 
-let [g:phpcd_root, s:root] = GetRoot(g:phpcd_root)
-if filereadable(s:root.'/.phpcd.vim')
-	exec 'source '.s:root.'/.phpcd.vim'
+let g:phpcd_root = GetRoot(g:phpcd_root)
+if filereadable(g:phpcd_root.'/.phpcd.vim')
+	exec 'source 'g:phpcd_root.'/.phpcd.vim'
 endif
 
 let g:phpcd_need_update = 0

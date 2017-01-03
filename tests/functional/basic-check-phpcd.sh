@@ -2,13 +2,15 @@
 
 set -e
 
+cd $(dirname $0)
+
 . bash-utils.sh
 
 cd ../..
 projectPath=$PWD
 autoloadPath="${projectPath}/vendor/autoload.php"
 
-handler=PHPID
+handler=PHPCD
 php ./php/main.php "$PWD" "$handler" "$(printf '{
 	"autoload_path": "%s",
 	"completion_match_type":
