@@ -1,5 +1,5 @@
 - 中文
-- [English](./README_en.md)
+- [English](./README.md)
 
 [![asciicast](https://asciinema.org/a/4dzyyjymrguylqt21igxlhhqx.png)](https://asciinema.org/a/4dzyyjymrguylqt21igxlhhqx)
 
