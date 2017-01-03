@@ -11,11 +11,11 @@ endif
 
 let g:phpcd_root = '/'
 
-function! GetRoot() " {{{
+function! GetRoot(globalRoot) " {{{
 	let root = expand("%:p:h")
 
-	if g:phpcd_root != '/' && stridx(root, g:phpcd_root) == 0
-		return g:phpcd_root
+	if a:globalRoot != '/' && stridx(root, a:globalRoot) == 0
+		return [a:globalRoot, root]
 	endif
 
 	while root != "/"
@@ -24,11 +24,10 @@ function! GetRoot() " {{{
 		endif
 		let root = fnamemodify(root, ":h")
 	endwhile
-	let g:phpcd_root = root
-	return root
+	return [a:globalRoot, root]
 endfunction " }}}
 
-let s:root = GetRoot()
+let [g:phpcd_root, s:root] = GetRoot(g:phpcd_root)
 if filereadable(s:root.'/.phpcd.vim')
 	exec 'source '.s:root.'/.phpcd.vim'
 endif
