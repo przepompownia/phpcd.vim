@@ -78,4 +78,18 @@ class GenericPropertyInfo implements PropertyInfo
 
         return $modifiers;
     }
+
+    /**
+     * @return array
+     */
+    public function getAllowedTypes()
+    {
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllowedNonTrivialTypes()
+    {
+    }
 }

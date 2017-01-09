@@ -27,7 +27,7 @@ class DocBlock
         // Get only the first @var line
         $tag = $tags[0]->getType();
 
-        var_dump(explode('|', (string)$tag));
+        // var_dump(explode('|', (string)$tag));
 
         $types = [];
 
@@ -39,7 +39,7 @@ class DocBlock
                 if ($type instanceof Object_) {
                     $types[] = (string)$type;
                 } else {
-                    printf("%s: %s\n", get_class($type), (string)$type);
+                    // printf("%s: %s\n", get_class($type), (string)$type);
                 }
 
                 ++$index;

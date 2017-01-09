@@ -38,6 +38,6 @@ class PHPCDTest extends TestCase
         );
 
         // $phpcd->proptype('PHPCD\\PHPCD', 'logger');
-        var_dump($phpcd->doc('PHPCD\\ClassInfo\\ClassInfoRepository', 'find', true));
+        var_dump($phpcd->functype('PHPCD\\ClassInfo\\ClassInfoRepository', 'find', true));
     }
 }

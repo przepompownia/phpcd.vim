@@ -143,14 +143,12 @@ class PHPCD implements RpcHandler
      * @param string $class_name for function set this args to empty
      * @param string $name
      */
-    public function doc($class_name, $name, $is_method = true)
+    private function doc($class_name, $name, $is_method = true)
     {
         try {
             if (!$class_name) {
                 return $this->docFunction($name);
             }
-            $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
-            $doc = preg_replace('#\s*\/|/\s*#', '', $doc);
 
             return $this->docClass($class_name, $name, $is_method);
         } catch (\ReflectionException $e) {
@@ -164,8 +162,10 @@ class PHPCD implements RpcHandler
         $reflection = new \ReflectionFunction($name);
         $doc = $reflection->getDocComment();
         $path = $reflection->getFileName();
+        $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
+        $doc = preg_replace('#\s*\/|/\s*#', '', $doc);
 
-        return [$path, $this->clearDoc($doc)];
+        return [$path, $doc];
     }
 
     private function docClass($class_name, $name, $is_method)
@@ -195,7 +195,10 @@ class PHPCD implements RpcHandler
             $path = $reflection->getDeclaringClass()->getFileName();
         }
 
-        return [$path, $this->clearDoc($doc)];
+        $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
+        $doc = preg_replace('#\s*\/|/\s*#', '', $doc);
+
+        return [$path, $doc];
     }
 
     /**

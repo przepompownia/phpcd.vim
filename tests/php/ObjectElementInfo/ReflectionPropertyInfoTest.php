@@ -22,7 +22,7 @@ class ReflectionPropertyInfoTest extends TestCase
         $types = $propertyInfo->getAllowedTypes();
 
 
-        var_dump($types);
+        // var_dump($types);
     }
 
     public function getAllowedTypesDataProvider()
