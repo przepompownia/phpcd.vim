@@ -313,17 +313,17 @@ class PHPCD implements RpcHandler
             }
 
             if (in_array(strtolower($type), ['static', '$this', 'self'])) {
-                $type = $nsuse['namespace'] . '\\' . $nsuse['class'];
+                $type = $nsuse->getNamespace() . '\\' . $nsuse->getClass();
             } elseif ($type[0] != '\\') {
                 $parts = explode('\\', $type);
                 $alias = array_shift($parts);
-                if (isset($nsuse['imports'][$alias])) {
-                    $type = $nsuse['imports'][$alias];
+                if (isset($nsuse->getImports()[$alias])) {
+                    $type = $nsuse->getImports()[$alias];
                     if ($parts) {
                         $type = $type . '\\' . join('\\', $parts);
                     }
                 } else {
-                    $type = $nsuse['namespace'] . '\\' . $type;
+                    $type = $nsuse->getNamespace() . '\\' . $type;
                 }
             }
 
