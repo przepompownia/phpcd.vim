@@ -422,7 +422,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 
 		" Get location of class definition, we have to iterate through all
 		if classname != ''
-			let [path, line] = rpc#request(g:phpcd_channel_id, 'locateMethodOrConstantDeclaration', classname, a:symbol)
+			let [path, line] = rpc#request(g:phpcd_channel_id, 'findSymbolDeclaration', classname, a:symbol)
 			return [path, line, 0]
 		endif " }}}
 	elseif index(['new', 'use', 'implements', 'extends'], a:symbol_context) > -1 " {{{
@@ -444,7 +444,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 			let impl = phpcd#SelectOne(impls)
 
 			if impl != ''
-				let [path, line] = rpc#request(g:phpcd_channel_id, 'locateMethodOrConstantDeclaration', impl, a:symbol)
+				let [path, line] = rpc#request(g:phpcd_channel_id, 'findSymbolDeclaration', impl, a:symbol)
 				return [path, line, 0]
 			endif
 		endif " }}}
@@ -456,7 +456,7 @@ function! phpcd#LocateSymbol(symbol, symbol_context, symbol_namespace, current_i
 		return [path, '$', 0] "}}}
 	elseif a:symbol_context =~ '\v.+(\@|:)' " pattern like 'class@method' or 'class:method' {{{
 		let full_classname = strpart(a:symbol_context, 1, strlen(a:symbol_context)-2)
-		let [path, line] = rpc#request(g:phpcd_channel_id, 'locateMethodOrConstantDeclaration', full_classname, a:symbol)
+		let [path, line] = rpc#request(g:phpcd_channel_id, 'findSymbolDeclaration', full_classname, a:symbol)
 		return [path, line, 0] " }}}
 	else " {{{
 		if a:symbol =~ '\v\C^[A-Z]'
