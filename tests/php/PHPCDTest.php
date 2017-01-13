@@ -5,6 +5,7 @@ namespace PHPCD;
 use PHPUnit\Framework\TestCase;
 use Mockery;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
+use PHPCD\PHPFileInfo\PHPFileInfo;
 use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\ConstantInfo\ConstantInfoRepository;
 use PHPCD\ObjectElementInfo\MethodInfoRepository;
@@ -26,6 +27,12 @@ class PHPCDTest extends TestCase
         $methodInfoRepository = Mockery::mock(MethodInfoRepository::class);
         $fileInfoFactory = Mockery::mock(PHPFileInfoFactory::class);
         $view = Mockery::mock(View::class);
+        $fileInfo = Mockery::mock(PHPFileInfo::class);
+
+        $fileInfo->shouldReceive('getImports')->andReturn([]);
+        $fileInfo->shouldReceive('getNamespace')->andReturn('');
+        $fileInfoFactory->shouldReceive('createFileInfo')->andReturn($fileInfo);
+        $view->shouldReceive('renderPHPFileInfo')->andReturnNull();
 
         $phpcd = new PHPCD(
             $nsinfo,

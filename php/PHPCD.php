@@ -292,21 +292,22 @@ class PHPCD implements RpcHandler
             }
 
             if (!$nsuse && $type[0] != '\\') {
-                $nsuse = $this->nsuse($path);
+                $nsuse = $this->file_info_factory->createFileInfo($path);
             }
 
             if (in_array(strtolower($type), ['static', '$this', 'self'])) {
-                $type = $nsuse['namespace'] . '\\' . $nsuse['class'];
+                $type = $nsuse->getNamespace() . '\\' . $nsuse->getClass();
             } elseif ($type[0] != '\\') {
                 $parts = explode('\\', $type);
                 $alias = array_shift($parts);
-                if (isset($nsuse['imports'][$alias])) {
-                    $type = $nsuse['imports'][$alias];
+                $imports = $nsuse->getImports();
+                if (isset($imports[$alias])) {
+                    $type = $imports[$alias];
                     if ($parts) {
                         $type = $type . '\\' . join('\\', $parts);
                     }
                 } else {
-                    $type = $nsuse['namespace'] . '\\' . $type;
+                    $type = $nsuse->getNamespace() . '\\' . $type;
                 }
             }
 
