@@ -76,15 +76,15 @@ class PHPCD implements RpcHandler
     }
 
     /**
-     * Fetch function or class method's source file path
-     * and their defination line number.
+     * Fetch class method's source file path
+     * and their definition line number.
      *
      * @param string $class_name class name
      * @param string $method_name method or function name
      *
      * @return [path, line]
      */
-    public function locateMethodOrConstantDeclaration($class_name, $method_name = '__construct')
+    public function findSymbolDeclaration($class_name, $method_name = '__construct')
     {
         try {
             $reflection = new \ReflectionClass($class_name);
@@ -93,6 +93,9 @@ class PHPCD implements RpcHandler
                 $reflection = $reflection->getMethod($method_name);
             } elseif ($reflection->hasConstant($method_name)) {
                 return [$this->getConstPath($method_name, $reflection), 'const ' . $method_name];
+            } elseif ($reflection->hasProperty($method_name)) {
+                $line = $this->getPropertyDefLine($reflection, $method_name);
+                return [$reflection->getFileName(), $line];
             }
 
             return [$reflection->getFileName(), $reflection->getStartLine()];
@@ -109,6 +112,20 @@ class PHPCD implements RpcHandler
         } catch (\ReflectionException $e) {
             return ['', null];
         }
+    }
+
+    private function getPropertyDefLine($classReflection, $property)
+    {
+        $class = new \SplFileObject($classReflection->getFileName());
+        $class->seek($classReflection->getStartLine());
+
+        $pattern = '/(private|protected|public|var)\s\$' . $property . '/x';
+        foreach ($class as $line => $content) {
+            if (preg_match($pattern, $content)) {
+                return $line + 1;
+            }
+        }
+        return $classReflection->getStartLine();
     }
 
     private function getConstPath($const_name, \ReflectionClass $reflection)
