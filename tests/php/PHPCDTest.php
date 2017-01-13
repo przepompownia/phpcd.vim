@@ -18,7 +18,7 @@ class PHPCDTest extends TestCase
     /**
      * @test
      */
-    public function proptype()
+    public function functype()
     {
         $nsinfo = Mockery::mock(NamespaceInfo::class);
         $logger = Mockery::mock(Logger::class);
@@ -30,7 +30,7 @@ class PHPCDTest extends TestCase
         $fileInfo = Mockery::mock(PHPFileInfo::class);
 
         $fileInfo->shouldReceive('getImports')->andReturn([]);
-        $fileInfo->shouldReceive('getNamespace')->andReturn('');
+        $fileInfo->shouldReceive('getNamespace')->andReturn('PHPCD\\ClassInfo');
         $fileInfoFactory->shouldReceive('createFileInfo')->andReturn($fileInfo);
         $view->shouldReceive('renderPHPFileInfo')->andReturnNull();
 
@@ -45,6 +45,6 @@ class PHPCDTest extends TestCase
         );
 
         // $phpcd->proptype('PHPCD\\PHPCD', 'logger');
-        var_dump($phpcd->functype('PHPCD\\ClassInfo\\ClassInfoRepository', 'find', true));
+        $this->assertContains('\PHPCD\ClassInfo\ClassInfoCollection', $phpcd->functype('PHPCD\\ClassInfo\\ClassInfoRepository', 'find', true));
     }
 }
