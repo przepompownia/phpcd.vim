@@ -31,19 +31,29 @@ class PHPCD implements RpcHandler
      */
     private $nsinfo;
 
-    /** @var ConstantInfoRepository */
+    /**
+     * @var ConstantInfoRepository
+     */
     private $constantInfoRepository;
 
-    /** @var PropertyInfoRepository **/
+    /**
+     * @var PropertyInfoRepository
+     */
     private $propertyInfoRepository;
 
-    /** @var MethodInfoRepository **/
+    /**
+     * @var MethodInfoRepository
+     */
     private $methodInfoRepository;
 
-    /** @var View **/
+    /**
+     * @var View
+     */
     private $view;
 
-    /** @var LegacyTypeLogic **/
+    /**
+     * @var LegacyTypeLogic
+     */
     private $legacyTypeLogic;
 
     /*
