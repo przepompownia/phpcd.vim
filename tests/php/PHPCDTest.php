@@ -44,7 +44,7 @@ class PHPCDTest extends TestCase
             $view
         );
 
-        // $phpcd->proptype('PHPCD\\PHPCD', 'logger');
-        $this->assertContains('\PHPCD\ClassInfo\ClassInfoCollection', $phpcd->functype('PHPCD\\ClassInfo\\ClassInfoRepository', 'find', true));
+        $types = $phpcd->functype('PHPCD\\ClassInfo\\ClassInfoRepository', 'find', true);
+        $this->assertContains('\PHPCD\ClassInfo\ClassInfoCollection', $types);
     }
 }
