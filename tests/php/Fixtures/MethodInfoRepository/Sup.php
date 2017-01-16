@@ -8,6 +8,9 @@ class Sup
 
     protected $pub4;
 
+    /**
+     * @var \ReflectionClass
+     */
     public $pub5;
 
     private $pub6;
