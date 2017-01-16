@@ -1,6 +1,6 @@
 <?php
 
-namespace tests;
+namespace tests\PHPCD;
 
 use PHPCD\PHPCD;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +15,7 @@ use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\NamespaceInfo;
 
-class PHPCDTest extends TestCase
+class FunctypeTest extends TestCase
 {
     /**
      * @test
@@ -62,55 +62,6 @@ class PHPCDTest extends TestCase
                 'PHPCD\\ClassInfo',
                 [],
                 ['\PHPCD\ClassInfo\ClassInfoCollection']
-            ],
-        ];
-    }
-
-    /**
-     * @test
-     * @dataProvider proptypeDataProvider
-     */
-    public function proptype($class, $method, $namespace, $imports, $expectedTypes)
-    {
-        $nsinfo = Mockery::mock(NamespaceInfo::class);
-        $logger = Mockery::mock(Logger::class);
-        $constantRepository = Mockery::mock(ConstantInfoRepository::class);
-        $propertyInfoRepository = Mockery::mock(PropertyInfoRepository::class);
-        $methodInfoRepository = Mockery::mock(MethodInfoRepository::class);
-        $fileInfoFactory = Mockery::mock(PHPFileInfoFactory::class);
-        $view = Mockery::mock(View::class);
-        $fileInfo = Mockery::mock(PHPFileInfo::class);
-
-        $fileInfo->shouldReceive('getImports')->andReturn($imports);
-        $fileInfo->shouldReceive('getNamespace')->andReturn($namespace);
-        $fileInfoFactory->shouldReceive('createFileInfo')->andReturn($fileInfo);
-        $view->shouldReceive('renderPHPFileInfo')->andReturnNull();
-
-        $phpcd = new PHPCD(
-            $nsinfo,
-            $logger,
-            $constantRepository,
-            $propertyInfoRepository,
-            $methodInfoRepository,
-            $fileInfoFactory,
-            $view
-        );
-
-        foreach ($expectedTypes as $expectedType) {
-            $types = $phpcd->proptype($class, $method, true);
-            $this->assertContains($expectedType, $types);
-        }
-    }
-
-    public function proptypeDataProvider()
-    {
-        return [
-            [
-                'tests\\MethodInfoRepository\\Sup',
-                'pub5',
-                'PHPCD\\MethodInfoRepository',
-                [],
-                ['\ReflectionClass']
             ],
         ];
     }
