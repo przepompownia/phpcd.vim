@@ -14,6 +14,7 @@ use PHPCD\ObjectElementInfo\PropertyInfoRepository;
 use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\NamespaceInfo;
+use PHPCD\DocBlock\LegacyTypeLogic;
 
 class FunctypeTest extends TestCase
 {
@@ -31,6 +32,7 @@ class FunctypeTest extends TestCase
         $fileInfoFactory = Mockery::mock(PHPFileInfoFactory::class);
         $view = Mockery::mock(View::class);
         $fileInfo = Mockery::mock(PHPFileInfo::class);
+        $legacyTypeLogic = new LegacyTypeLogic($logger, $fileInfoFactory);
 
         $fileInfo->shouldReceive('getImports')->andReturn($imports);
         $fileInfo->shouldReceive('getNamespace')->andReturn($namespace);
@@ -44,7 +46,8 @@ class FunctypeTest extends TestCase
             $propertyInfoRepository,
             $methodInfoRepository,
             $fileInfoFactory,
-            $view
+            $view,
+            $legacyTypeLogic
         );
 
         foreach ($expectedTypes as $expectedType) {

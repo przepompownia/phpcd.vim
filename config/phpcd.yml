@@ -11,6 +11,12 @@ services:
         arguments:
             - '%root%'
 
+    type.legacy:
+        class:      \PHPCD\DocBlock\LegacyTypeLogic
+        arguments:
+            - '@default_logger'
+            - '@file_info_factory'
+
     handler.phpcd:
         class:              \PHPCD\PHPCD
         arguments:
@@ -21,6 +27,7 @@ services:
             - '@method_info_repository'
             - '@file_info_factory'
             - '@view'
+            - '@type.legacy'
 
     server.phpcd:
         class:              Lvht\MsgpackRpc\ForkServer
