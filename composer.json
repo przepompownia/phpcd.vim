@@ -10,7 +10,7 @@
         "psr-4": {"PHPCD\\": "php/"}
     },
     "autoload-dev": {
-        "psr-4": {"PHPCD\\": "tests/php/"}
+        "psr-4": {"tests\\": "tests/php/"}
     },
     "require": {
         "psr/log": "^1.0",

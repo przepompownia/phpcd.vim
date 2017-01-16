@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\Sub2;
+namespace tests\Sub2;
 
 class Foo
 {

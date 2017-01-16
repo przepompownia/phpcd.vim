@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\MethodInfoRepository;
+namespace tests\MethodInfoRepository;
 
 /**
  * @property-read \SplFileObject $file

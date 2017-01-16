@@ -1,8 +1,9 @@
 <?php
 
-namespace PHPCD\PatternMatcher;
+namespace tests\PatternMatcher;
 
 use PHPUnit\Framework\TestCase;
+use PHPCD\PatternMatcher\SubsequencePatternMatcher;
 
 class SubsequencePatternMatcherTest extends TestCase
 {

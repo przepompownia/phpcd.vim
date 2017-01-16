@@ -1,9 +1,12 @@
 <?php
 
-namespace PHPCD\PatternMatcher;
+namespace tests\PatternMatcher;
 
 use PHPUnit\Framework\TestCase;
 use Mockery;
+use PHPCD\PatternMatcher\HeadOrSubsequenceOfLastPart;
+use PHPCD\PatternMatcher\HeadPatternMatcher;
+use PHPCD\PatternMatcher\SubsequencePatternMatcher;
 
 class HeadOrSubsequenceOfLastPartTest extends TestCase
 {

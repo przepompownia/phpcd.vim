@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\Fixtures\StringBasedPHPFileInfo;
+namespace tests\Fixtures\StringBasedPHPFileInfo;
 
 use A\X1234 as Test;
 

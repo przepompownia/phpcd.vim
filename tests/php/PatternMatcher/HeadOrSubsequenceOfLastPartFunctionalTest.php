@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\PatternMatcher;
+namespace tests\PatternMatcher;
 
 use PHPUnit\Framework\TestCase;
 

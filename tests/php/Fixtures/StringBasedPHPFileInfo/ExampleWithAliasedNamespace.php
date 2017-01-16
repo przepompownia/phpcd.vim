@@ -1,8 +1,8 @@
 <?php
 
-namespace PHPCD\Fixtures\StringBasedPHPFileInfo;
+namespace tests\Fixtures\StringBasedPHPFileInfo;
 
-use PHPCD\Sub2;
+use tests\Sub2;
 
 class ExampleWithAliasedNamespace extends Sub2\Foo
 {

@@ -1,8 +1,9 @@
 <?php
 
-namespace PHPCD\PHPFileInfo;
+namespace tests\PHPFileInfo;
 
 use PHPUnit\Framework\TestCase;
+use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 
 class StringBasedPHPFileInfoTest extends TestCase
 {
@@ -120,7 +121,7 @@ class StringBasedPHPFileInfoTest extends TestCase
         $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
 
         $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
-        $this->assertEquals('PHPCD\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
+        $this->assertEquals('tests\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
         $this->assertEquals('ExampleWithoutErrors', $fileInfo->getClass());
         $this->assertEquals('Cat', $fileInfo->getSuperclass());
 
@@ -138,7 +139,7 @@ class StringBasedPHPFileInfoTest extends TestCase
         $fileInfo = $this->getFileInfo($this->getAbsoluteFilePath($path));
 
         $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
-        $this->assertEquals('PHPCD\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
+        $this->assertEquals('tests\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
         $this->assertEquals('ExampleWithNonExistingInterfaces', $fileInfo->getClass());
         $this->assertNull($fileInfo->getSuperclass());
 
@@ -147,7 +148,7 @@ class StringBasedPHPFileInfoTest extends TestCase
 
         $this->assertTrue($fileInfo->hasErrors());
         $errors = $fileInfo->getErrors();
-        $this->assertEquals('Interface PHPCD\Fixtures\StringBasedPHPFileInfo\I1 does not exist.', current($errors));
+        $this->assertEquals('Interface tests\Fixtures\StringBasedPHPFileInfo\I1 does not exist.', current($errors));
 
     }
 

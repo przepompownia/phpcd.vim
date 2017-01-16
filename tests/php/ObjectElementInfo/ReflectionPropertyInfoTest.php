@@ -1,11 +1,12 @@
 <?php
 
-namespace PHPCD\ObjectElementInfo;
+namespace tests\ObjectElementInfo;
 
 use PHPUnit\Framework\TestCase;
 use phpDocumentor\Reflection\DocBlockFactory;
 use PHPCD\DocBlock\DocBlock;
-use PHPCD\MethodInfoRepository\Test1;
+use tests\MethodInfoRepository\Test1;
+use PHPCD\ObjectElementInfo\ReflectionPropertyInfo;
 
 class ReflectionPropertyInfoTest extends TestCase
 {

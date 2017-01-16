@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\Fixtures\StringBasedPHPFileInfo;
+namespace tests\Fixtures\StringBasedPHPFileInfo;
 
 interface Subinterface extends Superinterface
 {

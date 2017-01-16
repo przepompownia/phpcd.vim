@@ -1,8 +1,9 @@
 <?php
 
-namespace PHPCD\ObjectElementInfo;
+namespace tests\ObjectElementInfo;
 
 use PHPUnit\Framework\TestCase;
+use PHPCD\ObjectElementInfo\GenericPropertyInfo;
 
 class GenericPropertyInfoTest extends TestCase
 {

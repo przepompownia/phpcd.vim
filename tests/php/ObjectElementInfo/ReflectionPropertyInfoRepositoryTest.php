@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\ObjectElementInfo;
+namespace tests\ObjectElementInfo;
 
 use PHPCD\ObjectElementInfo\PropertyPath;
 use PHPUnit\Framework\TestCase;
@@ -9,6 +9,7 @@ use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Filter\PropertyFilter;
 use PHPCD\ObjectElementInfo\ReflectionPropertyInfoRepository;
 use PHPCD\ObjectElementInfo\PropertyInfo;
+use PHPCD\DocBlock\DocBlock;
 use Mockery;
 
 class ReflectionPropertyInfoRepositoryTest extends TestCase
@@ -18,7 +19,7 @@ class ReflectionPropertyInfoRepositoryTest extends TestCase
      */
     public function findAllProperties()
     {
-        $className =  'PHPCD\\MethodInfoRepository\\Test1';
+        $className =  'tests\\MethodInfoRepository\\Test1';
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $properties = $repository->find(new PropertyFilter([
@@ -39,8 +40,9 @@ class ReflectionPropertyInfoRepositoryTest extends TestCase
         $pattern_matcher->shouldReceive('match')->andReturn(true);
         $factory = Mockery::mock(ClassInfoFactory::class);
         $factory->shouldReceive('createReflectionClassFromFilter')->once()->andReturn(new \ReflectionClass($className));
+        $docBlock = Mockery::mock(DocBlock::class);
 
-        return new ReflectionPropertyInfoRepository($pattern_matcher, $factory);
+        return new ReflectionPropertyInfoRepository($pattern_matcher, $factory, $docBlock);
     }
 
     /**
@@ -48,7 +50,7 @@ class ReflectionPropertyInfoRepositoryTest extends TestCase
      */
     public function findPublicPropertiesOnly()
     {
-        $className =  'PHPCD\\MethodInfoRepository\\Test1';
+        $className =  'tests\\MethodInfoRepository\\Test1';
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $filter = new PropertyFilter([
@@ -66,7 +68,7 @@ class ReflectionPropertyInfoRepositoryTest extends TestCase
      */
     public function getByPathOfNonexistingProperty()
     {
-        $className =  \PHPCD\MethodInfoRepository\Test1::class;
+        $className =  \tests\MethodInfoRepository\Test1::class;
         $propertyName = 'doesnotexist';
         $path = new PropertyPath($className, $propertyName);
         $repository = $this->getRepositoryWithTrivialMatcher($className);
@@ -79,7 +81,7 @@ class ReflectionPropertyInfoRepositoryTest extends TestCase
      */
     public function getByPath()
     {
-        $className =  \PHPCD\MethodInfoRepository\Test1::class;
+        $className =  \tests\MethodInfoRepository\Test1::class;
         $propertyName = 'pub1';
         $path = new PropertyPath($className, $propertyName);
         $repository = $this->getRepositoryWithTrivialMatcher($className);

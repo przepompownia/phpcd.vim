@@ -1,12 +1,13 @@
 <?php
 
-namespace PHPCD\ObjectElementInfo;
+namespace tests\ObjectElementInfo;
 
 use PHPUnit\Framework\TestCase;
 use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\ObjectElementInfo\ReflectionMethodInfoRepository;
+use PHPCD\DocBlock\DocBlock;
 use Mockery;
 
 class ReflectionMethodInfoRepositoryTest extends TestCase
@@ -17,7 +18,7 @@ class ReflectionMethodInfoRepositoryTest extends TestCase
      */
     public function findAllMethods()
     {
-        $className =  'PHPCD\\MethodInfoRepository\\Test1';
+        $className =  'tests\\MethodInfoRepository\\Test1';
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $methods = $repository->find(new MethodFilter([
@@ -37,7 +38,7 @@ class ReflectionMethodInfoRepositoryTest extends TestCase
      */
     public function findPublicMethodsOnly()
     {
-        $className =  'PHPCD\\MethodInfoRepository\\Test1';
+        $className =  'tests\\MethodInfoRepository\\Test1';
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $filter = new MethodFilter([
@@ -55,7 +56,8 @@ class ReflectionMethodInfoRepositoryTest extends TestCase
         $pattern_matcher->shouldReceive('match')->andReturn(true);
         $factory = Mockery::mock(ClassInfoFactory::class);
         $factory->shouldReceive('createReflectionClassFromFilter')->once()->andReturn(new \ReflectionClass($className));
+        $docBlock = Mockery::mock(DocBlock::class);
 
-        return new ReflectionMethodInfoRepository($pattern_matcher, $factory);
+        return new ReflectionMethodInfoRepository($pattern_matcher, $factory, $docBlock);
     }
 }

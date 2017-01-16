@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\NamespaceInfo;
+namespace tests\NamespaceInfo;
 
 use PHPCD\NamespaceInfo;
 use PHPUnit\Framework\TestCase;

@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD;
+namespace tests;
 
 /**
  * Class which name equals existing subnamespace

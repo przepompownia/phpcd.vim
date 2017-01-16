@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\Fixtures\ClassNamesAndAliases\Repositories;
+namespace tests\Fixtures\ClassNamesAndAliases\Repositories;
 
 class Image
 {

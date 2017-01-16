@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\ConstantInfo;
+namespace tests\ConstantInfo;
 
 use PHPUnit\Framework\TestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
@@ -16,7 +16,7 @@ class ConstantInfoRepositoryTest extends TestCase
      */
     public function find()
     {
-        $className =  'PHPCD\\MethodInfoRepository\\Test1';
+        $className =  'tests\\MethodInfoRepository\\Test1';
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $constants = $repository->find(new ConstantFilter([

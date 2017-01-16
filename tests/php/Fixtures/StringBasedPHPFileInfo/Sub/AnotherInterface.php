@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\Fixtures\StringBasedPHPFileInfo\Sub;
+namespace tests\Fixtures\StringBasedPHPFileInfo\Sub;
 
 interface AnotherInterface
 {
