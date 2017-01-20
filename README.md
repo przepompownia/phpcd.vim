@@ -5,7 +5,7 @@
 
 ## Introduction
 
-PHPCD (PHP Completion Daemon) is another Vim omni complete engine for PHP.
+PHPCD (PHP Completion Daemon) is another Vim omnicomplete engine for PHP.
 
 PHPCD is based on [phpcomplete.vim](https://github.com/shawncplus/phpcomplete.vim) but is faster.
 
@@ -33,7 +33,7 @@ PHPCD consists of two parts. On part is written in VimL (mainly based on phpcomp
 
 ### System requirement
 
- 1. [PHP 5.3+](http://php.net/)
+ 1. [PHP 5.5+](http://php.net/)
  2. [PCNTL](http://php.net/manual/en/book.pcntl.php) Extension
  3. [Msgpack 0.5.7+(for NeoVim)](https://github.com/msgpack/msgpack-php) Extension or [JSON(for Vim 7.4+)](http://php.net/manual/en/intro.json.php) Extension
  4. ~~[Composer](https://getcomposer.org/) Project~~
