@@ -214,7 +214,7 @@ function! phpcd#completeDone() " {{{
 	endif
 endfunction " }}}
 
-function phpcd#getFixForNewClassUsage(new_alias, new_full_path) "{{{
+function! phpcd#getFixForNewClassUsage(new_alias, new_full_path) "{{{
 	 return rpc#request(g:phpcd_channel_id, 'getFixForNewClassUsage', expand('%:p'), { 'alias': a:new_alias, 'full_path': a:new_full_path })
 endfunction "}}}
 
@@ -235,7 +235,7 @@ function! phpcd#getSelectedItem(list) "{{{
 endfunction "}}}
 
 " Select implementation of input list
-function s:promptByInputList(list, msg) "{{{
+function! s:promptByInputList(list, msg) "{{{
 	if exists('g:loaded_tlib')
 		return <SID>promptByTlibInputList(a:list, a:msg)
 	else
@@ -243,7 +243,7 @@ function s:promptByInputList(list, msg) "{{{
 	endif
 endfunction "}}}
 
-function s:promptByTlibInputList(list, msg) "{{{
+function! s:promptByTlibInputList(list, msg) "{{{
 	let list = map(copy(a:list), '(empty(v:val["alias"]) ? "" : v:val["alias"]) . (empty(v:val["full_path"]) ? "" : " ".v:val["full_path"])')
 
 	let item = tlib#input#List('si', a:msg, list)
@@ -251,7 +251,7 @@ function s:promptByTlibInputList(list, msg) "{{{
 	return a:list[item - 1]
 endfunction "}}}
 
-function s:promptByBuiltinInputList(list, msg) "{{{
+function! s:promptByBuiltinInputList(list, msg) "{{{
 	let list = map(copy(a:list), '(v:key + 1) . ": " . (empty(v:val["alias"]) ? "" : v:val["alias"]) . (empty(v:val["full_path"]) ? "" : " ".v:val["full_path"])')
 	let list = insert(list, a:msg)
 	let item = 0
@@ -263,7 +263,7 @@ function s:promptByBuiltinInputList(list, msg) "{{{
 	return a:list[item - 1]
 endfunction "}}}
 
-function s:makeImportLineText(classpath, alias) "{{{
+function! s:makeImportLineText(classpath, alias) "{{{
 	if empty(a:alias)
 		let line = printf('use %s;', a:classpath)
 	else
@@ -274,7 +274,7 @@ function s:makeImportLineText(classpath, alias) "{{{
 endfunction "}}}
 
 " TODO make it private after test
-function phpcd#putImport(classpath, alias, stay_here) "{{{
+function! phpcd#putImport(classpath, alias, stay_here) "{{{
 
 	if phpcd#goToLineForNewUseStatement(a:stay_here) == 0
 		exec 'normal! cc'.<SID>makeImportLineText(a:classpath, a:alias)
@@ -303,7 +303,7 @@ function! phpcd#goToLineForNewUseStatement(stay_here) "{{{
 	return 1
 endfunction "}}}
 
-function phpcd#promptForChangeString(msg, string) "{{{
+function! phpcd#promptForChangeString(msg, string) "{{{
 	let string = inputdialog(a:msg, a:string)
 	return string
 endfunction "}}}
