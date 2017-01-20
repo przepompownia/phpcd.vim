@@ -1,6 +1,3 @@
-- [中文](./README_zh.md)
-- English
-
 [![asciicast](https://asciinema.org/a/4dzyyjymrguylqt21igxlhhqx.png)](https://asciinema.org/a/4dzyyjymrguylqt21igxlhhqx)
 
 ## Introduction
@@ -46,7 +43,7 @@ We recommend you use [Vim-Plug](https://github.com/junegunn/vim-plug/blob/master
 With Vim-Plug installed, put the following lines in your vimrc:
 
 ```
-Plug 'php-vim/phpcd.vim', { 'for': 'php' , 'do': 'composer update --no-dev' }
+Plug 'php-vim/phpcd.vim', { 'for': 'php' , 'do': 'composer install --no-dev' }
 ```
 
 And then execute `:PlugInstall` in the command mode.
