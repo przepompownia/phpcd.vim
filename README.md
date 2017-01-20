@@ -36,7 +36,7 @@ PHPCD consists of two parts. On part is written in VimL (mainly based on phpcomp
  1. [PHP 5.3+](http://php.net/)
  2. [PCNTL](http://php.net/manual/en/book.pcntl.php) Extension
  3. [Msgpack 0.5.7+(for NeoVim)](https://github.com/msgpack/msgpack-php) Extension or [JSON(for Vim 7.4+)](http://php.net/manual/en/intro.json.php) Extension
- 4. [Composer](https://getcomposer.org/) Project
+ 4. ~~[Composer](https://getcomposer.org/) Project~~
 
 
 ### Install PHPCD
@@ -51,9 +51,26 @@ Plug 'php-vim/phpcd.vim', { 'for': 'php' , 'do': 'composer update --no-dev' }
 
 And then execute `:PlugInstall` in the command mode.
 
+If you using the [deoplete](https://github.com/Shougo/deoplete.nvim), you can add the following lines to you init.vim
+
+```viml
+let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
+let g:deoplete#ignore_sources.php = ['omni']
+```
+The phpcd will work with deoplete happily.
+
 ## Usage
 
-First, in the project directory, run `composer install` to install all the dependent packages and generate the autoload file.
+~~First, in the project directory, run `composer install` to install all the dependent packages and generate the autoload file.~~
+The **composer** is not required any more. However, if you want to let phpcd work with your project, you must to make a **autoload** file for your project.
+
+If you use composer, composer will make the `vendor/autoload.php`. phpcd will use `vendor/autoload.php` automatically.
+
+If your project does not use composer but have a `path/to/autoload_file.php`, you need to create a **.phpcd.vim** file in your project root path, and let it reads
+```viml
+let g:phpcd_autoload_path = 'path/to/autoload_file.php'
+```
+And phpcd will the `g:phpcd_autoload_path` to load your class.
 
 The default PHP command used to run PHP parts of daemon is simply `php`. You may override it by assigning `g:phpcd_php_cli_executable` another value in your `vimrc`, for example:
 ```
