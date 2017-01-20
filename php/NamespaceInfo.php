@@ -78,7 +78,8 @@ class NamespaceInfo
         $namespaces = [];
         foreach ($this->prefixes as $prefix => $namespaceRoots) {
             foreach ($namespaceRoots as $namespaceRoot) {
-                $absoluteNsRoot = sprintf('%s%s%s',
+                $absoluteNsRoot = sprintf(
+                    '%s%s%s',
                     rtrim($this->projectRoot, DIRECTORY_SEPARATOR),
                     DIRECTORY_SEPARATOR,
                     trim($namespaceRoot, DIRECTORY_SEPARATOR)

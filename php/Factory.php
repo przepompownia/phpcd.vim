@@ -51,7 +51,11 @@ class Factory
                 return new Log\NullLogger;
             break;
             case '\\Monolog\\Logger':
-                $path = ((isset($parameters[0]) && is_string($parameters[0])) ? $parameters[0] : getenv('HOME') . '/.phpcd.log');
+                $path = (
+                    (isset($parameters[0]) && is_string($parameters[0])) ?
+                    $parameters[0] :
+                    getenv('HOME') . '/.phpcd.log'
+                );
 
                 $logger = new \Monolog\Logger('PHPCD');
                 $logger->pushHandler(new \Monolog\Handler\StreamHandler($path, \Monolog\Logger::DEBUG));
