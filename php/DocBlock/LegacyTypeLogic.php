@@ -90,7 +90,7 @@ class LegacyTypeLogic
         return [$path, $doc];
     }
 
-    public function typeByDoc($path, $doc, $class_name)
+    public function typeByDoc($path, $doc)
     {
         $has_doc = preg_match('/@(return|var)\s+(\S+)/m', $doc, $matches);
         if ($has_doc) {

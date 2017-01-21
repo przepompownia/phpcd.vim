@@ -203,7 +203,7 @@ class PHPCD implements RpcHandler
         }
 
         list($path, $doc) = $this->legacyTypeLogic->doc($class_name, $name);
-        return $this->legacyTypeLogic->typeByDoc($path, $doc, $class_name);
+        return $this->legacyTypeLogic->typeByDoc($path, $doc);
     }
 
     /**
@@ -214,7 +214,7 @@ class PHPCD implements RpcHandler
     public function proptype($class_name, $name)
     {
         list($path, $doc) = $this->legacyTypeLogic->doc($class_name, $name, false);
-        $types = $this->legacyTypeLogic->typeByDoc($path, $doc, $class_name);
+        $types = $this->legacyTypeLogic->typeByDoc($path, $doc);
 
         return $types;
     }
