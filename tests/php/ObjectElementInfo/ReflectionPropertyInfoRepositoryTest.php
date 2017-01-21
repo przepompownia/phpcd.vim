@@ -8,6 +8,7 @@ use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Filter\PropertyFilter;
 use PHPCD\ObjectElementInfo\ReflectionPropertyInfoRepository;
+use PHPCD\ClassInfo\ClassInfo;
 use PHPCD\ObjectElementInfo\PropertyInfo;
 use PHPCD\DocBlock\DocBlock;
 use Mockery;
@@ -40,6 +41,8 @@ class ReflectionPropertyInfoRepositoryTest extends TestCase
         $pattern_matcher->shouldReceive('match')->andReturn(true);
         $factory = Mockery::mock(ClassInfoFactory::class);
         $factory->shouldReceive('createReflectionClassFromFilter')->once()->andReturn(new \ReflectionClass($className));
+        $classInfo = Mockery::mock(ClassInfo::class);
+        $factory->shouldReceive('createClassInfo')->andReturn($classInfo);
         $docBlock = Mockery::mock(DocBlock::class);
 
         return new ReflectionPropertyInfoRepository($pattern_matcher, $factory, $docBlock);

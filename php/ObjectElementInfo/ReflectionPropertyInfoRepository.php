@@ -45,7 +45,8 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
         }
 
         foreach ($matches['names'] as $idx => $propertyName) {
-            $properties[] = new GenericPropertyInfo($propertyName, $matches['paths'][$idx], 'public');
+            $classInfo = $this->classInfoFactory->createClassInfo($matches['paths'][$idx]);
+            $properties[] = new GenericPropertyInfo($propertyName, $classInfo, 'public');
         }
 
         return $properties;

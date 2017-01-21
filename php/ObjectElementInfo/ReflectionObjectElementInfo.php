@@ -2,12 +2,31 @@
 
 namespace PHPCD\ObjectElementInfo;
 
+use PHPCD\ClassInfo\ReflectionClass;
+
 abstract class ReflectionObjectElementInfo implements ObjectElementInfo
 {
     /**
      * @var \ReflectionMethod|\ReflectionProperty
      */
     protected $objectElement;
+
+    /**
+     * @var ReflectionClass;
+     */
+    protected $classInfo;
+
+    /**
+     * @return ClassInfo
+     */
+    public function getClass()
+    {
+        if (null === $this->classInfo) {
+            $this->classInfo = new ReflectionClass($this->objectElement->getDeclaringClass());
+        }
+
+        return $this->classInfo;
+    }
 
     public function getName()
     {
@@ -31,7 +50,7 @@ abstract class ReflectionObjectElementInfo implements ObjectElementInfo
 
     public function getClassName()
     {
-        return $this->objectElement->getDeclaringClass()->getName();
+        return $this->getClass()->getName();
     }
 
     public function getDocComment()

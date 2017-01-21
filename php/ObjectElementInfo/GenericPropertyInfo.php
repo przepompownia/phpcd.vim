@@ -2,6 +2,8 @@
 
 namespace PHPCD\ObjectElementInfo;
 
+use PHPCD\ClassInfo\ClassInfo;
+
 class GenericPropertyInfo implements PropertyInfo
 {
     private $name;
@@ -10,14 +12,17 @@ class GenericPropertyInfo implements PropertyInfo
 
     private $static = false;
 
-    private $class;
+    /**
+     * @var ClassInfo
+     */
+    private $classInfo;
 
     private $docComment = '';
 
-    public function __construct($name, $class, $access, $static = false, $docComment = '')
+    public function __construct($name, ClassInfo $classInfo, $access, $static = false, $docComment = '')
     {
         $this->name = $name;
-        $this->class = $class;
+        $this->classInfo = $classInfo;
         $this->setAccess($access);
         $this->static = $static;
         $this->docComment = $docComment;
@@ -50,9 +55,17 @@ class GenericPropertyInfo implements PropertyInfo
         return $this->static;
     }
 
+    /**
+     * @return ClassInfo
+     */
+    public function getClass()
+    {
+        return $this->classInfo;
+    }
+
     public function getClassName()
     {
-        return $this->class;
+        return $this->classInfo->getName();
     }
 
     public function getDocComment()
