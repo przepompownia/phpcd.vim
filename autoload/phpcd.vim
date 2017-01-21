@@ -1,4 +1,5 @@
 function! phpcd#CompletePHP(findstart, base) " {{{
+	let g:name_pattern = '[a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*'
 	" we need to wait phpcd {{{
 	if !exists('g:phpcd_channel_id')
 		return
@@ -47,7 +48,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			return phpcd#GetPsrNamespace()
 		endif
 
-		if context =~? '\v^(final|abstract\s+)?(class|interface|trait)$'
+		if context =~? '\v^(final|abstract\s+)\?(class|interface|trait)$'
 			return [expand('%:t:r')]
 		end
 
@@ -86,6 +87,8 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			" special case when you've typed the class keyword and the name too,
 			" only extends and implements allowed there
 			return filter(['extends', 'implements'], 'stridx(v:val, a:base) == 0')
+		elseif context =~? printf('function\s\+%s\s*(\(\s*\(%s\s\+\)\?\$%s\s*,\)*\s*$', g:name_pattern, g:name_pattern, g:name_pattern)
+			return phpcd#getNamesToTypeDeclaration(a:base)
 		elseif context =~? 'new$'
 			return phpcd#getInstantiableClasses(a:base)
 		endif " }}}
@@ -147,6 +150,11 @@ endfunction " }}}
 
 function! phpcd#getInterfaces(path) " {{{
 	let class_info = rpc#request(g:phpid_channel_id, 'getInterfaces', a:path)
+	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
+endfunction " }}}
+
+function! phpcd#getNamesToTypeDeclaration(path) " {{{
+	let class_info = rpc#request(g:phpid_channel_id, 'getNamesToTypeDeclaration', a:path)
 	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
 endfunction " }}}
 
@@ -548,7 +556,7 @@ function! phpcd#GetCurrentInstruction(line_number, col_number, phpbegin) " {{{
 				\ '!', '@', '%', '^', '&',
 				\ '*', '/', '-', '+', '=',
 				\ ':', '>', '<', '.', '?',
-				\ ';', '(', '|', '['
+				\ ';', '|', '['
 				\ ]
 
 	let phpbegin_length = len(matchstr(getline(a:phpbegin[0]), '\zs<?\(php\)\?\ze'))
@@ -612,9 +620,9 @@ function! phpcd#GetCurrentInstruction(line_number, col_number, phpbegin) " {{{
 			endif
 
 			" save the coma position for later use if theres a "naked" , possibly separating a parameter and it is not in a parented part
-			if first_coma_break_pos == -1 && current_char == ','
-				let first_coma_break_pos = len(instruction)
-			endif
+			" if first_coma_break_pos == -1 && current_char == ','
+			" 	let first_coma_break_pos = len(instruction)
+			" endif
 		endif
 
 		" count nested darenthesis and brackets so we can tell if we need to break on a ';' or not (think of for (;;) loops)
