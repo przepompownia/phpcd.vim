@@ -83,7 +83,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			return phpcd#getPotentialSuperclasses(a:base)
 		elseif context =~? 'extends$'
 			return phpcd#getPotentialSuperclasses(a:base)
-		elseif context =~? 'class [a-zA-Z_\x7f-\xff\\][a-zA-Z_0-9\x7f-\xff\\]*'
+		elseif context =~? printf('class %s', g:name_pattern)
 			" special case when you've typed the class keyword and the name too,
 			" only extends and implements allowed there
 			return filter(['extends', 'implements'], 'stridx(v:val, a:base) == 0')
