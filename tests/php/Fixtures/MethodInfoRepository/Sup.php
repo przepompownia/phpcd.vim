@@ -9,12 +9,15 @@ class Sup
     protected $pub4;
 
     /**
-     * @var \ReflectionClass
+     * @var \ReflectionClass|Test1
      */
     public $pub5;
 
     private $pub6;
 
+    /**
+     * @return \ReflectionClass|Test1
+     */
     private function baz()
     {
     }

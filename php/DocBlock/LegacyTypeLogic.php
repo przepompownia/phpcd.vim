@@ -26,6 +26,37 @@ class LegacyTypeLogic
         $this->fileInfoFactory = $fileInfoFactory;
     }
 
+    public function typeByReturnType($class_name, $name)
+    {
+        try {
+            if ($class_name) {
+                $reflection = new \ReflectionClass($class_name);
+                $reflection = $reflection->getMethod($name);
+            } else {
+                $reflection = new \ReflectionFunction($name);
+            }
+            $type = (string) $reflection->getReturnType();
+
+            if (strtolower($type) == 'self') {
+                $type = $class_name;
+            }
+
+            return $type;
+        } catch (\ReflectionException $e) {
+            $this->logger->debug((string) $e);
+        }
+    }
+
+    public function typeByDoc($path, $doc)
+    {
+        $has_doc = preg_match('/@(return|var)\s+(\S+)/m', $doc, $matches);
+        if ($has_doc) {
+            return $this->fixRelativeType($path, explode('|', $matches[2]));
+        }
+
+        return [];
+    }
+
     /**
      * Fetch function, class method or class attribute's docblock
      *
@@ -88,16 +119,6 @@ class LegacyTypeLogic
         $doc = preg_replace('#\s*\/|/\s*#', '', $doc);
 
         return [$path, $doc];
-    }
-
-    public function typeByDoc($path, $doc)
-    {
-        $has_doc = preg_match('/@(return|var)\s+(\S+)/m', $doc, $matches);
-        if ($has_doc) {
-            return $this->fixRelativeType($path, explode('|', $matches[2]));
-        }
-
-        return [];
     }
 
     private function fixRelativeType($path, $names)
@@ -166,25 +187,4 @@ class LegacyTypeLogic
         'string'   => 1,
         'void'     => 1,
     ];
-
-    public function typeByReturnType($class_name, $name)
-    {
-        try {
-            if ($class_name) {
-                $reflection = new \ReflectionClass($class_name);
-                $reflection = $reflection->getMethod($name);
-            } else {
-                $reflection = new \ReflectionFunction($name);
-            }
-            $type = (string) $reflection->getReturnType();
-
-            if (strtolower($type) == 'self') {
-                $type = $class_name;
-            }
-
-            return $type;
-        } catch (\ReflectionException $e) {
-            $this->logger->debug((string) $e);
-        }
-    }
 }

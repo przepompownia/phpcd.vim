@@ -50,8 +50,11 @@ class FunctypeTest extends TestCase
             $legacyTypeLogic
         );
 
+        $types = $phpcd->functype($class, $method, true);
+
+        $this->assertEquals(count($expectedTypes), count($types));
+
         foreach ($expectedTypes as $expectedType) {
-            $types = $phpcd->functype($class, $method, true);
             $this->assertContains($expectedType, $types);
         }
     }
@@ -60,11 +63,11 @@ class FunctypeTest extends TestCase
     {
         return [
             [
-                'PHPCD\\ClassInfo\\ClassInfoRepository',
-                'find',
-                'PHPCD\\ClassInfo',
+                'tests\\MethodInfoRepository\\Sup',
+                'baz',
+                'tests\\MethodInfoRepository',
                 [],
-                ['\PHPCD\ClassInfo\ClassInfoCollection']
+                ['\\ReflectionClass', '\\tests\\MethodInfoRepository\\Test1']
             ],
         ];
     }

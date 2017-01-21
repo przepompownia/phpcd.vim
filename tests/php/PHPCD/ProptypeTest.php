@@ -50,8 +50,11 @@ class ProptypeTest extends TestCase
             $legacyTypeLogic
         );
 
+        $types = $phpcd->proptype($class, $method, true);
+
+        $this->assertEquals(count($expectedTypes), count($types));
+
         foreach ($expectedTypes as $expectedType) {
-            $types = $phpcd->proptype($class, $method, true);
             $this->assertContains($expectedType, $types);
         }
     }
@@ -62,9 +65,9 @@ class ProptypeTest extends TestCase
             [
                 'tests\\MethodInfoRepository\\Sup',
                 'pub5',
-                'PHPCD\\MethodInfoRepository',
+                'tests\\MethodInfoRepository',
                 [],
-                ['\ReflectionClass']
+                ['\\ReflectionClass', '\\tests\\MethodInfoRepository\\Test1']
             ],
         ];
     }
