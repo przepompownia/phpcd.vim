@@ -105,7 +105,7 @@ class VimMenuItemView implements View
     {
         return [
             'namespace' => $fileInfo->getNamespace(),
-            'class' => $fileInfo->getClass(),
+            'class' => $fileInfo->getClassName(),
             'imports' => $fileInfo->getImports()
         ];
     }

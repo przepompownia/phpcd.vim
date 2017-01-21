@@ -122,7 +122,7 @@ class StringBasedPHPFileInfoTest extends TestCase
 
         $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
         $this->assertEquals('tests\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
-        $this->assertEquals('ExampleWithoutErrors', $fileInfo->getClass());
+        $this->assertEquals('ExampleWithoutErrors', $fileInfo->getClassName());
         $this->assertEquals('Cat', $fileInfo->getSuperclass());
 
         $interfaces = $fileInfo->getInterfaces();
@@ -140,7 +140,7 @@ class StringBasedPHPFileInfoTest extends TestCase
 
         $this->assertInstanceOf('PHPCD\PHPFileInfo\PHPFileInfo', $fileInfo);
         $this->assertEquals('tests\Fixtures\StringBasedPHPFileInfo', $fileInfo->getNamespace());
-        $this->assertEquals('ExampleWithNonExistingInterfaces', $fileInfo->getClass());
+        $this->assertEquals('ExampleWithNonExistingInterfaces', $fileInfo->getClassName());
         $this->assertNull($fileInfo->getSuperclass());
 
         $interfaces = $fileInfo->getInterfaces();
@@ -149,7 +149,6 @@ class StringBasedPHPFileInfoTest extends TestCase
         $this->assertTrue($fileInfo->hasErrors());
         $errors = $fileInfo->getErrors();
         $this->assertEquals('Interface tests\Fixtures\StringBasedPHPFileInfo\I1 does not exist.', current($errors));
-
     }
 
     /**

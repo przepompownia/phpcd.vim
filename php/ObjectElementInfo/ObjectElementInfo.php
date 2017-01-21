@@ -12,7 +12,7 @@ interface ObjectElementInfo
 
     public function isStatic();
 
-    public function getClass();
+    public function getClassName();
 
     public function getDocComment();
 

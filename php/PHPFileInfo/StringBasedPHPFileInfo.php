@@ -301,7 +301,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
         return $this->namespace;
     }
 
-    public function getClass()
+    public function getClassName()
     {
         return $this->class;
     }
@@ -323,7 +323,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     public function getFullClassPath()
     {
-        return $this->getFullPath($this->getClass());
+        return $this->getFullPath($this->getClassName());
     }
 
     public function hasAliasUsed($alias)
@@ -420,7 +420,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
             }
         }
 
-        if ($new_alias === $this->getClass()) {
+        if ($new_alias === $this->getClassName()) {
             // Although it is not an error, we encourage
             // to not override the current class name with
             // an the same named alias of another path.
@@ -452,7 +452,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     public function canNewAliasConflict($alias)
     {
-        if ($this->hasAliasUsed($alias) || $alias === $this->getClass()) {
+        if ($this->hasAliasUsed($alias) || $alias === $this->getClassName()) {
             return true;
         }
 

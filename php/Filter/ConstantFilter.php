@@ -13,7 +13,7 @@ class ConstantFilter extends AbstractFilter implements ClassElementFilter
      *
      * @return string|null
      */
-    public function getClass()
+    public function getClassName()
     {
         return $this->criteria[self::CLASS_NAME];
     }

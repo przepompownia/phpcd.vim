@@ -50,7 +50,7 @@ class GenericPropertyInfo implements PropertyInfo
         return $this->static;
     }
 
-    public function getClass()
+    public function getClassName()
     {
         return $this->class;
     }

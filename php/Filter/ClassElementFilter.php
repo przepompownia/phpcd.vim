@@ -6,5 +6,5 @@ interface ClassElementFilter
 {
     const CLASS_NAME = 'className';
 
-    public function getClass();
+    public function getClassName();
 }

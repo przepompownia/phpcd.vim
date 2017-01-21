@@ -29,7 +29,7 @@ abstract class ReflectionObjectElementInfo implements ObjectElementInfo
         return $this->objectElement->isStatic();
     }
 
-    public function getClass()
+    public function getClassName()
     {
         return $this->objectElement->getDeclaringClass()->getName();
     }

@@ -12,7 +12,7 @@ interface PHPFileInfo
     /**
      * @return string
      */
-    public function getClass();
+    public function getClassName();
 
     /**
      * @return string

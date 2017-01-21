@@ -38,7 +38,6 @@ abstract class ReflectionObjectElementInfoRepository
     }
 
     /**
-     * @param \ReflectionMethod|\ReflectionProperty $element
      * @return bool
      */
     protected function filter(ObjectElementInfo $element, ObjectElementFilter $filter)
@@ -64,6 +63,6 @@ abstract class ReflectionObjectElementInfoRepository
         }
 
         // $element is then private
-        return $element->getClass() === $filter->getClass();
+        return $element->getClassName() === $filter->getClassName();
     }
 }

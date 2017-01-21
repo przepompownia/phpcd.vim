@@ -34,7 +34,7 @@ abstract class ObjectElementFilter extends AbstractFilter implements ClassElemen
      *
      * @return string|null
      */
-    public function getClass()
+    public function getClassName()
     {
         return $this->criteria[self::CLASS_NAME];
     }

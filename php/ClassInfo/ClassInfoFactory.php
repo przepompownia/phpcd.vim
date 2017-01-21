@@ -23,10 +23,10 @@ class ClassInfoFactory
 
     public function createReflectionClassFromFilter(ClassElementFilter $filter)
     {
-        if (empty($filter->getClass())) {
+        if (empty($filter->getClassName())) {
             throw new \InvalidArgumentException(sprintf('%s needs class name to find method.', self::class));
         }
 
-        return new \ReflectionClass($filter->getClass());
+        return new \ReflectionClass($filter->getClassName());
     }
 }

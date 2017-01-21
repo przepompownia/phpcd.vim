@@ -136,7 +136,7 @@ class LegacyTypeLogic
             }
 
             if (in_array(strtolower($type), ['static', '$this', 'self'])) {
-                $type = $nsuse->getNamespace() . '\\' . $nsuse->getClass();
+                $type = $nsuse->getNamespace() . '\\' . $nsuse->getClassName();
             } elseif ($type[0] != '\\') {
                 $parts = explode('\\', $type);
                 $alias = array_shift($parts);
