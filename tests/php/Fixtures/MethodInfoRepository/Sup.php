@@ -2,6 +2,8 @@
 
 namespace tests\MethodInfoRepository;
 
+use PHPCD\PatternMatcher as PM;
+
 class Sup
 {
     protected $pub2;
@@ -13,6 +15,9 @@ class Sup
      */
     public $pub5;
 
+    /**
+     * @var PM\PatternMatcher
+     */
     private $pub6;
 
     /**

@@ -69,6 +69,13 @@ class ProptypeTest extends TestCase
                 [],
                 ['\\ReflectionClass', '\\tests\\MethodInfoRepository\\Test1']
             ],
+            [
+                'tests\\MethodInfoRepository\\Sup',
+                'pub6',
+                'tests\\MethodInfoRepository',
+                ['PM' => '\\PHPCD\\PatternMatcher'],
+                ['\\PHPCD\\PatternMatcher\\PatternMatcher']
+            ],
         ];
     }
 }
