@@ -9,7 +9,7 @@ interface ClassInfo
     /**
      * @return bool
      */
-    public function isAbstract();
+    public function isAbstractClass();
 
     /**
      * @return bool
