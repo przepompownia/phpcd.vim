@@ -13,7 +13,7 @@ class ClassInfoFactory
      */
     public function createClassInfo($class)
     {
-        return new namespace\ReflectionClass($class);
+        return new namespace\ReflectionClass(new \ReflectionClass($class));
     }
 
     public function createClassInfoCollection()
