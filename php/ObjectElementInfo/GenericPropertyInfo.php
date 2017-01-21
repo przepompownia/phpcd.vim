@@ -63,11 +63,6 @@ class GenericPropertyInfo implements PropertyInfo
         return $this->classInfo;
     }
 
-    public function getClassName()
-    {
-        return $this->classInfo->getName();
-    }
-
     public function getDocComment()
     {
         return $this->docComment;

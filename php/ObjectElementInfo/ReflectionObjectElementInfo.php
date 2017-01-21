@@ -48,11 +48,6 @@ abstract class ReflectionObjectElementInfo implements ObjectElementInfo
         return $this->objectElement->isStatic();
     }
 
-    public function getClassName()
-    {
-        return $this->getClass()->getName();
-    }
-
     public function getDocComment()
     {
         return $this->objectElement->getDocComment();

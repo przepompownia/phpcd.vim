@@ -19,8 +19,6 @@ interface ObjectElementInfo
 
     public function isStatic();
 
-    public function getClassName();
-
     public function getDocComment();
 
     public function getModifiers();

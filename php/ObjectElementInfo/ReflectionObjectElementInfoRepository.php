@@ -63,6 +63,6 @@ abstract class ReflectionObjectElementInfoRepository
         }
 
         // $element is then private
-        return $element->getClassName() === $filter->getClassName();
+        return $element->getClass()->getName() === $filter->getClassName();
     }
 }
