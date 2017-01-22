@@ -1,6 +1,7 @@
 <?php
 namespace PHPCD;
 
+use PHPCD\ObjectElementInfo\MethodPath;
 use PHPCD\ObjectElementInfo\PropertyPath;
 use Psr\Log\LoggerInterface as Logger;
 use Psr\Log\LoggerAwareTrait;
@@ -183,33 +184,36 @@ class PHPCD implements RpcHandler
         return $this->view->renderPHPFileInfo($file_info);
     }
 
-    /**
-     * Fetch the function or class method return value's type
-     *
-     * For PHP7 or newer version, it tries to use the return type gramar
-     * to fetch the real return type.
-     *
-     * For PHP5, it use the docblock's return or var annotation to fetch
-     * the type.
-     *
-     * @return [type1, type2]
-     */
-    public function functype($class_name, $name)
+    public function getTypesReturnedByFunction($functionName)
     {
         if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            $type = $this->legacyTypeLogic->typeByReturnType($class_name, $name);
+            $type = $this->legacyTypeLogic->typeByReturnType('', $functionName);
             if ($type) {
                 return [$type];
             }
         }
 
-        list($path, $doc) = $this->legacyTypeLogic->doc($class_name, $name);
+        list($path, $doc) = $this->legacyTypeLogic->docFunction($functionName);
         return $this->legacyTypeLogic->typeByDoc($path, $doc);
     }
 
-    public function getTypesReturnedByFunction($functionName)
+    public function getTypesReturnedByMethod($className, $methodName)
     {
+        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            $type = $this->legacyTypeLogic->typeByReturnType($className, $methodName);
+            if ($type) {
+                return [$type];
+            }
+        }
 
+        $methodPath = new MethodPath($className, $methodName);
+        $method     = $this->methodInfoRepository->getByPath($methodPath);
+        $path       = $method->getClass()->getFileName();
+        $doc        = $method->getDocComment();
+
+        $types = $this->legacyTypeLogic->typeByDoc($path, $doc);
+
+        return $types;
     }
 
     /**
@@ -217,7 +221,7 @@ class PHPCD implements RpcHandler
      *
      * @return [type1, type2, ...]
      */
-    public function proptype($className, $propertyName)
+    public function getTypesOfProperty($className, $propertyName)
     {
         $propertyPath   = new PropertyPath($className, $propertyName);
         $property       = $this->propertyInfoRepository->getByPath($propertyPath);

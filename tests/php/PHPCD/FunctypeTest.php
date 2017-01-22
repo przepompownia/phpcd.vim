@@ -2,6 +2,7 @@
 
 namespace tests\PHPCD;
 
+use PHPCD\ObjectElementInfo\ReflectionMethodInfo;
 use PHPCD\PHPCD;
 use PHPUnit\Framework\TestCase;
 use Mockery;
@@ -20,9 +21,9 @@ class FunctypeTest extends TestCase
 {
     /**
      * @test
-     * @dataProvider functypeDataProvider
+     * @dataProvider dataProvider
      */
-    public function functype($class, $method, $namespace, $imports, $expectedTypes)
+    public function getTypesReturnedByMethod($class, $method, $namespace, $imports, $expectedTypes)
     {
         $nsinfo = Mockery::mock(NamespaceInfo::class);
         $logger = Mockery::mock(Logger::class);
@@ -33,11 +34,14 @@ class FunctypeTest extends TestCase
         $view = Mockery::mock(View::class);
         $fileInfo = Mockery::mock(PHPFileInfo::class);
         $legacyTypeLogic = new LegacyTypeLogic($logger, $fileInfoFactory);
+        $docBlock = Mockery::mock(DocBlock::class);
+        $methodInfo = new ReflectionMethodInfo(new \ReflectionMethod($class, $method), $docBlock);
 
         $fileInfo->shouldReceive('getImports')->andReturn($imports);
         $fileInfo->shouldReceive('getNamespace')->andReturn($namespace);
         $fileInfoFactory->shouldReceive('createFileInfo')->andReturn($fileInfo);
         $view->shouldReceive('renderPHPFileInfo')->andReturnNull();
+        $methodInfoRepository->shouldReceive('getByPath')->andReturn($methodInfo);
 
         $phpcd = new PHPCD(
             $nsinfo,
@@ -50,7 +54,7 @@ class FunctypeTest extends TestCase
             $legacyTypeLogic
         );
 
-        $types = $phpcd->functype($class, $method, true);
+        $types = $phpcd->getTypesReturnedByMethod($class, $method, true);
 
         $this->assertEquals(count($expectedTypes), count($types));
 
@@ -59,7 +63,7 @@ class FunctypeTest extends TestCase
         }
     }
 
-    public function functypeDataProvider()
+    public function dataProvider()
     {
         return [
             [

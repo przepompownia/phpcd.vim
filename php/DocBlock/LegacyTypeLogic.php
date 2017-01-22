@@ -59,48 +59,11 @@ class LegacyTypeLogic
         return [];
     }
 
-    /**
-     * Fetch function, class method or class attribute's docblock
-     *
-     * @param string $class_name for function set this args to empty
-     * @param string $name
-     */
-    public function doc($class_name, $name)
-    {
-        try {
-            if (!$class_name) {
-                return $this->docFunction($name);
-            }
-
-            return $this->docClass($class_name, $name);
-        } catch (\ReflectionException $e) {
-            $this->logger->debug($e->getMessage());
-            return [null, null];
-        }
-    }
-
-    private function docFunction($name)
+    public function docFunction($name)
     {
         $reflection = new \ReflectionFunction($name);
         $doc = $reflection->getDocComment();
         $path = $reflection->getFileName();
-
-        return [$path, $doc];
-    }
-
-    private function docClass($class_name, $name)
-    {
-        $reflection_class = new \ReflectionClass($class_name);
-
-        $reflection = $reflection_class->getMethod($name);
-
-        $doc = $reflection->getDocComment();
-
-        if (preg_match('/@(return|var)\s+static/i', $doc)) {
-            $path = $reflection_class->getFileName();
-        } else {
-            $path = $reflection->getDeclaringClass()->getFileName();
-        }
 
         return [$path, $doc];
     }
