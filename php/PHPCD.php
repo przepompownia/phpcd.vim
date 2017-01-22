@@ -1,6 +1,7 @@
 <?php
 namespace PHPCD;
 
+use PHPCD\ObjectElementInfo\PropertyPath;
 use Psr\Log\LoggerInterface as Logger;
 use Psr\Log\LoggerAwareTrait;
 use Lvht\MsgpackRpc\Server as RpcServer;
@@ -206,14 +207,23 @@ class PHPCD implements RpcHandler
         return $this->legacyTypeLogic->typeByDoc($path, $doc);
     }
 
+    public function getTypesReturnedByFunction($functionName)
+    {
+
+    }
+
     /**
      * Fetch class attribute's type by @var annotation
      *
      * @return [type1, type2, ...]
      */
-    public function proptype($class_name, $name)
+    public function proptype($className, $propertyName)
     {
-        list($path, $doc) = $this->legacyTypeLogic->doc($class_name, $name, false);
+        $propertyPath   = new PropertyPath($className, $propertyName);
+        $property       = $this->propertyInfoRepository->getByPath($propertyPath);
+        $path           = $property->getClass()->getFileName();
+        $doc            = $property->getDocComment();
+
         $types = $this->legacyTypeLogic->typeByDoc($path, $doc);
 
         return $types;

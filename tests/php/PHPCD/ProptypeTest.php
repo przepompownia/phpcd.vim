@@ -2,6 +2,7 @@
 
 namespace tests\PHPCD;
 
+use PHPCD\ObjectElementInfo\ReflectionPropertyInfo;
 use PHPCD\PHPCD;
 use PHPUnit\Framework\TestCase;
 use Mockery;
@@ -15,6 +16,7 @@ use PHPCD\NamespaceInfo;
 use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\DocBlock\LegacyTypeLogic;
+use PHPCD\DocBlock\DocBlock;
 
 class ProptypeTest extends TestCase
 {
@@ -22,7 +24,7 @@ class ProptypeTest extends TestCase
      * @test
      * @dataProvider proptypeDataProvider
      */
-    public function proptype($class, $method, $namespace, $imports, $expectedTypes)
+    public function proptype($class, $property, $namespace, $imports, $expectedTypes)
     {
         $nsinfo = Mockery::mock(NamespaceInfo::class);
         $logger = Mockery::mock(Logger::class);
@@ -33,11 +35,14 @@ class ProptypeTest extends TestCase
         $view = Mockery::mock(View::class);
         $fileInfo = Mockery::mock(PHPFileInfo::class);
         $legacyTypeLogic = new LegacyTypeLogic($logger, $fileInfoFactory);
+        $docBlock = Mockery::mock(DocBlock::class);
+        $propertyInfo = new ReflectionPropertyInfo(new \ReflectionProperty($class, $property), $docBlock);
 
         $fileInfo->shouldReceive('getImports')->andReturn($imports);
         $fileInfo->shouldReceive('getNamespace')->andReturn($namespace);
         $fileInfoFactory->shouldReceive('createFileInfo')->andReturn($fileInfo);
         $view->shouldReceive('renderPHPFileInfo')->andReturnNull();
+        $propertyInfoRepository->shouldReceive('getByPath')->andReturn($propertyInfo);
 
         $phpcd = new PHPCD(
             $nsinfo,
@@ -50,7 +55,7 @@ class ProptypeTest extends TestCase
             $legacyTypeLogic
         );
 
-        $types = $phpcd->proptype($class, $method, true);
+        $types = $phpcd->proptype($class, $property, true);
 
         $this->assertEquals(count($expectedTypes), count($types));
 

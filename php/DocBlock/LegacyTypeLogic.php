@@ -49,6 +49,8 @@ class LegacyTypeLogic
 
     public function typeByDoc($path, $doc)
     {
+        $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
+        $doc = preg_replace('#\s*\/|/\s*#', '', $doc);
         $has_doc = preg_match('/@(return|var)\s+(\S+)/m', $doc, $matches);
         if ($has_doc) {
             return $this->fixRelativeType($path, explode('|', $matches[2]));
@@ -63,14 +65,14 @@ class LegacyTypeLogic
      * @param string $class_name for function set this args to empty
      * @param string $name
      */
-    public function doc($class_name, $name, $is_method = true)
+    public function doc($class_name, $name)
     {
         try {
             if (!$class_name) {
                 return $this->docFunction($name);
             }
 
-            return $this->docClass($class_name, $name, $is_method);
+            return $this->docClass($class_name, $name);
         } catch (\ReflectionException $e) {
             $this->logger->debug($e->getMessage());
             return [null, null];
@@ -82,30 +84,15 @@ class LegacyTypeLogic
         $reflection = new \ReflectionFunction($name);
         $doc = $reflection->getDocComment();
         $path = $reflection->getFileName();
-        $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
-        $doc = preg_replace('#\s*\/|/\s*#', '', $doc);
 
         return [$path, $doc];
     }
 
-    private function docClass($class_name, $name, $is_method)
+    private function docClass($class_name, $name)
     {
         $reflection_class = new \ReflectionClass($class_name);
 
-        if ($is_method) {
-            $reflection = $reflection_class->getMethod($name);
-        } else {
-            if ($reflection_class->hasProperty($name)) {
-                $reflection = $reflection_class->getProperty($name);
-            } else {
-                $class_doc = $reflection_class->getDocComment();
-
-                $has_pseudo_property = preg_match('/@property(|-read|-write)\s+(?<type>\S+)\s+\$?'.$name.'/mi', $class_doc, $matches);
-                if ($has_pseudo_property) {
-                    return [$reflection_class->getFileName(), '@var '.$matches['type']];
-                }
-            }
-        }
+        $reflection = $reflection_class->getMethod($name);
 
         $doc = $reflection->getDocComment();
 
@@ -114,9 +101,6 @@ class LegacyTypeLogic
         } else {
             $path = $reflection->getDeclaringClass()->getFileName();
         }
-
-        $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
-        $doc = preg_replace('#\s*\/|/\s*#', '', $doc);
 
         return [$path, $doc];
     }
