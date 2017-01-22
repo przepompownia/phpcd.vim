@@ -12,12 +12,12 @@ class ClassInfoCollection extends Collection
     protected $collection = [];
 
     /**
-     * @param ClassInfo $class_info
+     * @param ClassInfo $classInfo
      * @return $this
      */
-    public function add(ClassInfo $class_info)
+    public function add(ClassInfo $classInfo)
     {
-        $this->collection[$class_info->getName()] = $class_info;
+        $this->collection[$classInfo->getName()] = $classInfo;
 
         return $this;
     }
