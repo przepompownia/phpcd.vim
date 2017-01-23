@@ -55,7 +55,7 @@ class ProptypeTest extends TestCase
             $legacyTypeLogic
         );
 
-        $types = $phpcd->proptype($class, $property, true);
+        $types = $phpcd->getTypesOfProperty($class, $property);
 
         $this->assertEquals(count($expectedTypes), count($types));
 
