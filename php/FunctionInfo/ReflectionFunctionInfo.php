@@ -5,7 +5,7 @@ namespace PHPCD\FunctionInfo;
 class ReflectionFunctionInfo implements FunctionInfo
 {
     /**
-     * @var \reflectionFunction
+     * @var \ReflectionFunction
      */
     private $reflectionFunction;
 

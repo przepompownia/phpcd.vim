@@ -2,11 +2,14 @@
 
 namespace PHPCD\FunctionInfo;
 
+use PHPCD\Filter\FunctionFilter;
+
 interface FunctionRepository
 {
     /**
      * @param FunctionFilter $filter
      * @return FunctionCollection
+     */
     public function find(FunctionFilter $filter);
 
     /**
@@ -14,5 +17,5 @@ interface FunctionRepository
      *
      * @return FunctionInfo
      */
-    public function get($name);
+    public function get($functionName);
 }
