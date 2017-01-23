@@ -2,12 +2,12 @@
 
 namespace tests\ObjectElementInfo;
 
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\ObjectElementInfo\GenericPropertyInfo;
 use Mockery;
 use PHPCD\ClassInfo\ClassInfo;
 
-class GenericPropertyInfoTest extends TestCase
+class GenericPropertyInfoTest extends MockeryTestCase
 {
     public function testConstructor()
     {

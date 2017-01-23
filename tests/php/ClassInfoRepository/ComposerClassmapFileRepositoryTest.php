@@ -2,7 +2,7 @@
 
 namespace tests\ClassInfo;
 
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
 use Composer\Autoload\ClassLoader;
 use Psr\Log\LoggerInterface;
@@ -14,7 +14,7 @@ use PHPCD\ClassInfo\ClassInfoCollection;
 use PHPCD\PHPFileInfo\PHPFileInfo;
 use Mockery;
 
-class ComposerClassmapFileRepositoryTest extends TestCase
+class ComposerClassmapFileRepositoryTest extends MockeryTestCase
 {
     /**
      * Try to find class info of class that is invalid

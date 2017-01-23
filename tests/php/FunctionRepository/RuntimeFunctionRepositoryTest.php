@@ -33,17 +33,9 @@ class RuntimeFunctionRepositoryTest extends MockeryTestCase
             ->zeroOrMoreTimes()
             ->andReturn(false)
             ->byDefault();
-        // $patternMatcher->shouldReceive('match')->with($pattern, 'array_column')->once()->andReturn(true);
+        $patternMatcher->shouldReceive('match')->with($pattern, 'array_column')->once()->andReturn(true);
 
         $collection->shouldReceive('add')->once();
         $collection = $repository->find($filter);
-    }
-
-    /**
-     * @test
-     */
-    public function get()
-    {
-        return null;
     }
 }

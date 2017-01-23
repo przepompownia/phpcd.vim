@@ -2,14 +2,14 @@
 
 namespace tests\ConstantInfo;
 
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\ConstantInfo\ReflectionConstantInfoRepository;
 use Mockery;
 
-class ConstantInfoRepositoryTest extends TestCase
+class ConstantInfoRepositoryTest extends MockeryTestCase
 {
     /**
      * @test

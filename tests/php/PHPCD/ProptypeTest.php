@@ -2,9 +2,9 @@
 
 namespace tests\PHPCD;
 
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\ObjectElementInfo\ReflectionPropertyInfo;
 use PHPCD\PHPCD;
-use PHPUnit\Framework\TestCase;
 use Mockery;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use PHPCD\PHPFileInfo\PHPFileInfo;
@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface as Logger;
 use PHPCD\DocBlock\LegacyTypeLogic;
 use PHPCD\DocBlock\DocBlock;
 
-class ProptypeTest extends TestCase
+class ProptypeTest extends MockeryTestCase
 {
     /**
      * @test
