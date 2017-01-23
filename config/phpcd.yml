@@ -11,6 +11,15 @@ services:
         arguments:
             - '%root%'
 
+    function_factory:
+        class: \PHPCD\FunctionInfo\FunctionInfoFactory
+
+    function_repository:
+        class: \PHPCD\FunctionInfo\RuntimeFunctionRepository
+        arguments:
+            - '@default_pattern_matcher'
+            - '@function_factory'
+
     type.legacy:
         class:      \PHPCD\DocBlock\LegacyTypeLogic
         arguments:
@@ -27,6 +36,7 @@ services:
             - '@method_info_repository'
             - '@file_info_factory'
             - '@view'
+            - '@function_repository'
             - '@type.legacy'
 
     server.phpcd:

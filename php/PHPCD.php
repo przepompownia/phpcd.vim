@@ -1,6 +1,7 @@
 <?php
 namespace PHPCD;
 
+use PHPCD\FunctionInfo\FunctionRepository;
 use PHPCD\ObjectElementInfo\MethodPath;
 use PHPCD\ObjectElementInfo\PropertyPath;
 use Psr\Log\LoggerInterface as Logger;
@@ -58,6 +59,11 @@ class PHPCD implements RpcHandler
      */
     private $legacyTypeLogic;
 
+    /**
+     * @var FunctionRepository
+     */
+    private $functionRepository;
+
     /*
      * Probably it should be replaced by
      * correctly implemented repository
@@ -76,6 +82,7 @@ class PHPCD implements RpcHandler
         MethodInfoRepository $methodInfoRepository,
         PHPFileInfoFactory $file_info_factory,
         View $view,
+        FunctionRepository $functionRepository,
         LegacyTypeLogic $legacyTypeLogic
     ) {
         $this->nsinfo = $nsinfo;
@@ -86,6 +93,7 @@ class PHPCD implements RpcHandler
         $this->methodInfoRepository = $methodInfoRepository;
         $this->view = $view;
         $this->legacyTypeLogic = $legacyTypeLogic;
+        $this->functionRepository = $functionRepository;
     }
 
     public function setServer(RpcServer $server)

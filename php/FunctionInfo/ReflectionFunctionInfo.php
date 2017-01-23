@@ -28,4 +28,9 @@ class ReflectionFunctionInfo implements FunctionInfo
     {
         return $this->reflectionFunction->getParameters();
     }
+
+    public function getFileName()
+    {
+        return $this->reflectionFunction->getFileName();
+    }
 }

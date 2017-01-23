@@ -9,4 +9,6 @@ interface FunctionInfo
     public function getDocComment();
 
     public function getParameters();
+
+    public function getFileName();
 }
