@@ -8,6 +8,7 @@ use PHPCD\Filter\FunctionFilter;
 use PHPCD\FunctionInfo\RuntimeFunctionRepository;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\FunctionInfo\FunctionInfoFactory;
+use PHPCD\FunctionInfo\FunctionInfo;
 use Mockery;
 
 class RuntimeFunctionRepositoryTest extends MockeryTestCase
@@ -23,19 +24,21 @@ class RuntimeFunctionRepositoryTest extends MockeryTestCase
         $filter = Mockery::mock(FunctionFilter::class);
         $collection = Mockery::mock(FunctionCollection::class);
 
-        $functionInfoFactory->shouldReceive('createFunctionCollection')->andReturn(new FunctionCollection());
+        $functionInfoFactory->shouldReceive('createFunctionCollection')->andReturn($collection);
+        $functionInfo = Mockery::mock(FunctionInfo::class);
+        $functionInfo->shouldReceive('getName')->andReturn('array_column');
+        $functionInfoFactory->shouldReceive('createFunctionInfo')->andReturn($functionInfo);
         $pattern = 'arcol';
         $filter->shouldReceive('getPattern')->andReturn($pattern);
 
         $patternMatcher
             ->shouldReceive('match')
-            ->with(Mockery::type('string'), Mockery::type('string'))
+            ->with($pattern, Mockery::not('array_column'))
             ->zeroOrMoreTimes()
-            ->andReturn(false)
-            ->byDefault();
+            ->andReturn(false);
         $patternMatcher->shouldReceive('match')->with($pattern, 'array_column')->once()->andReturn(true);
 
         $collection->shouldReceive('add')->once();
-        $collection = $repository->find($filter);
+        $repository->find($filter);
     }
 }
