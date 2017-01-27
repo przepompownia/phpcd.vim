@@ -5,11 +5,11 @@ namespace tests\ConstantInfo;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\ClassInfo\ClassInfoFactory;
-use PHPCD\Filter\ConstantFilter;
-use PHPCD\ConstantInfo\ReflectionConstantInfoRepository;
+use PHPCD\Filter\ClassConstantFilter;
+use PHPCD\ConstantInfo\ReflectionClassConstantInfoRepository;
 use Mockery;
 
-class ConstantInfoRepositoryTest extends MockeryTestCase
+class ClassConstantInfoRepositoryTest extends MockeryTestCase
 {
     /**
      * @test
@@ -19,8 +19,8 @@ class ConstantInfoRepositoryTest extends MockeryTestCase
         $className =  'tests\\MethodInfoRepository\\Test1';
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
-        $constants = $repository->find(new ConstantFilter([
-            ConstantFilter::CLASS_NAME => $className
+        $constants = $repository->find(new ClassConstantFilter([
+            ClassConstantFilter::CLASS_NAME => $className
         ], 'mocked'));
 
         $this->assertFalse($constants->isEmpty());
@@ -42,6 +42,6 @@ class ConstantInfoRepositoryTest extends MockeryTestCase
         $factory = Mockery::mock(ClassInfoFactory::class);
         $factory->shouldReceive('createReflectionClassFromFilter')->once()->andReturn(new \ReflectionClass($className));
 
-        return new ReflectionConstantInfoRepository($pattern_matcher, $factory);
+        return new ReflectionClassConstantInfoRepository($pattern_matcher, $factory);
     }
 }

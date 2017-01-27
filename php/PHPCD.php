@@ -10,8 +10,8 @@ use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use PHPCD\ClassInfo\ClassInfoFactory;
-use PHPCD\ConstantInfo\ConstantInfoRepository;
-use PHPCD\Filter\ConstantFilter;
+use PHPCD\ConstantInfo\ClassConstantInfoRepository;
+use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\Filter\PropertyFilter;
 use PHPCD\ObjectElementInfo\MethodInfoRepository;
@@ -35,7 +35,7 @@ class PHPCD implements RpcHandler
     private $nsinfo;
 
     /**
-     * @var ConstantInfoRepository
+     * @var ClassConstantInfoRepository
      */
     private $constantInfoRepository;
 
@@ -77,7 +77,7 @@ class PHPCD implements RpcHandler
     public function __construct(
         NamespaceInfo $nsinfo,
         Logger $logger,
-        ConstantInfoRepository $constantRepository,
+        ClassConstantInfoRepository $constantRepository,
         PropertyInfoRepository $propertyRepository,
         MethodInfoRepository $methodInfoRepository,
         PHPFileInfoFactory $file_info_factory,
@@ -247,7 +247,7 @@ class PHPCD implements RpcHandler
             $items = [];
 
             if (false !== $is_static) {
-                $constantFilter = new ConstantFilter([ConstantFilter::CLASS_NAME => $class_name], $pattern);
+                $constantFilter = new ClassConstantFilter([ClassConstantFilter::CLASS_NAME => $class_name], $pattern);
                 $constants = $this->constantInfoRepository->find($constantFilter);
 
                 foreach ($constants as $constant) {

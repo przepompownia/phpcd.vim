@@ -2,11 +2,11 @@
 
 namespace PHPCD\ConstantInfo;
 
-use PHPCD\Filter\ConstantFilter;
+use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\ClassInfo\ClassInfoFactory;
 
-class ReflectionConstantInfoRepository implements ConstantInfoRepository
+class ReflectionClassConstantInfoRepository implements ClassConstantInfoRepository
 {
     /**
      * @var PatternMatcher
@@ -27,7 +27,7 @@ class ReflectionConstantInfoRepository implements ConstantInfoRepository
         $this->classInfoFactory = $factory;
     }
 
-    public function find(ConstantFilter $filter)
+    public function find(ClassConstantFilter $filter)
     {
         $reflectionClass = $this->classInfoFactory->createReflectionClassFromFilter($filter);
 

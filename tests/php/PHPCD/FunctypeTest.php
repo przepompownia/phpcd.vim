@@ -9,7 +9,7 @@ use Mockery;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use PHPCD\PHPFileInfo\PHPFileInfo;
 use PHPCD\ClassInfo\ClassInfoFactory;
-use PHPCD\ConstantInfo\ConstantInfoRepository;
+use PHPCD\ConstantInfo\ClassConstantInfoRepository;
 use PHPCD\ObjectElementInfo\MethodInfoRepository;
 use PHPCD\ObjectElementInfo\PropertyInfoRepository;
 use PHPCD\View\View;
@@ -27,7 +27,7 @@ class FunctypeTest extends MockeryTestCase
     {
         $nsinfo = Mockery::mock(NamespaceInfo::class);
         $logger = Mockery::mock(Logger::class);
-        $constantRepository = Mockery::mock(ConstantInfoRepository::class);
+        $constantRepository = Mockery::mock(ClassConstantInfoRepository::class);
         $propertyInfoRepository = Mockery::mock(PropertyInfoRepository::class);
         $methodInfoRepository = Mockery::mock(MethodInfoRepository::class);
         $fileInfoFactory = Mockery::mock(PHPFileInfoFactory::class);

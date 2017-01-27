@@ -2,7 +2,7 @@
 
 namespace PHPCD\Filter;
 
-class ConstantFilter extends AbstractFilter implements ClassElementFilter
+class ClassConstantFilter extends AbstractFilter implements ClassElementFilter
 {
     protected $criteriaNames = [
         self::CLASS_NAME
