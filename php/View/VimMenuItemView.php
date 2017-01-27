@@ -2,6 +2,8 @@
 
 namespace PHPCD\View;
 
+use PHPCD\FunctionInfo\FunctionCollection;
+use PHPCD\ConstantInfo\ConstantInfoCollection;
 use PHPCD\ClassInfo\ClassInfo;
 use PHPCD\ObjectElementInfo\MethodInfo;
 use PHPCD\ObjectElementInfo\PropertyInfo;
@@ -42,6 +44,17 @@ class VimMenuItemView implements View
         $out->setKind('d');
 
         return $out->render();
+    }
+
+    public function renderConstantInfoCollection(ConstantInfoCollection $collection)
+    {
+        $result = [];
+
+        foreach ($collection as $constantInfo) {
+            $result[] = $this->renderConstantInfo($constantInfo);
+        }
+
+        return $result;
     }
 
     public function renderClassInfo(ClassInfo $classInfo)
@@ -87,6 +100,17 @@ class VimMenuItemView implements View
         $out->setInfo(preg_replace('#/?\*(\*|/)?#', '', $functionInfo->getDocComment()));
 
         return $out->render();
+    }
+
+    public function renderFunctionInfoCollection(FunctionCollection $collection)
+    {
+        $result = [];
+
+        foreach ($collection as $functionInfo) {
+            $result[] = $this->renderFunctionInfo($functionInfo);
+        }
+
+        return $result;
     }
 
     public function renderPropertyInfo(PropertyInfo $propertyInfo)

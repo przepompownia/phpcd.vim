@@ -21,5 +21,4 @@ class FunctionInfoFactory
     {
         return new FunctionCollection();
     }
-
 }

@@ -130,10 +130,10 @@ class PHPCD implements RpcHandler
         }
     }
 
-    public function locateFunctionDeclaration($name)
+    public function locateFunctionDeclaration($functionName)
     {
         try {
-            $reflection = new \ReflectionFunction($name);
+            $reflection = $this->functionRepository->get($functionName);
             return [$reflection->getFileName(), $reflection->getStartLine()];
         } catch (\ReflectionException $e) {
             return ['', null];
@@ -295,17 +295,14 @@ class PHPCD implements RpcHandler
 
     public function getFunctionsAndConstants($pattern)
     {
-        $items = [];
-        $funcs = get_defined_functions();
-        $funcs = array_merge($funcs['internal'], $funcs['user']);
-        foreach ($funcs as $func) {
-            $info = $this->getFunctionInfo($func, $pattern);
-            if ($info) {
-                $items[] = $info;
-            }
-        }
+        return array_merge($this->findFunctions($pattern), $this->getConstantsInfo($pattern));
+    }
 
-        return array_merge($items, $this->getConstantsInfo($pattern));
+    private function findFunctions($pattern)
+    {
+        $functions = $this->functionRepository->find($pattern);
+
+        return $this->view->renderFunctionInfoCollection($functions);
     }
 
     private function getConstantsInfo($pattern)
@@ -322,17 +319,6 @@ class PHPCD implements RpcHandler
         }
 
         return $items;
-    }
-
-    private function getFunctionInfo($name, $pattern = null)
-    {
-        if ($pattern && strpos($name, $pattern) !== 0) {
-            return null;
-        }
-
-        $functionInfo = new FunctionInfo(new \ReflectionFunction($name));
-
-        return $this->view->renderFunctionInfo($functionInfo);
     }
 
     /**
