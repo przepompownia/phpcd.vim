@@ -17,6 +17,7 @@ use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\DocBlock\LegacyTypeLogic;
 use PHPCD\DocBlock\DocBlock;
+use PHPCD\FunctionInfo\FunctionRepository;
 
 class ProptypeTest extends MockeryTestCase
 {
@@ -37,6 +38,7 @@ class ProptypeTest extends MockeryTestCase
         $legacyTypeLogic = new LegacyTypeLogic($logger, $fileInfoFactory);
         $docBlock = Mockery::mock(DocBlock::class);
         $propertyInfo = new ReflectionPropertyInfo(new \ReflectionProperty($class, $property), $docBlock);
+        $functionRepository = Mockery::mock(FunctionRepository::class);
 
         $fileInfo->shouldReceive('getImports')->andReturn($imports);
         $fileInfo->shouldReceive('getNamespace')->andReturn($namespace);
@@ -52,6 +54,7 @@ class ProptypeTest extends MockeryTestCase
             $methodInfoRepository,
             $fileInfoFactory,
             $view,
+            $functionRepository,
             $legacyTypeLogic
         );
 
