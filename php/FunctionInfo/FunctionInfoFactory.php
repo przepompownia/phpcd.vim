@@ -11,7 +11,7 @@ class FunctionInfoFactory
      */
     public function createFunctionInfo($functionName)
     {
-        return new \ReflectionFunction($functionName);
+        return new ReflectionFunctionInfo(new \ReflectionFunction($functionName));
     }
 
     /**

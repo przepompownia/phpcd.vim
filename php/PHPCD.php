@@ -1,6 +1,7 @@
 <?php
 namespace PHPCD;
 
+use PHPCD\Filter\FunctionFilter;
 use PHPCD\FunctionInfo\FunctionRepository;
 use PHPCD\ObjectElementInfo\MethodPath;
 use PHPCD\ObjectElementInfo\PropertyPath;

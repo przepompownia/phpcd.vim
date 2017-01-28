@@ -55,6 +55,13 @@ services:
         arguments:
             - '@docblock_factory'
 
+    repository.constant.factory:
+        class:              \PHPCD\ConstantInfo\ConstantInfoFactory
+
+    repository.constant:
+        class:              \PHPCD\ConstantInfo\RuntimeConstantInfoRepository
+        arguments:          ['@default_pattern_matcher', '@repository.constant.factory']
+
     repository.constant.class:
         class:              \PHPCD\ConstantInfo\ReflectionClassConstantInfoRepository
         arguments:          ['@default_pattern_matcher', '@class_info_factory']
