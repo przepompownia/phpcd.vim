@@ -31,7 +31,7 @@ services:
         arguments:
             - '@nsinfo'
             - '@default_logger'
-            - '@constant_info_repository'
+            - '@repository.constant.class'
             - '@property_info_repository'
             - '@method_info_repository'
             - '@file_info_factory'

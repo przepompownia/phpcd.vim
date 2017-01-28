@@ -55,8 +55,8 @@ services:
         arguments:
             - '@docblock_factory'
 
-    constant_info_repository:
-        class:              \PHPCD\ConstantInfo\ReflectionConstantInfoRepository
+    repository.constant.class:
+        class:              \PHPCD\ConstantInfo\ReflectionClassConstantInfoRepository
         arguments:          ['@default_pattern_matcher', '@class_info_factory']
 
     method_info_repository:
