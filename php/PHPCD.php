@@ -300,7 +300,7 @@ class PHPCD implements RpcHandler
 
     private function findFunctions($pattern)
     {
-        $functions = $this->functionRepository->find($pattern);
+        $functions = $this->functionRepository->find(new FunctionFilter($pattern));
 
         return $this->view->renderFunctionInfoCollection($functions);
     }
