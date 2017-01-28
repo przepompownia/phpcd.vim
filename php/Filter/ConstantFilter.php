@@ -2,7 +2,7 @@
 
 namespace PHPCD\Filter;
 
-class FunctionFilter extends AbstractFilter
+class ConstantFilter extends AbstractFilter
 {
     public function __construct($pattern)
     {
