@@ -1,6 +1,8 @@
 <?php
 namespace PHPCD;
 
+use PHPCD\ConstantInfo\ConstantInfoRepository;
+use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\FunctionFilter;
 use PHPCD\FunctionInfo\FunctionRepository;
 use PHPCD\ObjectElementInfo\MethodPath;
@@ -38,7 +40,12 @@ class PHPCD implements RpcHandler
     /**
      * @var ClassConstantInfoRepository
      */
-    private $constantInfoRepository;
+    private $classConstantRepository;
+
+    /**
+     * @var ConstantInfoRepository
+     */
+    private $constantRepository;
 
     /**
      * @var PropertyInfoRepository
@@ -78,7 +85,8 @@ class PHPCD implements RpcHandler
     public function __construct(
         NamespaceInfo $nsinfo,
         Logger $logger,
-        ClassConstantInfoRepository $constantRepository,
+        ConstantInfoRepository $constantRepository,
+        ClassConstantInfoRepository $classConstantRepository,
         PropertyInfoRepository $propertyRepository,
         MethodInfoRepository $methodInfoRepository,
         PHPFileInfoFactory $fileInfoFactory,
@@ -89,7 +97,8 @@ class PHPCD implements RpcHandler
         $this->nsinfo = $nsinfo;
         $this->setLogger($logger);
         $this->fileInfoFactory = $fileInfoFactory;
-        $this->constantInfoRepository = $constantRepository;
+        $this->constantRepository = $constantRepository;
+        $this->classConstantRepository = $classConstantRepository;
         $this->propertyInfoRepository = $propertyRepository;
         $this->methodInfoRepository = $methodInfoRepository;
         $this->view = $view;
@@ -249,7 +258,7 @@ class PHPCD implements RpcHandler
 
             if (false !== $isStstic) {
                 $constantFilter = new ClassConstantFilter([ClassConstantFilter::className => $className], $pattern);
-                $constants = $this->constantInfoRepository->find($constantFilter);
+                $constants = $this->classConstantRepository->find($constantFilter);
 
                 foreach ($constants as $constant) {
                         $items[] = $this->view->renderConstantInfo($constant);
@@ -308,18 +317,9 @@ class PHPCD implements RpcHandler
 
     private function findConstants($pattern)
     {
-        $items = [];
-        foreach (get_defined_constants() as $name => $value) {
-            if ($pattern && strpos($name, $pattern) !== 0) {
-                continue;
-            }
+        $constants = $this->constantRepository->find(new ConstantFilter($pattern));
 
-            $constantInfo = new ConstantInfo($name, $value);
-
-            $items[] = $this->view->renderConstantInfo($constantInfo);
-        }
-
-        return $items;
+        return $this->view->renderConstantInfoCollection($constants);
     }
 
     /**

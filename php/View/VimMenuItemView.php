@@ -95,7 +95,11 @@ class VimMenuItemView implements View
 
         $out = new VimMenuItem();
         $out->setWord($functionInfo->getName());
-        $out->setAbbr(sprintf('%s(%s)', $functionInfo->getName(), $params));
+        $out->setAbbr(sprintf(
+            '%s(%s)',
+            $functionInfo->getName(),
+            implode(', ', $params)
+        ));
         $out->setKind('f');
         $out->setInfo(preg_replace('#/?\*(\*|/)?#', '', $functionInfo->getDocComment()));
 
