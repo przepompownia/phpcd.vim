@@ -47,6 +47,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 		if context =~? '^namespace'
 			return phpcd#GetPsrNamespace()
 		endif
+		" Decho(context)
 
 		if context =~? '\v^(final|abstract\s+)\?(class|interface|trait)$'
 			return [expand('%:t:r')]
@@ -1170,7 +1171,7 @@ function! phpcd#UpdateIndex() " {{{
 	endif
 
 	let g:phpcd_need_update = 0
-	let nsuse = rpc#request(g:phpcd_channel_id, 'nsuse', expand('%:p'))
+	let nsuse = rpc#request(g:phpcd_channel_id, 'getPHPFileInfo', expand('%:p'))
 	let classname = nsuse.namespace . '\' . nsuse.class
 	return rpc#notify(g:phpid_channel_id, 'update', classname)
 endfunction " }}}
@@ -1322,7 +1323,7 @@ function! phpcd#GetTypeFromDocBlockParam(docblock_type) " {{{
 endfunction " }}}
 
 function! phpcd#GetCurrentNameSpace() " {{{
-	let nsuse = rpc#request(g:phpcd_channel_id, 'nsuse', expand('%:p'))
+	let nsuse = rpc#request(g:phpcd_channel_id, 'getPHPFileInfo', expand('%:p'))
 
 	return [nsuse.namespace, empty(nsuse.imports) ? {} : nsuse.imports]
 endfunction " }}}

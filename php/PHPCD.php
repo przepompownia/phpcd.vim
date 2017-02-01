@@ -196,7 +196,7 @@ class PHPCD implements RpcHandler
      * @param string $path the php script path
      *
      */
-    public function nsuse($path)
+    public function getPHPFileInfo($path)
     {
         $fileInfo = $this->fileInfoFactory->createFileInfo($path);
         return $this->view->renderPHPFileInfo($fileInfo);
