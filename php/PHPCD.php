@@ -93,8 +93,8 @@ class PHPCD implements RpcHandler
         $this->propertyInfoRepository = $propertyRepository;
         $this->methodInfoRepository = $methodInfoRepository;
         $this->view = $view;
-        $this->legacyTypeLogic = $legacyTypeLogic;
         $this->functionRepository = $functionRepository;
+        $this->legacyTypeLogic = $legacyTypeLogic;
     }
 
     public function setServer(RpcServer $server)
