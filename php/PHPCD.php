@@ -73,7 +73,7 @@ class PHPCD implements RpcHandler
      *
      * @var PHPFileInfoFactory
      */
-    private $file_info_factory;
+    private $fileInfoFactory;
 
     public function __construct(
         NamespaceInfo $nsinfo,
@@ -81,14 +81,14 @@ class PHPCD implements RpcHandler
         ClassConstantInfoRepository $constantRepository,
         PropertyInfoRepository $propertyRepository,
         MethodInfoRepository $methodInfoRepository,
-        PHPFileInfoFactory $file_info_factory,
+        PHPFileInfoFactory $fileInfoFactory,
         View $view,
         FunctionRepository $functionRepository,
         LegacyTypeLogic $legacyTypeLogic
     ) {
         $this->nsinfo = $nsinfo;
         $this->setLogger($logger);
-        $this->file_info_factory = $file_info_factory;
+        $this->fileInfoFactory = $fileInfoFactory;
         $this->constantInfoRepository = $constantRepository;
         $this->propertyInfoRepository = $propertyRepository;
         $this->methodInfoRepository = $methodInfoRepository;
@@ -106,22 +106,22 @@ class PHPCD implements RpcHandler
      * Fetch class method's source file path
      * and their definition line number.
      *
-     * @param string $class_name class name
-     * @param string $method_name method or function name
+     * @param string $className class name
+     * @param string $methodName method or function name
      *
      * @return [path, line]
      */
-    public function findSymbolDeclaration($class_name, $method_name = '__construct')
+    public function findSymbolDeclaration($className, $methodName = '__construct')
     {
         try {
-            $reflection = new \ReflectionClass($class_name);
+            $reflection = new \ReflectionClass($className);
 
-            if ($reflection->hasMethod($method_name)) {
-                $reflection = $reflection->getMethod($method_name);
-            } elseif ($reflection->hasConstant($method_name)) {
-                return [$this->getConstPath($method_name, $reflection), 'const ' . $method_name];
-            } elseif ($reflection->hasProperty($method_name)) {
-                $line = $this->getPropertyDefLine($reflection, $method_name);
+            if ($reflection->hasMethod($methodName)) {
+                $reflection = $reflection->getMethod($methodName);
+            } elseif ($reflection->hasConstant($methodName)) {
+                return [$this->getConstPath($methodName, $reflection), 'const ' . $methodName];
+            } elseif ($reflection->hasProperty($methodName)) {
+                $line = $this->getPropertyDefLine($reflection, $methodName);
                 return [$reflection->getFileName(), $line];
             }
 
@@ -155,13 +155,13 @@ class PHPCD implements RpcHandler
         return $classReflection->getStartLine();
     }
 
-    private function getConstPath($const_name, \ReflectionClass $reflection)
+    private function getConstPath($constantName, \ReflectionClass $reflection)
     {
         $origin = $path = $reflection->getFileName();
-        $origin_reflection = $reflection;
+        $originReflection = $reflection;
 
         while ($reflection = $reflection->getParentClass()) {
-            if ($reflection->hasConstant($const_name)) {
+            if ($reflection->hasConstant($constantName)) {
                 $path = $reflection->getFileName();
             } else {
                 break;
@@ -169,9 +169,9 @@ class PHPCD implements RpcHandler
         }
 
         if ($origin === $path) {
-            $interfaces = $origin_reflection->getInterfaces();
+            $interfaces = $originReflection->getInterfaces();
             foreach ($interfaces as $interface) {
-                if ($interface->hasConstant($const_name)) {
+                if ($interface->hasConstant($constantName)) {
                     $path = $interface->getFileName();
                     break;
                 }
@@ -189,8 +189,8 @@ class PHPCD implements RpcHandler
      */
     public function nsuse($path)
     {
-        $file_info = $this->file_info_factory->createFileInfo($path);
-        return $this->view->renderPHPFileInfo($file_info);
+        $fileInfo = $this->fileInfoFactory->createFileInfo($path);
+        return $this->view->renderPHPFileInfo($fileInfo);
     }
 
     public function getTypesReturnedByFunction($functionName)
@@ -242,13 +242,13 @@ class PHPCD implements RpcHandler
         return $types;
     }
 
-    public function getMatchingClassDetails($class_name, $pattern, $is_static, $public_only = true)
+    public function getMatchingClassDetails($className, $pattern, $isStstic, $publicOnly = true)
     {
         try {
             $items = [];
 
-            if (false !== $is_static) {
-                $constantFilter = new ClassConstantFilter([ClassConstantFilter::CLASS_NAME => $class_name], $pattern);
+            if (false !== $isStstic) {
+                $constantFilter = new ClassConstantFilter([ClassConstantFilter::className => $className], $pattern);
                 $constants = $this->constantInfoRepository->find($constantFilter);
 
                 foreach ($constants as $constant) {
@@ -257,9 +257,9 @@ class PHPCD implements RpcHandler
             }
 
             $methodFilter = new MethodFilter([
-                MethodFilter::CLASS_NAME    => $class_name,
-                MethodFilter::PUBLIC_ONLY   => $public_only,
-                MethodFilter::STATIC_ONLY   => $is_static,
+                MethodFilter::className    => $className,
+                MethodFilter::publicOnly   => $publicOnly,
+                MethodFilter::STATIC_ONLY   => $isStstic,
             ], $pattern);
 
             $methods = $this->methodInfoRepository->find($methodFilter);
@@ -269,9 +269,9 @@ class PHPCD implements RpcHandler
             }
 
             $propertyFilter = new PropertyFilter([
-                PropertyFilter::CLASS_NAME    => $class_name,
-                PropertyFilter::PUBLIC_ONLY   => $public_only,
-                PropertyFilter::STATIC_ONLY   => $is_static,
+                PropertyFilter::className    => $className,
+                PropertyFilter::publicOnly   => $publicOnly,
+                PropertyFilter::STATIC_ONLY   => $isStstic,
             ], $pattern);
 
             $properties = $this->propertyInfoRepository->find($propertyFilter);
@@ -287,16 +287,16 @@ class PHPCD implements RpcHandler
         }
     }
 
-    public function getFixForNewClassUsage($path, array $new_class_params)
+    public function getFixForNewClassUsage($path, array $newClassParams)
     {
-        $info = $this->file_info_factory->createFileInfo($path);
+        $info = $this->fileInfoFactory->createFileInfo($path);
 
-        return $info->getFixForNewClassUsage($new_class_params);
+        return $info->getFixForNewClassUsage($newClassParams);
     }
 
     public function getFunctionsAndConstants($pattern)
     {
-        return array_merge($this->findFunctions($pattern), $this->getConstantsInfo($pattern));
+        return array_merge($this->findFunctions($pattern), $this->findConstants($pattern));
     }
 
     private function findFunctions($pattern)
@@ -306,7 +306,7 @@ class PHPCD implements RpcHandler
         return $this->view->renderFunctionInfoCollection($functions);
     }
 
-    private function getConstantsInfo($pattern)
+    private function findConstants($pattern)
     {
         $items = [];
         foreach (get_defined_constants() as $name => $value) {
