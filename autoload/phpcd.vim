@@ -46,9 +46,8 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 		if context =~? '^namespace'
 			return phpcd#GetPsrNamespace()
 		endif
-		" Decho(context)
 
-		if context =~? '\v^(final|abstract\s+)\?(class|interface|trait)$'
+		if context =~? '\v^(final|abstract\s+)?(class|interface|trait)$'
 			return [expand('%:t:r')]
 		end
 
@@ -87,7 +86,7 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			" special case when you've typed the class keyword and the name too,
 			" only extends and implements allowed there
 			return filter(['extends', 'implements'], 'stridx(v:val, a:base) == 0')
-		elseif context =~? printf('function\s\+%s\s*(\(\s*\(%s\s\+\)\?\$%s\s*,\)*\s*$', g:name_pattern, g:name_pattern, g:name_pattern)
+		elseif context =~? printf('\vfunction\s+%s\s*\((\s*(%s\s+)?\$%s\s*,)*\s*$', g:name_pattern, g:name_pattern, g:name_pattern)
 			return phpcd#getNamesToTypeDeclaration(a:base)
 		elseif context =~? 'new$'
 			return phpcd#getInstantiableClasses(a:base)
