@@ -14,7 +14,6 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			let start -= 1
 		endwhile
 
-		" TODO 清理 phpbegin
 		let phpbegin = searchpairpos('<?', '', '?>', 'bWn',
 				\ 'synIDattr(synID(line("."), col("."), 0), "name") =~? "string\\|comment"')
 		let b:phpbegin = phpbegin
