@@ -10,6 +10,7 @@ use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use PHPCD\PHPFileInfo\PHPFileInfo;
 use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\ConstantInfo\ClassConstantInfoRepository;
+use PHPCD\ConstantInfo\ConstantInfoRepository;
 use PHPCD\ObjectElementInfo\MethodInfoRepository;
 use PHPCD\ObjectElementInfo\PropertyInfoRepository;
 use PHPCD\NamespaceInfo;
@@ -29,7 +30,8 @@ class ProptypeTest extends MockeryTestCase
     {
         $nsinfo = Mockery::mock(NamespaceInfo::class);
         $logger = Mockery::mock(Logger::class);
-        $constantRepository = Mockery::mock(ClassConstantInfoRepository::class);
+        $constantRepository = Mockery::mock(ConstantInfoRepository::class);
+        $classConstantRepository = Mockery::mock(ClassConstantInfoRepository::class);
         $propertyInfoRepository = Mockery::mock(PropertyInfoRepository::class);
         $methodInfoRepository = Mockery::mock(MethodInfoRepository::class);
         $fileInfoFactory = Mockery::mock(PHPFileInfoFactory::class);
@@ -50,6 +52,7 @@ class ProptypeTest extends MockeryTestCase
             $nsinfo,
             $logger,
             $constantRepository,
+            $classConstantRepository,
             $propertyInfoRepository,
             $methodInfoRepository,
             $fileInfoFactory,
