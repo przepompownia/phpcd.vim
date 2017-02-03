@@ -5,8 +5,8 @@ namespace PHPCD\ObjectElementInfo;
 class PropertyPath extends ObjectElementPath
 {
     /**
-    * @var string
-    */
+     * @var string
+     */
     private $propertyName;
 
     public function __construct($className, $propertyName)

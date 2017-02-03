@@ -2,7 +2,6 @@
 
 namespace PHPCD\ObjectElementInfo;
 
-use PHPCD\ObjectElementInfo\PropertyInfo;
 use PHPCD\DocBlock\DocBlock;
 
 class ReflectionPropertyInfo extends ReflectionObjectElementInfo implements PropertyInfo

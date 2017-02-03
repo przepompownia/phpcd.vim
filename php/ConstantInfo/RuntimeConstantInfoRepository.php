@@ -4,7 +4,6 @@ namespace PHPCD\ConstantInfo;
 
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\ClassInfo\ClassInfoFactory;
 
 class RuntimeConstantInfoRepository implements ConstantInfoRepository
 {

@@ -23,7 +23,7 @@ if (is_readable($autoload_file)) {
 
 $parameters['class_loader'] = $class_loader;
 
-$factory = new \PHPCD\Factory;
+$factory = new \PHPCD\Factory();
 
 $configdir = __DIR__.'/../config/';
 $handler_name = strtolower($handler_name);

@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPCD;
 
 use PHPCD\ConstantInfo\ConstantInfoRepository;
@@ -12,7 +13,6 @@ use Psr\Log\LoggerAwareTrait;
 use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
-use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\ConstantInfo\ClassConstantInfoRepository;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Filter\MethodFilter;
@@ -20,7 +20,6 @@ use PHPCD\Filter\PropertyFilter;
 use PHPCD\ObjectElementInfo\MethodInfoRepository;
 use PHPCD\ObjectElementInfo\PropertyInfoRepository;
 use PHPCD\View\View;
-use PHPCD\FunctionInfo\FunctionInfo;
 use PHPCD\DocBlock\LegacyTypeLogic;
 
 class PHPCD implements RpcHandler
@@ -115,7 +114,7 @@ class PHPCD implements RpcHandler
      * Fetch class method's source file path
      * and their definition line number.
      *
-     * @param string $className class name
+     * @param string $className  class name
      * @param string $methodName method or function name
      *
      * @return [path, line]
@@ -128,9 +127,10 @@ class PHPCD implements RpcHandler
             if ($reflection->hasMethod($methodName)) {
                 $reflection = $reflection->getMethod($methodName);
             } elseif ($reflection->hasConstant($methodName)) {
-                return [$this->getConstPath($methodName, $reflection), 'const ' . $methodName];
+                return [$this->getConstPath($methodName, $reflection), 'const '.$methodName];
             } elseif ($reflection->hasProperty($methodName)) {
                 $line = $this->getPropertyDefLine($reflection, $methodName);
+
                 return [$reflection->getFileName(), $line];
             }
 
@@ -144,6 +144,7 @@ class PHPCD implements RpcHandler
     {
         try {
             $reflection = $this->functionRepository->get($functionName);
+
             return [$reflection->getFileName(), $reflection->getStartLine()];
         } catch (\ReflectionException $e) {
             return ['', null];
@@ -155,12 +156,13 @@ class PHPCD implements RpcHandler
         $class = new \SplFileObject($classReflection->getFileName());
         $class->seek($classReflection->getStartLine());
 
-        $pattern = '/(private|protected|public|var)\s\$' . $property . '/x';
+        $pattern = '/(private|protected|public|var)\s\$'.$property.'/x';
         foreach ($class as $line => $content) {
             if (preg_match($pattern, $content)) {
                 return $line + 1;
             }
         }
+
         return $classReflection->getStartLine();
     }
 
@@ -194,11 +196,11 @@ class PHPCD implements RpcHandler
      * Fetch the php script's namespace and imports(by use) list.
      *
      * @param string $path the php script path
-     *
      */
     public function getPHPFileInfo($path)
     {
         $fileInfo = $this->fileInfoFactory->createFileInfo($path);
+
         return $this->view->renderPHPFileInfo($fileInfo);
     }
 
@@ -212,6 +214,7 @@ class PHPCD implements RpcHandler
         }
 
         list($path, $doc) = $this->legacyTypeLogic->docFunction($functionName);
+
         return $this->legacyTypeLogic->typeByDoc($path, $doc);
     }
 
@@ -225,9 +228,9 @@ class PHPCD implements RpcHandler
         }
 
         $methodPath = new MethodPath($className, $methodName);
-        $method     = $this->methodInfoRepository->getByPath($methodPath);
-        $path       = $method->getClass()->getFileName();
-        $doc        = $method->getDocComment();
+        $method = $this->methodInfoRepository->getByPath($methodPath);
+        $path = $method->getClass()->getFileName();
+        $doc = $method->getDocComment();
 
         $types = $this->legacyTypeLogic->typeByDoc($path, $doc);
 
@@ -235,16 +238,16 @@ class PHPCD implements RpcHandler
     }
 
     /**
-     * Fetch class attribute's type by @var annotation
+     * Fetch class attribute's type by @var annotation.
      *
      * @return [type1, type2, ...]
      */
     public function getTypesOfProperty($className, $propertyName)
     {
-        $propertyPath   = new PropertyPath($className, $propertyName);
-        $property       = $this->propertyInfoRepository->getByPath($propertyPath);
-        $path           = $property->getClass()->getFileName();
-        $doc            = $property->getDocComment();
+        $propertyPath = new PropertyPath($className, $propertyName);
+        $property = $this->propertyInfoRepository->getByPath($propertyPath);
+        $path = $property->getClass()->getFileName();
+        $doc = $property->getDocComment();
 
         $types = $this->legacyTypeLogic->typeByDoc($path, $doc);
 
@@ -261,14 +264,14 @@ class PHPCD implements RpcHandler
                 $constants = $this->classConstantRepository->find($constantFilter);
 
                 foreach ($constants as $constant) {
-                        $items[] = $this->view->renderConstantInfo($constant);
+                    $items[] = $this->view->renderConstantInfo($constant);
                 }
             }
 
             $methodFilter = new MethodFilter([
-                MethodFilter::className    => $className,
-                MethodFilter::publicOnly   => $publicOnly,
-                MethodFilter::STATIC_ONLY   => $isStstic,
+                MethodFilter::className => $className,
+                MethodFilter::publicOnly => $publicOnly,
+                MethodFilter::STATIC_ONLY => $isStstic,
             ], $pattern);
 
             $methods = $this->methodInfoRepository->find($methodFilter);
@@ -278,9 +281,9 @@ class PHPCD implements RpcHandler
             }
 
             $propertyFilter = new PropertyFilter([
-                PropertyFilter::className    => $className,
-                PropertyFilter::publicOnly   => $publicOnly,
-                PropertyFilter::STATIC_ONLY   => $isStstic,
+                PropertyFilter::className => $className,
+                PropertyFilter::publicOnly => $publicOnly,
+                PropertyFilter::STATIC_ONLY => $isStstic,
             ], $pattern);
 
             $properties = $this->propertyInfoRepository->find($propertyFilter);
@@ -292,6 +295,7 @@ class PHPCD implements RpcHandler
             return $items;
         } catch (\ReflectionException $e) {
             $this->logger->debug($e->getMessage());
+
             return [null, []];
         }
     }
@@ -323,7 +327,7 @@ class PHPCD implements RpcHandler
     }
 
     /**
-     * generate psr4 namespace according composer.json and file path
+     * generate psr4 namespace according composer.json and file path.
      */
     public function psr4ns($path)
     {

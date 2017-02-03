@@ -13,6 +13,7 @@ class ConstantInfoCollection extends Collection
 
     /**
      * @param ConstantInfo $constantInfo
+     *
      * @return $this
      */
     public function add(ConstantInfo $constantInfo)

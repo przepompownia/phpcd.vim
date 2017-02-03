@@ -13,6 +13,7 @@ class PropertyInfoCollection extends Collection
 
     /**
      * @param PropertyInfo $propertyInfo
+     *
      * @return $this
      */
     public function add(PropertyInfo $propertyInfo)

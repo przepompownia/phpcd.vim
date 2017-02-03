@@ -5,8 +5,8 @@ namespace PHPCD\ObjectElementInfo;
 abstract class ObjectElementPath
 {
     /**
-    * @var string
-    */
+     * @var string
+     */
     protected $className;
 
     public function getClassName()

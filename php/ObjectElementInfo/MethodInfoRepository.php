@@ -3,7 +3,6 @@
 namespace PHPCD\ObjectElementInfo;
 
 use PHPCD\Filter\MethodFilter;
-use PHPCD\ObjectElementInfo\MethodInfoCollection;
 
 interface MethodInfoRepository
 {
@@ -14,6 +13,7 @@ interface MethodInfoRepository
 
     /**
      * @param string $path
+     *
      * @return MethodInfo
      */
     public function getByPath($path);

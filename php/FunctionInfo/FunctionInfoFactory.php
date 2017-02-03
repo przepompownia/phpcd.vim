@@ -2,8 +2,6 @@
 
 namespace PHPCD\FunctionInfo;
 
-use PHPCD\FunctionInfo\FunctionCollection;
-
 class FunctionInfoFactory
 {
     /**

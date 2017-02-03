@@ -5,7 +5,7 @@ namespace PHPCD\View;
 class VimMenuItem
 {
     private $output = [
-        'icase' => 1
+        'icase' => 1,
     ];
 
     /**

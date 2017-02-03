@@ -3,7 +3,6 @@
 namespace PHPCD\ObjectElementInfo;
 
 use PHPCD\Filter\MethodFilter;
-use PHPCD\ObjectElementInfo\MethodInfoCollection;
 
 class ReflectionMethodInfoRepository extends ReflectionObjectElementInfoRepository implements MethodInfoRepository
 {
@@ -28,6 +27,7 @@ class ReflectionMethodInfoRepository extends ReflectionObjectElementInfoReposito
 
     /**
      * @param string $path
+     *
      * @return MethodInfo
      */
     public function getByPath($path)

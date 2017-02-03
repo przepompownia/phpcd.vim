@@ -125,6 +125,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     /**
      * @param string $class
+     *
      * @return $this
      */
     private function setClass($class)
@@ -146,7 +147,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
      */
     public function isClass()
     {
-        return ($this->type === 'class');
+        return 'class' === $this->type;
     }
 
     /**
@@ -154,7 +155,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
      */
     public function isInterface()
     {
-        return ($this->type === 'interface');
+        return 'interface' === $this->type;
     }
 
     /**
@@ -162,11 +163,11 @@ class StringBasedPHPFileInfo implements PHPFileInfo
      */
     public function isTrait()
     {
-        return ($this->type === 'trait');
+        return 'trait' === $this->type;
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string|null
      */
@@ -177,6 +178,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     /**
      * @param string $class
+     *
      * @return $this
      */
     private function setSuperclass($class)
@@ -229,7 +231,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
             return [
                 'name' => $matches['name'],
-                'type' => $type
+                'type' => $type,
             ];
         }
     }
@@ -277,9 +279,9 @@ class StringBasedPHPFileInfo implements PHPFileInfo
                         }
                     }
 
-                    /** empty type means import of some class **/
+                    /* empty type means import of some class **/
                     if (empty($use_matches['type'])) {
-                        $imports[$alias] = $use_matches['left'] . $suffix;
+                        $imports[$alias] = $use_matches['left'].$suffix;
                     }
                     // @todo case when $use_matches['type'] is 'constant' or 'function'
                     // This requires change of the oputput format because
@@ -333,7 +335,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
 
     public function hasErrors()
     {
-        return ! empty($this->errors);
+        return !empty($this->errors);
     }
 
     private function addError($error)
@@ -371,25 +373,27 @@ class StringBasedPHPFileInfo implements PHPFileInfo
      * check that that alias can be used then return array of arrays consisting of:
      *  - alias: null if we can use initial alias, otherwise generated alternative alias
      *  - full_path: null if there is no need to make new import,
-     *      otherwise path to import associated with the above alias
+     *      otherwise path to import associated with the above alias.
      *
      * Sometimes the same path may associated with more than one aliases (see unit test)
      * so this function returns array of suggestions to be used by client.
      *
      * @param array $new_class_params {
-     *  @type string  $alias
-     *  @type string  $full_path
+     *
+     *  @var string  $alias
+     *  @var string  $full_path
      *  }
      *
      * @return array {
-     *  @type string        $alias        the original or modified alias
-     *  @type string|null   $full_path    null if we have no new import to do
+     *
+     *  @var string        $alias        the original or modified alias
+     *  @var string|null   $full_path    null if we have no new import to do
      *  }[]
      */
     public function getFixForNewClassUsage(array $new_class_params)
     {
-        $new_alias  = $new_class_params['alias'];
-        $new_path   = trim($new_class_params['full_path'], '\\');
+        $new_alias = $new_class_params['alias'];
+        $new_path = trim($new_class_params['full_path'], '\\');
 
         $used_aliases = $this->getUsedAliasesForPath($new_path);
         if (!empty($used_aliases)) {
@@ -397,10 +401,10 @@ class StringBasedPHPFileInfo implements PHPFileInfo
             foreach ($used_aliases as $alias) {
                 if ($alias === $new_alias) {
                     // Nothing to do
-                    return [['alias' => null, 'full_path' => null ]];
+                    return [['alias' => null, 'full_path' => null]];
                 }
 
-                $suggestions[] = [ 'alias' => $alias, 'full_path' => null ];
+                $suggestions[] = ['alias' => $alias, 'full_path' => null];
             }
 
             return $suggestions;
@@ -409,14 +413,14 @@ class StringBasedPHPFileInfo implements PHPFileInfo
         if (!empty($this->imports)) {
             if ($this->hasAliasUsed($new_alias)) {
                 if ($this->extractNamespaceFromPath($new_path) === $this->getNamespace()) {
-                    return [['alias' => 'namespace\\'.$new_alias, 'full_path' => null ]];
+                    return [['alias' => 'namespace\\'.$new_alias, 'full_path' => null]];
                 }
 
                 // The path was not used,
                 // but an alternative alias is needed.
                 $new_alias = $this->generateNewAlias($new_alias);
 
-                return [['alias' => $new_alias, 'full_path' => $new_path ]];
+                return [['alias' => $new_alias, 'full_path' => $new_path]];
             }
         }
 
@@ -426,12 +430,12 @@ class StringBasedPHPFileInfo implements PHPFileInfo
             // an the same named alias of another path.
             $new_alias = $this->generateNewAlias($new_alias);
 
-            return [['alias' => $new_alias, 'full_path' => $new_path ]];
+            return [['alias' => $new_alias, 'full_path' => $new_path]];
         }
 
         // The alias was not used, so it does not need change,
         // the path need to insert
-        return [['alias' => null, 'full_path' => $new_path ]];
+        return [['alias' => null, 'full_path' => $new_path]];
     }
 
     private function extractNamespaceFromPath($path)
@@ -473,11 +477,12 @@ class StringBasedPHPFileInfo implements PHPFileInfo
             throw new FileInfoException('Syntax error');
         }
 
-        return (! $return_code);
+        return !$return_code;
     }
 
     /**
-     * Check if given class exists
+     * Check if given class exists.
+     *
      * @return bool
      */
     private function classExists($className)
@@ -494,7 +499,8 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     }
 
     /**
-     * Check if given interface exists
+     * Check if given interface exists.
+     *
      * @return bool
      */
     private function interfaceExists($interfaceName)

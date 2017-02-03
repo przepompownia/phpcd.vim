@@ -18,11 +18,11 @@ class VimMenuItemView implements View
      *  @param array Map between modifier numbers and displayed symbols
      */
     private $modifier_symbols = [
-       'final'     => '!',
-       'private'    => '-',
-       'protected'  => '#',
-       'public'     => '+',
-       'static'     => '@'
+       'final' => '!',
+       'private' => '-',
+       'protected' => '#',
+       'public' => '+',
+       'static' => '@',
     ];
 
     private function getModifiers(ObjectElementInfo $objectElement)
@@ -33,6 +33,7 @@ class VimMenuItemView implements View
     private function clearDoc($doc)
     {
         $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
+
         return preg_replace('#\s*\/|/\s*#', '', $doc);
     }
 
@@ -40,7 +41,7 @@ class VimMenuItemView implements View
     {
         $out = new VimMenuItem();
         $out->setWord($constantInfo->getName());
-        $out->setAbbr(sprintf(" +@ %s %s", $constantInfo->getName(), $constantInfo->getValue()));
+        $out->setAbbr(sprintf(' +@ %s %s', $constantInfo->getName(), $constantInfo->getValue()));
         $out->setKind('d');
 
         return $out->render();
@@ -64,6 +65,7 @@ class VimMenuItemView implements View
         $out->setAbbr();
         $out->setKind();
         $out->setInfo();
+
         return $out->render();
     }
 
@@ -76,7 +78,7 @@ class VimMenuItemView implements View
         $out = new VimMenuItem();
         $out->setWord($methodInfo->getName());
         $out->setAbbr(sprintf(
-            "%3s %s (%s)",
+            '%3s %s (%s)',
             $this->getModifiers($methodInfo),
             $methodInfo->getName(),
             implode(', ', $params)
@@ -122,7 +124,7 @@ class VimMenuItemView implements View
         $modifiers = $this->getModifiers($propertyInfo);
         $out = new VimMenuItem();
         $out->setWord($propertyInfo->getName());
-        $out->setAbbr(sprintf("%3s %s", $modifiers, $propertyInfo->getName()));
+        $out->setAbbr(sprintf('%3s %s', $modifiers, $propertyInfo->getName()));
         $out->setKind('p');
         $out->setInfo(preg_replace('#/?\*(\*|/)?#', '', $propertyInfo->getDocComment()));
 
@@ -134,7 +136,7 @@ class VimMenuItemView implements View
         return [
             'namespace' => $fileInfo->getNamespace(),
             'class' => $fileInfo->getClassName(),
-            'imports' => $fileInfo->getImports()
+            'imports' => $fileInfo->getImports(),
         ];
     }
 }

@@ -3,7 +3,6 @@
 namespace PHPCD\ObjectElementInfo;
 
 use PHPCD\Filter\PropertyFilter;
-use PHPCD\ObjectElementInfo\PropertyInfoCollection;
 
 interface PropertyInfoRepository
 {
@@ -14,6 +13,7 @@ interface PropertyInfoRepository
 
     /**
      * @param PropertyPath $path
+     *
      * @return PropertyInfo
      */
     public function getByPath(PropertyPath $path);

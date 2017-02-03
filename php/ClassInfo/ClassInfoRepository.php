@@ -18,14 +18,16 @@ interface ClassInfoRepository
 {
     /**
      * @param ClassFilter $filter criteria to search
+     *
      * @return ClassInfoCollection
      */
     public function find(ClassFilter $filter);
 
     /**
-     * Get ClassInfo based on class name
+     * Get ClassInfo based on class name.
      *
      * @param string class path
+     *
      * @return ClassInfo
      */
     public function get($path);

@@ -2,7 +2,6 @@
 
 namespace PHPCD;
 
-use PHPCD\NamespaceInfo;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -11,7 +10,7 @@ use Lvht\MsgpackRpc\Io;
 use Lvht\MsgpackRpc\MsgpackMessenger;
 
 /**
- * Simple factory to separate details of object creation
+ * Simple factory to separate details of object creation.
  */
 class Factory
 {
@@ -20,7 +19,7 @@ class Factory
      */
     public function createDIContainer($configFileName, $configDir, $additionalParameters = [])
     {
-        $container = new ContainerBuilder;
+        $container = new ContainerBuilder();
 
         $loader = new YamlFileLoader($container, new FileLocator($configDir));
 
@@ -37,7 +36,8 @@ class Factory
 
     /**
      * @param string $implementation absolute namespace path to a concrete logger
-     * @param array $parameters parameters to logger's constructor
+     * @param array  $parameters     parameters to logger's constructor
+     *
      * @return \Psr\Log\LoggerInterface
      */
     public function createLogger($implementation, $parameters = [])
@@ -45,20 +45,22 @@ class Factory
         switch ($implementation) {
             case '\\PHPCD\\Log\\DateTimeLogger':
                 $decoratedLogger = $this->createLogger('\\PHPCD\\Log\\Logger', $parameters);
+
                 return new Log\DateTimeLogger($decoratedLogger);
             break;
             case '\\PHPCD\\Log\\NullLogger':
-                return new Log\NullLogger;
+                return new Log\NullLogger();
             break;
             case '\\Monolog\\Logger':
                 $path = (
                     (isset($parameters[0]) && is_string($parameters[0])) ?
                     $parameters[0] :
-                    getenv('HOME') . '/.phpcd.log'
+                    getenv('HOME').'/.phpcd.log'
                 );
 
                 $logger = new \Monolog\Logger('PHPCD');
                 $logger->pushHandler(new \Monolog\Handler\StreamHandler($path, \Monolog\Logger::DEBUG));
+
                 return $logger;
             break;
             case '\\PHPCD\\Log\\Logger':
@@ -79,7 +81,7 @@ class Factory
      */
     public function createPatternMatcher($match_type = 'head', $case_sensitivity = null)
     {
-        $case_sensitivity = (bool)$case_sensitivity;
+        $case_sensitivity = (bool) $case_sensitivity;
 
         switch ($match_type) {
             case 'subsequence':
@@ -111,7 +113,7 @@ class Factory
     {
         $nsinfo = new NamespaceInfo($projectRoot);
 
-        $composerPath = $projectRoot . '/composer.json';
+        $composerPath = $projectRoot.'/composer.json';
 
         if (file_exists($composerPath) && is_readable($composerPath)) {
             $json = file_get_contents($composerPath);

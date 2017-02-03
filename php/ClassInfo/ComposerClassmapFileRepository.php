@@ -18,7 +18,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
 
     private $classmap = [];
 
-    /** @var ClassInfoFactory **/
+    /** @var ClassInfoFactory */
     private $classInfoFactory;
 
     /**
@@ -55,6 +55,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
 
     /**
      * @param ClassFilter $filter criteria to search
+     *
      * @return ClassInfoCollection
      */
     public function find(ClassFilter $filter)
@@ -85,7 +86,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
      * Check if getting information about classes cause no problem
      * Examples:
      *  - file has syntax errors
-     *  - superclass is not defined
+     *  - superclass is not defined.
      *
      *  @return bool
      */
@@ -109,6 +110,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
                 sprintf($message, ucfirst($fileInfo->getType()), $classpath),
                 $fileInfo->getErrors()
             );
+
             return false;
         } else {
             return true;
@@ -116,9 +118,10 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     }
 
     /**
-     * Get ClassInfo based on class name
+     * Get ClassInfo based on class name.
      *
      * @param string class path
+     *
      * @return ClassInfo
      */
     public function get($classpath)

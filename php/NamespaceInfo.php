@@ -16,9 +16,10 @@ class NamespaceInfo
     }
 
     /**
-     * Set the composer projectRoot dir
+     * Set the composer projectRoot dir.
      *
      * @param string $projectRoot the path
+     *
      * @return static
      */
     private function setProjectRoot($projectRoot)
@@ -38,21 +39,21 @@ class NamespaceInfo
         }
 
         $unify = function (&$path) {
-            if (! is_array($path)) {
+            if (!is_array($path)) {
                 $path = [$path];
             }
         };
 
         array_walk($list, $unify);
 
-        if (! isset($composer['autoload-dev']['psr-4'])) {
+        if (!isset($composer['autoload-dev']['psr-4'])) {
             return $list;
         }
 
         $list_dev = $composer['autoload-dev']['psr-4'];
 
         foreach ($list_dev as $namespace => $paths) {
-            if (! isset($list[$namespace])) {
+            if (!isset($list[$namespace])) {
                 $list[$namespace] = [];
             }
             $list[$namespace] = array_merge($list[$namespace], (array) $paths);
@@ -93,7 +94,7 @@ class NamespaceInfo
                         return ucwords($word);
                     });
 
-                    if (! empty($prefix)) {
+                    if (!empty($prefix)) {
                         array_unshift($path, trim($prefix, self::NAMESPACE_SEPARATOR));
                     }
 

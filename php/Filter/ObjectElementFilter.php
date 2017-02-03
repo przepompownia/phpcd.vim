@@ -10,7 +10,7 @@ abstract class ObjectElementFilter extends AbstractFilter implements ClassElemen
     protected $criteriaNames = [
         self::PUBLIC_ONLY,
         self::STATIC_ONLY,
-        self::CLASS_NAME
+        self::CLASS_NAME,
     ];
 
     /**
@@ -30,7 +30,7 @@ abstract class ObjectElementFilter extends AbstractFilter implements ClassElemen
     }
 
     /**
-     * Get filter by the class where this element is defined
+     * Get filter by the class where this element is defined.
      *
      * @return string|null
      */

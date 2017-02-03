@@ -13,6 +13,7 @@ class FunctionCollection extends Collection
 
     /**
      * @param FunctionInfo $functionInfo
+     *
      * @return $this
      */
     public function add(FunctionInfo $functionInfo)

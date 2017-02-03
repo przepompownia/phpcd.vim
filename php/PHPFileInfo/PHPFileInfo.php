@@ -60,14 +60,16 @@ interface PHPFileInfo
     public function getImports();
 
     /**
-     * @param array     $new_class_params {
-     *  @type string    $alias
-     *  @type string    $full_path
+     * @param array $new_class_params {
+     *
+     *  @var string    $alias
+     *  @var string    $full_path
      *  }
      *
      * @return array {
-     *  @type string        $alias        the original or modified alias
-     *  @type string|null   $full_path    null if we have no new import to do
+     *
+     *  @var string        $alias        the original or modified alias
+     *  @var string|null   $full_path    null if we have no new import to do
      *  }
      */
     public function getFixForNewClassUsage(array $new_class_params);
@@ -88,7 +90,7 @@ interface PHPFileInfo
     public function isTrait();
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string|null
      */

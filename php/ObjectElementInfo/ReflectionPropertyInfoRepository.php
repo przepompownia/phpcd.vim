@@ -4,8 +4,6 @@ namespace PHPCD\ObjectElementInfo;
 
 use PHPCD\NotFoundException;
 use PHPCD\Filter\PropertyFilter;
-use PHPCD\ObjectElementInfo\PropertyInfoCollection;
-use PHPCD\ObjectElementInfo\GenericPropertyInfo;
 
 class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoRepository implements PropertyInfoRepository
 {
@@ -40,7 +38,7 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
     {
         $properties = [];
 
-        if (! preg_match_all(self::VIRTUAL_PROPERTY_READ_REGEX, $reflection->getDocComment(), $matches)) {
+        if (!preg_match_all(self::VIRTUAL_PROPERTY_READ_REGEX, $reflection->getDocComment(), $matches)) {
             return [];
         }
 
@@ -54,6 +52,7 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
 
     /**
      * @param PropertyPath $path
+     *
      * @return PropertyInfo
      */
     public function getByPath(PropertyPath $path)

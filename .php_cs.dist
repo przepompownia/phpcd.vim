@@ -1,0 +1,16 @@
+<?php
+// vim: ft=php
+
+$finder = PhpCsFixer\Finder::create()
+->exclude('somedir')
+->in(__DIR__)
+;
+
+return PhpCsFixer\Config::create()
+    ->setRules([
+        '@Symfony' => true,
+        '@PSR2'     => true,
+        'array_syntax' => ['syntax' => 'short']
+    ])
+    ->setFinder($finder)
+    ;

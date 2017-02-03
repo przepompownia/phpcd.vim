@@ -8,12 +8,13 @@ interface FunctionRepository
 {
     /**
      * @param FunctionFilter $filter
+     *
      * @return FunctionCollection
      */
     public function find(FunctionFilter $filter);
 
     /**
-     * Get FunctionInfo based on class name
+     * Get FunctionInfo based on class name.
      *
      * @return FunctionInfo
      */

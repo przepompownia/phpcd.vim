@@ -16,6 +16,6 @@ class SubsequencePatternMatcher extends AbstractPatternMatcher implements Patter
         $modifiers = $this->isCaseSensitive() ? '' : 'i';
         $regex = sprintf('/%s/%s', implode('.*', array_map('preg_quote', str_split($pattern))), $modifiers);
 
-        return (bool)preg_match($regex, $string);
+        return (bool) preg_match($regex, $string);
     }
 }

@@ -51,7 +51,7 @@ class RuntimeFunctionRepository implements FunctionRepository
     }
 
     /**
-     * Get FunctionInfo based on class name
+     * Get FunctionInfo based on class name.
      *
      * @return FunctionInfo
      */

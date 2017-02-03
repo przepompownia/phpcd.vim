@@ -28,7 +28,7 @@ abstract class AbstractFilter
     }
 
     /**
-     * Get regex pattern to match against class name
+     * Get regex pattern to match against class name.
      *
      * @return string|null
      */

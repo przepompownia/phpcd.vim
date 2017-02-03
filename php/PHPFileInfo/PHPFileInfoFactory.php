@@ -8,13 +8,13 @@ use SplTempFileObject;
 class PHPFileInfoFactory
 {
     /**
-     * Create PHPFileInfo
+     * Create PHPFileInfo.
      *
      * @return PHPFileInfo|null
      */
     public function createFileInfo($path)
     {
-        if (! is_readable($path)) {
+        if (!is_readable($path)) {
             if (file_exists($path)) {
                 throw new \Exception(sprintf('Cannot read file %s.', $path));
             }

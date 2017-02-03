@@ -5,8 +5,8 @@ namespace PHPCD\ObjectElementInfo;
 class MethodPath extends ObjectElementPath
 {
     /**
-    * @var string
-    */
+     * @var string
+     */
     private $methodName;
 
     public function __construct($className, $methodName)

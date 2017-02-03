@@ -7,8 +7,8 @@ use PHPCD\Filter\ClassElementFilter;
 class ClassInfoFactory
 {
     /**
-     *
      * @param string|object $class
+     *
      * @return ClassInfo
      */
     public function createClassInfo($class)
@@ -18,7 +18,7 @@ class ClassInfoFactory
 
     public function createClassInfoCollection()
     {
-        return new ClassInfoCollection;
+        return new ClassInfoCollection();
     }
 
     public function createReflectionClassFromFilter(ClassElementFilter $filter)

@@ -5,11 +5,11 @@ namespace PHPCD\Filter;
 class ClassConstantFilter extends AbstractFilter implements ClassElementFilter
 {
     protected $criteriaNames = [
-        self::CLASS_NAME
+        self::CLASS_NAME,
     ];
 
     /**
-     * Get filter by the class where this element is defined
+     * Get filter by the class where this element is defined.
      *
      * @return string|null
      */

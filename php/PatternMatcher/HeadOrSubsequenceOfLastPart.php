@@ -15,8 +15,8 @@ class HeadOrSubsequenceOfLastPart extends AbstractPatternMatcher implements Patt
     private $subsequenceMatcher;
 
     /**
-     * @param HeadPatternMatcher  $headMatcher
-     * @param SubsequencePatternMatcher  $subsequenceMatcher
+     * @param HeadPatternMatcher        $headMatcher
+     * @param SubsequencePatternMatcher $subsequenceMatcher
      * @param  $case_sensitive
      */
     public function __construct(

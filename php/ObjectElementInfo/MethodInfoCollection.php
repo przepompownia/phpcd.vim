@@ -13,6 +13,7 @@ class MethodInfoCollection extends Collection
 
     /**
      * @param MethodInfo $methodInfo
+     *
      * @return $this
      */
     public function add(MethodInfo $methodInfo)

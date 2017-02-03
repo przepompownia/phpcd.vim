@@ -14,9 +14,9 @@ class HeadPatternMatcher extends AbstractPatternMatcher implements PatternMatche
         }
 
         if ($this->isCaseSensitive()) {
-            return (strpos($string, $pattern) === 0);
+            return 0 === strpos($string, $pattern);
         } else {
-            return (stripos($string, $pattern) === 0);
+            return 0 === stripos($string, $pattern);
         }
     }
 }
