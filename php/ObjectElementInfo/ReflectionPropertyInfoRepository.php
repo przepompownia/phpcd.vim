@@ -53,7 +53,7 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
     }
 
     /**
-     * @var PropertyPath $path
+     * @param PropertyPath $path
      * @return PropertyInfo
      */
     public function getByPath(PropertyPath $path)

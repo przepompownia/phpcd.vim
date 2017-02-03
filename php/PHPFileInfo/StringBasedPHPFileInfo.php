@@ -124,7 +124,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     }
 
     /**
-     * @var string $class
+     * @param string $class
      * @return $this
      */
     private function setClass($class)
@@ -176,7 +176,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     }
 
     /**
-     * @var string $class
+     * @param string $class
      * @return $this
      */
     private function setSuperclass($class)
@@ -194,7 +194,7 @@ class StringBasedPHPFileInfo implements PHPFileInfo
     }
 
     /**
-     * @var string
+     * @param string
      */
     private function setNamespace($namespace)
     {

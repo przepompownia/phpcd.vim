@@ -13,7 +13,7 @@ interface MethodInfoRepository
     public function find(MethodFilter $filter);
 
     /**
-     * @var string $path
+     * @param string $path
      * @return MethodInfo
      */
     public function getByPath($path);

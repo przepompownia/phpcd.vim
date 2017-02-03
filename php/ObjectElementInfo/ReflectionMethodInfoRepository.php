@@ -27,7 +27,7 @@ class ReflectionMethodInfoRepository extends ReflectionObjectElementInfoReposito
     }
 
     /**
-     * @var string $path
+     * @param string $path
      * @return MethodInfo
      */
     public function getByPath($path)
