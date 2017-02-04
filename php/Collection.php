@@ -5,7 +5,7 @@ namespace PHPCD;
 use ArrayObject;
 use IteratorAggregate;
 
-class Collection implements IteratorAggregate
+abstract class Collection implements IteratorAggregate
 {
     protected $collection = [];
 
