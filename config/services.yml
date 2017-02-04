@@ -80,3 +80,58 @@ services:
             - '@class_info_factory'
             - '@docblock'
 
+    view:
+        class:              \PHPCD\View\VimMenuItemView
+
+    nsinfo:
+        class:              \PHPCD\NamespaceInfo
+        factory:            ['@phpcd_factory', 'createNamespaceInfo']
+        arguments:
+            - '%root%'
+
+    function_factory:
+        class: \PHPCD\FunctionInfo\FunctionInfoFactory
+
+    function_repository:
+        class: \PHPCD\FunctionInfo\RuntimeFunctionRepository
+        arguments:
+            - '@default_pattern_matcher'
+            - '@function_factory'
+
+    type.legacy:
+        class:      \PHPCD\DocBlock\LegacyTypeLogic
+        arguments:
+            - '@default_logger'
+            - '@file_info_factory'
+
+    handler.phpcd:
+        class:              \PHPCD\PHPCD
+        arguments:
+            - '@nsinfo'
+            - '@default_logger'
+            - '@repository.constant'
+            - '@repository.constant.class'
+            - '@property_info_repository'
+            - '@method_info_repository'
+            - '@file_info_factory'
+            - '@view'
+            - '@function_repository'
+            - '@type.legacy'
+
+    server.phpcd:
+        class:              Lvht\MsgpackRpc\ForkServer
+        arguments:          [ '@messenger', '@handler.phpcd' ]
+
+    classes_repository:
+        class:              \PHPCD\ClassInfo\ComposerClassmapFileRepository
+        arguments:          ['%class_loader%', '@default_pattern_matcher', '@class_info_factory', '@file_info_factory', '@default_logger']
+
+    handler.phpid:
+        class:              \PHPCD\PHPID
+        arguments:          ['%root%', '@default_logger', '@classes_repository']
+        # calls:
+        #     - [ index ]
+
+    server.phpid:
+        class:              Lvht\MsgpackRpc\ForkServer
+        arguments:          [ '@messenger', '@handler.phpid' ]

@@ -27,8 +27,7 @@ $factory = new \PHPCD\Factory();
 
 $configdir = __DIR__.'/../config/';
 $handler_name = strtolower($handler_name);
-$configfile =  $handler_name.'.yml';
-$dIContainer = $factory->createDIContainer($configfile, $configdir, $parameters);
+$dIContainer = $factory->createDIContainer('services.yml', $configdir, $parameters);
 
 $logger = $dIContainer->get('default_logger');
 
