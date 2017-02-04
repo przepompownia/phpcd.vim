@@ -269,8 +269,8 @@ class PHPCD implements RpcHandler
             }
 
             $methodFilter = new MethodFilter([
-                MethodFilter::className => $className,
-                MethodFilter::publicOnly => $publicOnly,
+                MethodFilter::CLASS_NAME => $className,
+                MethodFilter::PUBLIC_ONLY => $publicOnly,
                 MethodFilter::STATIC_ONLY => $isStstic,
             ], $pattern);
 
@@ -281,8 +281,8 @@ class PHPCD implements RpcHandler
             }
 
             $propertyFilter = new PropertyFilter([
-                PropertyFilter::className => $className,
-                PropertyFilter::publicOnly => $publicOnly,
+                PropertyFilter::CLASS_NAME => $className,
+                PropertyFilter::PUBLIC_ONLY => $publicOnly,
                 PropertyFilter::STATIC_ONLY => $isStstic,
             ], $pattern);
 
