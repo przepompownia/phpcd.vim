@@ -2,7 +2,7 @@
 
 namespace PHPCD\ObjectElementInfo;
 
-use PHPCD\Collection;
+use PHPCD\Collection\Collection;
 
 /**
  * @method PropertyInfo[] getIterator()

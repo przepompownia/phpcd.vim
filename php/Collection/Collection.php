@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD;
+namespace PHPCD\Collection;
 
 use ArrayObject;
 use IteratorAggregate;

@@ -2,7 +2,7 @@
 
 namespace PHPCD\FunctionInfo;
 
-use PHPCD\Collection;
+use PHPCD\Collection\Collection;
 
 /**
  * @method FunctionInfo[] getIterator()

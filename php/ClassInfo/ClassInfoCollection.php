@@ -2,7 +2,7 @@
 
 namespace PHPCD\ClassInfo;
 
-use PHPCD\Collection;
+use PHPCD\Collection\Collection;
 
 /**
  * @method ClassInfo[] getIterator()

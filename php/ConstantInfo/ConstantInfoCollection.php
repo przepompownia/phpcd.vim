@@ -2,7 +2,7 @@
 
 namespace PHPCD\ConstantInfo;
 
-use PHPCD\Collection;
+use PHPCD\Collection\Collection;
 
 /**
  * @method ConstantInfo[] getIterator()
