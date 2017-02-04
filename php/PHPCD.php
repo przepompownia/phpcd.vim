@@ -117,7 +117,7 @@ class PHPCD implements RpcHandler
      * @param string $className  class name
      * @param string $methodName method or function name
      *
-     * @return [path, line]
+     * @return array
      */
     public function findSymbolDeclaration($className, $methodName = '__construct')
     {
@@ -151,7 +151,7 @@ class PHPCD implements RpcHandler
         }
     }
 
-    private function getPropertyDefLine($classReflection, $property)
+    private function getPropertyDefLine(\ReflectionClass $classReflection, $property)
     {
         $class = new \SplFileObject($classReflection->getFileName());
         $class->seek($classReflection->getStartLine());
@@ -238,9 +238,9 @@ class PHPCD implements RpcHandler
     }
 
     /**
-     * Fetch class attribute's type by @var annotation.
+     * Fetch class attribute's type by `@var` annotation.
      *
-     * @return [type1, type2, ...]
+     * @return array array of types
      */
     public function getTypesOfProperty($className, $propertyName)
     {
@@ -329,8 +329,8 @@ class PHPCD implements RpcHandler
     /**
      * generate psr4 namespace according composer.json and file path.
      */
-    public function psr4ns($path)
+    public function psr4ns($filePath)
     {
-        return $this->nsinfo->getByPath($path);
+        return $this->nsinfo->getByPath($filePath);
     }
 }

@@ -2,13 +2,13 @@
 
 namespace PHPCD;
 
-use Psr\Log\LoggerInterface as Logger;
-use Psr\Log\LoggerAwareTrait;
-use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
-use PHPCD\Filter\ClassFilter;
-use PHPCD\ClassInfo\ClassInfoRepository;
+use Lvht\MsgpackRpc\Server as RpcServer;
 use PHPCD\ClassInfo\ClassInfoCollection;
+use PHPCD\ClassInfo\ClassInfoRepository;
+use PHPCD\Filter\ClassFilter;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface as Logger;
 
 class PHPID implements RpcHandler
 {
@@ -21,19 +21,21 @@ class PHPID implements RpcHandler
 
     private $root;
 
+    private $classMap;
+
     /**
      * @var ClassInfoRepository
      */
-    private $classes_repository;
+    private $classesRepository;
 
     public function __construct(
         $root,
         Logger $logger,
-        ClassInfoRepository $classes_repository
+        ClassInfoRepository $classesRepository
     ) {
         $this->setRoot($root);
         $this->setLogger($logger);
-        $this->setClassInfoRepository($classes_repository);
+        $this->setClassInfoRepository($classesRepository);
     }
 
     /**
@@ -54,46 +56,43 @@ class PHPID implements RpcHandler
         $this->server = $server;
     }
 
-    protected function setClassInfoRepository(ClassInfoRepository $classes_repository)
+    protected function setClassInfoRepository(ClassInfoRepository $classesRepository)
     {
-        $this->classes_repository = $classes_repository;
+        $this->classesRepository = $classesRepository;
         return $this;
     }
 
     /**
      * update index for one class
      *
-     * @param string $class_name fqdn
+     * @param string $className fqdn
      */
-    public function update($class_name)
+    public function update($className)
     {
-        list($parent, $interfaces) = $this->getClassInfo($class_name);
+        list($parent, $interfaces) = $this->getClassInfo($className);
 
         if ($parent) {
-            $this->updateParentIndex($parent, $class_name);
+            $this->updateParentIndex($parent, $className);
         }
         foreach ($interfaces as $interface) {
-            $this->updateInterfaceIndex($interface, $class_name);
+            $this->updateInterfaceIndex($interface, $className);
         }
     }
 
     /**
-     * Fetch an interface's implemation list,
+     * Fetch an interface's implementation list,
      * or an abstract class's child class.
      *
      * @param string $name name of interface or abstract class
-     * @param bool $is_abstract_class
+     * @param bool $isAbstractClass
      *
-     * @return [
-     *   'full class name 1',
-     *   'full class name 2',
-     * ]
+     * @return array array of FQCNs
      */
-    public function ls($name, $is_abstract_class = false)
+    public function ls($name, $isAbstractClass = false)
     {
-        $base_path = $is_abstract_class ? $this->getIntefacesDir()
+        $basePath = $isAbstractClass ? $this->getIntefacesDir()
             : $this->getExtendsDir();
-        $path = $base_path . '/' . $this->getIndexFileName($name);
+        $path = $basePath . '/' . $this->getIndexFileName($name);
         if (!is_file($path)) {
             return [];
         }
@@ -111,8 +110,6 @@ class PHPID implements RpcHandler
     /**
      * Fetch and save class's interface and parent info
      * according the autoload_classmap.php file
-     *
-     * @param bool $is_force overwrite the exists index
      */
     public function index()
     {
@@ -120,30 +117,30 @@ class PHPID implements RpcHandler
 
         exec('composer dump-autoload -o -d ' . $this->root . ' 2>&1 >/dev/null');
 
-        $this->class_map = require $this->root
+        $this->classMap = require $this->root
             . '/vendor/composer/autoload_classmap.php';
 
-        $pipe_path = sys_get_temp_dir() . '/' . uniqid();
-        posix_mkfifo($pipe_path, 0600);
+        $pipePath = sys_get_temp_dir() . '/' . uniqid();
+        posix_mkfifo($pipePath, 0600);
 
-        $this->vimOpenProgressBar(count($this->class_map));
+        $this->vimOpenProgressBar(count($this->classMap));
 
-        while ($this->class_map) {
+        while ($this->classMap) {
             $pid = pcntl_fork();
 
             if ($pid == -1) {
                 die('could not fork');
             } elseif ($pid > 0) {
                 // 父进程
-                $pipe = fopen($pipe_path, 'r');
+                $pipe = fopen($pipePath, 'r');
                 $data = fgets($pipe);
-                $this->class_map = json_decode(trim($data), true);
+                $this->classMap = json_decode(trim($data), true);
                 pcntl_waitpid($pid, $status);
             } else {
                 // 子进程
-                $pipe = fopen($pipe_path, 'w');
+                $pipe = fopen($pipePath, 'w');
                 register_shutdown_function(function () use ($pipe) {
-                    $data = json_encode($this->class_map, true);
+                    $data = json_encode($this->classMap, true);
                     fwrite($pipe, "$data\n");
                     fclose($pipe);
                 });
@@ -153,8 +150,12 @@ class PHPID implements RpcHandler
                 exit;
             }
         }
-        fclose($pipe);
-        unlink($pipe_path);
+
+        if (isset($pipe) && is_resource($pipe)) {
+            fclose($pipe);
+        }
+
+        unlink($pipePath);
         $this->vimCloseProgressBar();
     }
 
@@ -175,56 +176,56 @@ class PHPID implements RpcHandler
 
     private function initIndexDir()
     {
-        $extends_dir = $this->getExtendsDir();
-        if (!is_dir($extends_dir)) {
-            mkdir($extends_dir, 0700, true);
+        $extendsDir = $this->getExtendsDir();
+        if (!is_dir($extendsDir)) {
+            mkdir($extendsDir, 0700, true);
         }
 
-        $interfaces_dir = $this->getIntefacesDir();
-        if (!is_dir($interfaces_dir)) {
-            mkdir($interfaces_dir, 0700, true);
+        $interfacesDir = $this->getIntefacesDir();
+        if (!is_dir($interfacesDir)) {
+            mkdir($interfacesDir, 0700, true);
         }
     }
 
     private function _index()
     {
-        foreach ($this->class_map as $class_name => $file_path) {
-            unset($this->class_map[$class_name]);
+        foreach ($this->classMap as $className => $filePath) {
+            unset($this->classMap[$className]);
             $this->vimUpdateProgressBar();
-            require $file_path;
-            $this->update($class_name);
+            require $filePath;
+            $this->update($className);
         }
     }
 
     private function updateParentIndex($parent, $child)
     {
-        $index_file = $this->getExtendsDir() . '/' . $this->getIndexFileName($parent);
-        $this->saveChild($index_file, $child);
+        $indexFile = $this->getExtendsDir() . '/' . $this->getIndexFileName($parent);
+        $this->saveChild($indexFile, $child);
     }
 
     private function updateInterfaceIndex($interface, $implementation)
     {
-        $index_file = $this->getIntefacesDir() . '/' . $this->getIndexFileName($interface);
-        $this->saveChild($index_file, $implementation);
+        $indexFile = $this->getIntefacesDir() . '/' . $this->getIndexFileName($interface);
+        $this->saveChild($indexFile, $implementation);
     }
 
-    private function saveChild($index_file, $child)
+    private function saveChild($indexFile, $child)
     {
-        $index_directory = dirname($index_file);
+        $indexDirectory = dirname($indexFile);
 
-        if (!is_dir($index_directory)) {
-            mkdir($index_directory, 0755, true);
+        if (!is_dir($indexDirectory)) {
+            mkdir($indexDirectory, 0755, true);
         }
 
-        if (is_file($index_file)) {
-            $childs = json_decode(file_get_contents($index_file));
+        if (is_file($indexFile)) {
+            $childs = json_decode(file_get_contents($indexFile));
         } else {
             $childs = [];
         }
 
         $childs[] = $child;
         $childs = array_unique($childs);
-        file_put_contents($index_file, json_encode($childs));
+        file_put_contents($indexFile, json_encode($childs));
     }
 
     private function getIndexFileName($name)
@@ -266,73 +267,73 @@ class PHPID implements RpcHandler
         $this->server->call('vim_command', ['call g:pb.restore()']);
     }
 
-    public function getAbsoluteClassesPaths($path_pattern)
+    public function getAbsoluteClassesPaths($pathPattern)
     {
-        $filter = new ClassFilter([], $path_pattern);
+        $filter = new ClassFilter([], $pathPattern);
 
-        $collection = $this->classes_repository->find($filter);
+        $collection = $this->classesRepository->find($filter);
 
         return $this->prepareOutputFromClassInfoCollection($collection, false);
     }
 
-    public function getInterfaces($path_pattern)
+    public function getInterfaces($pathPattern)
     {
-        $filter = new ClassFilter([ClassFilter::IS_INTERFACE => true], $path_pattern);
+        $filter = new ClassFilter([ClassFilter::IS_INTERFACE => true], $pathPattern);
 
-        $collection = $this->classes_repository->find($filter);
+        $collection = $this->classesRepository->find($filter);
 
         return $this->prepareOutputFromClassInfoCollection($collection, true);
     }
 
-    public function getPotentialSuperclasses($path_pattern)
+    public function getPotentialSuperclasses($pathPattern)
     {
         $filter = new ClassFilter([
             ClassFilter::IS_FINAL => false,
             ClassFilter::IS_TRAIT => false,
             ClassFilter::IS_INTERFACE => false
-        ], $path_pattern);
+        ], $pathPattern);
 
-        $collection = $this->classes_repository->find($filter);
-
-        return $this->prepareOutputFromClassInfoCollection($collection, true);
-    }
-
-    public function getInstantiableClasses($path_pattern)
-    {
-        $filter = new ClassFilter([ClassFilter::IS_INSTANTIABLE => true], $path_pattern);
-
-        $collection = $this->classes_repository->find($filter);
+        $collection = $this->classesRepository->find($filter);
 
         return $this->prepareOutputFromClassInfoCollection($collection, true);
     }
 
-    public function getNamesToTypeDeclaration($path_pattern)
+    public function getInstantiableClasses($pathPattern)
     {
-        // @TODO add basic type here, not in repository
-        $filter = new ClassFilter([ClassFilter::IS_TRAIT => false], $path_pattern);
+        $filter = new ClassFilter([ClassFilter::IS_INSTANTIABLE => true], $pathPattern);
 
-        $collection = $this->classes_repository->find($filter);
+        $collection = $this->classesRepository->find($filter);
+
+        return $this->prepareOutputFromClassInfoCollection($collection, true);
+    }
+
+    public function getNamesToTypeDeclaration($pathPattern)
+    {
+        // @TODO add basic types
+        $filter = new ClassFilter([ClassFilter::IS_TRAIT => false], $pathPattern);
+
+        $collection = $this->classesRepository->find($filter);
 
         return $this->prepareOutputFromClassInfoCollection($collection, true);
     }
 
     /**
      * Prepare single element of completion output
-     * @param ClassInfo $class_info
-     * @param bool $leading_backslash prepend class path with backslash
+     * @param ClassInfoCollection $collection
+     * @param bool $leadingBackslash prepend class path with backslash
      * @return array
      */
     private function prepareOutputFromClassInfoCollection(
         ClassInfoCollection $collection,
-        $leading_backslash = true
+        $leadingBackslash = true
     ) {
         $result = [];
 
-        foreach ($collection as $class_info) {
+        foreach ($collection as $classInfo) {
             $result[] = [
-                'full_name' => ($leading_backslash ? '\\' : '') . $class_info->getName(),
-                'short_name' => $class_info->getShortName(),
-                'doc_comment' => $class_info->getDocComment()
+                'full_name' => ($leadingBackslash ? '\\' : '') . $classInfo->getName(),
+                'short_name' => $classInfo->getShortName(),
+                'doc_comment' => $classInfo->getDocComment()
             ];
         }
 
@@ -342,7 +343,7 @@ class PHPID implements RpcHandler
     public function locateClassDeclaration($className)
     {
         try {
-            $class = $this->classes_repository->get($className);
+            $class = $this->classesRepository->get($className);
 
             return [$class->getFileName(), $class->getStartLine()];
         } catch (\Exception $e) {
