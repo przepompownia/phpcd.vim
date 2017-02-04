@@ -260,7 +260,7 @@ class PHPCD implements RpcHandler
             $items = [];
 
             if (false !== $isStstic) {
-                $constantFilter = new ClassConstantFilter([ClassConstantFilter::className => $className], $pattern);
+                $constantFilter = new ClassConstantFilter([ClassConstantFilter::CLASS_NAME => $className], $pattern);
                 $constants = $this->classConstantRepository->find($constantFilter);
 
                 foreach ($constants as $constant) {
