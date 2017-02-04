@@ -4,6 +4,9 @@ namespace PHPCD\ConstantInfo;
 
 use PHPCD\Collection;
 
+/**
+ * @method ConstantInfo[] getIterator()
+ */
 class ConstantInfoCollection extends Collection
 {
     /**

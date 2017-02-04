@@ -4,6 +4,9 @@ namespace PHPCD\ObjectElementInfo;
 
 use PHPCD\Collection;
 
+/**
+ * @method PropertyInfo[] getIterator()
+ */
 class PropertyInfoCollection extends Collection
 {
     /**

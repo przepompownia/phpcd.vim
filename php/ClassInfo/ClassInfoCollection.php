@@ -4,6 +4,9 @@ namespace PHPCD\ClassInfo;
 
 use PHPCD\Collection;
 
+/**
+ * @method ClassInfo[] getIterator()
+ */
 class ClassInfoCollection extends Collection
 {
     /**
