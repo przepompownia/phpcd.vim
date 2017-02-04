@@ -15,7 +15,7 @@ use PHPCD\PHPFileInfo\PHPFileInfo;
 class VimMenuItemView implements View
 {
     /**
-     *  @param array Map between modifier numbers and displayed symbols
+     *  @var array Map between modifier numbers and displayed symbols
      */
     private $modifier_symbols = [
        'final' => '!',
@@ -62,9 +62,9 @@ class VimMenuItemView implements View
     {
         $out = new VimMenuItem();
         $out->setWord($classInfo->getName());
-        $out->setAbbr();
-        $out->setKind();
-        $out->setInfo();
+        $out->setAbbr('');
+        $out->setKind('');
+        $out->setInfo('');
 
         return $out->render();
     }

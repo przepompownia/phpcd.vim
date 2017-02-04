@@ -120,7 +120,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     /**
      * Get ClassInfo based on class name.
      *
-     * @param string class path
+     * @param string $classpath
      *
      * @return ClassInfo
      */
