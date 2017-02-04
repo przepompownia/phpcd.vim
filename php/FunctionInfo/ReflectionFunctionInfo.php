@@ -33,4 +33,9 @@ class ReflectionFunctionInfo implements FunctionInfo
     {
         return $this->reflectionFunction->getFileName();
     }
+
+    public function getStartLine()
+    {
+        return $this->reflectionFunction->getStartLine();
+    }
 }

@@ -11,4 +11,6 @@ interface FunctionInfo
     public function getParameters();
 
     public function getFileName();
+
+    public function getStartLine();
 }
