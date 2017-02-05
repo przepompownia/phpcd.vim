@@ -4,7 +4,7 @@ namespace PHPCD\Element\ObjectElementInfo;
 
 use PHPCD\Filter\ObjectElementFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ClassInfoFactory;
 use PHPCD\DocBlock\DocBlock;
 
 abstract class ReflectionObjectElementInfoRepository

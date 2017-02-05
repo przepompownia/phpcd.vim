@@ -4,8 +4,8 @@ namespace PHPCD;
 
 use Lvht\MsgpackRpc\Handler as RpcHandler;
 use Lvht\MsgpackRpc\Server as RpcServer;
-use PHPCD\ClassInfo\ClassInfoCollection;
-use PHPCD\ClassInfo\ClassInfoRepository;
+use PHPCD\Element\ClassInfo\ClassInfoCollection;
+use PHPCD\Element\ClassInfo\ClassInfoRepository;
 use PHPCD\Filter\ClassFilter;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface as Logger;

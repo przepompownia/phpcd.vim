@@ -2,7 +2,7 @@
 
 namespace PHPCD\Element\ObjectElementInfo;
 
-use PHPCD\ClassInfo\ClassInfo;
+use PHPCD\Element\ClassInfo\ClassInfo;
 
 interface ObjectElementInfo
 {

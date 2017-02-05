@@ -4,11 +4,11 @@ namespace tests\ObjectElementInfo;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\Element\ObjectElementInfo\PropertyPath;
-use PHPCD\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ClassInfoFactory;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Filter\PropertyFilter;
 use PHPCD\Element\ObjectElementInfo\ReflectionPropertyInfoRepository;
-use PHPCD\ClassInfo\ClassInfo;
+use PHPCD\Element\ClassInfo\ClassInfo;
 use PHPCD\Element\ObjectElementInfo\PropertyInfo;
 use PHPCD\DocBlock\DocBlock;
 use Mockery;

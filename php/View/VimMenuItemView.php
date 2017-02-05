@@ -3,11 +3,11 @@
 namespace PHPCD\View;
 
 use PHPCD\Element\FunctionInfo\FunctionCollection;
-use PHPCD\ConstantInfo\ConstantInfoCollection;
-use PHPCD\ClassInfo\ClassInfo;
+use PHPCD\Element\ConstantInfo\ConstantInfoCollection;
+use PHPCD\Element\ClassInfo\ClassInfo;
 use PHPCD\Element\ObjectElementInfo\MethodInfo;
 use PHPCD\Element\ObjectElementInfo\PropertyInfo;
-use PHPCD\ConstantInfo\ConstantInfo;
+use PHPCD\Element\ConstantInfo\ConstantInfo;
 use PHPCD\Element\FunctionInfo\FunctionInfo;
 use PHPCD\Element\ObjectElementInfo\ObjectElementInfo;
 use PHPCD\PHPFileInfo\PHPFileInfo;

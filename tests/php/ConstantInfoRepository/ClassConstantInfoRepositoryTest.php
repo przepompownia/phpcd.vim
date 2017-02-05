@@ -4,9 +4,9 @@ namespace tests\ConstantInfo;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ClassInfoFactory;
 use PHPCD\Filter\ClassConstantFilter;
-use PHPCD\ConstantInfo\ReflectionClassConstantInfoRepository;
+use PHPCD\Element\ConstantInfo\ReflectionClassConstantInfoRepository;
 use Mockery;
 
 class ClassConstantInfoRepositoryTest extends MockeryTestCase

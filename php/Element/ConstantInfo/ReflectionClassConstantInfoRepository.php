@@ -1,10 +1,10 @@
 <?php
 
-namespace PHPCD\ConstantInfo;
+namespace PHPCD\Element\ConstantInfo;
 
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ClassInfoFactory;
 
 class ReflectionClassConstantInfoRepository implements ClassConstantInfoRepository
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace PHPCD\ClassInfo;
+namespace PHPCD\Element\ClassInfo;
 
 use PHPUnit\Framework\TestCase;
 use PHPCD\Filter\MethodFilter;
-use PHPCD\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ClassInfoFactory;
 use Mockery;
 
 class ClassInfoFactoryTest extends TestCase
@@ -12,7 +12,7 @@ class ClassInfoFactoryTest extends TestCase
     /**
      * @test
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage PHPCD\ClassInfo\ClassInfoFactory needs class name to find method.
+     * @expectedExceptionMessage PHPCD\Element\ClassInfo\ClassInfoFactory needs class name to find method.
      */
     public function findWithNoClass()
     {

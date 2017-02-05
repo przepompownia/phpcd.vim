@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\ConstantInfo;
+namespace PHPCD\Element\ConstantInfo;
 
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\PatternMatcher\PatternMatcher;

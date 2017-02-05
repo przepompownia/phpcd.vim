@@ -2,12 +2,12 @@
 
 namespace tests\ConstantInfoRepository;
 
-use PHPCD\ConstantInfo\ConstantInfoCollection;
+use PHPCD\Element\ConstantInfo\ConstantInfoCollection;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\ConstantInfo\RuntimeConstantInfoRepository;
+use PHPCD\Element\ConstantInfo\RuntimeConstantInfoRepository;
 use PHPCD\Filter\ConstantFilter;
-use PHPCD\ConstantInfo\ConstantInfoFactory;
+use PHPCD\Element\ConstantInfo\ConstantInfoFactory;
 use Mockery;
 
 class RuntimeConstantInfoRepositoryTest extends MockeryTestCase

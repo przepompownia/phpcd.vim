@@ -3,7 +3,7 @@
 namespace tests\ObjectElementInfo;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPCD\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ClassInfoFactory;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\Element\ObjectElementInfo\ReflectionMethodInfoRepository;

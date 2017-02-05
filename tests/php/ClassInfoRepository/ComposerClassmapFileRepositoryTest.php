@@ -7,10 +7,10 @@ use PHPCD\PatternMatcher\PatternMatcher;
 use Composer\Autoload\ClassLoader;
 use Psr\Log\LoggerInterface;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
-use PHPCD\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ClassInfoFactory;
 use PHPCD\Filter\ClassFilter;
-use PHPCD\ClassInfo\ComposerClassmapFileRepository;
-use PHPCD\ClassInfo\ClassInfoCollection;
+use PHPCD\Element\ClassInfo\ComposerClassmapFileRepository;
+use PHPCD\Element\ClassInfo\ClassInfoCollection;
 use PHPCD\PHPFileInfo\PHPFileInfo;
 use Mockery;
 

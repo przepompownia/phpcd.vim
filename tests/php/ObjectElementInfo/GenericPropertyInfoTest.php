@@ -5,7 +5,7 @@ namespace tests\ObjectElementInfo;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\Element\ObjectElementInfo\GenericPropertyInfo;
 use Mockery;
-use PHPCD\ClassInfo\ClassInfo;
+use PHPCD\Element\ClassInfo\ClassInfo;
 
 class GenericPropertyInfoTest extends MockeryTestCase
 {

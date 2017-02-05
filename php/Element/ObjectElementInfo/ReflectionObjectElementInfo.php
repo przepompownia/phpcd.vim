@@ -2,7 +2,7 @@
 
 namespace PHPCD\Element\ObjectElementInfo;
 
-use PHPCD\ClassInfo\ReflectionClass;
+use PHPCD\Element\ClassInfo\ReflectionClass;
 
 abstract class ReflectionObjectElementInfo implements ObjectElementInfo
 {

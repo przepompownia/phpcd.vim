@@ -2,7 +2,7 @@
 
 namespace PHPCD;
 
-use PHPCD\ConstantInfo\ConstantInfoRepository;
+use PHPCD\Element\ConstantInfo\ConstantInfoRepository;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\FunctionFilter;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
@@ -13,7 +13,7 @@ use Psr\Log\LoggerAwareTrait;
 use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
-use PHPCD\ConstantInfo\ClassConstantInfoRepository;
+use PHPCD\Element\ConstantInfo\ClassConstantInfoRepository;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\Filter\PropertyFilter;
