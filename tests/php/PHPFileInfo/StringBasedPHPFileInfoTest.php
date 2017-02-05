@@ -59,9 +59,9 @@ class StringBasedPHPFileInfoTest extends TestCase
             ],
             [
                 'Fixtures/ClassNamesAndAliases/Repositories/Category.php',
-                ['alias' => 'PHPUnit_Framework_TestCase', 'full_path' => '\PHPUnit_Framework_TestCase'],
+                ['alias' => 'TestCase', 'full_path' => '\PHPUnit\Framework\TestCase'],
                 [
-                    null => ['alias' => null, 'full_path' => 'PHPUnit_Framework_TestCase']
+                    null => ['alias' => null, 'full_path' => 'PHPUnit\Framework\TestCase']
                 ]
             ],
             [
