@@ -18,7 +18,7 @@ class ReflectionClass implements ClassInfo
 
     public function isAbstractClass()
     {
-        return $this->isAbstract() && $this->isInstantiable();
+        return $this->reflectionClass->isAbstract() && $this->isInstantiable();
     }
 
     public function matchesFilter(ClassFilter $classFilter)
