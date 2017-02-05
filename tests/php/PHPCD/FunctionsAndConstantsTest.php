@@ -3,8 +3,8 @@
 namespace tests\PHPCD;
 
 use PHPCD\View\VimMenuItemView;
-use PHPCD\FunctionInfo\ReflectionFunctionInfo;
-use PHPCD\FunctionInfo\FunctionCollection;
+use PHPCD\Element\FunctionInfo\ReflectionFunctionInfo;
+use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\ConstantInfo\ConstantInfoCollection;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\ObjectElementInfo\PropertyInfo;
@@ -22,7 +22,7 @@ use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\DocBlock\LegacyTypeLogic;
 use PHPCD\DocBlock\DocBlock;
-use PHPCD\FunctionInfo\FunctionRepository;
+use PHPCD\Element\FunctionInfo\FunctionRepository;
 
 class FunctionsAndConstantsTest extends MockeryTestCase
 {

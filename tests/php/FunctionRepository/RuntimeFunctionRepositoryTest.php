@@ -3,12 +3,12 @@
 namespace tests\FunctionRepository;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPCD\FunctionInfo\FunctionCollection;
+use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\Filter\FunctionFilter;
-use PHPCD\FunctionInfo\RuntimeFunctionRepository;
+use PHPCD\Element\FunctionInfo\RuntimeFunctionRepository;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\FunctionInfo\FunctionInfoFactory;
-use PHPCD\FunctionInfo\FunctionInfo;
+use PHPCD\Element\FunctionInfo\FunctionInfoFactory;
+use PHPCD\Element\FunctionInfo\FunctionInfo;
 use Mockery;
 
 class RuntimeFunctionRepositoryTest extends MockeryTestCase

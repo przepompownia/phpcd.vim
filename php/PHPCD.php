@@ -5,7 +5,7 @@ namespace PHPCD;
 use PHPCD\ConstantInfo\ConstantInfoRepository;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\FunctionFilter;
-use PHPCD\FunctionInfo\FunctionRepository;
+use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\ObjectElementInfo\MethodPath;
 use PHPCD\ObjectElementInfo\PropertyPath;
 use Psr\Log\LoggerInterface as Logger;

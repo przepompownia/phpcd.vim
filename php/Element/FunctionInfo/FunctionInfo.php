@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\FunctionInfo;
+namespace PHPCD\Element\FunctionInfo;
 
 interface FunctionInfo
 {

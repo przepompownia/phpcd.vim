@@ -18,7 +18,7 @@ use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\DocBlock\LegacyTypeLogic;
 use PHPCD\DocBlock\DocBlock;
-use PHPCD\FunctionInfo\FunctionRepository;
+use PHPCD\Element\FunctionInfo\FunctionRepository;
 
 class ProptypeTest extends MockeryTestCase
 {

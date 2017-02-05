@@ -17,7 +17,7 @@ use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\NamespaceInfo;
 use PHPCD\DocBlock\LegacyTypeLogic;
-use PHPCD\FunctionInfo\FunctionRepository;
+use PHPCD\Element\FunctionInfo\FunctionRepository;
 
 class FunctypeTest extends MockeryTestCase
 {

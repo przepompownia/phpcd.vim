@@ -1,11 +1,11 @@
 <?php
 
-namespace PHPCD\FunctionInfo;
+namespace PHPCD\Element\FunctionInfo;
 
 class FunctionInfoFactory
 {
     /**
-     * @return \ReflectionFunctionInfo
+     * @return ReflectionFunctionInfo
      */
     public function createFunctionInfo($functionName)
     {
