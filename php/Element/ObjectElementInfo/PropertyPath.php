@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\ObjectElementInfo;
+namespace PHPCD\Element\ObjectElementInfo;
 
 class PropertyPath extends ObjectElementPath
 {

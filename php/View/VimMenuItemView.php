@@ -5,11 +5,11 @@ namespace PHPCD\View;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\ConstantInfo\ConstantInfoCollection;
 use PHPCD\ClassInfo\ClassInfo;
-use PHPCD\ObjectElementInfo\MethodInfo;
-use PHPCD\ObjectElementInfo\PropertyInfo;
+use PHPCD\Element\ObjectElementInfo\MethodInfo;
+use PHPCD\Element\ObjectElementInfo\PropertyInfo;
 use PHPCD\ConstantInfo\ConstantInfo;
 use PHPCD\Element\FunctionInfo\FunctionInfo;
-use PHPCD\ObjectElementInfo\ObjectElementInfo;
+use PHPCD\Element\ObjectElementInfo\ObjectElementInfo;
 use PHPCD\PHPFileInfo\PHPFileInfo;
 
 class VimMenuItemView implements View

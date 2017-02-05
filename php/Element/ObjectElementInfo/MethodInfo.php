@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\ObjectElementInfo;
+namespace PHPCD\Element\ObjectElementInfo;
 
 interface MethodInfo extends ObjectElementInfo
 {

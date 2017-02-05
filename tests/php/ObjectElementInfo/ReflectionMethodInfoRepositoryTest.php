@@ -6,7 +6,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Filter\MethodFilter;
-use PHPCD\ObjectElementInfo\ReflectionMethodInfoRepository;
+use PHPCD\Element\ObjectElementInfo\ReflectionMethodInfoRepository;
 use PHPCD\DocBlock\DocBlock;
 use Mockery;
 

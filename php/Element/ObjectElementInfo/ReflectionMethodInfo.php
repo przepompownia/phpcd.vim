@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\ObjectElementInfo;
+namespace PHPCD\Element\ObjectElementInfo;
 
 class ReflectionMethodInfo extends ReflectionObjectElementInfo implements MethodInfo
 {

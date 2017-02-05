@@ -3,7 +3,7 @@
 namespace tests\PHPCD;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPCD\ObjectElementInfo\ReflectionMethodInfo;
+use PHPCD\Element\ObjectElementInfo\ReflectionMethodInfo;
 use PHPCD\PHPCD;
 use Mockery;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
@@ -11,8 +11,8 @@ use PHPCD\PHPFileInfo\PHPFileInfo;
 use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\ConstantInfo\ClassConstantInfoRepository;
 use PHPCD\ConstantInfo\ConstantInfoRepository;
-use PHPCD\ObjectElementInfo\MethodInfoRepository;
-use PHPCD\ObjectElementInfo\PropertyInfoRepository;
+use PHPCD\Element\ObjectElementInfo\MethodInfoRepository;
+use PHPCD\Element\ObjectElementInfo\PropertyInfoRepository;
 use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\NamespaceInfo;

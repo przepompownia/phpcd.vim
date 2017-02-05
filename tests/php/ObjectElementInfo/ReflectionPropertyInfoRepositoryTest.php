@@ -3,13 +3,13 @@
 namespace tests\ObjectElementInfo;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPCD\ObjectElementInfo\PropertyPath;
+use PHPCD\Element\ObjectElementInfo\PropertyPath;
 use PHPCD\ClassInfo\ClassInfoFactory;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Filter\PropertyFilter;
-use PHPCD\ObjectElementInfo\ReflectionPropertyInfoRepository;
+use PHPCD\Element\ObjectElementInfo\ReflectionPropertyInfoRepository;
 use PHPCD\ClassInfo\ClassInfo;
-use PHPCD\ObjectElementInfo\PropertyInfo;
+use PHPCD\Element\ObjectElementInfo\PropertyInfo;
 use PHPCD\DocBlock\DocBlock;
 use Mockery;
 

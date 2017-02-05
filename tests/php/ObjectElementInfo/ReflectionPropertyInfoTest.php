@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use phpDocumentor\Reflection\DocBlockFactory;
 use PHPCD\DocBlock\DocBlock;
 use tests\MethodInfoRepository\Test1;
-use PHPCD\ObjectElementInfo\ReflectionPropertyInfo;
+use PHPCD\Element\ObjectElementInfo\ReflectionPropertyInfo;
 
 class ReflectionPropertyInfoTest extends TestCase
 {

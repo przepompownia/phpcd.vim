@@ -3,7 +3,7 @@
 namespace tests\ObjectElementInfo;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPCD\ObjectElementInfo\GenericPropertyInfo;
+use PHPCD\Element\ObjectElementInfo\GenericPropertyInfo;
 use Mockery;
 use PHPCD\ClassInfo\ClassInfo;
 

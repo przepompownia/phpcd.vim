@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\ObjectElementInfo;
+namespace PHPCD\Element\ObjectElementInfo;
 
 use PHPCD\NotFoundException;
 use PHPCD\Filter\PropertyFilter;
