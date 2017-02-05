@@ -44,7 +44,7 @@ services:
         class:              \PHPCD\PHPFileInfo\PHPFileInfoFactory
 
     class_info_factory:
-        class:              \PHPCD\ClassInfo\ClassInfoFactory
+        class:              \PHPCD\Element\ClassInfo\ClassInfoFactory
 
     docblock_factory:
         class:              \phpDocumentor\Reflection\DocBlockFactory
@@ -56,25 +56,25 @@ services:
             - '@docblock_factory'
 
     repository.constant.factory:
-        class:              \PHPCD\ConstantInfo\ConstantInfoFactory
+        class:              \PHPCD\Element\ConstantInfo\ConstantInfoFactory
 
     repository.constant:
-        class:              \PHPCD\ConstantInfo\RuntimeConstantInfoRepository
+        class:              \PHPCD\Element\ConstantInfo\RuntimeConstantInfoRepository
         arguments:          ['@default_pattern_matcher', '@repository.constant.factory']
 
     repository.constant.class:
-        class:              \PHPCD\ConstantInfo\ReflectionClassConstantInfoRepository
+        class:              \PHPCD\Element\ConstantInfo\ReflectionClassConstantInfoRepository
         arguments:          ['@default_pattern_matcher', '@class_info_factory']
 
     method_info_repository:
-        class:              \PHPCD\ObjectElementInfo\ReflectionMethodInfoRepository
+        class:              \PHPCD\Element\ObjectElementInfo\ReflectionMethodInfoRepository
         arguments:
             - '@default_pattern_matcher'
             - '@class_info_factory'
             - '@docblock'
 
     property_info_repository:
-        class:              \PHPCD\ObjectElementInfo\ReflectionPropertyInfoRepository
+        class:              \PHPCD\Element\ObjectElementInfo\ReflectionPropertyInfoRepository
         arguments:
             - '@default_pattern_matcher'
             - '@class_info_factory'
@@ -90,10 +90,10 @@ services:
             - '%root%'
 
     function_factory:
-        class: \PHPCD\FunctionInfo\FunctionInfoFactory
+        class: \PHPCD\Element\FunctionInfo\FunctionInfoFactory
 
     function_repository:
-        class: \PHPCD\FunctionInfo\RuntimeFunctionRepository
+        class: \PHPCD\Element\FunctionInfo\RuntimeFunctionRepository
         arguments:
             - '@default_pattern_matcher'
             - '@function_factory'
@@ -123,7 +123,7 @@ services:
         arguments:          [ '@messenger', '@handler.phpcd' ]
 
     classes_repository:
-        class:              \PHPCD\ClassInfo\ComposerClassmapFileRepository
+        class:              \PHPCD\Element\ClassInfo\ComposerClassmapFileRepository
         arguments:          ['%class_loader%', '@default_pattern_matcher', '@class_info_factory', '@file_info_factory', '@default_logger']
 
     handler.phpid:
