@@ -12,5 +12,7 @@ interface FunctionInfo
 
     public function getFileName();
 
+    public function getReturnTypes();
+
     public function getStartLine();
 }

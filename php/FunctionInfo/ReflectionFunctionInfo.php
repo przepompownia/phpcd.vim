@@ -34,6 +34,25 @@ class ReflectionFunctionInfo implements FunctionInfo
         return $this->reflectionFunction->getFileName();
     }
 
+    public function getReturnTypes()
+    {
+        $type = $this->getPHPReturnType();
+        if (null !== $type) {
+            return [$type];
+        }
+    }
+
+    private function getPHPReturnType()
+    {
+        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+            $type = (string) $this->reflectionFunction->getReturnType();
+
+            if ('' !== $type) {
+                return $type;
+            }
+        }
+    }
+
     public function getStartLine()
     {
         return $this->reflectionFunction->getStartLine();
