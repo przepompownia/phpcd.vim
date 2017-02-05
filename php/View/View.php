@@ -23,7 +23,7 @@ interface View
 
     public function renderFunctionInfo(FunctionInfo $functionInfo);
 
-    public function renderFunctionInfoCollection(FunctionCollection $collection);
+    public function renderFunctionCollection(FunctionCollection $collection);
 
     public function renderPropertyInfo(PropertyInfo $propertyInfo);
 

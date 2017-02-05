@@ -108,7 +108,7 @@ class VimMenuItemView implements View
         return $out->render();
     }
 
-    public function renderFunctionInfoCollection(FunctionCollection $collection)
+    public function renderFunctionCollection(FunctionCollection $collection)
     {
         $result = [];
 

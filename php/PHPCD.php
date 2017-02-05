@@ -316,7 +316,7 @@ class PHPCD implements RpcHandler
     {
         $functions = $this->functionRepository->find(new FunctionFilter($pattern));
 
-        return $this->view->renderFunctionInfoCollection($functions);
+        return $this->view->renderFunctionCollection($functions);
     }
 
     private function findConstants($pattern)
