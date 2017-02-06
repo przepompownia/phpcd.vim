@@ -2,9 +2,10 @@
 
 namespace PHPCD\Element\ClassInfo;
 
+use PHPCD\Element\Element;
 use PHPCD\Filter\ClassFilter;
 
-interface ClassInfo
+interface ClassInfo extends Element
 {
     /**
      * @return bool

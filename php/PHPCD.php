@@ -276,9 +276,7 @@ class PHPCD implements RpcHandler
 
             $methods = $this->methodInfoRepository->find($methodFilter);
 
-            foreach ($methods as $method) {
-                $items[] = $this->view->renderMethodInfo($method);
-            }
+            $items = array_merge($items, $this->view->renderMethodCollection($methods));
 
             $propertyFilter = new PropertyFilter([
                 PropertyFilter::CLASS_NAME => $className,
@@ -288,9 +286,7 @@ class PHPCD implements RpcHandler
 
             $properties = $this->propertyInfoRepository->find($propertyFilter);
 
-            foreach ($properties as $property) {
-                $items[] = $this->view->renderPropertyInfo($property);
-            }
+            $items = array_merge($items, $this->view->renderPropertyCollection($properties));
 
             return $items;
         } catch (\ReflectionException $e) {

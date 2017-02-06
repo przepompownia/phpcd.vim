@@ -2,6 +2,7 @@
 
 namespace PHPCD\Element\ObjectElementInfo;
 
+use PHPCD\View\PropertyVisitor;
 use PHPCD\DocBlock\DocBlock;
 
 class ReflectionPropertyInfo extends ReflectionObjectElementInfo implements PropertyInfo
@@ -33,5 +34,10 @@ class ReflectionPropertyInfo extends ReflectionObjectElementInfo implements Prop
     public function getAllowedNonTrivialTypes()
     {
         return [];
+    }
+
+    public function accept(PropertyVisitor $visitor)
+    {
+        $visitor->visitElement($this);
     }
 }

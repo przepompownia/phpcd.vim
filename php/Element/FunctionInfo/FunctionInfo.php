@@ -2,6 +2,10 @@
 
 namespace PHPCD\Element\FunctionInfo;
 
+use PHPCD\Element\Element;
+use PHPCD\Element\CollectionVisitor;
+use PHPCD\View\FunctionInfoVisitor;
+
 interface FunctionInfo
 {
     public function getName();
@@ -15,4 +19,6 @@ interface FunctionInfo
     public function getReturnTypes();
 
     public function getStartLine();
+
+    public function accept(FunctionInfoVisitor $visitor);
 }

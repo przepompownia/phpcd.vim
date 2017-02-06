@@ -2,6 +2,10 @@
 
 namespace PHPCD\Element\FunctionInfo;
 
+use PHPCD\Element\AbstractElement;
+use PHPCD\Element\CollectionVisitor;
+use PHPCD\View\FunctionInfoVisitor;
+
 class ReflectionFunctionInfo implements FunctionInfo
 {
     /**
@@ -40,6 +44,7 @@ class ReflectionFunctionInfo implements FunctionInfo
         if (null !== $type) {
             return [$type];
         }
+        // @TODO get types from docblock
     }
 
     private function getPHPReturnType()
@@ -56,5 +61,10 @@ class ReflectionFunctionInfo implements FunctionInfo
     public function getStartLine()
     {
         return $this->reflectionFunction->getStartLine();
+    }
+
+    public function accept(FunctionInfoVisitor $visitor)
+    {
+        $visitor->visitElement($this);
     }
 }

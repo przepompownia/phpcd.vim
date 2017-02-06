@@ -2,9 +2,10 @@
 
 namespace PHPCD\Element\ClassInfo;
 
+use PHPCD\Element\AbstractElement;
 use PHPCD\Filter\ClassFilter;
 
-class ReflectionClass implements ClassInfo
+class ReflectionClass extends AbstractElement implements ClassInfo
 {
     /**
      * @var \ReflectionClass

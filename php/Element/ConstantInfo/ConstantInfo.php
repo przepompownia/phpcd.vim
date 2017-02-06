@@ -2,6 +2,8 @@
 
 namespace PHPCD\Element\ConstantInfo;
 
+use PHPCD\View\ConstantInfoVisitor;
+
 class ConstantInfo
 {
     private $name;
@@ -22,5 +24,10 @@ class ConstantInfo
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function accept(ConstantInfoVisitor $visitor)
+    {
+        $visitor->visitElement($this);
     }
 }

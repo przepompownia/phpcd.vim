@@ -4,6 +4,7 @@ namespace PHPCD\Collection;
 
 use ArrayObject;
 use IteratorAggregate;
+use PHPCD\Element\CollectionVisitor;
 
 abstract class Collection implements IteratorAggregate
 {
@@ -17,5 +18,12 @@ abstract class Collection implements IteratorAggregate
     public function isEmpty()
     {
         return empty($this->collection);
+    }
+
+    public function accept(CollectionVisitor $visitor)
+    {
+        foreach ($this->collection as $item) {
+            $item->accept($visitor);
+        }
     }
 }
