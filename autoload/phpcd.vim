@@ -414,6 +414,10 @@ function! phpcd#GetCurrentSymbolWithContext() " {{{
 	let context = substitute(context, '\s*[$a-zA-Z_0-9\\\x7f-\xff]*$', '', '')
 	let context = substitute(context, '\s\+\([\-:]\)', '\1', '')
 
+	if 'use' == context && '\\' != word[0]
+		let word = '\'.word
+	endif
+
 	let [current_namespace, current_imports] = phpcd#GetCurrentNameSpace()
 	if word != ''
 		let [symbol, symbol_namespace] = phpcd#ExpandClassName(word, current_namespace, current_imports)
@@ -1349,7 +1353,6 @@ function! phpcd#GetCurrentFunctionBoundaries() " {{{
 		let func_end_pos = [line('$'), len(getline(line('$')))]
 	endif
 
-	" Decho func_start_pos[0].' <= '.current_line_no.' && '.current_line_no.' <= '.func_end_pos[0]
 	if func_start_pos[0] <= current_line_no && current_line_no <= func_end_pos[0]
 		call cursor(old_cursor_pos[0], old_cursor_pos[1])
 		return [func_start_pos, func_end_pos]
