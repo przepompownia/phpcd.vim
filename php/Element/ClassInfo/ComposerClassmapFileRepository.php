@@ -126,6 +126,8 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
      */
     public function get($classpath)
     {
+        $classpath = ltrim($classpath, '\\');
+
         if ($this->isValid($classpath)) {
             return $this->classInfoFactory->createClassInfo($classpath);
         }
