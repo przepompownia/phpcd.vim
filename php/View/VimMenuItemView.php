@@ -2,6 +2,8 @@
 
 namespace PHPCD\View;
 
+use PHPCD\View\VimMenuRenderAbstractVisitor;
+use PHPCD\Collection\Collection;
 use PHPCD\Element\ObjectElementInfo\PropertyInfoCollection;
 use PHPCD\Element\ObjectElementInfo\MethodInfoCollection;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
@@ -18,8 +20,8 @@ class VimMenuItemView implements View
     public function renderConstantInfoCollection(ConstantInfoCollection $collection)
     {
         $visitor = new VimMenuRenderConstantVisitor();
-        $collection->accept($visitor);
-        return $visitor->getOutput();
+
+        return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
     public function renderClassInfo(ClassInfo $classInfo)
@@ -36,22 +38,22 @@ class VimMenuItemView implements View
     public function renderMethodCollection(MethodInfoCollection $collection)
     {
         $visitor = new VimMenuRenderMethodVisitor();
-        $collection->accept($visitor);
-        return $visitor->getOutput();
+
+        return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
     public function renderFunctionCollection(FunctionCollection $collection)
     {
         $visitor = new VimMenuRenderFunctionVisitor();
-        $collection->accept($visitor);
-        return $visitor->getOutput();
+
+        return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
     public function renderPropertyCollection(PropertyInfoCollection $collection)
     {
         $visitor = new VimMenuRenderPropertyVisitor();
-        $collection->accept($visitor);
-        return $visitor->getOutput();
+
+        return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
     public function renderPHPFileInfo(PHPFileInfo $fileInfo)
@@ -61,5 +63,12 @@ class VimMenuItemView implements View
             'class' => $fileInfo->getClassName(),
             'imports' => $fileInfo->getImports(),
         ];
+    }
+
+    private function renderCollectionWithVisitor(Collection $collection, VimMenuRenderAbstractVisitor $visitor)
+    {
+        $collection->accept($visitor);
+
+        return $visitor->getOutput();
     }
 }
