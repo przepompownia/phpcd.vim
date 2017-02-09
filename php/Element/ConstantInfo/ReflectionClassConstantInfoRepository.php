@@ -28,6 +28,10 @@ class ReflectionClassConstantInfoRepository implements ClassConstantInfoReposito
         $this->classInfoFactory = $factory;
     }
 
+    /**
+     * @param ClassConstantFilter $filter
+     * @return ClassConstantInfoCollection
+     */
     public function find(ClassConstantFilter $filter)
     {
         $classInfo = $this->classInfoFactory->createFromFilter($filter);

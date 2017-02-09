@@ -2,10 +2,10 @@
 
 namespace PHPCD\Element\ClassInfo;
 
-use PHPCD\Element\Element;
 use PHPCD\Filter\ClassFilter;
+use PHPCD\View\ClassVisitor;
 
-interface ClassInfo extends Element
+interface ClassInfo
 {
     /**
      * @return bool
@@ -61,4 +61,6 @@ interface ClassInfo extends Element
      * @return int
      */
     public function getStartLine();
+
+    public function accept(ClassVisitor $visitor);
 }

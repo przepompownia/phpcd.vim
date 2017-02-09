@@ -2,10 +2,10 @@
 
 namespace PHPCD\Element\ClassInfo;
 
-use PHPCD\Element\AbstractElement;
 use PHPCD\Filter\ClassFilter;
+use PHPCD\View\ClassVisitor;
 
-class ReflectionClass extends AbstractElement implements ClassInfo
+class ReflectionClass implements ClassInfo
 {
     /**
      * @var \ReflectionClass
@@ -122,5 +122,10 @@ class ReflectionClass extends AbstractElement implements ClassInfo
     public function getProperties()
     {
         return $this->reflectionClass->getProperties();
+    }
+
+    public function accept(ClassVisitor $visitor)
+    {
+        $visitor->visitElement($this);
     }
 }

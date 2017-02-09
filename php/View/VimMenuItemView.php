@@ -3,11 +3,12 @@
 namespace PHPCD\View;
 
 use PHPCD\Collection\Collection;
-use PHPCD\Element\ObjectElementInfo\PropertyInfoCollection;
-use PHPCD\Element\ObjectElementInfo\MethodInfoCollection;
-use PHPCD\Element\FunctionInfo\FunctionCollection;
+use PHPCD\Element\ClassInfo\ClassInfoCollection;
+use PHPCD\Element\ConstantInfo\ClassConstantInfoCollection;
 use PHPCD\Element\ConstantInfo\ConstantInfoCollection;
-use PHPCD\Element\ClassInfo\ClassInfo;
+use PHPCD\Element\FunctionInfo\FunctionCollection;
+use PHPCD\Element\ObjectElementInfo\MethodInfoCollection;
+use PHPCD\Element\ObjectElementInfo\PropertyInfoCollection;
 use PHPCD\PHPFileInfo\PHPFileInfo;
 
 class VimMenuItemView implements View
@@ -19,15 +20,18 @@ class VimMenuItemView implements View
         return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
-    public function renderClassInfo(ClassInfo $classInfo)
+    public function renderClassConstantCollection(ClassConstantInfoCollection $collection)
     {
-        $out = new VimMenuItem();
-        $out->setWord($classInfo->getName());
-        $out->setAbbr('');
-        $out->setKind('');
-        $out->setInfo('');
+        $visitor = new VimMenuRenderClassConstantVisitor();
 
-        return $out->render();
+        return $this->renderCollectionWithVisitor($collection, $visitor);
+    }
+
+    public function renderClassInfoCollection(ClassInfoCollection $collection)
+    {
+        $visitor = new VimMenuRenderClassVisitor();
+
+        return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
     public function renderMethodCollection(MethodInfoCollection $collection)

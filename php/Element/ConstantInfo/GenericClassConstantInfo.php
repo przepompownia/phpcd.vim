@@ -3,6 +3,7 @@
 namespace PHPCD\Element\ConstantInfo;
 
 use PHPCD\Element\ClassInfo\ClassInfo;
+use PHPCD\View\ClassConstantVisitor;
 
 class GenericClassConstantInfo extends AbstractConstantInfo implements ClassConstantInfo
 {
@@ -21,5 +22,10 @@ class GenericClassConstantInfo extends AbstractConstantInfo implements ClassCons
     public function getClass()
     {
         return $this->class;
+    }
+
+    public function accept(ClassConstantVisitor $visitor)
+    {
+        $visitor->visitElement($this);
     }
 }

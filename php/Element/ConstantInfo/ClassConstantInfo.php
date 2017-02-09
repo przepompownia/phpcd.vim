@@ -2,6 +2,8 @@
 
 namespace PHPCD\Element\ConstantInfo;
 
+use PHPCD\View\ClassConstantVisitor;
+
 interface ClassConstantInfo
 {
     public function getName();
@@ -9,4 +11,6 @@ interface ClassConstantInfo
     public function getValue();
 
     public function getClass();
+
+    public function accept(ClassConstantVisitor $visitor);
 }
