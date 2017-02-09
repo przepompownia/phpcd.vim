@@ -2,16 +2,16 @@
 
 namespace tests\ObjectElementInfo;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPCD\Element\ObjectElementInfo\PropertyPath;
-use PHPCD\Element\ClassInfo\ClassInfoFactory;
-use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\Filter\PropertyFilter;
-use PHPCD\Element\ObjectElementInfo\ReflectionPropertyInfoRepository;
-use PHPCD\Element\ClassInfo\ClassInfo;
-use PHPCD\Element\ObjectElementInfo\PropertyInfo;
-use PHPCD\DocBlock\DocBlock;
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPCD\DocBlock\DocBlock;
+use PHPCD\Element\ClassInfo\ReflectionClass;
+use PHPCD\Element\ClassInfo\ReflectionClassInfoFactory;
+use PHPCD\Element\ObjectElementInfo\PropertyInfo;
+use PHPCD\Element\ObjectElementInfo\PropertyPath;
+use PHPCD\Element\ObjectElementInfo\ReflectionPropertyInfoRepository;
+use PHPCD\Filter\PropertyFilter;
+use PHPCD\PatternMatcher\PatternMatcher;
 
 class ReflectionPropertyInfoRepositoryTest extends MockeryTestCase
 {
@@ -37,15 +37,16 @@ class ReflectionPropertyInfoRepositoryTest extends MockeryTestCase
 
     private function getRepositoryWithTrivialMatcher($className)
     {
-        $pattern_matcher = Mockery::mock(PatternMatcher::class);
-        $pattern_matcher->shouldReceive('match')->andReturn(true);
-        $factory = Mockery::mock(ClassInfoFactory::class);
-        $factory->shouldReceive('createReflectionClassFromFilter')->once()->andReturn(new \ReflectionClass($className))->byDefault();
-        $classInfo = Mockery::mock(ClassInfo::class);
+        $patternMatcher = Mockery::mock(PatternMatcher::class);
+        $patternMatcher->shouldReceive('match')->andReturn(true);
+        $factory = Mockery::mock(ReflectionClassInfoFactory::class);
+        $factory->shouldReceive('createFromFilter')->once()
+            ->andReturn(new ReflectionClass(new \ReflectionClass($className)))->byDefault();
+        $classInfo = Mockery::mock(ReflectionClass::class);
         $factory->shouldReceive('createClassInfo')->andReturn($classInfo);
         $docBlock = Mockery::mock(DocBlock::class);
 
-        return new ReflectionPropertyInfoRepository($pattern_matcher, $factory, $docBlock);
+        return new ReflectionPropertyInfoRepository($patternMatcher, $factory, $docBlock);
     }
 
     /**
@@ -67,13 +68,12 @@ class ReflectionPropertyInfoRepositoryTest extends MockeryTestCase
 
     /**
      * @test
-     * @expectedException PHPCD\NotFoundException
+     * @expectedException \PHPCD\NotFoundException
      */
     public function getByPathOfNonexistingProperty()
     {
         $pattern_matcher = Mockery::mock(PatternMatcher::class);
-        $factory = Mockery::mock(ClassInfoFactory::class);
-        $classInfo = Mockery::mock(ClassInfo::class);
+        $factory = Mockery::mock(ReflectionClassInfoFactory::class);
         $docBlock = Mockery::mock(DocBlock::class);
         $repository = new ReflectionPropertyInfoRepository($pattern_matcher, $factory, $docBlock);
 
@@ -89,11 +89,10 @@ class ReflectionPropertyInfoRepositoryTest extends MockeryTestCase
      */
     public function getByPath()
     {
-        $pattern_matcher = Mockery::mock(PatternMatcher::class);
-        $factory = Mockery::mock(ClassInfoFactory::class);
-        $classInfo = Mockery::mock(ClassInfo::class);
+        $patternMatcher = Mockery::mock(PatternMatcher::class);
+        $factory = Mockery::mock(ReflectionClassInfoFactory::class);
         $docBlock = Mockery::mock(DocBlock::class);
-        $repository = new ReflectionPropertyInfoRepository($pattern_matcher, $factory, $docBlock);
+        $repository = new ReflectionPropertyInfoRepository($patternMatcher, $factory, $docBlock);
 
         $className =  \tests\MethodInfoRepository\Test1::class;
         $propertyName = 'pub1';

@@ -4,30 +4,11 @@ namespace PHPCD\Element\ConstantInfo;
 
 use PHPCD\View\ConstantInfoVisitor;
 
-class ConstantInfo
+interface ConstantInfo
 {
-    private $name;
+    public function getName();
 
-    private $value;
+    public function getValue();
 
-    public function __construct($name, $value)
-    {
-        $this->name = $name;
-        $this->value = $value;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function getValue()
-    {
-        return $this->value;
-    }
-
-    public function accept(ConstantInfoVisitor $visitor)
-    {
-        $visitor->visitElement($this);
-    }
+    public function accept(ConstantInfoVisitor $visitor);
 }

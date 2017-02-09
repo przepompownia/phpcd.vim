@@ -3,7 +3,6 @@
 namespace PHPCD\View;
 
 use PHPCD\Element\FunctionInfo\FunctionInfo;
-use PHPCD\View\VimMenuItem;
 
 class VimMenuRenderFunctionVisitor extends VimMenuRenderAbstractVisitor implements FunctionInfoVisitor
 {

@@ -2,8 +2,6 @@
 
 namespace PHPCD\Element\FunctionInfo;
 
-use PHPCD\Element\AbstractElement;
-use PHPCD\Element\CollectionVisitor;
 use PHPCD\View\FunctionInfoVisitor;
 
 class ReflectionFunctionInfo implements FunctionInfo

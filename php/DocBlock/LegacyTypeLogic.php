@@ -83,7 +83,7 @@ class LegacyTypeLogic
             }
 
             if (in_array(strtolower($type), ['static', '$this', 'self'])) {
-                $type = $nsuse->getNamespace() . '\\' . $nsuse->getClassName();
+                $type = $nsuse->getNamespace().'\\'.$nsuse->getClassName();
             } elseif ($type[0] != '\\') {
                 $parts = explode('\\', $type);
                 $alias = array_shift($parts);
@@ -91,16 +91,16 @@ class LegacyTypeLogic
                 if (isset($imports[$alias])) {
                     $type = $imports[$alias];
                     if ($parts) {
-                        $type = $type . '\\' . join('\\', $parts);
+                        $type = $type.'\\'.implode('\\', $parts);
                     }
                 } else {
-                    $type = $nsuse->getNamespace() . '\\' . $type;
+                    $type = $nsuse->getNamespace().'\\'.$type;
                 }
             }
 
             if ($type) {
                 if ($type[0] != '\\') {
-                    $type = '\\' . $type;
+                    $type = '\\'.$type;
                 }
                 $types[] = $type;
             }
@@ -120,18 +120,18 @@ class LegacyTypeLogic
     }
 
     private $primitive_types = [
-        'array'    => 1,
-        'bool'     => 1,
+        'array' => 1,
+        'bool' => 1,
         'callable' => 1,
-        'double'   => 1,
-        'float'    => 1,
-        'int'      => 1,
-        'mixed'    => 1,
-        'null'     => 1,
-        'object'   => 1,
+        'double' => 1,
+        'float' => 1,
+        'int' => 1,
+        'mixed' => 1,
+        'null' => 1,
+        'object' => 1,
         'resource' => 1,
-        'scalar'   => 1,
-        'string'   => 1,
-        'void'     => 1,
+        'scalar' => 1,
+        'string' => 1,
+        'void' => 1,
     ];
 }

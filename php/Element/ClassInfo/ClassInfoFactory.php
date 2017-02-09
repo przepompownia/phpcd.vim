@@ -4,29 +4,21 @@ namespace PHPCD\Element\ClassInfo;
 
 use PHPCD\Filter\ClassElementFilter;
 
-class ClassInfoFactory
+interface ClassInfoFactory
 {
     /**
      * @param string|object $class
      *
      * @return ClassInfo
      */
-    public function createClassInfo($class)
-    {
-        return new namespace\ReflectionClass(new \ReflectionClass($class));
-    }
+    public function createClassInfo($class);
 
-    public function createClassInfoCollection()
-    {
-        return new ClassInfoCollection();
-    }
+    public function createCollection();
 
-    public function createReflectionClassFromFilter(ClassElementFilter $filter)
-    {
-        if (empty($filter->getClassName())) {
-            throw new \InvalidArgumentException(sprintf('%s needs class name to find method.', self::class));
-        }
-
-        return new \ReflectionClass($filter->getClassName());
-    }
+    /**
+     * @param ClassElementFilter $filter
+     *
+     * @return ClassInfo
+     */
+    public function createFromFilter(ClassElementFilter $filter);
 }

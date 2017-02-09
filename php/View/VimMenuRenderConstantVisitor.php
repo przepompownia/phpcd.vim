@@ -3,7 +3,6 @@
 namespace PHPCD\View;
 
 use PHPCD\Element\ConstantInfo\ConstantInfo;
-use PHPCD\View\VimMenuItem;
 
 class VimMenuRenderConstantVisitor extends VimMenuRenderAbstractVisitor implements ConstantInfoVisitor
 {

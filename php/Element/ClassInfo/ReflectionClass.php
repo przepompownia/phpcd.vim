@@ -108,4 +108,19 @@ class ReflectionClass extends AbstractElement implements ClassInfo
     {
         return $this->reflectionClass->getStartLine();
     }
+
+    public function getConstants()
+    {
+        return $this->reflectionClass->getConstants();
+    }
+
+    public function getMethods()
+    {
+        return $this->reflectionClass->getMethods();
+    }
+
+    public function getProperties()
+    {
+        return $this->reflectionClass->getProperties();
+    }
 }

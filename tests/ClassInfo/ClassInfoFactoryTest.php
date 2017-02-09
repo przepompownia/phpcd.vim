@@ -21,6 +21,6 @@ class ClassInfoFactoryTest extends TestCase
 
         $factory = new ClassInfoFactory($pattern_matcher);
 
-        $factory->createReflectionClassFromFilter(new MethodFilter([], ''));
+        $factory->createFromFilter(new MethodFilter([], ''));
     }
 }

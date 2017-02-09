@@ -2,12 +2,12 @@
 
 namespace tests\ClassInfo;
 
+use PHPCD\Element\ClassInfo\ReflectionClassInfoFactory;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
 use Composer\Autoload\ClassLoader;
 use Psr\Log\LoggerInterface;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
-use PHPCD\Element\ClassInfo\ClassInfoFactory;
 use PHPCD\Filter\ClassFilter;
 use PHPCD\Element\ClassInfo\ComposerClassmapFileRepository;
 use PHPCD\Element\ClassInfo\ClassInfoCollection;
@@ -26,7 +26,7 @@ class ComposerClassmapFileRepositoryTest extends MockeryTestCase
         $pattern_matcher    = Mockery::mock(PatternMatcher::class);
         $fileInfoFactory    = Mockery::mock(PHPFileInfoFactory::class);
         $fileInfo           = Mockery::mock(PHPFileInfo::class);
-        $classInfoFactory   = new ClassInfoFactory($pattern_matcher);
+        $classInfoFactory   = new ReflectionClassInfoFactory();
 
         $classMap = [
             'Any\\Class' => 'ExampleFile.php'

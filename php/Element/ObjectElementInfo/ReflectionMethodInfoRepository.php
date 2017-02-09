@@ -11,7 +11,7 @@ class ReflectionMethodInfoRepository extends ReflectionObjectElementInfoReposito
      */
     public function find(MethodFilter $filter)
     {
-        $reflectionClass = $this->classInfoFactory->createReflectionClassFromFilter($filter);
+        $reflectionClass = $this->classInfoFactory->createFromFilter($filter);
 
         $collection = new MethodInfoCollection();
 

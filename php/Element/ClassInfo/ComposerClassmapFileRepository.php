@@ -60,7 +60,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
      */
     public function find(ClassFilter $filter)
     {
-        $collection = $this->classInfoFactory->createClassInfoCollection();
+        $collection = $this->classInfoFactory->createCollection();
 
         foreach (array_keys($this->classmap) as $classpath) {
             if ($this->pattern_matcher->match($filter->getPattern(), $classpath)) {

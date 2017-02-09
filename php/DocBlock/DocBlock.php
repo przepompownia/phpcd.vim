@@ -37,7 +37,7 @@ class DocBlock
             while ($tag->has($index)) {
                 $type = $tag->get($index);
                 if ($type instanceof Object_) {
-                    $types[] = (string)$type;
+                    $types[] = (string) $type;
                 } else {
                     // printf("%s: %s\n", get_class($type), (string)$type);
                 }
@@ -45,7 +45,6 @@ class DocBlock
                 ++$index;
             }
         } elseif ($tag instanceof Array_) {
-
         }
 
         return $types;

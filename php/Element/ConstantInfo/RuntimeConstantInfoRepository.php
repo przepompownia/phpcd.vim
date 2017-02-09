@@ -42,7 +42,7 @@ class RuntimeConstantInfoRepository implements ConstantInfoRepository
         $constants = array_filter($constants, $arrayFilter, ARRAY_FILTER_USE_KEY);
 
         foreach ($constants as $name => $value) {
-            $collection->add(new ConstantInfo($name, $value));
+            $collection->add(new GenericConstantInfo($name, $value));
         }
 
         return $collection;

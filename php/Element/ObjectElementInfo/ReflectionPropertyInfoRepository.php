@@ -2,6 +2,7 @@
 
 namespace PHPCD\Element\ObjectElementInfo;
 
+use PHPCD\Element\ClassInfo\ReflectionClass;
 use PHPCD\NotFoundException;
 use PHPCD\Filter\PropertyFilter;
 
@@ -14,7 +15,7 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
      */
     public function find(PropertyFilter $filter)
     {
-        $reflectionClass = $this->classInfoFactory->createReflectionClassFromFilter($filter);
+        $reflectionClass = $this->classInfoFactory->createFromFilter($filter);
 
         $collection = new PropertyInfoCollection();
 
@@ -34,7 +35,7 @@ class ReflectionPropertyInfoRepository extends ReflectionObjectElementInfoReposi
         return $collection;
     }
 
-    private function getVirtualProperties(\ReflectionClass $reflection)
+    private function getVirtualProperties(ReflectionClass $reflection)
     {
         $properties = [];
 

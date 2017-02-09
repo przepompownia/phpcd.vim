@@ -8,7 +8,7 @@ use PHPCD\PHPCD;
 use Mockery;
 use PHPCD\PHPFileInfo\PHPFileInfoFactory;
 use PHPCD\PHPFileInfo\PHPFileInfo;
-use PHPCD\Element\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ReflectionClassInfoFactory;
 use PHPCD\Element\ConstantInfo\ClassConstantInfoRepository;
 use PHPCD\Element\ConstantInfo\ConstantInfoRepository;
 use PHPCD\Element\ObjectElementInfo\MethodInfoRepository;

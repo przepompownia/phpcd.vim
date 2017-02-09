@@ -7,8 +7,6 @@ use PHPCD\Element\ConstantInfo\ConstantInfoCollection;
 use PHPCD\Element\ClassInfo\ClassInfo;
 use PHPCD\Element\ObjectElementInfo\MethodInfoCollection;
 use PHPCD\Element\ObjectElementInfo\PropertyInfoCollection;
-use PHPCD\Element\ConstantInfo\ConstantInfo;
-use PHPCD\Element\FunctionInfo\FunctionInfo;
 use PHPCD\PHPFileInfo\PHPFileInfo;
 
 interface View

@@ -2,20 +2,20 @@
 
 namespace PHPCD\Element\ObjectElementInfo;
 
+use PHPCD\DocBlock\DocBlock;
+use PHPCD\Element\ClassInfo\ReflectionClassInfoFactory;
 use PHPCD\Filter\ObjectElementFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\Element\ClassInfo\ClassInfoFactory;
-use PHPCD\DocBlock\DocBlock;
 
 abstract class ReflectionObjectElementInfoRepository
 {
     /**
      * @var PatternMatcher
      */
-    private $pattern_matcher;
+    private $patternMatcher;
 
     /**
-     * @var ClassInfoFactory
+     * @var ReflectionClassInfoFactory
      */
     protected $classInfoFactory;
 
@@ -25,14 +25,14 @@ abstract class ReflectionObjectElementInfoRepository
     protected $docBlock;
 
     /**
-     * @param PatternMatcher $pattern_matcher
+     * @param PatternMatcher $patternMatcher
      */
     public function __construct(
-        PatternMatcher $pattern_matcher,
-        ClassInfoFactory $factory,
+        PatternMatcher $patternMatcher,
+        ReflectionClassInfoFactory $factory,
         DocBlock $docBlock
     ) {
-        $this->pattern_matcher = $pattern_matcher;
+        $this->patternMatcher = $patternMatcher;
         $this->classInfoFactory = $factory;
         $this->docBlock = $docBlock;
     }
@@ -42,7 +42,7 @@ abstract class ReflectionObjectElementInfoRepository
      */
     protected function filter(ObjectElementInfo $element, ObjectElementFilter $filter)
     {
-        if ($filter->getPattern() && !$this->pattern_matcher->match($filter->getPattern(), $element->getName())) {
+        if ($filter->getPattern() && !$this->patternMatcher->match($filter->getPattern(), $element->getName())) {
             return false;
         }
 

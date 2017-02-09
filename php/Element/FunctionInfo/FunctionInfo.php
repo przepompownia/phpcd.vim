@@ -2,8 +2,6 @@
 
 namespace PHPCD\Element\FunctionInfo;
 
-use PHPCD\Element\Element;
-use PHPCD\Element\CollectionVisitor;
 use PHPCD\View\FunctionInfoVisitor;
 
 interface FunctionInfo

@@ -4,6 +4,8 @@ namespace tests\ObjectElementInfo;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\Element\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ReflectionClass;
+use PHPCD\Element\ClassInfo\ReflectionClassInfoFactory;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\Element\ObjectElementInfo\ReflectionMethodInfoRepository;
@@ -54,8 +56,9 @@ class ReflectionMethodInfoRepositoryTest extends MockeryTestCase
     {
         $pattern_matcher = Mockery::mock(PatternMatcher::class);
         $pattern_matcher->shouldReceive('match')->andReturn(true);
-        $factory = Mockery::mock(ClassInfoFactory::class);
-        $factory->shouldReceive('createReflectionClassFromFilter')->once()->andReturn(new \ReflectionClass($className));
+        $factory = Mockery::mock(ReflectionClassInfoFactory::class);
+        $factory->shouldReceive('createFromFilter')->once()
+            ->andReturn(new ReflectionClass(new \ReflectionClass($className)));
         $docBlock = Mockery::mock(DocBlock::class);
 
         return new ReflectionMethodInfoRepository($pattern_matcher, $factory, $docBlock);

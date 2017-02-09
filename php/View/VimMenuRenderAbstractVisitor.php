@@ -3,7 +3,6 @@
 namespace PHPCD\View;
 
 use PHPCD\Element\ObjectElementInfo\ObjectElementInfo;
-use PHPCD\Collection\Collection;
 use PHPCD\Element\CollectionVisitor;
 
 abstract class VimMenuRenderAbstractVisitor implements CollectionVisitor
@@ -23,6 +22,7 @@ abstract class VimMenuRenderAbstractVisitor implements CollectionVisitor
     {
         return implode('', array_intersect_key($this->modifier_symbols, array_flip($objectElement->getModifiers())));
     }
+
     protected $output = [];
 
     public function getOutput()

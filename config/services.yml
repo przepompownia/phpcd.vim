@@ -44,7 +44,7 @@ services:
         class:              \PHPCD\PHPFileInfo\PHPFileInfoFactory
 
     class_info_factory:
-        class:              \PHPCD\Element\ClassInfo\ClassInfoFactory
+        class:              \PHPCD\Element\ClassInfo\ReflectionClassInfoFactory
 
     docblock_factory:
         class:              \phpDocumentor\Reflection\DocBlockFactory

@@ -2,9 +2,10 @@
 
 namespace tests\ConstantInfo;
 
+use PHPCD\Element\ClassInfo\ReflectionClass;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\Element\ClassInfo\ClassInfoFactory;
+use PHPCD\Element\ClassInfo\ReflectionClassInfoFactory;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Element\ConstantInfo\ReflectionClassConstantInfoRepository;
 use Mockery;
@@ -39,8 +40,9 @@ class ClassConstantInfoRepositoryTest extends MockeryTestCase
     {
         $pattern_matcher = Mockery::mock(PatternMatcher::class);
         $pattern_matcher->shouldReceive('match')->andReturn(true);
-        $factory = Mockery::mock(ClassInfoFactory::class);
-        $factory->shouldReceive('createReflectionClassFromFilter')->once()->andReturn(new \ReflectionClass($className));
+        $factory = Mockery::mock(ReflectionClassInfoFactory::class);
+        $factory->shouldReceive('createFromFilter')->once()
+            ->andReturn(new ReflectionClass(new \ReflectionClass($className)));
 
         return new ReflectionClassConstantInfoRepository($pattern_matcher, $factory);
     }

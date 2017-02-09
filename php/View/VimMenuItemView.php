@@ -2,17 +2,12 @@
 
 namespace PHPCD\View;
 
-use PHPCD\View\VimMenuRenderAbstractVisitor;
 use PHPCD\Collection\Collection;
 use PHPCD\Element\ObjectElementInfo\PropertyInfoCollection;
 use PHPCD\Element\ObjectElementInfo\MethodInfoCollection;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\Element\ConstantInfo\ConstantInfoCollection;
 use PHPCD\Element\ClassInfo\ClassInfo;
-use PHPCD\Element\ObjectElementInfo\PropertyInfo;
-use PHPCD\Element\ConstantInfo\ConstantInfo;
-use PHPCD\Element\FunctionInfo\FunctionInfo;
-use PHPCD\Element\ObjectElementInfo\ObjectElementInfo;
 use PHPCD\PHPFileInfo\PHPFileInfo;
 
 class VimMenuItemView implements View

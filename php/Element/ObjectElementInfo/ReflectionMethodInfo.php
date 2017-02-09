@@ -19,6 +19,5 @@ class ReflectionMethodInfo extends ReflectionObjectElementInfo implements Method
     public function accept(MethodVisitor $visitor)
     {
         $visitor->visitElement($this);
-
     }
 }

@@ -3,7 +3,6 @@
 namespace PHPCD\View;
 
 use PHPCD\Element\ObjectElementInfo\PropertyInfo;
-use PHPCD\View\VimMenuItem;
 
 class VimMenuRenderPropertyVisitor extends VimMenuRenderAbstractVisitor implements PropertyVisitor
 {

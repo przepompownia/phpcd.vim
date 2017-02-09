@@ -1,4 +1,5 @@
 <?php
+
 error_reporting(-1);
 set_error_handler(function ($severity, $message, $file, $line) {
     throw new ErrorException($message, 0, $severity, $file, $line);
@@ -11,10 +12,10 @@ $parameters = json_decode($parameters, true) ?: [];
 $parameters['root'] = realpath($root);
 
 /** load autoloader for PHPCD **/
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 /** load autoloader for the project **/
-$composer_autoload_file = $root . '/vendor/autoload.php';
+$composer_autoload_file = $root.'/vendor/autoload.php';
 $autoload_file = empty($parameters['autoload_file']) ? $composer_autoload_file : $parameters['autoload_file'];
 if (is_readable($autoload_file)) {
     $class_loader = require $autoload_file;
@@ -36,7 +37,7 @@ try {
         throw new \InvalidArgumentException('The daemon name should be PHPCD or PHPID');
     }
 
-    $server = $dIContainer->get('server.'. $handler_name);
+    $server = $dIContainer->get('server.'.$handler_name);
     $server->loop();
 } catch (\Throwable $e) {
     $logger->error($e->getMessage(), $e->getTrace());
