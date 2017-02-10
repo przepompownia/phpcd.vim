@@ -256,8 +256,8 @@ class PHPCD implements RpcHandler
 
     public function getMatchingClassDetails($className, $pattern, $isStatic, $publicOnly = true)
     {
+        $items = [];
         try {
-            $items = [];
 
             if (false !== $isStatic) {
                 $constantFilter = new ClassConstantFilter([ClassConstantFilter::CLASS_NAME => $className], $pattern);
@@ -281,18 +281,15 @@ class PHPCD implements RpcHandler
                 PropertyFilter::PUBLIC_ONLY => $publicOnly,
                 PropertyFilter::STATIC_ONLY => $isStatic,
             ], $pattern);
-            // PropertyFilter::C
 
             $properties = $this->propertyInfoRepository->find($propertyFilter);
 
             $items = array_merge($items, $this->view->renderPropertyCollection($properties));
-
-            return $items;
-        } catch (\ReflectionException $e) {
+        } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());
-
-            return [null, []];
         }
+
+        return $items;
     }
 
     public function getFixForNewClassUsage($path, array $newClassParams)
