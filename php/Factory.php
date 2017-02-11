@@ -2,12 +2,12 @@
 
 namespace PHPCD;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Lvht\MsgpackRpc\JsonMessenger;
 use Lvht\MsgpackRpc\Io;
+use Lvht\MsgpackRpc\JsonMessenger;
 use Lvht\MsgpackRpc\MsgpackMessenger;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Simple factory to separate details of object creation.
@@ -100,7 +100,7 @@ class Factory
         }
     }
 
-    public function createMessenger(IO $io, $messengerType = null)
+    public function createMessenger(Io $io, $messengerType = null)
     {
         if ($messengerType === 'json') {
             return new JsonMessenger($io);

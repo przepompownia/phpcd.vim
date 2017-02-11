@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "153252653ee5bb61f84b6470b0c2e56a",
+    "content-hash": "eaf8e5b4b125864fdafee56a44d393e3",
     "packages": [
         {
             "name": "lvht/msgpack-rpc",
-            "version": "v0.1.3",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lvht/msgpack-rpc.git",
-                "reference": "9f2c3187e5fad1f21a0f5bccb85bf149645f40c7"
+                "reference": "1ca16a935920486d85999a5408c34e3ce80f3767"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lvht/msgpack-rpc/zipball/9f2c3187e5fad1f21a0f5bccb85bf149645f40c7",
-                "reference": "9f2c3187e5fad1f21a0f5bccb85bf149645f40c7",
+                "url": "https://api.github.com/repos/lvht/msgpack-rpc/zipball/1ca16a935920486d85999a5408c34e3ce80f3767",
+                "reference": "1ca16a935920486d85999a5408c34e3ce80f3767",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                     "email": "git@lvht.net"
                 }
             ],
-            "time": "2016-07-26T21:55:37+00:00"
+            "time": "2017-02-08T02:36:24+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -754,7 +754,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2017-02-09T21:01:27+00:00"
+            "time": "2017-02-09 21:01:27"
         },
         {
             "name": "myclabs/deep-copy",
