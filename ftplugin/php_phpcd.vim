@@ -34,11 +34,10 @@ let s:encoded_options = json_encode(g:phpcd_server_options)
 command! -nargs=0 PHPID call phpcd#Index()
 
 let s:phpcd_path = expand('<sfile>:p:h:h') . '/php/main.php'
-if exists('g:phpcd_channel_id')
-	call rpc#stop(g:phpcd_channel_id)
+if !exists('g:phpcd_channel_id')
+	let g:phpcd_channel_id = rpc#start(g:phpcd_php_cli_executable,
+				\ s:phpcd_path, g:phpcd_root, 'PHPCD', s:encoded_options)
 endif
-let g:phpcd_channel_id = rpc#start(g:phpcd_php_cli_executable,
-			\ s:phpcd_path, g:phpcd_root, 'PHPCD', s:encoded_options)
 
 if g:phpcd_root == '/'
 	let &cpo = s:save_cpo
@@ -46,12 +45,10 @@ if g:phpcd_root == '/'
 	finish
 endif
 
-if exists('g:phpid_channel_id')
-	call rpc#stop(g:phpid_channel_id)
+if !exists('g:phpid_channel_id')
+	let g:phpid_channel_id = rpc#start(g:phpcd_php_cli_executable,
+				\ s:phpcd_path, g:phpcd_root, 'PHPID', s:encoded_options)
 endif
-
-let g:phpid_channel_id = rpc#start(g:phpcd_php_cli_executable,
-			\ s:phpcd_path, g:phpcd_root, 'PHPID', s:encoded_options)
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
