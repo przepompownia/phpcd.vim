@@ -16,14 +16,14 @@ class LegacyTypeLogic
      * to avoid scanning each file each time
      * even if such was not changed in meantime.
      *
-     * @var PHPFileInfoFactory
+     * @var PHPFileFactory
      */
-    private $fileInfoFactory;
+    private $fileFactory;
 
-    public function __construct(Logger $logger, PHPFileFactory $fileInfoFactory)
+    public function __construct(Logger $logger, PHPFileFactory $fileFactory)
     {
         $this->setLogger($logger);
-        $this->fileInfoFactory = $fileInfoFactory;
+        $this->fileFactory = $fileFactory;
     }
 
     public function typeByReturnType($class_name, $name)
@@ -79,7 +79,7 @@ class LegacyTypeLogic
             }
 
             if (!$nsuse && $type[0] != '\\') {
-                $nsuse = $this->fileInfoFactory->createFile($path);
+                $nsuse = $this->fileFactory->createFile($path);
             }
 
             if (in_array(strtolower($type), ['static', '$this', 'self'])) {

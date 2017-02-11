@@ -10,7 +10,7 @@ use PHPCD\Filter\ConstantFilter;
 use PHPCD\Element\ConstantInfo\ConstantFactory;
 use Mockery;
 
-class RuntimeConstantInfoRepositoryTest extends MockeryTestCase
+class RuntimeConstantRepositoryTest extends MockeryTestCase
 {
     /**
      * @test

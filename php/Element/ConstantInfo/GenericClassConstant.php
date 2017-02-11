@@ -5,7 +5,7 @@ namespace PHPCD\Element\ConstantInfo;
 use PHPCD\Element\ClassInfo\ClassInfo;
 use PHPCD\View\ClassConstantVisitor;
 
-class GenericClassConstant extends AbstractConstantInfo implements ClassConstant
+class GenericClassConstant extends AbstractConstant implements ClassConstant
 {
     /**
      * @var ClassInfo

@@ -2,7 +2,7 @@
 
 namespace PHPCD\Element\ConstantInfo;
 
-abstract class AbstractConstantInfo
+abstract class AbstractConstant
 {
     protected $name;
 

@@ -8,7 +8,7 @@ use PHPCD\DocBlock\DocBlock;
 use tests\MethodRepository\Test1;
 use PHPCD\Element\ObjectElement\ReflectionProperty;
 
-class ReflectionPropertyInfoTest extends TestCase
+class ReflectionPropertyTest extends TestCase
 {
     /**
      * @test

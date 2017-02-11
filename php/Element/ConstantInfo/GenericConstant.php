@@ -4,7 +4,7 @@ namespace PHPCD\Element\ConstantInfo;
 
 use PHPCD\View\ConstantVisitor;
 
-class GenericConstant extends AbstractConstantInfo implements ConstantInfo
+class GenericConstant extends AbstractConstant implements ConstantInfo
 {
     public function __construct($name, $value)
     {
