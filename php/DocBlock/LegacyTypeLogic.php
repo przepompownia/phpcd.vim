@@ -4,7 +4,7 @@ namespace PHPCD\DocBlock;
 
 use Psr\Log\LoggerInterface as Logger;
 use Psr\Log\LoggerAwareTrait;
-use PHPCD\PHPFileInfo\PHPFileInfoFactory;
+use PHPCD\PHPFile\PHPFileFactory;
 
 class LegacyTypeLogic
 {
@@ -20,7 +20,7 @@ class LegacyTypeLogic
      */
     private $fileInfoFactory;
 
-    public function __construct(Logger $logger, PHPFileInfoFactory $fileInfoFactory)
+    public function __construct(Logger $logger, PHPFileFactory $fileInfoFactory)
     {
         $this->setLogger($logger);
         $this->fileInfoFactory = $fileInfoFactory;
@@ -79,7 +79,7 @@ class LegacyTypeLogic
             }
 
             if (!$nsuse && $type[0] != '\\') {
-                $nsuse = $this->fileInfoFactory->createFileInfo($path);
+                $nsuse = $this->fileInfoFactory->createFile($path);
             }
 
             if (in_array(strtolower($type), ['static', '$this', 'self'])) {

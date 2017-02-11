@@ -4,7 +4,7 @@ namespace PHPCD\View;
 
 use PHPCD\Element\FunctionInfo\FunctionInfo;
 
-class VimMenuRenderFunctionVisitor extends VimMenuRenderAbstractVisitor implements FunctionInfoVisitor
+class VimMenuRenderFunctionVisitor extends VimMenuRenderAbstractVisitor implements FunctionVisitor
 {
     public function visitElement(FunctionInfo $functionInfo)
     {

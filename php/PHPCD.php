@@ -2,23 +2,23 @@
 
 namespace PHPCD;
 
-use PHPCD\Element\ConstantInfo\ConstantInfoRepository;
+use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\FunctionFilter;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
-use PHPCD\Element\ObjectElementInfo\MethodPath;
-use PHPCD\Element\ObjectElementInfo\PropertyPath;
+use PHPCD\Element\ObjectElement\MethodPath;
+use PHPCD\Element\ObjectElement\PropertyPath;
 use Psr\Log\LoggerInterface as Logger;
 use Psr\Log\LoggerAwareTrait;
 use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
-use PHPCD\PHPFileInfo\PHPFileInfoFactory;
-use PHPCD\Element\ConstantInfo\ClassConstantInfoRepository;
+use PHPCD\PHPFile\PHPFileFactory;
+use PHPCD\Element\ConstantInfo\ClassConstantRepository;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\Filter\PropertyFilter;
-use PHPCD\Element\ObjectElementInfo\MethodInfoRepository;
-use PHPCD\Element\ObjectElementInfo\PropertyInfoRepository;
+use PHPCD\Element\ObjectElement\MethodRepository;
+use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\View\View;
 use PHPCD\DocBlock\LegacyTypeLogic;
 
@@ -37,24 +37,24 @@ class PHPCD implements RpcHandler
     private $nsinfo;
 
     /**
-     * @var ClassConstantInfoRepository
+     * @var ClassConstantRepository
      */
     private $classConstantRepository;
 
     /**
-     * @var ConstantInfoRepository
+     * @var ConstantRepository
      */
     private $constantRepository;
 
     /**
-     * @var PropertyInfoRepository
+     * @var PropertyRepository
      */
-    private $propertyInfoRepository;
+    private $propertyRepository;
 
     /**
-     * @var MethodInfoRepository
+     * @var MethodRepository
      */
-    private $methodInfoRepository;
+    private $methodRepository;
 
     /**
      * @var View
@@ -77,29 +77,29 @@ class PHPCD implements RpcHandler
      * to avoid scanning each file each time
      * even if such was not changed in meantime.
      *
-     * @var PHPFileInfoFactory
+     * @var PHPFileFactory
      */
-    private $fileInfoFactory;
+    private $fileFactory;
 
     public function __construct(
         NamespaceInfo $nsinfo,
         Logger $logger,
-        ConstantInfoRepository $constantRepository,
-        ClassConstantInfoRepository $classConstantRepository,
-        PropertyInfoRepository $propertyRepository,
-        MethodInfoRepository $methodInfoRepository,
-        PHPFileInfoFactory $fileInfoFactory,
+        ConstantRepository $constantRepository,
+        ClassConstantRepository $classConstantRepository,
+        PropertyRepository $propertyRepository,
+        MethodRepository $methodRepository,
+        PHPFileFactory $fileFactory,
         View $view,
         FunctionRepository $functionRepository,
         LegacyTypeLogic $legacyTypeLogic
     ) {
         $this->nsinfo = $nsinfo;
         $this->setLogger($logger);
-        $this->fileInfoFactory = $fileInfoFactory;
+        $this->fileFactory = $fileFactory;
         $this->constantRepository = $constantRepository;
         $this->classConstantRepository = $classConstantRepository;
-        $this->propertyInfoRepository = $propertyRepository;
-        $this->methodInfoRepository = $methodInfoRepository;
+        $this->propertyRepository = $propertyRepository;
+        $this->methodRepository = $methodRepository;
         $this->view = $view;
         $this->functionRepository = $functionRepository;
         $this->legacyTypeLogic = $legacyTypeLogic;
@@ -199,9 +199,9 @@ class PHPCD implements RpcHandler
      */
     public function getPHPFileInfo($path)
     {
-        $fileInfo = $this->fileInfoFactory->createFileInfo($path);
+        $file = $this->fileFactory->createFile($path);
 
-        return $this->view->renderPHPFileInfo($fileInfo);
+        return $this->view->renderPHPFile($file);
     }
 
     public function getTypesReturnedByFunction($functionName)
@@ -228,7 +228,7 @@ class PHPCD implements RpcHandler
         }
 
         $methodPath = new MethodPath($className, $methodName);
-        $method = $this->methodInfoRepository->getByPath($methodPath);
+        $method = $this->methodRepository->getByPath($methodPath);
         $path = $method->getClass()->getFileName();
         $doc = $method->getDocComment();
 
@@ -245,7 +245,7 @@ class PHPCD implements RpcHandler
     public function getTypesOfProperty($className, $propertyName)
     {
         $propertyPath = new PropertyPath($className, $propertyName);
-        $property = $this->propertyInfoRepository->getByPath($propertyPath);
+        $property = $this->propertyRepository->getByPath($propertyPath);
         $path = $property->getClass()->getFileName();
         $doc = $property->getDocComment();
 
@@ -272,7 +272,7 @@ class PHPCD implements RpcHandler
                 MethodFilter::STATIC_ONLY => $isStatic,
             ], $pattern);
 
-            $methods = $this->methodInfoRepository->find($methodFilter);
+            $methods = $this->methodRepository->find($methodFilter);
 
             $items = array_merge($items, $this->view->renderMethodCollection($methods));
 
@@ -282,7 +282,7 @@ class PHPCD implements RpcHandler
                 PropertyFilter::STATIC_ONLY => $isStatic,
             ], $pattern);
 
-            $properties = $this->propertyInfoRepository->find($propertyFilter);
+            $properties = $this->propertyRepository->find($propertyFilter);
 
             $items = array_merge($items, $this->view->renderPropertyCollection($properties));
         } catch (\Exception $e) {
@@ -294,7 +294,7 @@ class PHPCD implements RpcHandler
 
     public function getFixForNewClassUsage($path, array $newClassParams)
     {
-        $info = $this->fileInfoFactory->createFileInfo($path);
+        $info = $this->fileFactory->createFile($path);
 
         return $info->getFixForNewClassUsage($newClassParams);
     }
@@ -315,7 +315,7 @@ class PHPCD implements RpcHandler
     {
         $constants = $this->constantRepository->find(new ConstantFilter($pattern));
 
-        return $this->view->renderConstantInfoCollection($constants);
+        return $this->view->renderConstantCollection($constants);
     }
 
     /**

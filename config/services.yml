@@ -41,10 +41,10 @@ services:
         autowiring_types:   Lvht\MsgpackRpc\Io
 
     file_info_factory:
-        class:              \PHPCD\PHPFileInfo\PHPFileInfoFactory
+        class:              \PHPCD\PHPFile\PHPFileFactory
 
     class_info_factory:
-        class:              \PHPCD\Element\ClassInfo\ReflectionClassInfoFactory
+        class:              \PHPCD\Element\ClassInfo\ReflectionClassFactory
 
     docblock_factory:
         class:              \phpDocumentor\Reflection\DocBlockFactory
@@ -56,25 +56,25 @@ services:
             - '@docblock_factory'
 
     repository.constant.factory:
-        class:              \PHPCD\Element\ConstantInfo\ConstantInfoFactory
+        class:              \PHPCD\Element\ConstantInfo\ConstantFactory
 
     repository.constant:
-        class:              \PHPCD\Element\ConstantInfo\RuntimeConstantInfoRepository
+        class:              \PHPCD\Element\ConstantInfo\RuntimeConstantRepository
         arguments:          ['@default_pattern_matcher', '@repository.constant.factory']
 
     repository.constant.class:
-        class:              \PHPCD\Element\ConstantInfo\ReflectionClassConstantInfoRepository
+        class:              \PHPCD\Element\ConstantInfo\ReflectionClassConstantRepository
         arguments:          ['@default_pattern_matcher', '@class_info_factory']
 
     method_info_repository:
-        class:              \PHPCD\Element\ObjectElementInfo\ReflectionMethodInfoRepository
+        class:              \PHPCD\Element\ObjectElement\ReflectionMethodRepository
         arguments:
             - '@default_pattern_matcher'
             - '@class_info_factory'
             - '@docblock'
 
     property_info_repository:
-        class:              \PHPCD\Element\ObjectElementInfo\ReflectionPropertyInfoRepository
+        class:              \PHPCD\Element\ObjectElement\ReflectionPropertyRepository
         arguments:
             - '@default_pattern_matcher'
             - '@class_info_factory'
@@ -90,7 +90,7 @@ services:
             - '%root%'
 
     function_factory:
-        class: \PHPCD\Element\FunctionInfo\FunctionInfoFactory
+        class: \PHPCD\Element\FunctionInfo\FunctionFactory
 
     function_repository:
         class: \PHPCD\Element\FunctionInfo\RuntimeFunctionRepository

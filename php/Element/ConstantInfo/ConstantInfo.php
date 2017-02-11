@@ -2,7 +2,7 @@
 
 namespace PHPCD\Element\ConstantInfo;
 
-use PHPCD\View\ConstantInfoVisitor;
+use PHPCD\View\ConstantVisitor;
 
 interface ConstantInfo
 {
@@ -10,5 +10,5 @@ interface ConstantInfo
 
     public function getValue();
 
-    public function accept(ConstantInfoVisitor $visitor);
+    public function accept(ConstantVisitor $visitor);
 }

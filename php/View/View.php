@@ -2,27 +2,27 @@
 
 namespace PHPCD\View;
 
-use PHPCD\Element\ClassInfo\ClassInfoCollection;
-use PHPCD\Element\ConstantInfo\ClassConstantInfoCollection;
-use PHPCD\Element\ConstantInfo\ConstantInfoCollection;
+use PHPCD\Element\ClassInfo\ClassCollection;
+use PHPCD\Element\ConstantInfo\ClassConstantCollection;
+use PHPCD\Element\ConstantInfo\ConstantCollection;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
-use PHPCD\Element\ObjectElementInfo\MethodInfoCollection;
-use PHPCD\Element\ObjectElementInfo\PropertyInfoCollection;
-use PHPCD\PHPFileInfo\PHPFileInfo;
+use PHPCD\Element\ObjectElement\MethodCollection;
+use PHPCD\Element\ObjectElement\PropertyCollection;
+use PHPCD\PHPFile\PHPFile;
 
 interface View
 {
-    public function renderConstantInfoCollection(ConstantInfoCollection $collection);
+    public function renderConstantCollection(ConstantCollection $collection);
 
-    public function renderClassConstantCollection(ClassConstantInfoCollection $collection);
+    public function renderClassConstantCollection(ClassConstantCollection $collection);
 
-    public function renderClassInfoCollection(ClassInfoCollection $collection);
+    public function renderClassCollection(ClassCollection $collection);
 
-    public function renderMethodCollection(MethodInfoCollection $collection);
+    public function renderMethodCollection(MethodCollection $collection);
 
     public function renderFunctionCollection(FunctionCollection $collection);
 
-    public function renderPropertyCollection(PropertyInfoCollection $collection);
+    public function renderPropertyCollection(PropertyCollection $collection);
 
-    public function renderPHPFileInfo(PHPFileInfo $fileInfo);
+    public function renderPHPFile(PHPFile $file);
 }

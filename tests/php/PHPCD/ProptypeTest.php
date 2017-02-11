@@ -2,23 +2,22 @@
 
 namespace tests\PHPCD;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPCD\Element\ObjectElementInfo\ReflectionPropertyInfo;
-use PHPCD\PHPCD;
 use Mockery;
-use PHPCD\PHPFileInfo\PHPFileInfoFactory;
-use PHPCD\PHPFileInfo\PHPFileInfo;
-use PHPCD\Element\ClassInfo\ClassInfoFactory;
-use PHPCD\Element\ConstantInfo\ClassConstantInfoRepository;
-use PHPCD\Element\ConstantInfo\ConstantInfoRepository;
-use PHPCD\Element\ObjectElementInfo\MethodInfoRepository;
-use PHPCD\Element\ObjectElementInfo\PropertyInfoRepository;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPCD\DocBlock\DocBlock;
+use PHPCD\DocBlock\LegacyTypeLogic;
+use PHPCD\Element\ConstantInfo\ClassConstantRepository;
+use PHPCD\Element\ConstantInfo\ConstantRepository;
+use PHPCD\Element\FunctionInfo\FunctionRepository;
+use PHPCD\Element\ObjectElement\MethodRepository;
+use PHPCD\Element\ObjectElement\PropertyRepository;
+use PHPCD\Element\ObjectElement\ReflectionProperty;
 use PHPCD\NamespaceInfo;
+use PHPCD\PHPCD;
+use PHPCD\PHPFile\PHPFile;
+use PHPCD\PHPFile\PHPFileFactory;
 use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
-use PHPCD\DocBlock\LegacyTypeLogic;
-use PHPCD\DocBlock\DocBlock;
-use PHPCD\Element\FunctionInfo\FunctionRepository;
 
 class ProptypeTest extends MockeryTestCase
 {
@@ -30,32 +29,32 @@ class ProptypeTest extends MockeryTestCase
     {
         $nsinfo = Mockery::mock(NamespaceInfo::class);
         $logger = Mockery::mock(Logger::class);
-        $constantRepository = Mockery::mock(ConstantInfoRepository::class);
-        $classConstantRepository = Mockery::mock(ClassConstantInfoRepository::class);
-        $propertyInfoRepository = Mockery::mock(PropertyInfoRepository::class);
-        $methodInfoRepository = Mockery::mock(MethodInfoRepository::class);
-        $fileInfoFactory = Mockery::mock(PHPFileInfoFactory::class);
+        $constantRepository = Mockery::mock(ConstantRepository::class);
+        $classConstantRepository = Mockery::mock(ClassConstantRepository::class);
+        $propertyRepository = Mockery::mock(PropertyRepository::class);
+        $methodRepository = Mockery::mock(MethodRepository::class);
+        $fileFactory = Mockery::mock(PHPFileFactory::class);
         $view = Mockery::mock(View::class);
-        $fileInfo = Mockery::mock(PHPFileInfo::class);
-        $legacyTypeLogic = new LegacyTypeLogic($logger, $fileInfoFactory);
+        $file = Mockery::mock(PHPFile::class);
+        $legacyTypeLogic = new LegacyTypeLogic($logger, $fileFactory);
         $docBlock = Mockery::mock(DocBlock::class);
-        $propertyInfo = new ReflectionPropertyInfo(new \ReflectionProperty($class, $property), $docBlock);
+        $propertyInfo = new ReflectionProperty(new \ReflectionProperty($class, $property), $docBlock);
         $functionRepository = Mockery::mock(FunctionRepository::class);
 
-        $fileInfo->shouldReceive('getImports')->andReturn($imports);
-        $fileInfo->shouldReceive('getNamespace')->andReturn($namespace);
-        $fileInfoFactory->shouldReceive('createFileInfo')->andReturn($fileInfo);
-        $view->shouldReceive('renderPHPFileInfo')->andReturnNull();
-        $propertyInfoRepository->shouldReceive('getByPath')->andReturn($propertyInfo);
+        $file->shouldReceive('getImports')->andReturn($imports);
+        $file->shouldReceive('getNamespace')->andReturn($namespace);
+        $fileFactory->shouldReceive('createFile')->andReturn($file);
+        $view->shouldReceive('renderPHPFile')->andReturnNull();
+        $propertyRepository->shouldReceive('getByPath')->andReturn($propertyInfo);
 
         $phpcd = new PHPCD(
             $nsinfo,
             $logger,
             $constantRepository,
             $classConstantRepository,
-            $propertyInfoRepository,
-            $methodInfoRepository,
-            $fileInfoFactory,
+            $propertyRepository,
+            $methodRepository,
+            $fileFactory,
             $view,
             $functionRepository,
             $legacyTypeLogic
@@ -74,16 +73,16 @@ class ProptypeTest extends MockeryTestCase
     {
         return [
             [
-                'tests\\MethodInfoRepository\\Sup',
+                'tests\\MethodRepository\\Sup',
                 'pub5',
-                'tests\\MethodInfoRepository',
+                'tests\\MethodRepository',
                 [],
-                ['\\ReflectionClass', '\\tests\\MethodInfoRepository\\Test1']
+                ['\\ReflectionClass', '\\tests\\MethodRepository\\Test1']
             ],
             [
-                'tests\\MethodInfoRepository\\Sup',
+                'tests\\MethodRepository\\Sup',
                 'pub6',
-                'tests\\MethodInfoRepository',
+                'tests\\MethodRepository',
                 ['PM' => '\\PHPCD\\PatternMatcher'],
                 ['\\PHPCD\\PatternMatcher\\PatternMatcher']
             ],

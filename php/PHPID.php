@@ -4,8 +4,8 @@ namespace PHPCD;
 
 use Lvht\MsgpackRpc\Handler as RpcHandler;
 use Lvht\MsgpackRpc\Server as RpcServer;
-use PHPCD\Element\ClassInfo\ClassInfoCollection;
-use PHPCD\Element\ClassInfo\ClassInfoRepository;
+use PHPCD\Element\ClassInfo\ClassCollection;
+use PHPCD\Element\ClassInfo\ClassRepository;
 use PHPCD\Filter\ClassFilter;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface as Logger;
@@ -24,18 +24,18 @@ class PHPID implements RpcHandler
     private $classMap;
 
     /**
-     * @var ClassInfoRepository
+     * @var ClassRepository
      */
-    private $classesRepository;
+    private $classRepository;
 
     public function __construct(
         $root,
         Logger $logger,
-        ClassInfoRepository $classesRepository
+        ClassRepository $classRepository
     ) {
         $this->setRoot($root);
         $this->setLogger($logger);
-        $this->setClassInfoRepository($classesRepository);
+        $this->setClassRepository($classRepository);
     }
 
     /**
@@ -56,9 +56,9 @@ class PHPID implements RpcHandler
         $this->server = $server;
     }
 
-    protected function setClassInfoRepository(ClassInfoRepository $classesRepository)
+    protected function setClassRepository(ClassRepository $classesRepository)
     {
-        $this->classesRepository = $classesRepository;
+        $this->classRepository = $classesRepository;
         return $this;
     }
 
@@ -271,18 +271,18 @@ class PHPID implements RpcHandler
     {
         $filter = new ClassFilter([], $pathPattern);
 
-        $collection = $this->classesRepository->find($filter);
+        $collection = $this->classRepository->find($filter);
 
-        return $this->prepareOutputFromClassInfoCollection($collection, false);
+        return $this->prepareOutputFromClassCollection($collection, false);
     }
 
     public function getInterfaces($pathPattern)
     {
         $filter = new ClassFilter([ClassFilter::IS_INTERFACE => true], $pathPattern);
 
-        $collection = $this->classesRepository->find($filter);
+        $collection = $this->classRepository->find($filter);
 
-        return $this->prepareOutputFromClassInfoCollection($collection, true);
+        return $this->prepareOutputFromClassCollection($collection, true);
     }
 
     public function getPotentialSuperclasses($pathPattern)
@@ -293,18 +293,18 @@ class PHPID implements RpcHandler
             ClassFilter::IS_INTERFACE => false
         ], $pathPattern);
 
-        $collection = $this->classesRepository->find($filter);
+        $collection = $this->classRepository->find($filter);
 
-        return $this->prepareOutputFromClassInfoCollection($collection, true);
+        return $this->prepareOutputFromClassCollection($collection, true);
     }
 
     public function getInstantiableClasses($pathPattern)
     {
         $filter = new ClassFilter([ClassFilter::IS_INSTANTIABLE => true], $pathPattern);
 
-        $collection = $this->classesRepository->find($filter);
+        $collection = $this->classRepository->find($filter);
 
-        return $this->prepareOutputFromClassInfoCollection($collection, true);
+        return $this->prepareOutputFromClassCollection($collection, true);
     }
 
     public function getNamesToTypeDeclaration($pathPattern)
@@ -312,19 +312,19 @@ class PHPID implements RpcHandler
         // @TODO add basic types
         $filter = new ClassFilter([ClassFilter::IS_TRAIT => false], $pathPattern);
 
-        $collection = $this->classesRepository->find($filter);
+        $collection = $this->classRepository->find($filter);
 
-        return $this->prepareOutputFromClassInfoCollection($collection, true);
+        return $this->prepareOutputFromClassCollection($collection, true);
     }
 
     /**
      * Prepare single element of completion output
-     * @param ClassInfoCollection $collection
+     * @param ClassCollection $collection
      * @param bool $leadingBackslash prepend class path with backslash
      * @return array
      */
-    private function prepareOutputFromClassInfoCollection(
-        ClassInfoCollection $collection,
+    private function prepareOutputFromClassCollection(
+        ClassCollection $collection,
         $leadingBackslash = true
     ) {
         $result = [];
@@ -343,13 +343,13 @@ class PHPID implements RpcHandler
     public function locateClassDeclaration($className)
     {
         try {
-            $class = $this->classesRepository->get($className);
+            $class = $this->classRepository->get($className);
 
             return [$class->getFileName(), $class->getStartLine()];
         } catch (\Exception $e) {
             $this->logger->warning($e->getMessage(), $e->getTrace());
 
-            return ['', null];
+            return [];
         }
     }
 }

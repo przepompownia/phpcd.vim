@@ -5,12 +5,12 @@ namespace PHPCD\Element\ClassInfo;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\PHPFileInfo\PHPFileInfoFactory;
+use PHPCD\PHPFile\PHPFileFactory;
 use Composer\Autoload\ClassLoader;
 use PHPCD\Filter\ClassFilter;
 use PHPCD\NotFoundException;
 
-class ComposerClassmapFileRepository implements ClassInfoRepository
+class ComposerClassmapFileRepository implements ClassRepository
 {
     use LoggerAwareTrait;
 
@@ -18,30 +18,30 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
 
     private $classmap = [];
 
-    /** @var ClassInfoFactory */
-    private $classInfoFactory;
+    /** @var ClassFactory */
+    private $classFactory;
 
     /**
-     * @var PHPFileInfoFactory
+     * @var PHPFileFactory
      */
-    private $fileInfoFactory;
+    private $fileFactory;
 
     /**
      * @var PatternMatcher
      */
-    private $pattern_matcher;
+    private $patternMatcher;
 
     public function __construct(
         ClassLoader $classLoader,
-        PatternMatcher $pattern_matcher,
-        ClassInfoFactory $classInfoFactory,
-        PHPFileInfoFactory $fileInfoFactory,
+        PatternMatcher $patternMatcher,
+        ClassFactory $classFactory,
+        PHPFileFactory $fileFactory,
         LoggerInterface $logger
     ) {
-        $this->pattern_matcher = $pattern_matcher;
+        $this->patternMatcher = $patternMatcher;
         $this->classLoader = $classLoader;
-        $this->classInfoFactory = $classInfoFactory;
-        $this->fileInfoFactory = $fileInfoFactory;
+        $this->classFactory = $classFactory;
+        $this->fileFactory = $fileFactory;
         $this->setLogger($logger);
         $this->loadClassMap();
     }
@@ -56,14 +56,14 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
     /**
      * @param ClassFilter $filter criteria to search
      *
-     * @return ClassInfoCollection
+     * @return ClassCollection
      */
     public function find(ClassFilter $filter)
     {
-        $collection = $this->classInfoFactory->createCollection();
+        $collection = $this->classFactory->createCollection();
 
         foreach (array_keys($this->classmap) as $classpath) {
-            if ($this->pattern_matcher->match($filter->getPattern(), $classpath)) {
+            if ($this->patternMatcher->match($filter->getPattern(), $classpath)) {
                 try {
                     $classInfo = $this->get($classpath);
                 } catch (NotFoundException $e) {
@@ -99,16 +99,16 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
         }
 
         try {
-            $fileInfo = $this->fileInfoFactory->createFileInfo($filePath);
+            $file = $this->fileFactory->createFile($filePath);
         } catch (\Exception $e) {
             $this->logger->warning($e->getMessage(), $e->getTrace());
         }
 
-        if ($fileInfo->hasErrors()) {
+        if ($file->hasErrors()) {
             $message = '%s %s did not pass validation and then cannot be added to class info repository. Reason:';
             $this->logger->warning(
-                sprintf($message, ucfirst($fileInfo->getType()), $classpath),
-                $fileInfo->getErrors()
+                sprintf($message, ucfirst($file->getType()), $classpath),
+                $file->getErrors()
             );
 
             return false;
@@ -129,7 +129,7 @@ class ComposerClassmapFileRepository implements ClassInfoRepository
         $classpath = ltrim($classpath, '\\');
 
         if ($this->isValid($classpath)) {
-            return $this->classInfoFactory->createClassInfo($classpath);
+            return $this->classFactory->createClassInfo($classpath);
         }
 
         throw new NotFoundException(sprintf('Cannot find class %s in repository', $classpath));

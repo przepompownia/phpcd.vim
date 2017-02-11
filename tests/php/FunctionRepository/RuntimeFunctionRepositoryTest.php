@@ -7,7 +7,7 @@ use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\Filter\FunctionFilter;
 use PHPCD\Element\FunctionInfo\RuntimeFunctionRepository;
 use PHPCD\PatternMatcher\PatternMatcher;
-use PHPCD\Element\FunctionInfo\FunctionInfoFactory;
+use PHPCD\Element\FunctionInfo\FunctionFactory;
 use PHPCD\Element\FunctionInfo\FunctionInfo;
 use Mockery;
 
@@ -19,15 +19,15 @@ class RuntimeFunctionRepositoryTest extends MockeryTestCase
     public function find()
     {
         $patternMatcher    = Mockery::mock(PatternMatcher::class);
-        $functionInfoFactory = Mockery::mock(FunctionInfoFactory::class);
-        $repository = new RuntimeFunctionRepository($patternMatcher, $functionInfoFactory);
+        $functionFactory = Mockery::mock(FunctionFactory::class);
+        $repository = new RuntimeFunctionRepository($patternMatcher, $functionFactory);
         $filter = Mockery::mock(FunctionFilter::class);
         $collection = Mockery::mock(FunctionCollection::class);
 
-        $functionInfoFactory->shouldReceive('createFunctionCollection')->andReturn($collection);
+        $functionFactory->shouldReceive('createFunctionCollection')->andReturn($collection);
         $functionInfo = Mockery::mock(FunctionInfo::class);
         $functionInfo->shouldReceive('getName')->andReturn('array_column');
-        $functionInfoFactory->shouldReceive('createFunctionInfo')->andReturn($functionInfo);
+        $functionFactory->shouldReceive('createFunction')->andReturn($functionInfo);
         $pattern = 'arcol';
         $filter->shouldReceive('getPattern')->andReturn($pattern);
 

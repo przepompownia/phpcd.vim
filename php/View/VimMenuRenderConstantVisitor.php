@@ -4,7 +4,7 @@ namespace PHPCD\View;
 
 use PHPCD\Element\ConstantInfo\ConstantInfo;
 
-class VimMenuRenderConstantVisitor extends VimMenuRenderAbstractVisitor implements ConstantInfoVisitor
+class VimMenuRenderConstantVisitor extends VimMenuRenderAbstractVisitor implements ConstantVisitor
 {
     public function visitElement(ConstantInfo $constantInfo)
     {

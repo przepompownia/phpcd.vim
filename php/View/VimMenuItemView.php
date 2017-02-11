@@ -3,38 +3,38 @@
 namespace PHPCD\View;
 
 use PHPCD\Collection\Collection;
-use PHPCD\Element\ClassInfo\ClassInfoCollection;
-use PHPCD\Element\ConstantInfo\ClassConstantInfoCollection;
-use PHPCD\Element\ConstantInfo\ConstantInfoCollection;
+use PHPCD\Element\ClassInfo\ClassCollection;
+use PHPCD\Element\ConstantInfo\ClassConstantCollection;
+use PHPCD\Element\ConstantInfo\ConstantCollection;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
-use PHPCD\Element\ObjectElementInfo\MethodInfoCollection;
-use PHPCD\Element\ObjectElementInfo\PropertyInfoCollection;
-use PHPCD\PHPFileInfo\PHPFileInfo;
+use PHPCD\Element\ObjectElement\MethodCollection;
+use PHPCD\Element\ObjectElement\PropertyCollection;
+use PHPCD\PHPFile\PHPFile;
 
 class VimMenuItemView implements View
 {
-    public function renderConstantInfoCollection(ConstantInfoCollection $collection)
+    public function renderConstantCollection(ConstantCollection $collection)
     {
         $visitor = new VimMenuRenderConstantVisitor();
 
         return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
-    public function renderClassConstantCollection(ClassConstantInfoCollection $collection)
+    public function renderClassConstantCollection(ClassConstantCollection $collection)
     {
         $visitor = new VimMenuRenderClassConstantVisitor();
 
         return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
-    public function renderClassInfoCollection(ClassInfoCollection $collection)
+    public function renderClassCollection(ClassCollection $collection)
     {
         $visitor = new VimMenuRenderClassVisitor();
 
         return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
-    public function renderMethodCollection(MethodInfoCollection $collection)
+    public function renderMethodCollection(MethodCollection $collection)
     {
         $visitor = new VimMenuRenderMethodVisitor();
 
@@ -48,19 +48,19 @@ class VimMenuItemView implements View
         return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
-    public function renderPropertyCollection(PropertyInfoCollection $collection)
+    public function renderPropertyCollection(PropertyCollection $collection)
     {
         $visitor = new VimMenuRenderPropertyVisitor();
 
         return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
-    public function renderPHPFileInfo(PHPFileInfo $fileInfo)
+    public function renderPHPFile(PHPFile $file)
     {
         return [
-            'namespace' => $fileInfo->getNamespace(),
-            'class' => $fileInfo->getClassName(),
-            'imports' => $fileInfo->getImports(),
+            'namespace' => $file->getNamespace(),
+            'class' => $file->getClassName(),
+            'imports' => $file->getImports(),
         ];
     }
 

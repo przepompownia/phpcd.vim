@@ -2,7 +2,7 @@
 
 namespace PHPCD\View;
 
-use PHPCD\Element\ObjectElementInfo\PropertyInfo;
+use PHPCD\Element\ObjectElement\PropertyInfo;
 
 class VimMenuRenderPropertyVisitor extends VimMenuRenderAbstractVisitor implements PropertyVisitor
 {

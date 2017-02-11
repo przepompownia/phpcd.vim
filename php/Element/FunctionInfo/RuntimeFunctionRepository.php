@@ -13,14 +13,14 @@ class RuntimeFunctionRepository implements FunctionRepository
     private $patternMatcher;
 
     /**
-     * @var FunctionInfoFactory
+     * @var FunctionFactory
      */
-    private $functionInfoFactory;
+    private $functionFactory;
 
-    public function __construct(PatternMatcher $patternMatcher, FunctionInfoFactory $functionInfoFactory)
+    public function __construct(PatternMatcher $patternMatcher, FunctionFactory $functionFactory)
     {
         $this->patternMatcher = $patternMatcher;
-        $this->functionInfoFactory = $functionInfoFactory;
+        $this->functionFactory = $functionFactory;
     }
 
     /**
@@ -28,7 +28,7 @@ class RuntimeFunctionRepository implements FunctionRepository
      */
     public function find(FunctionFilter $filter)
     {
-        $collection = $this->functionInfoFactory->createFunctionCollection();
+        $collection = $this->functionFactory->createFunctionCollection();
 
         $functions = get_defined_functions();
         $functions = array_merge($functions['internal'], $functions['user']);
@@ -57,6 +57,6 @@ class RuntimeFunctionRepository implements FunctionRepository
      */
     public function get($functionName)
     {
-        return $this->functionInfoFactory->createFunctionInfo($functionName);
+        return $this->functionFactory->createFunction($functionName);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace PHPCD\View;
 
-use PHPCD\Element\ObjectElementInfo\MethodInfo;
+use PHPCD\Element\ObjectElement\MethodInfo;
 
 class VimMenuRenderMethodVisitor extends VimMenuRenderAbstractVisitor implements MethodVisitor
 {

@@ -2,7 +2,7 @@
 
 namespace PHPCD\Element\FunctionInfo;
 
-use PHPCD\View\FunctionInfoVisitor;
+use PHPCD\View\FunctionVisitor;
 
 interface FunctionInfo
 {
@@ -18,5 +18,5 @@ interface FunctionInfo
 
     public function getStartLine();
 
-    public function accept(FunctionInfoVisitor $visitor);
+    public function accept(FunctionVisitor $visitor);
 }

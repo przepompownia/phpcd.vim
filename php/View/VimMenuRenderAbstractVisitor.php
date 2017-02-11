@@ -2,7 +2,7 @@
 
 namespace PHPCD\View;
 
-use PHPCD\Element\ObjectElementInfo\ObjectElementInfo;
+use PHPCD\Element\ObjectElement\ObjectElement;
 use PHPCD\Element\CollectionVisitor;
 
 abstract class VimMenuRenderAbstractVisitor implements CollectionVisitor
@@ -18,7 +18,7 @@ abstract class VimMenuRenderAbstractVisitor implements CollectionVisitor
        'static' => '@',
     ];
 
-    protected function getModifiers(ObjectElementInfo $objectElement)
+    protected function getModifiers(ObjectElement $objectElement)
     {
         return implode('', array_intersect_key($this->modifier_symbols, array_flip($objectElement->getModifiers())));
     }
