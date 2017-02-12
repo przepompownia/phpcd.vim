@@ -7,5 +7,5 @@ use X\Y as Z;
 
 function veryLongName(MethodFilter $methodFilter): Z
 {
-    return;
+    return new Z();
 }
