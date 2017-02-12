@@ -2,6 +2,9 @@
     "name": "phpvim/phpcd.vim",
     "authors": [
         {
+            "name": "Tomasz Nowiński"
+        },
+        {
             "name": "吕海涛",
             "email": "git@lvht.net"
         }
@@ -28,5 +31,10 @@
     "require-dev": {
         "phpunit/phpunit": ">=6.0.6",
         "mockery/mockery": "dev-master"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "PHPCD\\WhiteList::write"
+        ]
     }
 }
