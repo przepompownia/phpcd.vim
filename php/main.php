@@ -5,39 +5,43 @@ set_error_handler(function ($severity, $message, $file, $line) {
     throw new ErrorException($message, 0, $severity, $file, $line);
 });
 
-$handler_name = $argv[2];
+$handlerName = $argv[2];
 $root = $argv[1];
 $parameters = (empty($argv[3]) ? '' : $argv[3]);
 $parameters = json_decode($parameters, true) ?: [];
 $parameters['root'] = realpath($root);
 
-/** load autoloader for PHPCD **/
-require __DIR__.'/../vendor/autoload.php';
-
 /** load autoloader for the project **/
-$composer_autoload_file = $root.'/vendor/autoload.php';
-$autoload_file = empty($parameters['autoload_file']) ? $composer_autoload_file : $parameters['autoload_file'];
-if (is_readable($autoload_file)) {
-    $class_loader = require $autoload_file;
+$composerAutoloadFile = $root.'/vendor/autoload.php';
+$projectAutoloadFile = empty($parameters['autoload_file']) ? $composerAutoloadFile : $parameters['autoload_file'];
+if (!is_readable($projectAutoloadFile)) {
     // @TODO non-composer class loader
+    throw new Exception('This version still depends of autoloader from composer.');
 }
+$projectClassLoader = require $projectAutoloadFile;
+$parameters['class_loader'] = $projectClassLoader;
 
-$parameters['class_loader'] = $class_loader;
+/** load autoloader for PHPCD **/
+$phpcdAutoloadFile = __DIR__.'/../vendor/autoload.php';
+/** @var \Composer\Autoload\ClassLoader $phpcdClassLoader */
+$phpcdClassLoader = require $phpcdAutoloadFile;
+
+\PHPCD\WhiteList::load();
 
 $factory = new \PHPCD\Factory();
 
-$configdir = __DIR__.'/../config/';
-$handler_name = strtolower($handler_name);
-$dIContainer = $factory->createDIContainer('services.yml', $configdir, $parameters);
+$configDir = __DIR__.'/../config/';
+$handlerName = strtolower($handlerName);
+$dIContainer = $factory->createDIContainer('services.yml', $configDir, $parameters);
 
 $logger = $dIContainer->get('default_logger');
 
 try {
-    if ($handler_name !== 'phpcd' && $handler_name !== 'phpid') {
+    if ($handlerName !== 'phpcd' && $handlerName !== 'phpid') {
         throw new \InvalidArgumentException('The daemon name should be PHPCD or PHPID');
     }
 
-    $server = $dIContainer->get('server.'.$handler_name);
+    $server = $dIContainer->get('server.'.$handlerName);
     $server->loop();
 } catch (\Throwable $e) {
     $logger->error($e->getMessage(), $e->getTrace());
