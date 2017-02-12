@@ -13,6 +13,9 @@ interface ClassFactory
      */
     public function createClassInfo($class);
 
+    /**
+     * @return ClassCollection
+     */
     public function createCollection();
 
     /**
