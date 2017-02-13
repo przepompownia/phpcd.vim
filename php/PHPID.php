@@ -39,15 +39,17 @@ class PHPID implements RpcHandler
     }
 
     /**
-     * Set the composer root dir
+     * Set the composer root dir.
      *
      * @param string $root the path
+     *
      * @return static
      */
     private function setRoot($root)
     {
         // @TODO do we need to validate this input variable?
         $this->root = $root;
+
         return $this;
     }
 
@@ -59,11 +61,12 @@ class PHPID implements RpcHandler
     protected function setClassRepository(ClassRepository $classesRepository)
     {
         $this->classRepository = $classesRepository;
+
         return $this;
     }
 
     /**
-     * update index for one class
+     * update index for one class.
      *
      * @param string $className fqdn
      */
@@ -83,8 +86,8 @@ class PHPID implements RpcHandler
      * Fetch an interface's implementation list,
      * or an abstract class's child class.
      *
-     * @param string $name name of interface or abstract class
-     * @param bool $isAbstractClass
+     * @param string $name            name of interface or abstract class
+     * @param bool   $isAbstractClass
      *
      * @return array array of FQCNs
      */
@@ -92,7 +95,7 @@ class PHPID implements RpcHandler
     {
         $basePath = $isAbstractClass ? $this->getIntefacesDir()
             : $this->getExtendsDir();
-        $path = $basePath . '/' . $this->getIndexFileName($name);
+        $path = $basePath.'/'.$this->getIndexFileName($name);
         if (!is_file($path)) {
             return [];
         }
@@ -109,18 +112,18 @@ class PHPID implements RpcHandler
 
     /**
      * Fetch and save class's interface and parent info
-     * according the autoload_classmap.php file
+     * according the autoload_classmap.php file.
      */
     public function index()
     {
         $this->initIndexDir();
 
-        exec('composer dump-autoload -o -d ' . $this->root . ' 2>&1 >/dev/null');
+        exec('composer dump-autoload -o -d '.$this->root.' 2>&1 >/dev/null');
 
         $this->classMap = require $this->root
-            . '/vendor/composer/autoload_classmap.php';
+            .'/vendor/composer/autoload_classmap.php';
 
-        $pipePath = sys_get_temp_dir() . '/' . uniqid();
+        $pipePath = sys_get_temp_dir().'/'.uniqid();
         posix_mkfifo($pipePath, 0600);
 
         $this->vimOpenProgressBar(count($this->classMap));
@@ -161,17 +164,17 @@ class PHPID implements RpcHandler
 
     private function getIndexDir()
     {
-        return $this->root . '/.phpcd';
+        return $this->root.'/.phpcd';
     }
 
     private function getIntefacesDir()
     {
-        return $this->getIndexDir() . '/interfaces';
+        return $this->getIndexDir().'/interfaces';
     }
 
     private function getExtendsDir()
     {
-        return $this->getIndexDir() . '/extends';
+        return $this->getIndexDir().'/extends';
     }
 
     private function initIndexDir()
@@ -199,13 +202,13 @@ class PHPID implements RpcHandler
 
     private function updateParentIndex($parent, $child)
     {
-        $indexFile = $this->getExtendsDir() . '/' . $this->getIndexFileName($parent);
+        $indexFile = $this->getExtendsDir().'/'.$this->getIndexFileName($parent);
         $this->saveChild($indexFile, $child);
     }
 
     private function updateInterfaceIndex($interface, $implementation)
     {
-        $indexFile = $this->getIntefacesDir() . '/' . $this->getIndexFileName($interface);
+        $indexFile = $this->getIntefacesDir().'/'.$this->getIndexFileName($interface);
         $this->saveChild($indexFile, $implementation);
     }
 
@@ -230,7 +233,7 @@ class PHPID implements RpcHandler
 
     private function getIndexFileName($name)
     {
-        return str_replace("\\", '_', $name);
+        return str_replace('\\', '_', $name);
     }
 
     private function getClassInfo($name)
@@ -253,7 +256,7 @@ class PHPID implements RpcHandler
 
     private function vimOpenProgressBar($max)
     {
-        $cmd = 'let g:pb = vim#widgets#progressbar#NewSimpleProgressBar("Indexing:", ' . $max . ')';
+        $cmd = 'let g:pb = vim#widgets#progressbar#NewSimpleProgressBar("Indexing:", '.$max.')';
         $this->server->call('vim_command', [$cmd]);
     }
 
@@ -290,7 +293,7 @@ class PHPID implements RpcHandler
         $filter = new ClassFilter([
             ClassFilter::IS_FINAL => false,
             ClassFilter::IS_TRAIT => false,
-            ClassFilter::IS_INTERFACE => false
+            ClassFilter::IS_INTERFACE => false,
         ], $pathPattern);
 
         $collection = $this->classRepository->find($filter);
@@ -318,9 +321,11 @@ class PHPID implements RpcHandler
     }
 
     /**
-     * Prepare single element of completion output
+     * Prepare single element of completion output.
+     *
      * @param ClassCollection $collection
-     * @param bool $leadingBackslash prepend class path with backslash
+     * @param bool            $leadingBackslash prepend class path with backslash
+     *
      * @return array
      */
     private function prepareOutputFromClassCollection(
@@ -331,9 +336,9 @@ class PHPID implements RpcHandler
 
         foreach ($collection as $classInfo) {
             $result[] = [
-                'full_name' => ($leadingBackslash ? '\\' : '') . $classInfo->getName(),
+                'full_name' => ($leadingBackslash ? '\\' : '').$classInfo->getName(),
                 'short_name' => $classInfo->getShortName(),
-                'doc_comment' => $classInfo->getDocComment()
+                'doc_comment' => $classInfo->getDocComment(),
             ];
         }
 

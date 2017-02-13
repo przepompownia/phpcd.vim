@@ -15,7 +15,7 @@ use PHPCD\PHPFile\PHPFileFactory;
  */
 class WhiteList
 {
-    const PHPCD_AUTOLOAD_FILE = __DIR__ . '/../vendor/autoload.php';
+    const PHPCD_AUTOLOAD_FILE = __DIR__.'/../vendor/autoload.php';
 
     const PHPCD_DIR = '.phpcd';
 
@@ -47,7 +47,7 @@ class WhiteList
 
     private static function createOutputDirIfNeeded()
     {
-        if (! file_exists(self::getOutputDir())) {
+        if (!file_exists(self::getOutputDir())) {
             mkdir(self::getOutputDir(), 0700, true);
         }
 
@@ -62,7 +62,7 @@ class WhiteList
     public static function read()
     {
         if (is_readable(self::getFileName())) {
-            return require(self::getFileName());
+            return require self::getFileName();
         }
 
         return [];
@@ -76,7 +76,7 @@ class WhiteList
         }
 
         foreach ($whitelist as $fileName) {
-            require_once($fileName);
+            require_once $fileName;
         }
     }
 
@@ -90,5 +90,3 @@ class WhiteList
         return self::getOutputDir().DIRECTORY_SEPARATOR.self::WHITELIST_FILENAME;
     }
 }
-
-
