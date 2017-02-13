@@ -35,7 +35,7 @@
     },
     "scripts": {
         "post-autoload-dump": [
-            "PHPCD\\WhiteList::write"
+            "@php -r \"require('vendor/autoload.php'); PHPCD\\WhiteList::write();\""
         ]
     }
 }

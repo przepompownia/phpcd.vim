@@ -491,7 +491,7 @@ class StringBasedPHPFile implements PHPFile
 
         $exists = class_exists($className);
 
-        if (!$exists) {
+        if (false === $exists) {
             throw new FileException(sprintf('Class %s does not exist.', $className));
         }
 

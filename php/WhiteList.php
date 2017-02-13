@@ -31,7 +31,7 @@ class WhiteList
 
         foreach ($phpcdClassLoader->getClassMap() as $class => $fileName) {
             $file = $fileFactory->createFile($fileName);
-            if (!$file->hasErrors()) {
+            if (false === $file->hasErrors()) {
                 $whiteList[] = $fileName;
             }
         }
