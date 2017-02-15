@@ -346,7 +346,10 @@ function! phpcd#JumpToDefinition(mode) " {{{
 
 	let cur_pos = getcurpos()
 	let cur_pos[0] = bufnr('%')
-	call add(g:phpcd_jump_stack, cur_pos)
+	if !exists('s:phpcd_jump_stack')
+		let s:phpcd_jump_stack = []
+	endif
+	call add(s:phpcd_jump_stack, cur_pos)
 
 	if str2nr(symbol_line) > 0
 		silent! execute edit_cmd . symbol_line . ' ' . symbol_file
@@ -361,14 +364,14 @@ function! phpcd#JumpToDefinition(mode) " {{{
 endfunction " }}}
 
 function! phpcd#JumpBack() "{{{"
-	if len(g:phpcd_jump_stack) == 0
+	if !exists('s:phpcd_jump_stack') || len(s:phpcd_jump_stack) == 0
 		return
 	endif
 
-	let prev_pos = g:phpcd_jump_stack[-1]
+	let prev_pos = s:phpcd_jump_stack[-1]
 	let prev_buf = prev_pos[0]
 	let prev_pos[0] = 0
-	unlet g:phpcd_jump_stack[-1]
+	unlet s:phpcd_jump_stack[-1]
 	exec 'buffer '.prev_buf
 	call setpos('.', prev_pos)
 endfunction "}}}"
@@ -1116,8 +1119,10 @@ function! phpcd#GetClassName(start_line, context, current_namespace, imports) " 
 			if line =~? '^\s*' . object . '\s*=.*);\?$' " {{{
 				let classname = phpcd#GetCallChainReturnTypeAt(a:start_line - i)
 				let classname_parts = split(classname, '\\\+')
-				let classname_candidate = classname_parts[-1]
-				let class_candidate_namespace = join(classname_parts[0:-2], '\')
+				if len(classname_parts) > 0
+					let classname_candidate = classname_parts[-1]
+					let class_candidate_namespace = join(classname_parts[0:-2], '\')
+				endif
 				break
 			endif " }}}
 
@@ -1397,7 +1402,7 @@ function! phpcd#GetCallChainReturnTypeAt(line) " {{{
 	return classname
 endfunction " }}}
 
-function! s:GetFullName(namespace, classname)
+function! s:GetFullName(namespace, classname) " {{{
 	if a:namespace == '\'
 		let full_classname = a:classname
 	else
@@ -1405,6 +1410,33 @@ function! s:GetFullName(namespace, classname)
 	endif
 
 	return full_classname
-endfunction
+endfunction " }}}
+
+function! phpcd#GetRoot(globalRoot, currentPath, projectConfigFile, autoloadFile) " {{{
+	if '/' isnot a:globalRoot && stridx(a:currentPath, a:globalRoot) is 0
+		return a:globalRoot
+	endif
+
+	for needle in [a:projectConfigFile, a:autoloadFile]
+		let root = <SID>searchDirectoryUpwardForFile(a:currentPath, needle)
+		if '/' isnot root
+			return root
+		endif
+	endfor
+
+	return '/'
+endfunction " }}}
+
+function! s:searchDirectoryUpwardForFile(initialDirectory, file) " {{{
+	let root = a:initialDirectory
+	while '/' isnot	root
+		if (filereadable(root.'/'.a:file))
+			return root
+		endif
+		let root = fnamemodify(root, ":h")
+	endwhile
+
+	return root
+endfunction " }}}
 
 " vim: foldmethod=marker:noexpandtab:ts=2:sts=2:sw=2

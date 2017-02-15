@@ -18,7 +18,7 @@
     "require": {
         "php": "^5.5||^7.0",
         "psr/log": "^1.0",
-        "lvht/msgpack-rpc": "^0.2",
+        "lvht/msgpack-rpc": "^0.2.1",
         "symfony/dependency-injection": "^3.0",
         "symfony/config": "^3.0",
         "symfony/yaml": "^3.0",

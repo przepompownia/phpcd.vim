@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "eaf8e5b4b125864fdafee56a44d393e3",
+    "content-hash": "8b3cb092f0ba4fd22019076faff3a0f8",
     "packages": [
         {
             "name": "lvht/msgpack-rpc",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lvht/msgpack-rpc.git",
-                "reference": "1ca16a935920486d85999a5408c34e3ce80f3767"
+                "reference": "cc3f055251d90030c4fa683ab303e419738c35cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lvht/msgpack-rpc/zipball/1ca16a935920486d85999a5408c34e3ce80f3767",
-                "reference": "1ca16a935920486d85999a5408c34e3ce80f3767",
+                "url": "https://api.github.com/repos/lvht/msgpack-rpc/zipball/cc3f055251d90030c4fa683ab303e419738c35cd",
+                "reference": "cc3f055251d90030c4fa683ab303e419738c35cd",
                 "shasum": ""
             },
             "require": {
@@ -41,7 +41,7 @@
                     "email": "git@lvht.net"
                 }
             ],
-            "time": "2017-02-08T02:36:24+00:00"
+            "time": "2017-02-12T23:04:26+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -697,12 +697,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "63987b7de6ca423c27803e1f4a52bcfaa211667e"
+                "reference": "0653a4f0c50149e7b89e9978f04c941de82c7549"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/63987b7de6ca423c27803e1f4a52bcfaa211667e",
-                "reference": "63987b7de6ca423c27803e1f4a52bcfaa211667e",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/0653a4f0c50149e7b89e9978f04c941de82c7549",
+                "reference": "0653a4f0c50149e7b89e9978f04c941de82c7549",
                 "shasum": ""
             },
             "require": {
@@ -754,7 +754,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2017-02-09 21:01:27"
+            "time": "2017-02-14T17:09:25+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1767,6 +1767,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
+        "php": "^5.5||^7.0",
         "ext-json": "*"
     },
     "platform-dev": []

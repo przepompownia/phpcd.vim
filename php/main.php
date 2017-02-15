@@ -5,9 +5,8 @@ set_error_handler(function ($severity, $message, $file, $line) {
     throw new ErrorException($message, 0, $severity, $file, $line);
 });
 
-$handlerName = $argv[2];
 $root = $argv[1];
-$parameters = (empty($argv[3]) ? '' : $argv[3]);
+$parameters = (empty($argv[2]) ? '' : $argv[2]);
 $parameters = json_decode($parameters, true) ?: [];
 $parameters['root'] = realpath($root);
 
@@ -31,17 +30,13 @@ $phpcdClassLoader = require $phpcdAutoloadFile;
 $factory = new \PHPCD\Factory();
 
 $configDir = __DIR__.'/../config/';
-$handlerName = strtolower($handlerName);
 $dIContainer = $factory->createDIContainer('services.yml', $configDir, $parameters);
 
 $logger = $dIContainer->get('default_logger');
 
 try {
-    if ($handlerName !== 'phpcd' && $handlerName !== 'phpid') {
-        throw new \InvalidArgumentException('The daemon name should be PHPCD or PHPID');
-    }
-
-    $server = $dIContainer->get('server.'.$handlerName);
+    $server = $dIContainer->get('server.phpcd');
+    $server->addHandler($dIContainer->get('handler.phpid'));
     $server->loop();
 } catch (\Throwable $e) {
     $logger->error($e->getMessage(), $e->getTrace());
