@@ -36,6 +36,8 @@ class NamespaceInfo
 
         if (isset($composer['autoload']['psr-4'])) {
             $list = $composer['autoload']['psr-4'];
+        } else {
+            $list = [];
         }
 
         $unify = function (&$path) {
