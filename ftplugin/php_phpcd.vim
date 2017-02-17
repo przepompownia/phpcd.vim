@@ -47,9 +47,15 @@ function! Init(new_phpcd_root, projectConfigFile) " {{{
 	" endif
 endfunction " }}}
 
+let directory = expand("%:p:h")
+if ! isdirectory(directory)
+	echoerr(printf('The directory path %s of the current file does not exist. Trying to use the current directory as the project root instead.', directory))
+	let directory = getcwd()
+endif
+
 let new_phpcd_root = phpcd#GetRoot(
 	\ g:phpcd_root,
-	\ expand("%:p:h"),
+	\ directory,
 	\ g:phpcd_project_config_file_name,
 	\ g:phpcd_autoload_path
 	\ )
