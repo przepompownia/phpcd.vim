@@ -20,7 +20,7 @@ class NamespaceInfoTest extends TestCase
             ],
             [
                 '{"autoload": {"psr-0": {"": "src/"}}}',
-                []
+                ['' => ['src/']]
             ]
         ];
     }

@@ -32,13 +32,7 @@ class NamespaceInfo
 
     public function getPrefixesFromComposerJson($json)
     {
-        $composer = json_decode($json, true);
-
-        if (isset($composer['autoload']['psr-4'])) {
-            $list = $composer['autoload']['psr-4'];
-        } else {
-            $list = [];
-        }
+        $list = [];
 
         $unify = function (&$path) {
             if (!is_array($path)) {
@@ -46,19 +40,23 @@ class NamespaceInfo
             }
         };
 
-        array_walk($list, $unify);
-
-        if (!isset($composer['autoload-dev']['psr-4'])) {
-            return $list;
-        }
-
-        $list_dev = $composer['autoload-dev']['psr-4'];
-
-        foreach ($list_dev as $namespace => $paths) {
+        $append = function (&$paths, $namespace) use (&$list) {
             if (!isset($list[$namespace])) {
                 $list[$namespace] = [];
             }
-            $list[$namespace] = array_merge($list[$namespace], (array) $paths);
+            $list[$namespace] = array_merge($list[$namespace], $paths);
+        };
+
+        $composer = json_decode($json, true);
+
+        foreach (['autoload', 'autoload-dev'] as $autoload) {
+            foreach (['psr-0', 'psr-4'] as $psr) {
+                if (isset($composer[$autoload][$psr])) {
+                    $listPSR = $composer[$autoload][$psr];
+                    array_walk($listPSR, $unify);
+                    array_walk($listPSR, $append);
+                }
+            }
         }
 
         return $list;
