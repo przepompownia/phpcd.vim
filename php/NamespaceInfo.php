@@ -34,17 +34,14 @@ class NamespaceInfo
     {
         $list = [];
 
-        $unify = function (&$path) {
-            if (!is_array($path)) {
-                $path = [$path];
-            }
-        };
-
-        $append = function (&$paths, $namespace) use (&$list) {
+        $append = function ($path, $namespace) use (&$list) {
             if (!isset($list[$namespace])) {
                 $list[$namespace] = [];
             }
-            $list[$namespace] = array_merge($list[$namespace], $paths);
+            if (!is_array($path)) {
+                $path = [$path];
+            }
+            $list[$namespace] = array_merge($list[$namespace], $path);
         };
 
         $composer = json_decode($json, true);
@@ -53,7 +50,6 @@ class NamespaceInfo
             foreach (['psr-0', 'psr-4'] as $psr) {
                 if (isset($composer[$autoload][$psr])) {
                     $listPSR = $composer[$autoload][$psr];
-                    array_walk($listPSR, $unify);
                     array_walk($listPSR, $append);
                 }
             }
