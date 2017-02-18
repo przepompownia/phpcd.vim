@@ -1,0 +1,6 @@
+parameters:
+    completion_case_sensitivity:       false
+    completion_match_type:             'head_or_subsequence_of_last_part'
+    logger_implementation:             '\Monolog\Logger'
+    logger_parameters:                 []
+    messenger:                         null

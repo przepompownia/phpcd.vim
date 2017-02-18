@@ -24,7 +24,8 @@
         "symfony/yaml": "^3.0",
         "monolog/monolog": "^1.20",
         "ext-json": "*",
-        "phpdocumentor/reflection-docblock": "^3.1"
+        "phpdocumentor/reflection-docblock": "^3.1",
+        "incenteev/composer-parameter-handler": "^2.1"
     },
     "config": {
       "classmap-authoritative": true
@@ -36,6 +37,17 @@
     "scripts": {
         "post-autoload-dump": [
             "@php -r \"require('vendor/autoload.php'); PHPCD\\WhiteList::write();\""
+        ],
+        "post-install-cmd": [
+          "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "post-update-cmd": [
+          "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
         ]
+    },
+    "extra": {
+      "incenteev-parameters": {
+        "file": "config/parameters.yml"
+      }
     }
 }
