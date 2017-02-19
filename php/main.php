@@ -4,6 +4,8 @@ error_reporting(-1);
 set_error_handler(function ($severity, $message, $file, $line) {
     throw new ErrorException($message, 0, $severity, $file, $line);
 });
+$fatalErrorFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'phpcd-errors.log';
+ini_set('error_log', $fatalErrorFile);
 
 $root = $argv[1];
 $parameters = (empty($argv[2]) ? '' : $argv[2]);
