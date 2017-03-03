@@ -3,6 +3,7 @@
 namespace PHPCD\Element\FunctionInfo;
 
 use PHPCD\View\FunctionVisitor;
+use PHPCD\DocBlock\DocBlock;
 
 class ReflectionFunction implements FunctionInfo
 {
@@ -11,9 +12,15 @@ class ReflectionFunction implements FunctionInfo
      */
     private $reflectionFunction;
 
-    public function __construct(\ReflectionFunction $reflectionFunction)
+    public function __construct(DocBlock $docBlock, \ReflectionFunction $reflectionFunction)
     {
+        $this->docBlock = $docBlock;
         $this->reflectionFunction = $reflectionFunction;
+    }
+
+    public function getNamespaceName()
+    {
+        return $this->reflectionFunction->getNamespaceName();
     }
 
     public function getName()
@@ -36,29 +43,55 @@ class ReflectionFunction implements FunctionInfo
         return $this->reflectionFunction->getFileName();
     }
 
-    public function getReturnTypes()
-    {
-        $type = $this->getPHPReturnType();
-        if (null !== $type) {
-            return [$type];
-        }
-        // @TODO get types from docblock
-    }
-
-    private function getPHPReturnType()
-    {
-        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            $type = (string) $this->reflectionFunction->getReturnType();
-
-            if ('' !== $type) {
-                return $type;
-            }
-        }
-    }
-
     public function getStartLine()
     {
         return $this->reflectionFunction->getStartLine();
+    }
+
+    /**
+     * @return array
+     */
+    private function getNonTrivialTypesFromDocblock()
+    {
+        $docBlock = $this->getDocComment();
+        $objectTypes = $this->docBlock->getObjectTypesFromDocBlock(
+            $docBlock,
+            $this->getNamespaceName(),
+            $this->getFileName(),
+            DocBlock::TAG_RETURN
+        );
+
+        $types = [];
+
+        foreach ($objectTypes as $type) {
+            $typeClass = get_class($type);
+
+            switch ($typeClass) {
+                case Object_::class:
+                    $types[] = (string) $type;
+                    break;
+                case This::class:
+                case Static_::class:
+                case Self_::class:
+                    break;
+                default:
+                    throw new \Exception('Invalid type.');
+            }
+        }
+
+        return $types;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNonTrivialTypes()
+    {
+        if (version_compare(PHP_VERSION, '7.0.0') >= 0 && $this->reflectionFunction->hasReturnType()) {
+            return [(string) $this->reflectionFunction->getReturnType()];
+        }
+
+        return $this->getNonTrivialTypesFromDocblock();
     }
 
     public function accept(FunctionVisitor $visitor)

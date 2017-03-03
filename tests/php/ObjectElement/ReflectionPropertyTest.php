@@ -3,6 +3,7 @@
 namespace tests\ObjectElement;
 
 use PHPUnit\Framework\TestCase;
+use phpDocumentor\Reflection\Types\ContextFactory;
 use phpDocumentor\Reflection\DocBlockFactory;
 use PHPCD\DocBlock\DocBlock;
 use tests\MethodRepository\Test1;
@@ -16,14 +17,12 @@ class ReflectionPropertyTest extends TestCase
      */
     public function getAllowedTypes($class, $method)
     {
+        $contextFactory = new ContextFactory();
         $docBlockFactory = DocBlockFactory::createInstance();
-        $docBlock = new DocBlock($docBlockFactory);
+        $docBlock = new DocBlock($docBlockFactory, $contextFactory);
         $property = new \ReflectionProperty($class, $method);
-        $propertyInfo = new ReflectionProperty($property, $docBlock);
-        $types = $propertyInfo->getAllowedTypes();
-
-
-        // var_dump($types);
+        $propertyInfo = new ReflectionProperty($docBlock, $property);
+        $type = $propertyInfo->getFirstTypeString();
     }
 
     public function getAllowedTypesDataProvider()

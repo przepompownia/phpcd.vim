@@ -96,6 +96,14 @@ class ReflectionClass implements ClassInfo
     /**
      * @return string
      */
+    public function getNamespaceName()
+    {
+        return $this->reflectionClass->getNamespaceName();
+    }
+
+    /**
+     * @return string
+     */
     public function getFileName()
     {
         return $this->reflectionClass->getFileName();

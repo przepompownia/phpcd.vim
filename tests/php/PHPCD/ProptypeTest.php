@@ -5,7 +5,6 @@ namespace tests\PHPCD;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\DocBlock\DocBlock;
-use PHPCD\DocBlock\LegacyTypeLogic;
 use PHPCD\Element\ConstantInfo\ClassConstantRepository;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
@@ -18,6 +17,8 @@ use PHPCD\PHPFile\PHPFile;
 use PHPCD\PHPFile\PHPFileFactory;
 use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
+use phpDocumentor\Reflection\DocBlockFactory;
+use phpDocumentor\Reflection\Types\ContextFactory;
 
 class ProptypeTest extends MockeryTestCase
 {
@@ -36,9 +37,10 @@ class ProptypeTest extends MockeryTestCase
         $fileFactory = Mockery::mock(PHPFileFactory::class);
         $view = Mockery::mock(View::class);
         $file = Mockery::mock(PHPFile::class);
-        $legacyTypeLogic = new LegacyTypeLogic($logger, $fileFactory);
-        $docBlock = Mockery::mock(DocBlock::class);
-        $propertyInfo = new ReflectionProperty(new \ReflectionProperty($class, $property), $docBlock);
+        $docBlockFactory = DocblockFactory::createInstance();
+        $contextFactory = new ContextFactory();
+        $docBlock = new DocBlock($docBlockFactory, $contextFactory);
+        $propertyInfo = new ReflectionProperty($docBlock, new \ReflectionProperty($class, $property));
         $functionRepository = Mockery::mock(FunctionRepository::class);
 
         $file->shouldReceive('getImports')->andReturn($imports);
@@ -56,8 +58,7 @@ class ProptypeTest extends MockeryTestCase
             $methodRepository,
             $fileFactory,
             $view,
-            $functionRepository,
-            $legacyTypeLogic
+            $functionRepository
         );
 
         $types = $phpcd->getTypesOfProperty($class, $property);

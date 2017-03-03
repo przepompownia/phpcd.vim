@@ -20,7 +20,6 @@ use PHPCD\Filter\PropertyFilter;
 use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\View\View;
-use PHPCD\DocBlock\LegacyTypeLogic;
 
 class PHPCD implements RpcHandler
 {
@@ -62,11 +61,6 @@ class PHPCD implements RpcHandler
     private $view;
 
     /**
-     * @var LegacyTypeLogic
-     */
-    private $legacyTypeLogic;
-
-    /**
      * @var FunctionRepository
      */
     private $functionRepository;
@@ -90,8 +84,7 @@ class PHPCD implements RpcHandler
         MethodRepository $methodRepository,
         PHPFileFactory $fileFactory,
         View $view,
-        FunctionRepository $functionRepository,
-        LegacyTypeLogic $legacyTypeLogic
+        FunctionRepository $functionRepository
     ) {
         $this->nsinfo = $nsinfo;
         $this->setLogger($logger);
@@ -102,7 +95,6 @@ class PHPCD implements RpcHandler
         $this->methodRepository = $methodRepository;
         $this->view = $view;
         $this->functionRepository = $functionRepository;
-        $this->legacyTypeLogic = $legacyTypeLogic;
     }
 
     public function setServer(RpcServer $server)
@@ -206,35 +198,16 @@ class PHPCD implements RpcHandler
 
     public function getTypesReturnedByFunction($functionName)
     {
-        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            $type = $this->legacyTypeLogic->typeByReturnType('', $functionName);
-            if ($type) {
-                return [$type];
-            }
-        }
-
-        list($path, $doc) = $this->legacyTypeLogic->docFunction($functionName);
-
-        return $this->legacyTypeLogic->typeByDoc($path, $doc);
+        $function = $this->functionRepository->get($functionName);
+        return $function->getNonTrivialTypes();
     }
 
     public function getTypesReturnedByMethod($className, $methodName)
     {
-        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            $type = $this->legacyTypeLogic->typeByReturnType($className, $methodName);
-            if ($type) {
-                return [$type];
-            }
-        }
-
         $methodPath = new MethodPath($className, $methodName);
         $method = $this->methodRepository->getByPath($methodPath);
-        $path = $method->getClass()->getFileName();
-        $doc = $method->getDocComment();
 
-        $types = $this->legacyTypeLogic->typeByDoc($path, $doc);
-
-        return $types;
+        return $method->getNonTrivialTypes();
     }
 
     /**
@@ -246,12 +219,7 @@ class PHPCD implements RpcHandler
     {
         $propertyPath = new PropertyPath($className, $propertyName);
         $property = $this->propertyRepository->getByPath($propertyPath);
-        $path = $property->getClass()->getFileName();
-        $doc = $property->getDocComment();
-
-        $types = $this->legacyTypeLogic->typeByDoc($path, $doc);
-
-        return $types;
+        return $property->getNonTrivialTypes();
     }
 
     public function getMatchingClassDetails($className, $pattern, $isStatic, $publicOnly = true)

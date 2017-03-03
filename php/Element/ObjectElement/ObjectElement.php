@@ -22,4 +22,14 @@ interface ObjectElement
     public function getDocComment();
 
     public function getModifiers();
+
+    /**
+     * @return array
+     */
+    public function getAllowedTypes();
+
+    /**
+     * @return array
+     */
+    public function getNonTrivialTypes();
 }

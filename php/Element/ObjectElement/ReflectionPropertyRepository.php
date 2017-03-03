@@ -20,7 +20,7 @@ class ReflectionPropertyRepository extends ReflectionObjectElementRepository imp
         $collection = new PropertyCollection();
 
         foreach ($reflectionClass->getProperties() as $property) {
-            $property = new ReflectionProperty($property, $this->docBlock);
+            $property = new ReflectionProperty($this->docBlock, $property);
             if (true === $this->filter($property, $filter)) {
                 $collection->add($property);
             }
@@ -64,6 +64,6 @@ class ReflectionPropertyRepository extends ReflectionObjectElementRepository imp
             throw new NotFoundException($e->getMessage(), $e->getCode(), $e);
         }
 
-        return new ReflectionProperty($property, $this->docBlock);
+        return new ReflectionProperty($this->docBlock, $property);
     }
 }

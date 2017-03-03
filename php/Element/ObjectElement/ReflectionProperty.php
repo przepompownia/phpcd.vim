@@ -7,37 +7,27 @@ use PHPCD\DocBlock\DocBlock;
 
 class ReflectionProperty extends ReflectionObjectElement implements PropertyInfo
 {
-    /**
-     * @var DocBlock
-     */
-    protected $docBlock;
-
-    public function __construct(\ReflectionProperty $property, DocBlock $docBlock)
+    public function __construct(DocBlock $docBlock, \ReflectionProperty $property)
     {
+        parent::__construct($docBlock);
         $this->objectElement = $property;
-        $this->docBlock = $docBlock;
     }
 
-    /**
-     * @return array
-     */
-    public function getAllowedTypes()
+    protected function getDocBlockTagName()
     {
-        $docBlock = $this->getDocComment();
-
-        return $this->docBlock->getTypesFromDocBlock($docBlock);
-    }
-
-    /**
-     * @return array
-     */
-    public function getAllowedNonTrivialTypes()
-    {
-        return [];
+        return DocBlock::TAG_VAR;
     }
 
     public function accept(PropertyVisitor $visitor)
     {
         $visitor->visitElement($this);
+    }
+
+    /**
+     * @return array
+     */
+    public function getNonTrivialTypes()
+    {
+        return $this->getNonTrivialTypesFromDocblock();
     }
 }

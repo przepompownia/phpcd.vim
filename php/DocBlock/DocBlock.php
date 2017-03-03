@@ -2,51 +2,83 @@
 
 namespace PHPCD\DocBlock;
 
-use phpDocumentor\Reflection\DocBlockFactory;
+use phpDocumentor\Reflection\Types\ContextFactory;
+use phpDocumentor\Reflection\DocBlockFactoryInterface;
 use phpDocumentor\Reflection\Types\Compound;
 use phpDocumentor\Reflection\Types\Object_;
+use phpDocumentor\Reflection\Types\Self_;
+use phpDocumentor\Reflection\Types\Static_;
+use phpDocumentor\Reflection\Types\This;
 use phpDocumentor\Reflection\Types\Array_;
 
 class DocBlock
 {
+    const TAG_VAR    = 'var';
+    const TAG_PARAM  = 'param';
+    const TAG_RETURN = 'return';
+
+    const OBJECT_TYPES = [
+        Self_::class,
+        Static_::class,
+        This::class,
+        Object_::class,
+    ];
+
     /**
-     * @var DocBlockFactory
+     * @var ContextFactory
+     */
+    private $contextFactory;
+
+    /**
+     * @var DocBlockFactoryInterface
      */
     protected $docBlockFactory;
 
-    public function __construct(DocBlockFactory $docBlockFactory)
-    {
+    public function __construct(
+        DocBlockFactoryInterface $docBlockFactory,
+        ContextFactory $contextFactory
+    ) {
         $this->docBlockFactory = $docBlockFactory;
+        $this->contextFactory = $contextFactory;
     }
 
-    public function getTypesFromDocBlock($docBlock)
+    public function getTypesFromDocBlock($docBlockString, $namespace, $fileName, $tagName)
     {
-        $comment = $this->docBlockFactory->create($docBlock);
-        $tags = $comment->getTagsByName('var');
+        if (!file_exists($fileName)) {
+        }
+        $context = $this->contextFactory->createForNamespace($namespace, file_get_contents($fileName));
+        $comment = $this->docBlockFactory->create($docBlockString, $context);
+        $tags = $comment->getTagsByName($tagName);
 
         // Get only the first @var line
-        $tag = $tags[0]->getType();
+        $type = $tags[0]->getType();
 
-        // var_dump(explode('|', (string)$tag));
+        if ($type instanceof Compound) {
+            return iterator_to_array(new CompoundTypeIterator($type));
+        }
 
+        return [$type];
+    }
+
+    public function getObjectTypesFromDocblock($docBlockString, $namespace, $fileName, $tagName)
+    {
         $types = [];
 
-        // @TODO refactor
-        if ($tag instanceof Compound) {
-            $index = 0;
-            while ($tag->has($index)) {
-                $type = $tag->get($index);
-                if ($type instanceof Object_) {
-                    $types[] = (string) $type;
-                } else {
-                    // printf("%s: %s\n", get_class($type), (string)$type);
-                }
+        $allTypes = $this->getTypesFromDocBlock($docBlockString, $namespace, $fileName, $tagName);
 
-                ++$index;
+        foreach ($allTypes as $type) {
+            if (in_array(get_class($type), self::OBJECT_TYPES)) {
+                $types[] = $type;
             }
-        } elseif ($tag instanceof Array_) {
         }
 
         return $types;
+    }
+
+    public function getFirstTypeStringFromDocblock($docBlockString, $namespace, $fileName, $tagName)
+    {
+        $types = $this->getObjectTypesFromDocBlock($docBlockString, $namespace, $fileName, $tagName);
+
+        return (string) current($types);
     }
 }

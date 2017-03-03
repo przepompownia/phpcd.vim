@@ -16,7 +16,7 @@ class ReflectionMethodRepository extends ReflectionObjectElementRepository imple
         $collection = new MethodCollection();
 
         foreach ($reflectionClass->getMethods() as $method) {
-            $method = new ReflectionMethod($method);
+            $method = new ReflectionMethod($this->docBlock, $method);
             if (true === $this->filter($method, $filter)) {
                 $collection->add($method);
             }

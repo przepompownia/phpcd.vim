@@ -46,10 +46,14 @@ services:
         class:              \phpDocumentor\Reflection\DocBlockFactory
         factory:            ['phpDocumentor\Reflection\DocBlockFactory', 'createInstance']
 
+    factory.context:
+        class:              \phpDocumentor\Reflection\Types\ContextFactory
+
     docblock:
         class:              PHPCD\DocBlock\DocBlock
         arguments:
             - '@docblock_factory'
+            - '@factory.context'
 
     repository.constant.factory:
         class:              \PHPCD\Element\ConstantInfo\ConstantFactory
@@ -87,18 +91,14 @@ services:
 
     function_factory:
         class: \PHPCD\Element\FunctionInfo\FunctionFactory
+        arguments:
+            - '@docblock'
 
     function_repository:
         class: \PHPCD\Element\FunctionInfo\RuntimeFunctionRepository
         arguments:
             - '@default_pattern_matcher'
             - '@function_factory'
-
-    type.legacy:
-        class:      \PHPCD\DocBlock\LegacyTypeLogic
-        arguments:
-            - '@default_logger'
-            - '@file_info_factory'
 
     handler.phpcd:
         class:              \PHPCD\PHPCD
@@ -112,7 +112,6 @@ services:
             - '@file_info_factory'
             - '@view'
             - '@function_repository'
-            - '@type.legacy'
 
     server.phpcd:
         class:              Lvht\MsgpackRpc\ForkServer

@@ -4,7 +4,6 @@ namespace tests\PHPCD;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPCD\DocBlock\LegacyTypeLogic;
 use PHPCD\Element\ConstantInfo\ClassConstantRepository;
 use PHPCD\Element\ConstantInfo\ConstantCollection;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
@@ -18,6 +17,7 @@ use PHPCD\PHPCD;
 use PHPCD\PHPFile\PHPFileFactory;
 use PHPCD\View\VimMenuItemView;
 use Psr\Log\LoggerInterface as Logger;
+use PHPCD\DocBlock\DocBlock;
 
 class FunctionsAndConstantsTest extends MockeryTestCase
 {
@@ -32,16 +32,17 @@ class FunctionsAndConstantsTest extends MockeryTestCase
         $propertyRepository = Mockery::mock(PropertyRepository::class);
         $methodRepository = Mockery::mock(MethodRepository::class);
         $fileFactory = Mockery::mock(PHPFileFactory::class);
-        $legacyTypeLogic = Mockery::mock(LegacyTypeLogic::class);
 
         $constantRepository = Mockery::mock(ConstantRepository::class);
         $classConstantRepository = Mockery::mock(ClassConstantRepository::class);
         $functionRepository = Mockery::mock(FunctionRepository::class);
 
+        $docBlock = Mockery::mock(DocBlock::class);
+
         $view = new VimMenuItemView();
         $constantRepository->shouldReceive('find')->once()->andReturn(new ConstantCollection());
         $functionCollection = new FunctionCollection();
-        $functionCollection->add(new ReflectionFunction(new \ReflectionFunction('var_dump')));
+        $functionCollection->add(new ReflectionFunction($docBlock, new \ReflectionFunction('var_dump')));
         $functionRepository->shouldReceive('find')->once()->andReturn($functionCollection);
 
 
@@ -54,8 +55,7 @@ class FunctionsAndConstantsTest extends MockeryTestCase
             $methodRepository,
             $fileFactory,
             $view,
-            $functionRepository,
-            $legacyTypeLogic
+            $functionRepository
         );
 
         $output = $phpcd->getFunctionsAndConstants('var');

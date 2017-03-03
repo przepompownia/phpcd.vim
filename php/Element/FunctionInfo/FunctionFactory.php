@@ -2,14 +2,25 @@
 
 namespace PHPCD\Element\FunctionInfo;
 
+use PHPCD\DocBlock\DocBlock;
+
 class FunctionFactory
 {
+    /**
+     * @var DocBlock
+     */
+    protected $docBlock;
+
+    public function __construct(DocBlock $docBlock)
+    {
+        $this->docBlock = $docBlock;
+    }
     /**
      * @return ReflectionFunction
      */
     public function createFunction($functionName)
     {
-        return new ReflectionFunction(new \ReflectionFunction($functionName));
+        return new ReflectionFunction($this->docblock, new \ReflectionFunction($functionName));
     }
 
     /**

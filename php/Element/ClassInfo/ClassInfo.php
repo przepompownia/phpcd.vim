@@ -62,5 +62,10 @@ interface ClassInfo
      */
     public function getStartLine();
 
+    /**
+     * @return string
+     */
+    public function getNamespaceName();
+
     public function accept(ClassVisitor $visitor);
 }
