@@ -50,7 +50,7 @@ try
 
 	let directory = expand("%:p:h")
 	if ! isdirectory(directory)
-		echoerr(printf('The directory path %s of the current file does not exist. Trying to use the current directory as the project root instead.', directory))
+		echo(printf('The directory path %s of the current file does not exist. Trying to use the current directory as the project root instead.', directory))
 		let directory = getcwd()
 	endif
 
