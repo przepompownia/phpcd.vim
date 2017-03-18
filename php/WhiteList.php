@@ -21,18 +21,33 @@ class WhiteList
 
     const WHITELIST_FILENAME = 'whitelist.php';
 
-    public static function write()
+    public static function write($forceReindex = false)
     {
         $phpcdClassLoader = require self::PHPCD_AUTOLOAD_FILE;
 
         $fileFactory = new PHPFileFactory();
 
+        $oldWhiteList = self::read();
         $whiteList = [];
 
         foreach ($phpcdClassLoader->getClassMap() as $class => $fileName) {
+            $modificationTime = filemtime($fileName);
+
+            if (isset($oldWhiteList[$class]['modified'])) {
+                $cachedModificationTime = $oldWhiteList[$class]['modified'];
+
+                if (false === $forceReindex && $modificationTime <= $cachedModificationTime) {
+                    $whiteList[$class] = $oldWhiteList[$class];
+                    continue;
+                }
+            }
+
             $file = $fileFactory->createFile($fileName);
             if (false === $file->hasErrors()) {
-                $whiteList[] = $fileName;
+                $whiteList[$class] = [
+                    'fileName' => $fileName,
+                    'modified' => $modificationTime,
+                ];
             }
         }
 
@@ -75,8 +90,10 @@ class WhiteList
             self::write();
         }
 
-        foreach ($whitelist as $fileName) {
-            require_once $fileName;
+        foreach ($whitelist as $file) {
+            if (!empty($file['fileName']) && is_readable($file['fileName'])) {
+                require_once $file['fileName'];
+            }
         }
     }
 
