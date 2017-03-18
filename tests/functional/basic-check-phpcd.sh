@@ -19,6 +19,6 @@ php ./php/main.php "$PWD" "$(printf '{
 
 sleep 1
 
-killTask $! $handler
+killTask $!
 
 echo PHPCD started!
