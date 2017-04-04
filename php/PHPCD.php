@@ -107,21 +107,21 @@ class PHPCD implements RpcHandler
      * and their definition line number.
      *
      * @param string $className  class name
-     * @param string $methodName method or function name
+     * @param string $symbol method or function name
      *
      * @return array
      */
-    public function findSymbolDeclaration($className, $methodName = '__construct')
+    public function findSymbolDeclaration($className, $symbol = '__construct')
     {
         try {
             $reflection = new \ReflectionClass($className);
 
-            if ($reflection->hasMethod($methodName)) {
-                $reflection = $reflection->getMethod($methodName);
-            } elseif ($reflection->hasConstant($methodName)) {
-                return [$this->getConstPath($methodName, $reflection), 'const '.$methodName];
-            } elseif ($reflection->hasProperty($methodName)) {
-                $line = $this->getPropertyDefLine($reflection, $methodName);
+            if ($reflection->hasMethod($symbol)) {
+                $reflection = $reflection->getMethod($symbol);
+            } elseif ($reflection->hasConstant($symbol)) {
+                return [$this->getConstPath($symbol, $reflection), 'const '.$symbol];
+            } elseif ($reflection->hasProperty($symbol)) {
+                $line = $this->getPropertyDefLine($reflection, $symbol);
 
                 return [$reflection->getFileName(), $line];
             }
