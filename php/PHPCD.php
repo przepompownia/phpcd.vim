@@ -199,6 +199,7 @@ class PHPCD implements RpcHandler
     public function getTypesReturnedByFunction($functionName)
     {
         $function = $this->functionRepository->get($functionName);
+
         return $function->getNonTrivialTypes();
     }
 
