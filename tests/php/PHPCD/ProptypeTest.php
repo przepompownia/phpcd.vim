@@ -12,6 +12,7 @@ use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\Element\ObjectElement\ReflectionProperty;
 use PHPCD\NamespaceInfo;
+use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\PHPCD;
 use PHPCD\PHPFile\PHPFile;
 use PHPCD\PHPFile\PHPFileFactory;
@@ -20,6 +21,7 @@ use Psr\Log\LoggerInterface as Logger;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Types\ContextFactory;
 use tests\Fixtures\MethodRepository\Sup;
+use tests\Fixtures\MethodRepository\Test1;
 
 class ProptypeTest extends MockeryTestCase
 {
@@ -79,14 +81,14 @@ class ProptypeTest extends MockeryTestCase
                 'pub5',
                 'tests\\Fixtures\\MethodRepository',
                 [],
-                ['\\ReflectionClass', '\\tests\\MethodRepository\\Test1']
+                ['\\ReflectionClass', '\\'.Test1::class]
             ],
             [
                 Sup::class,
                 'pub6',
                 'tests\\Fixtures\\MethodRepository',
-                ['PM' => '\\PHPCD\\PatternMatcher'],
-                ['\\PHPCD\\PatternMatcher\\PatternMatcher']
+                ['PM' => '\\'.PatternMatcher::class],
+                ['\\'.PatternMatcher::class]
             ],
         ];
     }
