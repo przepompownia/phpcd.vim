@@ -2,6 +2,7 @@
 
 namespace PHPCD\Element\ObjectElement;
 
+use PHPCD\Element\ClassInfo\ClassInfo;
 use PHPCD\Element\ClassInfo\ReflectionClass;
 use phpDocumentor\Reflection\Types\Self_;
 use phpDocumentor\Reflection\Types\Static_;
@@ -91,7 +92,7 @@ abstract class ReflectionObjectElement implements ObjectElement
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getFirstTypeString()
     {
