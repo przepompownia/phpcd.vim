@@ -25,12 +25,11 @@ class ReflectionMethodRepository extends ReflectionObjectElementRepository imple
         return $collection;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return MethodInfo
-     */
-    public function getByPath($path)
+    public function getByPath(MethodPath $path)
     {
+        $reflectionMethod = new \ReflectionMethod($path->getClassName(), $path->getMethodName());
+
+        return new ReflectionMethod($this->docBlock, $reflectionMethod);
     }
+
 }
