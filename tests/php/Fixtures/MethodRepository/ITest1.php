@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\MethodRepository;
+namespace tests\Fixtures\MethodRepository;
 
 interface ITest1
 {

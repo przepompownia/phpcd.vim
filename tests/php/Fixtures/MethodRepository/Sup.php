@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\MethodRepository;
+namespace tests\Fixtures\MethodRepository;
 
 use PHPCD\PatternMatcher as PM;
 
@@ -34,5 +34,13 @@ class Sup
 
     protected function xyz()
     {
+    }
+
+    /**
+     * @return \ReflectionClass|Test1
+     */
+    public function doNothing(): PM\PatternMatcher
+    {
+
     }
 }

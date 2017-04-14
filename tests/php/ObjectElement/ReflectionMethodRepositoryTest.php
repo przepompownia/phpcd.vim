@@ -10,6 +10,7 @@ use PHPCD\Element\ClassInfo\ReflectionClassFactory;
 use PHPCD\Element\ObjectElement\ReflectionMethodRepository;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
+use tests\Fixtures\MethodRepository\Test1;
 
 class ReflectionMethodRepositoryTest extends MockeryTestCase
 {
@@ -19,7 +20,7 @@ class ReflectionMethodRepositoryTest extends MockeryTestCase
      */
     public function findAllMethods()
     {
-        $className =  'tests\\MethodRepository\\Test1';
+        $className =  Test1::class;
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $methods = $repository->find(new MethodFilter([
@@ -28,7 +29,7 @@ class ReflectionMethodRepositoryTest extends MockeryTestCase
 
         $this->assertFalse($methods->isEmpty());
 
-        $this->assertCount(5, $methods);
+        $this->assertCount(6, $methods);
         $method = $methods->getIterator()->current();
         $this->assertEquals('play', $method->getName());
         $this->assertTrue($method->isPublic());
@@ -39,7 +40,7 @@ class ReflectionMethodRepositoryTest extends MockeryTestCase
      */
     public function findPublicMethodsOnly()
     {
-        $className =  'tests\\MethodRepository\\Test1';
+        $className =  Test1::class;
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $filter = new MethodFilter([
@@ -48,7 +49,7 @@ class ReflectionMethodRepositoryTest extends MockeryTestCase
         ], 'mocked');
 
         $methods = $repository->find($filter);
-        $this->assertCount(2, $methods);
+        $this->assertCount(3, $methods);
     }
 
     private function getRepositoryWithTrivialMatcher($className)

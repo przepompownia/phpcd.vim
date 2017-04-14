@@ -9,6 +9,7 @@ use PHPCD\Element\ClassInfo\ReflectionClassFactory;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Element\ConstantInfo\ReflectionClassConstantRepository;
 use Mockery;
+use tests\Fixtures\MethodRepository\Test1;
 
 class ClassConstantRepositoryTest extends MockeryTestCase
 {
@@ -17,7 +18,7 @@ class ClassConstantRepositoryTest extends MockeryTestCase
      */
     public function find()
     {
-        $className =  'tests\\MethodRepository\\Test1';
+        $className =  Test1::class;
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $constants = $repository->find(new ClassConstantFilter([

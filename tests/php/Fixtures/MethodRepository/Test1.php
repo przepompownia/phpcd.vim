@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\MethodRepository;
+namespace tests\Fixtures\MethodRepository;
 
 /**
  * @property-read \SplFileObject $file

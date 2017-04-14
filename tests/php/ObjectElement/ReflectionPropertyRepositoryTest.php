@@ -12,6 +12,7 @@ use PHPCD\Element\ObjectElement\PropertyPath;
 use PHPCD\Element\ObjectElement\ReflectionPropertyRepository;
 use PHPCD\Filter\PropertyFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
+use tests\Fixtures\MethodRepository\Test1;
 
 class ReflectionPropertyRepositoryTest extends MockeryTestCase
 {
@@ -20,7 +21,7 @@ class ReflectionPropertyRepositoryTest extends MockeryTestCase
      */
     public function findAllProperties()
     {
-        $className =  'tests\\MethodRepository\\Test1';
+        $className =  Test1::class;
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $properties = $repository->find(new PropertyFilter([
@@ -54,7 +55,7 @@ class ReflectionPropertyRepositoryTest extends MockeryTestCase
      */
     public function findPublicPropertiesOnly()
     {
-        $className =  'tests\\MethodRepository\\Test1';
+        $className =  Test1::class;
         $repository = $this->getRepositoryWithTrivialMatcher($className);
 
         $filter = new PropertyFilter([
@@ -77,7 +78,7 @@ class ReflectionPropertyRepositoryTest extends MockeryTestCase
         $docBlock = Mockery::mock(DocBlock::class);
         $repository = new ReflectionPropertyRepository($pattern_matcher, $factory, $docBlock);
 
-        $className =  \tests\MethodRepository\Test1::class;
+        $className =  \tests\Fixtures\MethodRepository\Test1::class;
         $propertyName = 'doesnotexist';
         $path = new PropertyPath($className, $propertyName);
 
@@ -94,7 +95,7 @@ class ReflectionPropertyRepositoryTest extends MockeryTestCase
         $docBlock = Mockery::mock(DocBlock::class);
         $repository = new ReflectionPropertyRepository($patternMatcher, $factory, $docBlock);
 
-        $className =  \tests\MethodRepository\Test1::class;
+        $className =  \tests\Fixtures\MethodRepository\Test1::class;
         $propertyName = 'pub1';
         $path = new PropertyPath($className, $propertyName);
 

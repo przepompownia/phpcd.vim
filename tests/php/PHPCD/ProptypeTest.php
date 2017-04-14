@@ -19,6 +19,7 @@ use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Types\ContextFactory;
+use tests\Fixtures\MethodRepository\Sup;
 
 class ProptypeTest extends MockeryTestCase
 {
@@ -74,16 +75,16 @@ class ProptypeTest extends MockeryTestCase
     {
         return [
             [
-                'tests\\MethodRepository\\Sup',
+                Sup::class,
                 'pub5',
-                'tests\\MethodRepository',
+                'tests\\Fixtures\\MethodRepository',
                 [],
                 ['\\ReflectionClass', '\\tests\\MethodRepository\\Test1']
             ],
             [
-                'tests\\MethodRepository\\Sup',
+                Sup::class,
                 'pub6',
-                'tests\\MethodRepository',
+                'tests\\Fixtures\\MethodRepository',
                 ['PM' => '\\PHPCD\\PatternMatcher'],
                 ['\\PHPCD\\PatternMatcher\\PatternMatcher']
             ],

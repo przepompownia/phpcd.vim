@@ -19,6 +19,8 @@ use PHPCD\View\View;
 use Psr\Log\LoggerInterface as Logger;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Types\ContextFactory;
+use tests\Fixtures\MethodRepository\Sup;
+use tests\Fixtures\MethodRepository\Test1;
 
 class FunctypeTest extends MockeryTestCase
 {
@@ -73,13 +75,20 @@ class FunctypeTest extends MockeryTestCase
     public function dataProvider()
     {
         return [
-            [
-                'tests\\MethodRepository\\Sup',
-                'baz',
-                'tests\\MethodRepository',
-                [],
-                ['\\ReflectionClass', '\\tests\\MethodRepository\\Test1']
-            ],
+             [
+                 Sup::class,
+                 'baz',
+                 'tests\\Fixtures\\MethodRepository',
+                 [],
+                 ['\\ReflectionClass', '\\'.Test1::class]
+             ],
+//            [
+//                Sup::class,
+//                'doNothing',
+//                'tests\\Fixtures\\MethodRepository',
+//                [],
+//                ['\\PM\PatternMatcher']
+//            ],
         ];
     }
 }
