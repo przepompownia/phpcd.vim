@@ -12,6 +12,7 @@ use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\Element\ObjectElement\ReflectionMethod;
 use PHPCD\NamespaceInfo;
+use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\PHPCD;
 use PHPCD\PHPFile\PHPFile;
 use PHPCD\PHPFile\PHPFileFactory;
@@ -82,13 +83,13 @@ class FunctypeTest extends MockeryTestCase
                  [],
                  ['\\ReflectionClass', '\\'.Test1::class]
              ],
-//            [
-//                Sup::class,
-//                'doNothing',
-//                'tests\\Fixtures\\MethodRepository',
-//                [],
-//                ['\\PM\PatternMatcher']
-//            ],
+            [
+                Sup::class,
+                'doNothing',
+                'tests\\Fixtures\\MethodRepository',
+                [],
+                ['\\'.PatternMatcher::class]
+            ],
         ];
     }
 }

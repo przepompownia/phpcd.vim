@@ -34,7 +34,8 @@ class ReflectionMethod extends ReflectionObjectElement implements MethodInfo
     public function getNonTrivialTypes()
     {
         if (version_compare(PHP_VERSION, '7.0.0') >= 0 && $this->objectElement->hasReturnType()) {
-            return [(string) $this->objectElement->getReturnType()];
+            $typeString = '\\'.(string) $this->objectElement->getReturnType();
+            return [$typeString];
         }
 
         return $this->getNonTrivialTypesFromDocblock();
