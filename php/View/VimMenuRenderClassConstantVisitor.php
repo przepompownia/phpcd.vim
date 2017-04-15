@@ -10,7 +10,12 @@ class VimMenuRenderClassConstantVisitor extends VimMenuRenderAbstractVisitor imp
     {
         $out = new VimMenuItem();
         $out->setWord($constantInfo->getName());
-        $out->setAbbr(sprintf(' +@ %s %s', $constantInfo->getName(), $constantInfo->getValue()));
+
+        $value = $constantInfo->getValue();
+        if (is_array($value)) {
+            $value = sprintf('[ %s, ... ]', implode(', ', array_slice($value, 0, 2, false)));
+        }
+        $out->setAbbr(sprintf(' +@ %s %s', $constantInfo->getName(), $value));
         $out->setKind('d');
 
         $this->output[] = $out->render();
