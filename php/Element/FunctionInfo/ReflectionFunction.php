@@ -4,6 +4,10 @@ namespace PHPCD\Element\FunctionInfo;
 
 use PHPCD\View\FunctionVisitor;
 use PHPCD\DocBlock\DocBlock;
+use phpDocumentor\Reflection\Types\Self_;
+use phpDocumentor\Reflection\Types\Static_;
+use phpDocumentor\Reflection\Types\This;
+use phpDocumentor\Reflection\Types\Object_;
 
 class ReflectionFunction implements FunctionInfo
 {
