@@ -63,7 +63,7 @@ class ReflectionFunction implements FunctionInfo
     private function getNonTrivialTypesFromDocblock()
     {
         $docBlock = $this->getDocComment();
-        $objectTypes = $this->docBlock->getObjectTypesFromDocBlock(
+        $objectTypes = $this->docBlock->getObjectTypesFromDocblock(
             $docBlock,
             $this->getNamespaceName(),
             $this->getFileName(),

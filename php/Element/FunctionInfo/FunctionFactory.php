@@ -20,7 +20,7 @@ class FunctionFactory
      */
     public function createFunction($functionName)
     {
-        return new ReflectionFunction($this->docblock, new \ReflectionFunction($functionName));
+        return new ReflectionFunction($this->docBlock, new \ReflectionFunction($functionName));
     }
 
     /**

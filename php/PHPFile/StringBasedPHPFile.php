@@ -57,7 +57,7 @@ class StringBasedPHPFile implements PHPFile
                 }
 
                 if ($this->isInterface()) {
-                    $this->interfaceExists($this->getSuperClass());
+                    $this->interfaceExists($this->getSuperclass());
                 }
             }
 

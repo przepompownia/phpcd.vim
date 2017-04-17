@@ -112,7 +112,7 @@ abstract class ReflectionObjectElement implements ObjectElement
     protected function getNonTrivialTypesFromDocblock()
     {
         $docBlock = $this->getDocComment();
-        $objectTypes = $this->docBlock->getObjectTypesFromDocBlock(
+        $objectTypes = $this->docBlock->getObjectTypesFromDocblock(
             $docBlock,
             $this->getClass()->getNamespaceName(),
             $this->getClass()->getFileName(),

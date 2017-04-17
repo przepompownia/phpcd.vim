@@ -76,7 +76,7 @@ class DocBlock
 
     public function getFirstTypeStringFromDocblock($docBlockString, $namespace, $fileName, $tagName)
     {
-        $types = $this->getObjectTypesFromDocBlock($docBlockString, $namespace, $fileName, $tagName);
+        $types = $this->getObjectTypesFromDocblock($docBlockString, $namespace, $fileName, $tagName);
 
         return (string) current($types);
     }
