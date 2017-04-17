@@ -16,6 +16,11 @@ class ReflectionFunction implements FunctionInfo
      */
     private $reflectionFunction;
 
+    /**
+     * @var DocBlock
+     */
+    protected $docBlock;
+
     public function __construct(DocBlock $docBlock, \ReflectionFunction $reflectionFunction)
     {
         $this->docBlock = $docBlock;
