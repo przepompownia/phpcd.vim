@@ -100,20 +100,22 @@ class ComposerClassmapFileRepository implements ClassRepository
 
         try {
             $file = $this->fileFactory->createFile($filePath);
+
+            if ($file->hasErrors()) {
+                $message = '%s %s did not pass validation and then cannot be added to class info repository. Reason:';
+                $this->logger->warning(
+                    sprintf($message, ucfirst($file->getType()), $classpath),
+                    $file->getErrors()
+                );
+
+                return false;
+            } else {
+                return true;
+            }
         } catch (\Exception $e) {
             $this->logger->warning($e->getMessage(), $e->getTrace());
-        }
-
-        if ($file->hasErrors()) {
-            $message = '%s %s did not pass validation and then cannot be added to class info repository. Reason:';
-            $this->logger->warning(
-                sprintf($message, ucfirst($file->getType()), $classpath),
-                $file->getErrors()
-            );
 
             return false;
-        } else {
-            return true;
         }
     }
 
