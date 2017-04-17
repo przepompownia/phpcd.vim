@@ -4,12 +4,12 @@ namespace PHPCD\PatternMatcher;
 
 abstract class AbstractPatternMatcher implements PatternMatcher
 {
-    private $case_sensitive = false;
+    private $caseSensitive = false;
 
-    public function __construct($case_sensitive = null)
+    public function __construct($caseSensitive = null)
     {
-        if ($case_sensitive === true) {
-            $this->case_sensitive = $case_sensitive;
+        if ($caseSensitive === true) {
+            $this->caseSensitive = $caseSensitive;
         }
     }
 
@@ -18,6 +18,6 @@ abstract class AbstractPatternMatcher implements PatternMatcher
      */
     public function isCaseSensitive()
     {
-        return $this->case_sensitive;
+        return $this->caseSensitive;
     }
 }

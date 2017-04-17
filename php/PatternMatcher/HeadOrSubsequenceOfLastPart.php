@@ -17,16 +17,16 @@ class HeadOrSubsequenceOfLastPart extends AbstractPatternMatcher implements Patt
     /**
      * @param HeadPatternMatcher        $headMatcher
      * @param SubsequencePatternMatcher $subsequenceMatcher
-     * @param  $case_sensitive
+     * @param  $caseSensitive
      */
     public function __construct(
         HeadPatternMatcher $headMatcher,
         SubsequencePatternMatcher $subsequenceMatcher,
-        $case_sensitive = null
+        $caseSensitive = null
     ) {
         $this->headMatcher = $headMatcher;
         $this->subsequenceMatcher = $subsequenceMatcher;
-        $this->case_sensitive = $case_sensitive;
+        parent::__construct($caseSensitive);
     }
 
     /**
