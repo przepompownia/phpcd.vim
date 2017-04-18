@@ -1,11 +1,10 @@
 <?php
 
-namespace test\Element\ClassInfo;
+namespace tests\Element\ClassInfo;
 
 use Mockery;
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
 use PHPCD\Filter\MethodFilter;
-use PHPCD\PatternMatcher\PatternMatcher;
 use PHPUnit\Framework\TestCase;
 
 class ClassInfoFactoryTest extends TestCase
@@ -17,10 +16,7 @@ class ClassInfoFactoryTest extends TestCase
      */
     public function findWithNoClass()
     {
-        $pattern_matcher = Mockery::mock(PatternMatcher::class);
-        $pattern_matcher->shouldReceive('match')->andReturn(true);
-
-        $factory = new ReflectionClassFactory($pattern_matcher);
+        $factory = new ReflectionClassFactory();
 
         $factory->createFromFilter(new MethodFilter([], ''));
     }
