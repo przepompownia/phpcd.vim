@@ -8,6 +8,9 @@ use Lvht\MsgpackRpc\MsgpackMessenger;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use PHPCD\Element\ClassInfo\ClassLoader\ClassLoader;
+use PHPCD\Element\ClassInfo\ClassLoader\NullClassLoader;
+use PHPCD\Element\ClassInfo\ClassLoader\ComposerClassLoader;
 
 /**
  * Simple factory to separate details of object creation.
@@ -32,6 +35,18 @@ class Factory
         $container->compile();
 
         return $container;
+    }
+
+    /**
+     * @return ClassLoader
+     */
+    public function createClassLoader($classLoader)
+    {
+        if ($classLoader instanceof \Composer\Autoload\ClassLoader) {
+            return new ComposerClassLoader($classLoader);
+        }
+
+        return new NullClassLoader();
     }
 
     /**

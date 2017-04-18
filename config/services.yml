@@ -90,12 +90,12 @@ services:
             - '%root%'
 
     function_factory:
-        class: \PHPCD\Element\FunctionInfo\FunctionFactory
+        class:               \PHPCD\Element\FunctionInfo\FunctionFactory
         arguments:
             - '@docblock'
 
     function_repository:
-        class: \PHPCD\Element\FunctionInfo\RuntimeFunctionRepository
+        class:               \PHPCD\Element\FunctionInfo\RuntimeFunctionRepository
         arguments:
             - '@default_pattern_matcher'
             - '@function_factory'
@@ -117,9 +117,15 @@ services:
         class:              Lvht\MsgpackRpc\ForkServer
         arguments:          [ '@messenger', '@handler.phpcd' ]
 
+    class_loader:
+        class:              \PHPCD\Element\ClassInfo\ClassLoader\ClassLoader
+        factory:            ['@phpcd_factory', 'createClassLoader']
+        arguments:
+            - '%class_loader%'
+
     classes_repository:
         class:              \PHPCD\Element\ClassInfo\ComposerClassmapFileRepository
-        arguments:          ['%class_loader%', '@default_pattern_matcher', '@class_info_factory', '@file_info_factory', '@default_logger']
+        arguments:          ['@class_loader', '@default_pattern_matcher', '@class_info_factory', '@file_info_factory', '@default_logger']
 
     handler.phpid:
         class:              \PHPCD\PHPID

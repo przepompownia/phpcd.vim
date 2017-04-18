@@ -15,11 +15,7 @@ $parameters['root'] = realpath($root);
 /** load autoloader for the project **/
 $composerAutoloadFile = $root.'/vendor/autoload.php';
 $projectAutoloadFile = empty($parameters['autoload_file']) ? $composerAutoloadFile : $parameters['autoload_file'];
-if (!is_readable($projectAutoloadFile)) {
-    // @TODO non-composer class loader
-    throw new Exception('This version still depends of autoloader from composer.');
-}
-$projectClassLoader = require $projectAutoloadFile;
+$projectClassLoader = is_readable($projectAutoloadFile) ? require $projectAutoloadFile : null;
 $parameters['class_loader'] = $projectClassLoader;
 
 /** load autoloader for PHPCD **/

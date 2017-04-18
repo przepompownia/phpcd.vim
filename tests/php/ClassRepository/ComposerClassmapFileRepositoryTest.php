@@ -5,7 +5,7 @@ namespace tests\ClassRepository;
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
-use Composer\Autoload\ClassLoader;
+use PHPCD\Element\ClassInfo\ClassLoader\ClassLoader;
 use Psr\Log\LoggerInterface;
 use PHPCD\PHPFile\PHPFileFactory;
 use PHPCD\Filter\ClassFilter;

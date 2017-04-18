@@ -6,7 +6,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerAwareTrait;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\PHPFile\PHPFileFactory;
-use Composer\Autoload\ClassLoader;
+use PHPCD\Element\ClassInfo\ClassLoader\ClassLoader;
 use PHPCD\Filter\ClassFilter;
 use PHPCD\NotFoundException;
 
@@ -14,6 +14,9 @@ class ComposerClassmapFileRepository implements ClassRepository
 {
     use LoggerAwareTrait;
 
+    /**
+     * @var ClassLoader
+     */
     private $classLoader;
 
     private $classmap = [];
