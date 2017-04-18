@@ -51,7 +51,7 @@ class ComposerClassmapFileRepository implements ClassRepository
 
     private function loadClassMap()
     {
-        $this->classmap = $this->classLoader->getClassmap();
+        $this->classmap = $this->classLoader->getClassMap();
 
         return $this;
     }
