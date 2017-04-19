@@ -273,15 +273,15 @@ class StringBasedPHPFile implements PHPFile
                         if (empty($expansion_matches['alias'])) {
                             // Get default alias
                             $suffix_parts = explode('\\', $suffix);
-                            $alias = array_pop($suffix_parts);
+                            $alias = end($suffix_parts);
                         } else {
                             $alias = $expansion_matches['alias'];
                         }
-                    }
 
-                    /* empty type means import of some class **/
-                    if (empty($use_matches['type'])) {
-                        $imports[$alias] = $use_matches['left'].$suffix;
+                        /* empty type means import of some class **/
+                        if (empty($use_matches['type'])) {
+                            $imports[$alias] = $use_matches['left'].$suffix;
+                        }
                     }
                     // @todo case when $use_matches['type'] is 'constant' or 'function'
                     // This requires change of the oputput format because
