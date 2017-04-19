@@ -65,7 +65,7 @@ class PHPCD implements RpcHandler
      */
     private $functionRepository;
 
-    /*
+    /**
      * Probably it should be replaced by
      * correctly implemented repository
      * to avoid scanning each file each time
