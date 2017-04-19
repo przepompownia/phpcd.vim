@@ -1177,6 +1177,10 @@ function! phpcd#UpdateIndex() " {{{
 		return
 	endif
 
+	if ! filereadable(expand('%:p'))
+		return
+	endif
+
 	let g:phpcd_need_update = 0
 	let nsuse = rpc#request(g:phpcd_channel_id, 'getPHPFileInfo', expand('%:p'))
 	let classname = nsuse.namespace . '\' . nsuse.class
@@ -1330,6 +1334,10 @@ function! phpcd#GetTypeFromDocBlockParam(docblock_type) " {{{
 endfunction " }}}
 
 function! phpcd#GetCurrentNameSpace() " {{{
+	if ! filereadable(expand('%:p'))
+		return
+	endif
+
 	let nsuse = rpc#request(g:phpcd_channel_id, 'getPHPFileInfo', expand('%:p'))
 
 	return [nsuse.namespace, empty(nsuse.imports) ? {} : nsuse.imports]
