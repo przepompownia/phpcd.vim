@@ -43,8 +43,13 @@ class DocBlock
 
     public function getTypesFromDocBlock($docBlockString, $namespace, $fileName, $tagName)
     {
-        if (!file_exists($fileName)) {
+        if (!file_exists($fileName)
+            || empty($docBlockString)
+            || empty($tagName)
+        ) {
+            return [];
         }
+
         $context = $this->contextFactory->createForNamespace($namespace, file_get_contents($fileName));
         $comment = $this->docBlockFactory->create($docBlockString, $context);
         $tags = $comment->getTagsByName($tagName);
