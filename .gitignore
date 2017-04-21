@@ -1,5 +1,5 @@
 /vendor/
-.phpcd/
+.*
 /vimunit
 
 # Ignore deoplete source cache

@@ -46,13 +46,14 @@ We recommend you use [Vim-Plug](https://github.com/junegunn/vim-plug/blob/master
 With Vim-Plug installed, put the following lines in your vimrc:
 
 ```
-Plug 'php-vim/phpcd.vim', { 'for': 'php' , 'do': 'composer install --no-dev' }
+Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
 ```
 
 And then execute `:PlugInstall` in the command mode.
 
 **If you install phpcd manually, you need run `composer install` in the phpcd.vim root directory.**
 
+### deoplete
 If you using the [deoplete](https://github.com/Shougo/deoplete.nvim), you can add the following lines to you init.vim
 
 ```viml
@@ -60,6 +61,13 @@ let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
 let g:deoplete#ignore_sources.php = ['omni']
 ```
 The phpcd will work with deoplete happily.
+
+However if you are experiencing problems with deoplete you can disable the phpcd source.
+
+```viml
+let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
+let g:deoplete#ignore_sources.php = ['phpcd', 'omni']
+```
 
 ## Usage
 
@@ -72,7 +80,7 @@ If your project does not use composer but have a `path/to/autoload_file.php`, yo
 ```viml
 let g:phpcd_autoload_path = 'path/to/autoload_file.php'
 ```
-And phpcd will the `g:phpcd_autoload_path` to load your class.
+And phpcd will use the `g:phpcd_autoload_path` to load your class.
 
 The default PHP command used to run PHP parts of daemon is simply `php`. You may override it by assigning `g:phpcd_php_cli_executable` another value in your `vimrc`, for example:
 ```

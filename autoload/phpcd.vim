@@ -352,7 +352,11 @@ function! phpcd#JumpToDefinition(mode) " {{{
 	call add(s:phpcd_jump_stack, cur_pos)
 
 	if str2nr(symbol_line) > 0
-		silent! execute edit_cmd . symbol_line . ' ' . symbol_file
+		if expand('%:p') == symbol_file
+			silent! execute symbol_line
+		else
+			silent! execute edit_cmd . symbol_line . ' ' . symbol_file
+		endif
 	else
 		silent! execute edit_cmd . '1 ' . symbol_file
 		silent! call search(symbol_line)
@@ -1346,7 +1350,7 @@ endfunction " }}}
 function! phpcd#GetCurrentFunctionBoundaries() " {{{
 	let old_cursor_pos = [line('.'), col('.')]
 	let current_line_no = old_cursor_pos[0]
-	let function_pattern = '\<function\s\+.*('
+	let function_pattern = '\<function\s\+[^(]\+('
 
 	let func_start_pos = searchpos(function_pattern, 'Wbc')
 	if func_start_pos == [0, 0]
