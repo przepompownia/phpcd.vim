@@ -46,12 +46,12 @@ We recommend you use [Vim-Plug](https://github.com/junegunn/vim-plug/blob/master
 With Vim-Plug installed, put the following lines in your vimrc:
 
 ```
-Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install --no-dev' }
 ```
 
 And then execute `:PlugInstall` in the command mode.
 
-**If you install phpcd manually, you need run `composer install` in the phpcd.vim root directory.**
+**If you install phpcd manually, you need run `composer install --no-dev` in the phpcd.vim root directory.**
 
 ### deoplete
 If you using the [deoplete](https://github.com/Shougo/deoplete.nvim), you can add the following lines to you init.vim
@@ -71,7 +71,7 @@ let g:deoplete#ignore_sources.php = ['phpcd', 'omni']
 
 ## Usage
 
-~~First, in the project directory, run `composer install` to install all the dependent packages and generate the autoload file.~~
+~~First, in the project directory, run `composer install --no-dev` to install all the dependent packages and generate the autoload file.~~
 The **composer** is not required any more. However, if you want to let phpcd work with your project, you must to make a **autoload** file for your project.
 
 If you use composer, composer will make the `vendor/autoload.php`. phpcd will use `vendor/autoload.php` automatically.
