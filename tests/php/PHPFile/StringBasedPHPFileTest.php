@@ -29,13 +29,6 @@ class StringBasedPHPFileTest extends TestCase
                 ['Image2' => ['alias' => 'Image2', 'full_path' => 'PHPCD\Fixtures\ClassNamesAndAliases\Repositories\Image']]
             ],
             [
-                // Alias Image is already used, the path is not used
-                // Suggest both to change alias and to add the path to imports
-                'Fixtures/ClassNamesAndAliases/Services/Image.php',
-                ['alias' => 'Image', 'full_path' => '\PHPCD\Fixtures\ClassNamesAndAliases\Models\Image'],
-                ['Image2' => ['alias' => 'Image2', 'full_path' => 'PHPCD\Fixtures\ClassNamesAndAliases\Models\Image']]
-            ],
-            [
                 // inserted alias may be used (expect null),
                 //  the path does not exist yet (expect that it will be suggested to adding)
                 'Fixtures/ClassNamesAndAliases/Services/Image.php',
