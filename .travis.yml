@@ -1,9 +1,18 @@
+dist: trusty
+sudo: false
 language: 'php'
-php:
-    - '7.1'
+matrix:
+  include:
+    - php: 5.6
+      env: PHPUNIT_OPTIONS="--exclude-group php7" COMPOSER_CMD=update COMPOSER_OPTS='--no-interaction --no-scripts' COMPOSER_RUN_SCRIPT='run-script post-install-cmd'
+    - php: 7.1
+      env: PHPUNIT_OPTIONS= COMPOSER_CMD=install COMPOSER_OPTS='--no-interaction --no-scripts' COMPOSER_RUN_SCRIPT='run-script post-install-cmd'
 
 install:
-    - composer install --no-interaction
+  - composer $COMPOSER_CMD $COMPOSER_OPTS; composer $COMPOSER_RUN_SCRIPT
+
+before_install:
+  - phpenv config-rm xdebug.ini
 
 script:
-    - phpunit
+  - ./vendor/bin/phpunit ${PHPUNIT_OPTIONS}
