@@ -35,12 +35,4 @@ class Sup
     protected function xyz()
     {
     }
-
-    /**
-     * @return \ReflectionClass|Test1
-     */
-    public function doNothing(): PM\PatternMatcher
-    {
-
-    }
 }

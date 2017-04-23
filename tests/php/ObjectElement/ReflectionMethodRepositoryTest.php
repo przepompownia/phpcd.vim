@@ -29,7 +29,7 @@ class ReflectionMethodRepositoryTest extends MockeryTestCase
 
         $this->assertFalse($methods->isEmpty());
 
-        $this->assertCount(6, $methods);
+        $this->assertCount(5, $methods);
         $method = $methods->getIterator()->current();
         $this->assertEquals('play', $method->getName());
         $this->assertTrue($method->isPublic());
@@ -49,7 +49,7 @@ class ReflectionMethodRepositoryTest extends MockeryTestCase
         ], 'mocked');
 
         $methods = $repository->find($filter);
-        $this->assertCount(3, $methods);
+        $this->assertCount(2, $methods);
     }
 
     private function getRepositoryWithTrivialMatcher($className)

@@ -16,7 +16,7 @@
         "psr-4": {"tests\\": "tests/php/"}
     },
     "require": {
-        "php": "^5.5||^7.0",
+        "php": "^5.5 || ^7.0",
         "psr/log": "^1.0",
         "lvht/msgpack-rpc": "^0.2.1",
         "symfony/dependency-injection": "^3.0",
@@ -31,7 +31,7 @@
       "classmap-authoritative": true
     },
     "require-dev": {
-        "phpunit/phpunit": "^6",
+        "phpunit/phpunit": "^5.7 || ^6",
         "mockery/mockery": "dev-master"
     },
     "scripts": {

@@ -21,15 +21,31 @@ use Psr\Log\LoggerInterface as Logger;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\Types\ContextFactory;
 use tests\Fixtures\MethodRepository\Sup;
+use tests\Fixtures\MethodRepository\SupPhp7;
 use tests\Fixtures\MethodRepository\Test1;
 
 class FunctypeTest extends MockeryTestCase
 {
     /**
      * @test
+     * @group php7
+     * @dataProvider dataProviderPHP7
+     */
+    public function getTypesReturnedByMethodForPHP7($class, $method, $namespace, $imports, $expectedTypes)
+    {
+        return $this->getTypes($class, $method, $namespace, $imports, $expectedTypes);
+    }
+
+    /**
+     * @test
      * @dataProvider dataProvider
      */
     public function getTypesReturnedByMethod($class, $method, $namespace, $imports, $expectedTypes)
+    {
+        return $this->getTypes($class, $method, $namespace, $imports, $expectedTypes);
+    }
+
+    private function getTypes($class, $method, $namespace, $imports, $expectedTypes)
     {
         $nsinfo = Mockery::mock(NamespaceInfo::class);
         $logger = Mockery::mock(Logger::class);
@@ -83,8 +99,14 @@ class FunctypeTest extends MockeryTestCase
                  [],
                  ['\\ReflectionClass', '\\'.Test1::class]
              ],
+        ];
+    }
+
+    public function dataProviderPHP7()
+    {
+        return [
             [
-                Sup::class,
+                SupPhp7::class,
                 'doNothing',
                 'tests\\Fixtures\\MethodRepository',
                 [],
