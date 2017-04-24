@@ -28,6 +28,7 @@ class HeadOrSubsequenceOfLastPartFunctionalTest extends TestCase
             ['PhP\\D', 'PHP\\PHPCD', false],
             ['PHP\\', 'PHP\\PHPCD', true],
             ['Ppd', 'PHP\\PHPCD', true],
+            ['\PHP', 'PHP\\PHPCD', true],
         ];
     }
 }

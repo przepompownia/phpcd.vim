@@ -34,7 +34,7 @@ class HeadOrSubsequenceOfLastPart extends AbstractPatternMatcher implements Patt
      */
     public function match($pattern, $string)
     {
-        if ($this->headMatcher->match($pattern, $string)) {
+        if ($this->headMatcher->match(ltrim($pattern, '\\'), $string)) {
             return true;
         }
 
