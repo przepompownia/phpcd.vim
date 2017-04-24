@@ -114,6 +114,7 @@ endfunction " }}}
 
 function! s:remapClassInfoItem(class_item, make_use_entry) " {{{
 	let result = {}
+	let result.dup = 1
 	let result.menu = a:class_item.short_name
 
 	if a:make_use_entry == 1
