@@ -6,10 +6,6 @@ try
 		let g:phpcd_server_options = {}
 	endif
 
-	if ! exists('g:phpcd_server_options.completion_match_type')
-		let g:phpcd_server_options.completion_match_type = 'head'
-	endif
-
 	if ! exists('g:phpcd_php_cli_executable')
 		let g:phpcd_php_cli_executable = 'php'
 	endif
