@@ -39,7 +39,9 @@ class ReflectionClassConstantRepository implements ClassConstantRepository
         $collection = new ClassConstantCollection();
 
         foreach ($classInfo->getConstants() as $name => $value) {
-            $collection->add(new GenericClassConstant($classInfo, $name, $value));
+            if ($this->patternMatcher->match($filter->getPattern(), $name)) {
+                $collection->add(new GenericClassConstant($classInfo, $name, $value));
+            }
         }
 
         return $collection;
