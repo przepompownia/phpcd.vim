@@ -1,6 +1,7 @@
 /vendor/
 .*
 /vimunit
+/config/parameters.yml
 
 # Ignore deoplete source cache
 *.py[cod]
