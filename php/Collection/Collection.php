@@ -12,7 +12,9 @@ abstract class Collection implements IteratorAggregate
 
     public function getIterator()
     {
-        return (new ArrayObject($this->collection))->getIterator();
+        foreach ($this->collection as $item) {
+            yield $item;
+        }
     }
 
     public function isEmpty()
@@ -22,7 +24,7 @@ abstract class Collection implements IteratorAggregate
 
     public function accept(CollectionVisitor $visitor)
     {
-        foreach ($this->collection as $item) {
+        foreach ($this as $item) {
             $item->accept($visitor);
         }
     }
