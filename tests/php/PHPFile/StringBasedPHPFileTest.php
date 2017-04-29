@@ -92,17 +92,20 @@ class StringBasedPHPFileTest extends TestCase
         );
 
         foreach ($fix as $suggestion) {
-            $new_alias = $suggestion['alias'];
+            $newAlias = $suggestion['alias'];
 
-            $this->assertTrue(array_key_exists($new_alias, $expectedSuggestions), 'No such alias');
+            $this->assertTrue(
+                array_key_exists($newAlias, $expectedSuggestions),
+                sprintf('Alias "%s" not found in [%s]', $newAlias, implode(',', array_keys($expectedSuggestions)))
+            );
             $this->assertEquals(
-                $new_alias,
-                $expectedSuggestions[$new_alias]['alias'],
+                $newAlias,
+                $expectedSuggestions[$newAlias]['alias'],
                 'Aliases are not equal.'
             );
             $this->assertEquals(
                 $suggestion['full_path'],
-                $expectedSuggestions[$new_alias]['full_path'],
+                $expectedSuggestions[$newAlias]['full_path'],
                 'Paths are not equal.'
             );
         }
