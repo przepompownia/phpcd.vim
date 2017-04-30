@@ -1,5 +1,5 @@
 dist: trusty
-sudo: false
+sudo: true
 language: 'php'
 matrix:
   include:
@@ -13,6 +13,11 @@ install:
 
 before_install:
   - phpenv config-rm xdebug.ini
+  - sudo add-apt-repository -y ppa:neovim-ppa/unstable
+  - sudo apt-get -qq update
+  - sudo apt-get install -y neovim
+  - pecl install msgpack-0.5.7
 
 script:
   - ./vendor/bin/phpunit ${PHPUNIT_OPTIONS}
+  - ./tests/vim/runtests.sh

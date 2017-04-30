@@ -1,21 +1,26 @@
 #!/bin/bash
 
+cd $(dirname $0)
+. vimCommand.sh
+
 composer --working-dir=fixtures dump-autoload -ao -vvv
 
 messageFile=/tmp/phpcd-tests-vim-messages.log
 
-vimExecuable=nvim
+vimExecuables=(`which nvim`)
 
-$vimExecuable -u vimrc -U NONE -N \
-	--cmd set\ rtp+=../.. \
-	--cmd 'source ../../plugin/phpcd.vim' \
-	--cmd "let g:phpcd_test_vim_message_log='${messageFile}'" \
-	-S runner.vim                              \
-	test_*.vim
+for vimExecuable in "${vimExecuables[@]}"; do
+	printf "Test on %s:\n" $vimExecuable
+	vimWithPHPCDOnly "$vimExecuable" \
+		--cmd "let g:phpcd_test_vim_message_log='${messageFile}'" \
+		-S runner.vim \
+		test_*.vim
 
-cat $messageFile
+	cat $messageFile
 
-grep -q "0 errors, 0 failures" $messageFile
-status=$?
-rm -f $messageFile
+	grep -q "0 errors, 0 failures" $messageFile
+	status=$?
+	rm -f $messageFile
+done
+
 exit $status
