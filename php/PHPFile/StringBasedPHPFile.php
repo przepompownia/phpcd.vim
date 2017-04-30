@@ -263,27 +263,27 @@ class StringBasedPHPFile implements PHPFile
         $imports = [];
 
         if (strtolower(substr($line, 0, 3) == 'use')) {
-            if (preg_match(self::USE_PATTERN, $line, $use_matches) && !empty($use_matches)) {
-                $expansions = array_map('self::trim', explode(',', $use_matches['right']));
+            if (preg_match(self::USE_PATTERN, $line, $useMatches) && !empty($useMatches)) {
+                $expansions = array_map('self::trim', explode(',', $useMatches['right']));
 
                 foreach ($expansions as $expansion) {
-                    if (preg_match(self::ALIAS_PATTERN, $expansion, $expansion_matches) && !empty($expansion_matches)) {
-                        $suffix = $expansion_matches['suffix'];
+                    if (preg_match(self::ALIAS_PATTERN, $expansion, $expansionMatches) && !empty($expansionMatches)) {
+                        $suffix = $expansionMatches['suffix'];
 
-                        if (empty($expansion_matches['alias'])) {
+                        if (empty($expansionMatches['alias'])) {
                             // Get default alias
                             $suffix_parts = explode('\\', $suffix);
                             $alias = end($suffix_parts);
                         } else {
-                            $alias = $expansion_matches['alias'];
+                            $alias = $expansionMatches['alias'];
                         }
 
                         /* empty type means import of some class **/
-                        if (empty($use_matches['type'])) {
-                            $imports[$alias] = $use_matches['left'].$suffix;
+                        if (empty($useMatches['type'])) {
+                            $imports[$alias] = $useMatches['left'].$suffix;
                         }
                     }
-                    // @todo case when $use_matches['type'] is 'constant' or 'function'
+                    // @todo case when $useMatches['type'] is 'constant' or 'function'
                     // This requires change of the oputput format because
                     // we can use the same alias string to some class and some function at once
                 }
@@ -350,10 +350,10 @@ class StringBasedPHPFile implements PHPFile
         return $this->errors;
     }
 
-    public function getUsedAliasesForPath($full_path)
+    public function getUsedAliasesForPath($fullPath)
     {
-        $used = array_filter($this->imports, function ($value) use ($full_path) {
-            return $value === $full_path;
+        $used = array_filter($this->imports, function ($value) use ($fullPath) {
+            return $value === $fullPath;
         });
 
         return array_keys($used);
@@ -378,28 +378,28 @@ class StringBasedPHPFile implements PHPFile
      * Sometimes the same path may associated with more than one aliases (see unit test)
      * so this function returns array of suggestions to be used by client.
      *
-     * @param array $new_class_params {
+     * @param array $newClassParams {
      *
      *  @var string  $alias
-     *  @var string  $full_path
+     *  @var string  $fullPath
      *  }
      *
      * @return array {
      *
      *  @var string        $alias        the original or modified alias
-     *  @var string|null   $full_path    null if we have no new import to do
+     *  @var string|null   $fullPath    null if we have no new import to do
      *  }[]
      */
-    public function getFixForNewClassUsage(array $new_class_params)
+    public function getFixForNewClassUsage(array $newClassParams)
     {
-        $new_alias = $new_class_params['alias'];
-        $new_path = trim($new_class_params['full_path'], '\\');
+        $newAlias = $newClassParams['alias'];
+        $newPath = trim($newClassParams['full_path'], '\\');
 
-        $used_aliases = $this->getUsedAliasesForPath($new_path);
-        if (!empty($used_aliases)) {
+        $usedAliases = $this->getUsedAliasesForPath($newPath);
+        if (!empty($usedAliases)) {
             $suggestions = [];
-            foreach ($used_aliases as $alias) {
-                if ($alias === $new_alias) {
+            foreach ($usedAliases as $alias) {
+                if ($alias === $newAlias) {
                     // Nothing to do
                     return [['alias' => null, 'full_path' => null]];
                 }
@@ -411,31 +411,31 @@ class StringBasedPHPFile implements PHPFile
         }
 
         if (!empty($this->imports)) {
-            if ($this->hasAliasUsed($new_alias)) {
-                if ($this->extractNamespaceFromPath($new_path) === $this->getNamespace()) {
-                    return [['alias' => 'namespace\\'.$new_alias, 'full_path' => null]];
+            if ($this->hasAliasUsed($newAlias)) {
+                if ($this->extractNamespaceFromPath($newPath) === $this->getNamespace()) {
+                    return [['alias' => 'namespace\\'.$newAlias, 'full_path' => null]];
                 }
 
                 // The path was not used,
                 // but an alternative alias is needed.
-                $new_alias = $this->generateNewAlias($new_alias);
+                $newAlias = $this->generateNewAlias($newAlias);
 
-                return [['alias' => $new_alias, 'full_path' => $new_path]];
+                return [['alias' => $newAlias, 'full_path' => $newPath]];
             }
         }
 
-        if ($new_alias === $this->getClassName()) {
+        if ($newAlias === $this->getClassName()) {
             // Although it is not an error, we encourage
             // to not override the current class name with
             // an the same named alias of another path.
-            $new_alias = $this->generateNewAlias($new_alias);
+            $newAlias = $this->generateNewAlias($newAlias);
 
-            return [['alias' => $new_alias, 'full_path' => $new_path]];
+            return [['alias' => $newAlias, 'full_path' => $newPath]];
         }
 
         // The alias was not used, so it does not need change,
         // the path need to insert
-        return [['alias' => null, 'full_path' => $new_path]];
+        return [['alias' => null, 'full_path' => $newPath]];
     }
 
     private function extractNamespaceFromPath($path)
@@ -469,15 +469,15 @@ class StringBasedPHPFile implements PHPFile
     private function validateSyntax()
     {
         $path = $this->file->getPathName();
-        $php_cmd = sprintf('/usr/bin/php -l %s >/dev/null 2>&1', $path);
+        $phpCmd = sprintf('%s -l %s >/dev/null 2>&1', PHP_BINARY, $path);
 
-        system($php_cmd, $return_code);
+        system($phpCmd, $returnCode);
 
-        if ($return_code !== 0) {
-            throw new FileException('Syntax error');
+        if ($returnCode !== 0) {
+            throw new FileException('Syntax error was detected by an external lint command.');
         }
 
-        return !$return_code;
+        return !$returnCode;
     }
 
     /**
