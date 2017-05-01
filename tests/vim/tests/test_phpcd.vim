@@ -17,13 +17,18 @@ endfunction
 
 function s:runCompletion()
 	let start = phpcd#CompletePHP(1, '')
-	let base = strpart(getline("."), start)
+	let base = strpart(getline('.'), start, col('.') - start - 1)
 	return phpcd#CompletePHP(0, base)
 endfunction
 
 function s:appendIncompleteLineText(lineNumber, lineText)
 	call cursor(a:lineNumber, 0)
 	execute "normal! o".a:lineText."\<esc>l"
+endfunction
+
+function s:insertInlineIncompleteLineText(lineNumber, columnNumber, inlineText)
+	call cursor(a:lineNumber, a:columnNumber)
+	execute "normal! a".a:inlineText."\<esc>l"
 endfunction
 
 function! Test_expect_plugin_was_loaded()
@@ -41,9 +46,9 @@ function! Test_expect_public_property()
 	call assert_equal(
 		\'pubvar',
 		\res[0].word)
-endf
+endfunction
 
-function Test_expect_constant()
+function! Test_expect_constant()
 	call <SID>startEditFixture('PHPCD/B/C/ExpectClassConstantOnly.php')
 
 	call <SID>appendIncompleteLineText(9, '\PHPCD\A\Alpha::iv')
@@ -54,4 +59,35 @@ function Test_expect_constant()
 	" even without leading dollar sign
 	call assert_equal('d', res[0].kind)
 	call assert_equal('p', res[1].kind)
-endf
+endfunction
+
+function! Test_expect_class_path_completion_at_import_declaration()
+	call <SID>startEditFixture('PHPCD/A/Alpha.php')
+
+	call <SID>appendIncompleteLineText(3, 'use Expect')
+	let res = <SID>runCompletion()
+
+	call assert_equal(2, len(res))
+	call assert_equal('PHPCD\B\C\ExpectClassConstantOnly', res[0].word)
+	call assert_equal('PHPCD\B\C\ExpectPublicVariable', res[1].word)
+endfunction
+
+function! Test_expect_class_path_completion_at_function_declaration()
+	call <SID>startEditFixture('PHPCD/A/Alpha.php')
+
+	call <SID>insertInlineIncompleteLineText(22, 34, 'Expect')
+
+	let g:phpcd_insert_class_shortname = 1
+	let res = <SID>runCompletion()
+
+	call assert_equal(2, len(res))
+	call assert_equal('ExpectClassConstantOnly', res[0].word)
+	call assert_equal('ExpectPublicVariable', res[1].word)
+
+	let g:phpcd_insert_class_shortname = 0
+	let res = <SID>runCompletion()
+
+	call assert_equal(2, len(res))
+	call assert_equal('\PHPCD\B\C\ExpectClassConstantOnly', res[0].word)
+	call assert_equal('\PHPCD\B\C\ExpectPublicVariable', res[1].word)
+endfunction

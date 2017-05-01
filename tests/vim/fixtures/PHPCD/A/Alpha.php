@@ -2,10 +2,6 @@
 
 namespace PHPCD\A;
 
-/**
- * Class Alpha
- * @author yourname
- */
 class Alpha
 {
     const PI = 3.141;
