@@ -21,7 +21,12 @@ function s:runCompletion()
 	return phpcd#CompletePHP(0, base)
 endfunction
 
-function! Test_if_plugin_was_loaded()
+function s:appendIncompleteLineText(lineNumber, lineText)
+	call cursor(a:lineNumber, 0)
+	execute "normal! o".a:lineText."\<esc>l"
+endfunction
+
+function! Test_expect_plugin_was_loaded()
 	call <SID>startEditFixture('PHPCD/B/C/ExpectPublicVariable.php')
 	call assert_equal('phpcd#CompletePHP', &omnifunc)
 endfunction
@@ -29,7 +34,7 @@ endfunction
 function! Test_expect_public_property()
 	call <SID>startEditFixture('PHPCD/B/C/ExpectPublicVariable.php')
 
-	call cursor(11, 18)
+	call <SID>appendIncompleteLineText(9, '$alpha->pb')
 	let res = <SID>runCompletion()
 	" res == [{'word': 'pubvar', 'info': '', 'kind': 'p', 'abbr': '  - pubvar', 'icase': 1}]
 
@@ -41,7 +46,7 @@ endf
 function Test_expect_constant()
 	call <SID>startEditFixture('PHPCD/B/C/ExpectClassConstantOnly.php')
 
-	call cursor(9, 27)
+	call <SID>appendIncompleteLineText(9, '\PHPCD\A\Alpha::iv')
 	let res = <SID>runCompletion()
 
 	" this test with fixtures
