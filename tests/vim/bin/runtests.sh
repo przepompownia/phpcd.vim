@@ -1,9 +1,9 @@
 #!/bin/bash
 
 cd $(dirname $0)
-. vimCommand.sh
+. ../app/vimCommand.sh
 
-composer --working-dir=fixtures dump-autoload -ao -vvv
+composer --working-dir=../fixtures dump-autoload -ao -vvv
 
 messageFile=/tmp/phpcd-tests-vim-messages.log
 
@@ -13,8 +13,8 @@ for vimExecuable in "${vimExecuables[@]}"; do
 	printf "Test on %s:\n" $vimExecuable
 	vimWithPHPCDOnly "$vimExecuable" \
 		--cmd "let g:phpcd_test_vim_message_log='${messageFile}'" \
-		-S runner.vim \
-		test_*.vim
+		-S ../app/runner.vim \
+		../tests/test_*.vim
 
 	cat $messageFile
 

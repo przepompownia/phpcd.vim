@@ -20,4 +20,4 @@ before_install:
 
 script:
   - ./vendor/bin/phpunit ${PHPUNIT_OPTIONS}
-  - ./tests/vim/runtests.sh
+  - ./tests/vim/bin/runtests.sh

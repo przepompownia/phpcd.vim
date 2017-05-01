@@ -9,7 +9,7 @@ function TearDown()
 endfunction
 
 function s:startEditFixture(fixtureRelativePath)
-	let path =  s:current_dir.'/fixtures/'.a:fixtureRelativePath
+	let path =  s:current_dir.'/../fixtures/'.a:fixtureRelativePath
 	call assert_true(filereadable(path))
 	exe ":edit ".path
 	" exe ":silent! edit ".path
@@ -19,6 +19,11 @@ function s:runCompletion()
 	let start = phpcd#CompletePHP(1, '')
 	let base = strpart(getline("."), start)
 	return phpcd#CompletePHP(0, base)
+endfunction
+
+function! Test_if_plugin_was_loaded()
+	call <SID>startEditFixture('PHPCD/B/C/ExpectPublicVariable.php')
+	call assert_equal('phpcd#CompletePHP', &omnifunc)
 endfunction
 
 function! Test_expect_public_property()
