@@ -4,9 +4,9 @@ language: 'php'
 matrix:
   include:
     - php: 5.6
-      env: PHPUNIT_OPTIONS="--exclude-group php7" COMPOSER_CMD=update COMPOSER_OPTS='--no-interaction --no-scripts' COMPOSER_RUN_SCRIPT='run-script post-install-cmd'
+      env: PHPUNIT_OPTIONS="--exclude-group php7" COMPOSER_CMD=update COMPOSER_OPTS='--no-interaction --no-scripts' COMPOSER_RUN_SCRIPT='run-script post-install-cmd' MSGPACK_VERSION='0.5.7'
     - php: 7.1
-      env: PHPUNIT_OPTIONS= COMPOSER_CMD=install COMPOSER_OPTS='--no-interaction --no-scripts' COMPOSER_RUN_SCRIPT='run-script post-install-cmd'
+      env: PHPUNIT_OPTIONS= COMPOSER_CMD=install COMPOSER_OPTS='--no-interaction --no-scripts' COMPOSER_RUN_SCRIPT='run-script post-install-cmd' MSGPACK_VERSION='2.0.2'
 
 install:
   - composer $COMPOSER_CMD $COMPOSER_OPTS; composer $COMPOSER_RUN_SCRIPT
@@ -16,7 +16,7 @@ before_install:
   - sudo add-apt-repository -y ppa:neovim-ppa/unstable
   - sudo apt-get -qq update
   - sudo apt-get install -y neovim
-  - pecl install msgpack-0.5.7
+  - pecl install msgpack-${MSGPACK_VERSION}
 
 script:
   - ./vendor/bin/phpunit ${PHPUNIT_OPTIONS}
