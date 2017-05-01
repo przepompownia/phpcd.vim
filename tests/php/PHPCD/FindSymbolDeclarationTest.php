@@ -2,14 +2,11 @@
 
 namespace tests\PHPCD;
 
-use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery;
 use PHPCD\Element\ConstantInfo\ClassConstantRepository;
-use PHPCD\Element\ConstantInfo\ConstantCollection;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
-use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
-use PHPCD\Element\FunctionInfo\ReflectionFunction;
 use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\NamespaceInfo;
@@ -19,13 +16,13 @@ use PHPCD\View\VimMenuItemView;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\DocBlock\DocBlock;
 
-class FunctionsAndConstantsTest extends MockeryTestCase
+class FindSymbolDeclarationTest extends MockeryTestCase
 {
     /**
      * @test
-     * @dataProvider proptypeDataProvider
+     * @dataProvider dataProvider
      */
-    public function getFunctionsAndConstants($pattern, $result)
+    public function findSymbolDeclaration($class, $symbol, $expectedFilePath, $expectedLineNumber)
     {
         $nsinfo = Mockery::mock(NamespaceInfo::class);
         $logger = Mockery::mock(Logger::class);
@@ -40,10 +37,6 @@ class FunctionsAndConstantsTest extends MockeryTestCase
         $docBlock = Mockery::mock(DocBlock::class);
 
         $view = new VimMenuItemView();
-        $constantRepository->shouldReceive('find')->once()->andReturn(new ConstantCollection());
-        $functionCollection = new FunctionCollection();
-        $functionCollection->add(new ReflectionFunction($docBlock, new \ReflectionFunction('var_dump')));
-        $functionRepository->shouldReceive('find')->once()->andReturn($functionCollection);
 
         $phpcd = new PHPCD(
             $nsinfo,
@@ -57,18 +50,25 @@ class FunctionsAndConstantsTest extends MockeryTestCase
             $functionRepository
         );
 
-        $output = $phpcd->getFunctionsAndConstants('var');
-        $this->assertCount(1, $output);
-        $firstItem = current($output);
-        $this->assertEquals('var_dump', $firstItem['word']);
-        $this->assertEquals('var_dump(vars)', $firstItem['abbr']);
-        $this->assertEquals('f', $firstItem['kind']);
+        $output = $phpcd->findSymbolDeclaration($class, $symbol);
+        $this->assertEquals([realpath($expectedFilePath), $expectedLineNumber], $output);
     }
 
-    public function proptypeDataProvider()
+    public function dataProvider()
     {
         return [
-            [1,1]
+            [
+                '\tests\Fixtures\MethodRepository\Sup',
+                'baz',
+                __DIR__.'/../Fixtures/MethodRepository/Sup.php',
+                26,
+            ],
+            [
+                '\tests\Fixtures\MethodRepository\Sup',
+                'pub5',
+                __DIR__.'/../Fixtures/MethodRepository/Sup.php',
+                16,
+            ],
         ];
     }
 }
