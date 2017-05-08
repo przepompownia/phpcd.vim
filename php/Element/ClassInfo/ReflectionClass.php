@@ -132,6 +132,13 @@ class ReflectionClass implements ClassInfo
         return $this->reflectionClass->getProperties();
     }
 
+    public function isThrowable()
+    {
+        return (version_compare(PHP_VERSION, '7.0.0') >= 0
+            && $this->reflectionClass->implementsInterface(\Throwable::class)
+            || $this->reflectionClass->isSubclassOf(\Exception::class));
+    }
+
     public function accept(ClassVisitor $visitor)
     {
         $visitor->visitElement($this);

@@ -9,6 +9,7 @@ class ClassFilter extends AbstractFilter
     const IS_TRAIT = 'isTrait';
     const IS_INSTANTIABLE = 'isInstantiable';
     const IS_INTERFACE = 'isInterface';
+    const IS_THROWABLE = 'isThrowable';
 
     protected $criteriaNames = [
         self::IS_ABSTRACT_CLASS,
@@ -16,6 +17,7 @@ class ClassFilter extends AbstractFilter
         self::IS_TRAIT,
         self::IS_INSTANTIABLE,
         self::IS_INTERFACE,
+        self::IS_THROWABLE,
     ];
 
     /**
@@ -87,6 +89,14 @@ class ClassFilter extends AbstractFilter
     public function isInstantiable()
     {
         return $this->criteria[self::IS_INSTANTIABLE];
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isThrowable()
+    {
+        return $this->criteria[self::IS_THROWABLE];
     }
 
     /**

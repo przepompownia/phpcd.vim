@@ -311,6 +311,18 @@ class PHPID implements RpcHandler
         return $this->prepareOutputFromClassCollection($collection, true);
     }
 
+    public function getThrowableInstantiableClasses($pathPattern)
+    {
+        $filter = new ClassFilter([
+            ClassFilter::IS_INSTANTIABLE => true,
+            ClassFilter::IS_THROWABLE => true,
+        ], $pathPattern);
+
+        $collection = $this->classRepository->find($filter);
+
+        return $this->prepareOutputFromClassCollection($collection, true);
+    }
+
     public function getNamesToTypeDeclaration($pathPattern)
     {
         // @TODO add basic types

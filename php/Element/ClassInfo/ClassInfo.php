@@ -33,6 +33,11 @@ interface ClassInfo
     public function isInterface();
 
     /**
+     * @return bool
+     */
+    public function isThrowable();
+
+    /**
      * @return string
      */
     public function getShortName();
