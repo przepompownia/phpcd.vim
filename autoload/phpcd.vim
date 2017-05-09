@@ -90,6 +90,8 @@ function! phpcd#CompletePHP(findstart, base) " {{{
 			return filter(['extends', 'implements'], 'stridx(v:val, a:base) == 0')
 		elseif strpart(getline('.'), 0, col('.')) =~? '\vthrow\s+new\s+$'
 			return phpcd#getThrowableInstantiableClasses(a:base)
+		elseif context =~? printf('\vcatch\s*\(\s*(%s)*$', g:name_pattern)
+			return phpcd#getThrowableClasses(a:base)
 		elseif context =~? printf('\vfunction\s+%s\s*\((\s*(%s\s+)?\$%s\s*,)*\s*$', g:name_pattern, g:name_pattern, g:name_pattern)
 			return phpcd#getNamesToTypeDeclaration(a:base)
 		elseif context =~? 'new$'
@@ -170,6 +172,11 @@ endfunction " }}}
 
 function! phpcd#getThrowableInstantiableClasses(path) " {{{
 	let class_info = rpc#request(g:phpid_channel_id, 'getThrowableInstantiableClasses', a:path)
+	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
+endfunction " }}}
+
+function! phpcd#getThrowableClasses(path) " {{{
+	let class_info = rpc#request(g:phpid_channel_id, 'getThrowableClasses', a:path)
 	return <SID>prepareClassInfoOutput(class_info, g:phpcd_insert_class_shortname)
 endfunction " }}}
 
@@ -618,7 +625,8 @@ function! phpcd#GetCurrentInstruction(line_number, col_number, phpbegin) " {{{
 
 		" break on statements as "return" or "throws"
 		if synIDName == 'phpStatement' || synIDName == 'phpException'
-			break
+			" todo write test after comment this break statement
+			" break
 		endif
 
 		" if the current char should be considered

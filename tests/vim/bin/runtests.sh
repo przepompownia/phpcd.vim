@@ -20,6 +20,9 @@ for vimExecuable in "${vimExecuables[@]}"; do
 
 	grep -q "0 errors, 0 failures" $messageFile
 	status=$?
+	if [[ $status != 0 && -f /tmp/phpcd-errors.log ]]; then
+		cat /tmp/phpcd-errors.log
+	fi
 	rm -f $messageFile
 done
 

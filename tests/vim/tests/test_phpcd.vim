@@ -91,3 +91,26 @@ function! Test_expect_class_path_completion_at_function_declaration()
 	call assert_equal('\PHPCD\B\C\ExpectClassConstantOnly', res[0].word)
 	call assert_equal('\PHPCD\B\C\ExpectPublicVariable', res[1].word)
 endfunction
+
+function! Test_complete_throw_new()
+	call <SID>startEditFixture('PHPCD/A/Alpha.php')
+
+	call <SID>appendIncompleteLineText(23, 'throw new Custom')
+	let res = <SID>runCompletion()
+
+	call assert_equal(2, len(res))
+	call assert_equal('\PHPCD\Throwable\CustomError', res[0].word)
+	call assert_equal('\PHPCD\Throwable\CustomException', res[1].word)
+endfunction
+
+function! Test_complete_catch_exception()
+	call <SID>startEditFixture('PHPCD/A/Alpha.php')
+
+	call <SID>appendIncompleteLineText(23, 'try {} catch(Custom')
+	let res = <SID>runCompletion()
+
+	call assert_equal(3, len(res))
+	call assert_equal('\PHPCD\Throwable\AbstractCustomError', res[0].word)
+	call assert_equal('\PHPCD\Throwable\CustomError', res[1].word)
+	call assert_equal('\PHPCD\Throwable\CustomException', res[2].word)
+endfunction
