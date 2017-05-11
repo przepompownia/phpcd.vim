@@ -114,3 +114,24 @@ function! Test_complete_catch_exception()
 	call assert_equal('\PHPCD\Throwable\CustomError', res[1].word)
 	call assert_equal('\PHPCD\Throwable\CustomException', res[2].word)
 endfunction
+
+function! Test_complete_based_on_returned_value()
+	call <SID>startEditFixture('PHPCD/Docblock/Foo.php')
+
+	call <SID>appendIncompleteLineText(11, '$rv->get')
+	let res = <SID>runCompletion()
+
+	call assert_equal(1, len(res))
+	call assert_equal('getReflectionClass', res[0].word)
+endfunction
+
+function! Test_complete_public_methods()
+	call <SID>startEditFixture('PHPCD/Docblock/Foo.php')
+
+	call <SID>appendIncompleteLineText(11, '$rc = $rv->getReflectionClass();')
+	call <SID>appendIncompleteLineText(12, '$rc->isAbs')
+	let res = <SID>runCompletion()
+
+	call assert_equal(1, len(res))
+	call assert_equal('isAbstract', res[0].word)
+endfunction
