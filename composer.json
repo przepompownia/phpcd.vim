@@ -16,7 +16,7 @@
         "psr-4": {"tests\\": "tests/php/"}
     },
     "require": {
-        "php": "^5.5 || ^7.0",
+        "php": "^7",
         "psr/log": "^1.0",
         "lvht/msgpack-rpc": "^0.2.1",
         "symfony/dependency-injection": "^3.0",

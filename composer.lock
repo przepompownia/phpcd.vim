@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "14becc7f2bfced8055a0fb3990baf45b",
+    "content-hash": "8534f33a78e663be0120872210ed8deb",
     "packages": [
         {
             "name": "incenteev/composer-parameter-handler",
@@ -867,7 +867,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2017-06-22T13:56:23+00:00"
+            "time": "2017-06-22 13:56:23"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2077,7 +2077,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.5 || ^7.0",
+        "php": "^7",
         "ext-json": "*"
     },
     "platform-dev": []
