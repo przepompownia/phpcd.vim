@@ -76,11 +76,18 @@ class WhiteList
      */
     public static function read()
     {
-        if (is_readable(self::getFileName())) {
-            return require self::getFileName();
+        if (!is_readable(self::getFileName())) {
+            return [];
         }
 
-        return [];
+        $whitelist = require self::getFileName();
+
+        if (!is_array($whitelist)) {
+            error_log('Wrong whielist format.');
+            return [];
+        }
+
+        return $whitelist;
     }
 
     public static function load()
