@@ -99,7 +99,11 @@ class WhiteList
 
         foreach ($whitelist as $file) {
             if (!empty($file['fileName']) && is_readable($file['fileName'])) {
-                require_once $file['fileName'];
+                try {
+                    require_once $file['fileName'];
+                } catch (\Exception $e) {
+
+                }
             }
         }
     }
