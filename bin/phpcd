@@ -1,0 +1,23 @@
+<?php
+// vim: ft=php
+
+$projectRoot=realpath(dirname(__FILE__).'/../');
+define('FRONT_CONTROLLER_PATH', realpath($projectRoot.'/php/main.php'));
+putenv('PHP_INI_SCAN_DIR=:'.$projectRoot);
+
+array_shift($argv);
+
+$arguments = array_map('escapeshellarg', $argv);
+$arguments = $argv;
+
+$commandComponents = [];
+
+if (extension_loaded('xdebug')) {
+    $commandComponents[] = '-dzend_extension=xdebug.so';
+}
+
+$commandComponents[] = FRONT_CONTROLLER_PATH;
+
+$commandComponents = array_merge($commandComponents, $arguments);
+
+pcntl_exec(PHP_BINARY, $commandComponents);

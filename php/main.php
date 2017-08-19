@@ -1,5 +1,7 @@
 <?php
 
+use Psr\Log\LoggerInterface;
+
 error_reporting(-1);
 set_error_handler(function ($severity, $message, $file, $line) {
     throw new ErrorException($message, 0, $severity, $file, $line);
@@ -30,6 +32,7 @@ $factory = new \PHPCD\Factory();
 $configDir = __DIR__.'/../config/';
 $dIContainer = $factory->createDIContainer('services.yml', $configDir, $parameters);
 
+/** @var LoggerInterface */
 $logger = $dIContainer->get('default_logger');
 
 try {

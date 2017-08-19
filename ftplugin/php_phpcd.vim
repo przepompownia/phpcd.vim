@@ -21,7 +21,7 @@ try
 		let messenger = 'json'
 	end
 
-	let s:phpcd_path = expand('<sfile>:p:h:h') . '/php/main.php'
+	let s:phpcd_path = expand('<sfile>:p:h:h') . '/bin/phpcd'
 
 	let g:phpcd_server_options['messenger'] = messenger
 	let g:php_autoload_path = g:phpcd_root.'/'.g:phpcd_autoload_path
