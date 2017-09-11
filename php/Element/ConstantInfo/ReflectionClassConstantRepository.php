@@ -2,6 +2,7 @@
 
 namespace PHPCD\Element\ConstantInfo;
 
+use PHPCD\NotFoundException;
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
@@ -45,5 +46,29 @@ class ReflectionClassConstantRepository implements ClassConstantRepository
         }
 
         return $collection;
+    }
+
+    /**
+     * @param ObjectElementPath $elementPath
+     *
+     * @return ClassConstant
+     */
+    public function getByPath(ObjectElementPath $elementPath)
+    {
+        $classInfo = $this->classInfoFactory->createClassInfo($elementPath->getClassName());
+
+        if (! $classInfo->hasConstant($elementPath->getElementName())) {
+            throw new NotFoundException(sprintf(
+                'Class %s has not constant %s',
+                $elementPath->getClassName(),
+                $elementPath->getElementName()
+            ));
+        }
+
+        return new GenericClassConstant(
+            $elementPath->getClassName(),
+            $elementPath->getElementName(),
+            $classInfo->getConstantName()
+        );
     }
 }

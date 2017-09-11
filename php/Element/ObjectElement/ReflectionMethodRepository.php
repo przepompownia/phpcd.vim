@@ -36,5 +36,4 @@ class ReflectionMethodRepository extends ReflectionObjectElementRepository imple
 
         return new ReflectionMethod($this->docBlock, $reflectionMethod);
     }
-
 }

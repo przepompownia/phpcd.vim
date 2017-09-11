@@ -2,6 +2,7 @@
 
 namespace PHPCD;
 
+use PHPCD\NotFoundException;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\FunctionFilter;
@@ -20,6 +21,7 @@ use PHPCD\Filter\PropertyFilter;
 use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\View\View;
+use PHPCD\Element\ObjectElement\ObjectElementPath;
 
 class PHPCD implements RpcHandler
 {
@@ -114,21 +116,31 @@ class PHPCD implements RpcHandler
     public function findSymbolDeclaration($className, $symbol = '__construct')
     {
         try {
-            $reflection = new \ReflectionClass($className);
-
-            if ($reflection->hasMethod($symbol)) {
-                $reflection = $reflection->getMethod($symbol);
-            } elseif ($reflection->hasConstant($symbol)) {
-                return [$this->getConstPath($symbol, $reflection), 'const '.$symbol];
-            } elseif ($reflection->hasProperty($symbol)) {
-                $line = $this->getPropertyDefLine($reflection, $symbol);
-
-                return [$reflection->getFileName(), $line];
-            }
-
-            return [$reflection->getFileName(), $reflection->getStartLine()];
-        } catch (\ReflectionException $e) {
+            $symbol = $this->findSymbol($className, $symbol);
+        } catch (NotFoundException $e) {
             return ['', null];
+        }
+    }
+
+    /**
+     * @todo move to repository
+     *
+     * @return ObjectElement
+     */
+    private function findSymbol($className, $symbol = '__construct')
+    {
+        try {
+            return $this->methodRepository->getByPath(new MethodPath($className, $symbol));
+        } catch (NotFoundException $e) {
+            try {
+                return $this->classConstantRepository->getByPath(new ObjectElementPath($className, $symbol));
+            } catch (NotFoundException $e) {
+                try {
+                    return $this->propertyRepository->getByPath(new PropertyPath($className, $symbol));
+                } catch (NotFoundException $e) {
+                    throw new NotFoundException(sprintf('Symbol %s not found in class %s', $className, $symbol));
+                }
+            }
         }
     }
 

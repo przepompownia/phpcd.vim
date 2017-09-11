@@ -2,6 +2,7 @@
 
 namespace PHPCD\Element\ConstantInfo;
 
+use PHPCD\Element\ObjectElement\ObjectElementPath;
 use PHPCD\Filter\ClassConstantFilter;
 
 interface ClassConstantRepository
@@ -12,4 +13,11 @@ interface ClassConstantRepository
      * @return ClassConstantCollection
      */
     public function find(ClassConstantFilter $filter);
+
+    /**
+     * @param ObjectElementPath $elementPath
+     *
+     * @return ClassConstant
+     */
+    public function getByPath(ObjectElementPath $elementPath);
 }

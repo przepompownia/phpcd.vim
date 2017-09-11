@@ -15,6 +15,8 @@ use PHPCD\PHPFile\PHPFileFactory;
 use PHPCD\View\VimMenuItemView;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\DocBlock\DocBlock;
+use PHPCD\NotFoundException;
+use PHPCD\Element\ConstantInfo\ClassConstant;
 
 class FindSymbolDeclarationTest extends MockeryTestCase
 {
@@ -33,6 +35,10 @@ class FindSymbolDeclarationTest extends MockeryTestCase
         $constantRepository = Mockery::mock(ConstantRepository::class);
         $classConstantRepository = Mockery::mock(ClassConstantRepository::class);
         $functionRepository = Mockery::mock(FunctionRepository::class);
+
+        $methodRepository->shouldReceive('getByPath')->andThrow(NotFoundException::class);
+        $constant = Mockery::mock(ClassConstant::class);
+        $classConstantRepository->shouldReceive('getByPath')->andReturn($constant);
 
         $docBlock = Mockery::mock(DocBlock::class);
 
