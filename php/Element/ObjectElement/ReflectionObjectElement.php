@@ -25,7 +25,7 @@ abstract class ReflectionObjectElement implements ObjectElement
     abstract protected function getDocBlockTagName();
 
     /**
-     * @var \ReflectionMethod|\ReflectionProperty
+     * @var \ReflectionMethod|\ReflectionProperty|\ReflectionClassConstant
      */
     protected $objectElement;
 

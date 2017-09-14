@@ -2,7 +2,7 @@
 
 namespace PHPCD\View;
 
-use PHPCD\Element\ConstantInfo\ClassConstant;
+use PHPCD\Element\ObjectElement\Constant\ClassConstant;
 
 interface ClassConstantVisitor
 {

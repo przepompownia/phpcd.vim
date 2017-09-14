@@ -3,7 +3,7 @@
 namespace PHPCD\View;
 
 use PHPCD\Element\ClassInfo\ClassCollection;
-use PHPCD\Element\ConstantInfo\ClassConstantCollection;
+use PHPCD\Element\ObjectElement\Constant\ClassConstantCollection;
 use PHPCD\Element\ConstantInfo\ConstantCollection;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\Element\ObjectElement\MethodCollection;

@@ -60,10 +60,10 @@ class ReflectionPropertyRepository extends ReflectionObjectElementRepository imp
     {
         try {
             $property = new \ReflectionProperty($path->getClassName(), $path->getPropertyName());
+
+            return new ReflectionProperty($this->docBlock, $property);
         } catch (\ReflectionException $e) {
             throw new NotFoundException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return new ReflectionProperty($this->docBlock, $property);
     }
 }

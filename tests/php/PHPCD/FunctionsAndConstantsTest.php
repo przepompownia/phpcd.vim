@@ -4,12 +4,12 @@ namespace tests\PHPCD;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPCD\Element\ConstantInfo\ClassConstantRepository;
 use PHPCD\Element\ConstantInfo\ConstantCollection;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\FunctionInfo\ReflectionFunction;
+use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\NamespaceInfo;

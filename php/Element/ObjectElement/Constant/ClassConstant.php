@@ -1,16 +1,13 @@
 <?php
 
-namespace PHPCD\Element\ConstantInfo;
+namespace PHPCD\Element\ObjectElement\Constant;
 
+use PHPCD\Element\ObjectElement\ObjectElement;
 use PHPCD\View\ClassConstantVisitor;
 
-interface ClassConstant
+interface ClassConstant extends ObjectElement
 {
-    public function getName();
-
     public function getValue();
-
-    public function getClass();
 
     public function accept(ClassConstantVisitor $visitor);
 }

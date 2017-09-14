@@ -2,7 +2,7 @@
 
 namespace PHPCD\View;
 
-use PHPCD\Element\ConstantInfo\ClassConstant;
+use PHPCD\Element\ObjectElement\Constant\ClassConstant;
 
 class VimMenuRenderClassConstantVisitor extends VimMenuRenderAbstractVisitor implements ClassConstantVisitor
 {

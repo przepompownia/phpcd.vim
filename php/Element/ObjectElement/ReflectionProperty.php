@@ -7,10 +7,10 @@ use PHPCD\DocBlock\DocBlock;
 
 class ReflectionProperty extends ReflectionObjectElement implements PropertyInfo
 {
-    public function __construct(DocBlock $docBlock, \ReflectionProperty $property)
+    public function __construct(DocBlock $docBlock, \ReflectionProperty $constant)
     {
         parent::__construct($docBlock);
-        $this->objectElement = $property;
+        $this->objectElement = $constant;
     }
 
     protected function getDocBlockTagName()

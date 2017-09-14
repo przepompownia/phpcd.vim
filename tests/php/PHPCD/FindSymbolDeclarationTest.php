@@ -4,7 +4,8 @@ namespace tests\PHPCD;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery;
-use PHPCD\Element\ConstantInfo\ClassConstantRepository;
+use PHPCD\Element\ObjectElement\Constant\ClassConstant;
+use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\ObjectElement\MethodRepository;
@@ -16,7 +17,6 @@ use PHPCD\View\VimMenuItemView;
 use Psr\Log\LoggerInterface as Logger;
 use PHPCD\DocBlock\DocBlock;
 use PHPCD\NotFoundException;
-use PHPCD\Element\ConstantInfo\ClassConstant;
 
 class FindSymbolDeclarationTest extends MockeryTestCase
 {
