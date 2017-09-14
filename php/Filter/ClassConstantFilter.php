@@ -2,12 +2,8 @@
 
 namespace PHPCD\Filter;
 
-class ClassConstantFilter extends AbstractFilter implements ClassElementFilter
+class ClassConstantFilter extends ObjectElementFilter
 {
-    protected $criteriaNames = [
-        self::CLASS_NAME,
-    ];
-
     /**
      * Get filter by the class where this element is defined.
      *

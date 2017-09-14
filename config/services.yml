@@ -61,7 +61,10 @@ services:
 
     repository.constant.class:
         class:              \PHPCD\Element\ObjectElement\Constant\ReflectionClassConstantRepository
-        arguments:          ['@default_pattern_matcher', '@class_info_factory']
+        arguments:
+            - '@default_pattern_matcher'
+            - '@class_info_factory'
+            - '@docblock'
 
     method_info_repository:
         class:              \PHPCD\Element\ObjectElement\ReflectionMethodRepository

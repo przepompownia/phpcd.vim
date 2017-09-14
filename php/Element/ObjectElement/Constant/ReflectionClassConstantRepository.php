@@ -3,10 +3,11 @@
 namespace PHPCD\Element\ObjectElement\Constant;
 
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
+use PHPCD\Element\ObjectElement\ReflectionObjectElementRepository;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
 
-class ReflectionClassConstantRepository implements ClassConstantRepository
+class ReflectionClassConstantRepository extends ReflectionObjectElementRepository implements ClassConstantRepository
 {
     /**
      * @var PatternMatcher
@@ -18,29 +19,19 @@ class ReflectionClassConstantRepository implements ClassConstantRepository
      */
     protected $classInfoFactory;
 
-    /**
-     * @param PatternMatcher $patternMatcher
-     */
-    public function __construct(PatternMatcher $patternMatcher, ReflectionClassFactory $factory)
-    {
-        $this->patternMatcher = $patternMatcher;
-        $this->classInfoFactory = $factory;
-    }
-
-    /**
-     * @param ClassConstantFilter $filter
-     *
-     * @return ClassConstantCollection
-     */
-    public function find(ClassConstantFilter $filter)
+    public function find(ClassConstantFilter $filter): ClassConstantCollection
     {
         $classInfo = $this->classInfoFactory->createFromFilter($filter);
 
         $collection = new ClassConstantCollection();
 
-        foreach ($classInfo->getConstants() as $name => $value) {
-            if ($this->patternMatcher->match($filter->getPattern(), $name)) {
-                $collection->add(new GenericClassConstant($classInfo, $name, $value));
+        foreach (array_keys($classInfo->getConstants()) as $constantName) {
+            $constant = new ReflectionClassConstant(
+                $this->docBlock,
+                new \ReflectionClassConstant($classInfo->getName(), $constantName)
+            );
+            if (true === $this->filter($constant, $filter)) {
+                $collection->add($constant);
             }
         }
 

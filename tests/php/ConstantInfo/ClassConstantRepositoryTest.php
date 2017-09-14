@@ -8,6 +8,7 @@ use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Element\ObjectElement\Constant\ReflectionClassConstantRepository;
+use PHPCD\DocBlock\DocBlock;
 use Mockery;
 use tests\Fixtures\MethodRepository\Test1;
 
@@ -44,7 +45,8 @@ class ClassConstantRepositoryTest extends MockeryTestCase
         $factory = Mockery::mock(ReflectionClassFactory::class);
         $factory->shouldReceive('createFromFilter')->once()
             ->andReturn(new ReflectionClass(new \ReflectionClass($className)));
+        $docBlock = Mockery::mock(DocBlock::class);
 
-        return new ReflectionClassConstantRepository($patternMatcher, $factory);
+        return new ReflectionClassConstantRepository($patternMatcher, $factory, $docBlock);
     }
 }
