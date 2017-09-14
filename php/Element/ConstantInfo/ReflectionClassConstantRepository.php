@@ -6,6 +6,7 @@ use PHPCD\NotFoundException;
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
+use PHPCD\Element\ObjectElement\ObjectElementPath;
 
 class ReflectionClassConstantRepository implements ClassConstantRepository
 {
