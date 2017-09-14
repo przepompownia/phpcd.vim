@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPCD\Element\ConstantInfo;
+namespace PHPCD\Element\ObjectElement\Constant;
 
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
 use PHPCD\Filter\ClassConstantFilter;

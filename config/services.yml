@@ -60,7 +60,7 @@ services:
         arguments:          ['@default_pattern_matcher', '@repository.constant.factory']
 
     repository.constant.class:
-        class:              \PHPCD\Element\ConstantInfo\ReflectionClassConstantRepository
+        class:              \PHPCD\Element\ObjectElement\Constant\ReflectionClassConstantRepository
         arguments:          ['@default_pattern_matcher', '@class_info_factory']
 
     method_info_repository:

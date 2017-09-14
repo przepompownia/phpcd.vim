@@ -7,7 +7,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\PatternMatcher\PatternMatcher;
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
 use PHPCD\Filter\ClassConstantFilter;
-use PHPCD\Element\ConstantInfo\ReflectionClassConstantRepository;
+use PHPCD\Element\ObjectElement\Constant\ReflectionClassConstantRepository;
 use Mockery;
 use tests\Fixtures\MethodRepository\Test1;
 

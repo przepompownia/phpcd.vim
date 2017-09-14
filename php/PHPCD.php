@@ -13,7 +13,7 @@ use Psr\Log\LoggerAwareTrait;
 use Lvht\MsgpackRpc\Server as RpcServer;
 use Lvht\MsgpackRpc\Handler as RpcHandler;
 use PHPCD\PHPFile\PHPFileFactory;
-use PHPCD\Element\ConstantInfo\ClassConstantRepository;
+use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\Filter\PropertyFilter;
@@ -36,7 +36,7 @@ class PHPCD implements RpcHandler
     private $nsinfo;
 
     /**
-     * @var ClassConstantRepository
+     * @var \PHPCD\Element\ObjectElement\Constant\ClassConstantRepository
      */
     private $classConstantRepository;
 

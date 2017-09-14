@@ -1,8 +1,9 @@
 <?php
 
-namespace PHPCD\Element\ConstantInfo;
+namespace PHPCD\Element\ObjectElement\Constant;
 
 use PHPCD\Element\ClassInfo\ClassInfo;
+use PHPCD\Element\ConstantInfo\AbstractConstant;
 use PHPCD\View\ClassConstantVisitor;
 
 class GenericClassConstant extends AbstractConstant implements ClassConstant

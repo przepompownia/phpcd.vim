@@ -4,7 +4,7 @@ namespace tests\PHPCD;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery;
-use PHPCD\Element\ConstantInfo\ClassConstantRepository;
+use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\ObjectElement\MethodRepository;
