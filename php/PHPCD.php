@@ -22,6 +22,7 @@ use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\View\View;
 use PHPCD\Element\ObjectElement\ObjectElementPath;
+use PHPCD\Element\ObjectElement\ObjectElement;
 
 class PHPCD implements RpcHandler
 {
@@ -124,10 +125,8 @@ class PHPCD implements RpcHandler
 
     /**
      * @todo move to repository
-     *
-     * @return ObjectElement
      */
-    private function findSymbol($className, $symbol = '__construct')
+    private function findSymbol($className, $symbol = '__construct'): ObjectElement
     {
         try {
             return $this->methodRepository->getByPath(new MethodPath($className, $symbol));
