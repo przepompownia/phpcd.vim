@@ -3,6 +3,7 @@
 namespace PHPCD\Element\ObjectElement;
 
 use PHPCD\Element\ClassInfo\ClassInfo;
+use PHPCD\Element\PhysicalLocation;
 
 class GenericProperty implements PropertyInfo
 {
@@ -99,5 +100,10 @@ class GenericProperty implements PropertyInfo
      */
     public function getNonTrivialTypes()
     {
+    }
+
+    public function getPhysicalLocation(): PhysicalLocation
+    {
+        return new PhysicalLocation($this->classInfo->getFileName(), 1);
     }
 }

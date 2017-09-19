@@ -107,13 +107,8 @@ class PHPCD implements RpcHandler
     /**
      * Fetch class method's source file path
      * and their definition line number.
-     *
-     * @param string $className  class name
-     * @param string $symbol method or function name
-     *
-     * @return array
      */
-    public function findSymbolDeclaration($className, $symbol = '__construct')
+    public function findSymbolDeclaration($className, $symbol = '__construct'): array
     {
         try {
             $symbol = $this->findObjectElement($className, $symbol);
@@ -121,7 +116,7 @@ class PHPCD implements RpcHandler
             $location = $symbol->getPhysicalLocation();
 
             return [$location->getFileName(), $location->getLineNumber()];
-            // @todo render, getDefinitionLine
+            // @todo render
         } catch (NotFoundException $e) {
             return ['', null];
         }
