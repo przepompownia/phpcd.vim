@@ -3,6 +3,7 @@
 namespace PHPCD\Element\ObjectElement;
 
 use PHPCD\Element\ClassInfo\ClassInfo;
+use PHPCD\Element\PhysicalLocation;
 
 interface ObjectElement
 {
@@ -32,4 +33,6 @@ interface ObjectElement
      * @return array
      */
     public function getNonTrivialTypes();
+
+    public function getPhysicalLocation(): PhysicalLocation;
 }

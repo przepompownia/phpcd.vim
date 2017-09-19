@@ -2,6 +2,7 @@
 
 namespace PHPCD\Element\ObjectElement;
 
+use PHPCD\Element\PhysicalLocation;
 use PHPCD\View\MethodVisitor;
 use PHPCD\DocBlock\DocBlock;
 
@@ -39,5 +40,10 @@ class ReflectionMethod extends ReflectionObjectElement implements MethodInfo
         }
 
         return $this->getNonTrivialTypesFromDocblock();
+    }
+
+    public function getPhysicalLocation(): PhysicalLocation
+    {
+        return new PhysicalLocation($this->objectElement->getFileName(), $this->objectElement->getStartLine());
     }
 }

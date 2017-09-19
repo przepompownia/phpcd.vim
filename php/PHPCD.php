@@ -117,6 +117,10 @@ class PHPCD implements RpcHandler
     {
         try {
             $symbol = $this->findObjectElement($className, $symbol);
+
+            $location = $symbol->getPhysicalLocation();
+
+            return [$location->getFileName(), $location->getLineNumber()];
             // @todo render, getDefinitionLine
         } catch (NotFoundException $e) {
             return ['', null];

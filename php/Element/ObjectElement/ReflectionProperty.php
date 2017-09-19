@@ -2,6 +2,7 @@
 
 namespace PHPCD\Element\ObjectElement;
 
+use PHPCD\Element\PhysicalLocation;
 use PHPCD\View\PropertyVisitor;
 use PHPCD\DocBlock\DocBlock;
 
@@ -31,19 +32,21 @@ class ReflectionProperty extends ReflectionObjectElement implements PropertyInfo
         return $this->getNonTrivialTypesFromDocblock();
     }
 
-    public function getDeclarationLineNumber(): int
+    public function getPhysicalLocation(): PhysicalLocation
     {
         $class = $this->objectElement->getDeclaringClass();
-        $fileObject = new \SplFileObject($class->getFileName());
+        $filename = $class->getFileName();
+
+        $fileObject = new \SplFileObject($filename);
         $fileObject->seek($class->getStartLine());
 
         $pattern = '/(private|protected|public|var)\s\$'.$this->getName().'/x';
         foreach ($fileObject as $line => $content) {
             if (preg_match($pattern, $content)) {
-                return $line + 1;
+                return new PhysicalLocation($filename, $line + 1);
             }
         }
 
-        return $class->getStartLine();
+        return new PhysicalLocation($filename, $class->getStartLine());
     }
 }
