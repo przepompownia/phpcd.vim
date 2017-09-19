@@ -40,9 +40,6 @@ class CompoundObjectElementRepository
         $this->logger = $logger;
     }
 
-    /**
-     * @todo move to separate class
-     */
     public function findObjectElement($className, $symbol = '__construct'): ObjectElement
     {
         try {
