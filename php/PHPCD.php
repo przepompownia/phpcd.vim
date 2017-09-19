@@ -38,7 +38,7 @@ class PHPCD implements RpcHandler
     private $nsinfo;
 
     /**
-     * @var \PHPCD\Element\ObjectElement\Constant\ClassConstantRepository
+     * @var ClassConstantRepository
      */
     private $classConstantRepository;
 
