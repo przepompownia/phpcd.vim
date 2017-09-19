@@ -169,32 +169,6 @@ class PHPCD implements RpcHandler
         return $classReflection->getStartLine();
     }
 
-    private function getConstPath($constantName, \ReflectionClass $reflection)
-    {
-        $origin = $path = $reflection->getFileName();
-        $originReflection = $reflection;
-
-        while ($reflection = $reflection->getParentClass()) {
-            if ($reflection->hasConstant($constantName)) {
-                $path = $reflection->getFileName();
-            } else {
-                break;
-            }
-        }
-
-        if ($origin === $path) {
-            $interfaces = $originReflection->getInterfaces();
-            foreach ($interfaces as $interface) {
-                if ($interface->hasConstant($constantName)) {
-                    $path = $interface->getFileName();
-                    break;
-                }
-            }
-        }
-
-        return $path;
-    }
-
     /**
      * Fetch the php script's namespace and imports(by use) list.
      *
