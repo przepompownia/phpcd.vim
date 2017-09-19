@@ -42,6 +42,6 @@ class ReflectionClassConstant extends ReflectionObjectElement implements ClassCo
 
     public function getPhysicalLocation(): PhysicalLocation
     {
-        return new PhysicalLocation('', 1);
+        return new PhysicalLocation($this->objectElement->getDeclaringClass()->getFileName(), 1);
     }
 }
