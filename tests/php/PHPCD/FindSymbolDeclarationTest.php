@@ -10,6 +10,7 @@ use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyRepository;
+use PHPCD\Element\PhysicalLocation;
 use PHPCD\NamespaceInfo;
 use PHPCD\PHPCD;
 use PHPCD\PHPFile\PHPFileFactory;
@@ -37,7 +38,11 @@ class FindSymbolDeclarationTest extends MockeryTestCase
         $functionRepository = Mockery::mock(FunctionRepository::class);
 
         $methodRepository->shouldReceive('getByPath')->andThrow(NotFoundException::class);
+        $location = Mockery::mock(PhysicalLocation::class);
+        $location->shouldReceive('getFileName')->andReturn(realpath($expectedFilePath));
+        $location->shouldReceive('getLineNumber')->andReturn($expectedLineNumber);
         $constant = Mockery::mock(ClassConstant::class);
+        $constant->shouldReceive('getPhysicalLocation')->andReturn($location);
         $classConstantRepository->shouldReceive('getByPath')->andReturn($constant);
 
         $docBlock = Mockery::mock(DocBlock::class);
