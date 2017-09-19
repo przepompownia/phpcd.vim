@@ -2,27 +2,26 @@
 
 namespace PHPCD;
 
-use PHPCD\NotFoundException;
+use Lvht\MsgpackRpc\Handler as RpcHandler;
+use Lvht\MsgpackRpc\Server as RpcServer;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
+use PHPCD\Element\FunctionInfo\FunctionRepository;
+use PHPCD\Element\ObjectElement\ClassConstantPath;
+use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
+use PHPCD\Element\ObjectElement\MethodPath;
+use PHPCD\Element\ObjectElement\MethodRepository;
+use PHPCD\Element\ObjectElement\ObjectElement;
+use PHPCD\Element\ObjectElement\PropertyPath;
+use PHPCD\Element\ObjectElement\PropertyRepository;
+use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\FunctionFilter;
-use PHPCD\Element\FunctionInfo\FunctionRepository;
-use PHPCD\Element\ObjectElement\MethodPath;
-use PHPCD\Element\ObjectElement\PropertyPath;
-use Psr\Log\LoggerInterface as Logger;
-use Psr\Log\LoggerAwareTrait;
-use Lvht\MsgpackRpc\Server as RpcServer;
-use Lvht\MsgpackRpc\Handler as RpcHandler;
-use PHPCD\PHPFile\PHPFileFactory;
-use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
-use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Filter\MethodFilter;
 use PHPCD\Filter\PropertyFilter;
-use PHPCD\Element\ObjectElement\MethodRepository;
-use PHPCD\Element\ObjectElement\PropertyRepository;
+use PHPCD\PHPFile\PHPFileFactory;
 use PHPCD\View\View;
-use PHPCD\Element\ObjectElement\ObjectElementPath;
-use PHPCD\Element\ObjectElement\ObjectElement;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface as Logger;
 
 class PHPCD implements RpcHandler
 {
@@ -133,7 +132,7 @@ class PHPCD implements RpcHandler
             return $this->methodRepository->getByPath(new MethodPath($className, $symbol));
         } catch (NotFoundException $e) {
             try {
-                return $this->classConstantRepository->getByPath(new ObjectElementPath($className, $symbol));
+                return $this->classConstantRepository->getByPath(new ClassConstantPath($className, $symbol));
             } catch (NotFoundException $e) {
                 try {
                     return $this->propertyRepository->getByPath(new PropertyPath($className, $symbol));

@@ -2,22 +2,12 @@
 
 namespace PHPCD\Element\ObjectElement\Constant;
 
-use PHPCD\Element\ObjectElement\ObjectElementPath;
+use PHPCD\Element\ObjectElement\ClassConstantPath;
 use PHPCD\Filter\ClassConstantFilter;
 
 interface ClassConstantRepository
 {
-    /**
-     * @param ClassConstantFilter $filter
-     *
-     * @return ClassConstantCollection
-     */
-    public function find(ClassConstantFilter $filter);
+    public function find(ClassConstantFilter $filter): ClassConstantCollection;
 
-    /**
-     * @param ObjectElementPath $elementPath
-     *
-     * @return ClassConstant
-     */
-    public function getByPath(ObjectElementPath $elementPath);
+    public function getByPath(ClassConstantPath $elementPath): ClassConstant;
 }
