@@ -100,6 +100,14 @@ services:
             - '@default_pattern_matcher'
             - '@function_factory'
 
+    repository.object_element:
+        class: PHPCD\Element\ObjectElement\CompoundObjectElementRepository
+        arguments:
+            - '@repository.constant.class'
+            - '@property_info_repository'
+            - '@method_info_repository'
+            - '@default_logger'
+
     handler.phpcd:
         class:              \PHPCD\PHPCD
         arguments:
@@ -112,6 +120,7 @@ services:
             - '@file_info_factory'
             - '@view'
             - '@function_repository'
+            - '@repository.object_element'
 
     server.phpcd:
         class:              Lvht\MsgpackRpc\ForkServer

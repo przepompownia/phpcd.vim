@@ -4,6 +4,7 @@ namespace tests\PHPCD;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery;
+use PHPCD\Element\ObjectElement\CompoundObjectElementRepository;
 use PHPCD\Element\ObjectElement\Constant\ClassConstant;
 use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
@@ -43,7 +44,9 @@ class FindSymbolDeclarationTest extends MockeryTestCase
         $location->shouldReceive('getLineNumber')->andReturn($expectedLineNumber);
         $constant = Mockery::mock(ClassConstant::class);
         $constant->shouldReceive('getPhysicalLocation')->andReturn($location);
-        $classConstantRepository->shouldReceive('getByPath')->andReturn($constant);
+
+        $objectElementRepository = Mockery::mock(CompoundObjectElementRepository::class);
+        $objectElementRepository->shouldReceive('findObjectElement')->andReturn($constant);
 
         $docBlock = Mockery::mock(DocBlock::class);
 
@@ -58,7 +61,8 @@ class FindSymbolDeclarationTest extends MockeryTestCase
             $methodRepository,
             $fileFactory,
             $view,
-            $functionRepository
+            $functionRepository,
+            $objectElementRepository
         );
 
         $output = $phpcd->findSymbolDeclaration($class, $symbol);

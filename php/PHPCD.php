@@ -7,6 +7,7 @@ use Lvht\MsgpackRpc\Server as RpcServer;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\ObjectElement\ClassConstantPath;
+use PHPCD\Element\ObjectElement\CompoundObjectElementRepository;
 use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Element\ObjectElement\MethodPath;
 use PHPCD\Element\ObjectElement\MethodRepository;
@@ -77,6 +78,11 @@ class PHPCD implements RpcHandler
      */
     private $fileFactory;
 
+    /**
+     * @var CompoundObjectElementRepository
+     */
+    private $objectElementRepository;
+
     public function __construct(
         NamespaceInfo $nsinfo,
         Logger $logger,
@@ -86,7 +92,8 @@ class PHPCD implements RpcHandler
         MethodRepository $methodRepository,
         PHPFileFactory $fileFactory,
         View $view,
-        FunctionRepository $functionRepository
+        FunctionRepository $functionRepository,
+        CompoundObjectElementRepository $objectElementRepository
     ) {
         $this->nsinfo = $nsinfo;
         $this->setLogger($logger);
@@ -97,6 +104,7 @@ class PHPCD implements RpcHandler
         $this->methodRepository = $methodRepository;
         $this->view = $view;
         $this->functionRepository = $functionRepository;
+        $this->objectElementRepository = $objectElementRepository;
     }
 
     public function setServer(RpcServer $server)
@@ -111,7 +119,7 @@ class PHPCD implements RpcHandler
     public function findSymbolDeclaration($className, $symbol = '__construct'): array
     {
         try {
-            $symbol = $this->findObjectElement($className, $symbol);
+            $symbol = $this->objectElementRepository->findObjectElement($className, $symbol);
 
             $location = $symbol->getPhysicalLocation();
 
@@ -119,26 +127,6 @@ class PHPCD implements RpcHandler
             // @todo render
         } catch (NotFoundException $e) {
             return ['', null];
-        }
-    }
-
-    /**
-     * @todo move to separate class
-     */
-    private function findObjectElement($className, $symbol = '__construct'): ObjectElement
-    {
-        try {
-            return $this->methodRepository->getByPath(new MethodPath($className, $symbol));
-        } catch (NotFoundException $e) {
-            try {
-                return $this->classConstantRepository->getByPath(new ClassConstantPath($className, $symbol));
-            } catch (NotFoundException $e) {
-                try {
-                    return $this->propertyRepository->getByPath(new PropertyPath($className, $symbol));
-                } catch (NotFoundException $e) {
-                    throw new NotFoundException(sprintf('Symbol %s not found in class %s', $className, $symbol));
-                }
-            }
         }
     }
 
