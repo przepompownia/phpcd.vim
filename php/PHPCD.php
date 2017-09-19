@@ -116,7 +116,7 @@ class PHPCD implements RpcHandler
     public function findSymbolDeclaration($className, $symbol = '__construct')
     {
         try {
-            $symbol = $this->findSymbol($className, $symbol);
+            $symbol = $this->findObjectElement($className, $symbol);
             // @todo render, getDefinitionLine
         } catch (NotFoundException $e) {
             return ['', null];
@@ -124,9 +124,9 @@ class PHPCD implements RpcHandler
     }
 
     /**
-     * @todo move to repository
+     * @todo move to separate class
      */
-    private function findSymbol($className, $symbol = '__construct'): ObjectElement
+    private function findObjectElement($className, $symbol = '__construct'): ObjectElement
     {
         try {
             return $this->methodRepository->getByPath(new MethodPath($className, $symbol));
