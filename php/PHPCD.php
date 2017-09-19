@@ -154,21 +154,6 @@ class PHPCD implements RpcHandler
         }
     }
 
-    private function getPropertyDefLine(\ReflectionClass $classReflection, $property)
-    {
-        $class = new \SplFileObject($classReflection->getFileName());
-        $class->seek($classReflection->getStartLine());
-
-        $pattern = '/(private|protected|public|var)\s\$'.$property.'/x';
-        foreach ($class as $line => $content) {
-            if (preg_match($pattern, $content)) {
-                return $line + 1;
-            }
-        }
-
-        return $classReflection->getStartLine();
-    }
-
     /**
      * Fetch the php script's namespace and imports(by use) list.
      *
