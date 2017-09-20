@@ -2,10 +2,10 @@
 
 namespace PHPCD\Element\ObjectElement\Constant;
 
+use PHPCD\DocBlock\DocBlock;
 use PHPCD\Element\ObjectElement\ReflectionObjectElement;
 use PHPCD\Element\PhysicalLocation;
-use PHPCD\View\ClassConstantVisitor;
-use PHPCD\DocBlock\DocBlock;
+use PHPCD\View\ObjectElementVisitor;
 
 class ReflectionClassConstant extends ReflectionObjectElement implements ClassConstant
 {
@@ -35,9 +35,9 @@ class ReflectionClassConstant extends ReflectionObjectElement implements ClassCo
         return 'x-x';
     }
 
-    public function accept(ClassConstantVisitor $visitor)
+    public function acceptObjectElement(ObjectElementVisitor $visitor): void
     {
-        $visitor->visitElement($this);
+        $visitor->visitConstant($this);
     }
 
     public function getPhysicalLocation(): PhysicalLocation

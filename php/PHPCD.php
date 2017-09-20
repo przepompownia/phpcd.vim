@@ -6,12 +6,10 @@ use Lvht\MsgpackRpc\Handler as RpcHandler;
 use Lvht\MsgpackRpc\Server as RpcServer;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
-use PHPCD\Element\ObjectElement\ClassConstantPath;
 use PHPCD\Element\ObjectElement\CompoundObjectElementRepository;
 use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Element\ObjectElement\MethodPath;
 use PHPCD\Element\ObjectElement\MethodRepository;
-use PHPCD\Element\ObjectElement\ObjectElement;
 use PHPCD\Element\ObjectElement\PropertyPath;
 use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\Filter\ClassConstantFilter;
@@ -123,6 +121,8 @@ class PHPCD implements RpcHandler
 
             $location = $symbol->getPhysicalLocation();
 
+//            $this->logger->debug($location->getFileName());
+
             return [$location->getFileName(), $location->getLineNumber()];
             // @todo render
         } catch (NotFoundException $e) {
@@ -182,39 +182,10 @@ class PHPCD implements RpcHandler
 
     public function getMatchingClassDetails($className, $pattern, $isStatic, $publicOnly = true)
     {
-        $items = [];
-        try {
-            if (false !== $isStatic) {
-                $constantFilter = new ClassConstantFilter([ClassConstantFilter::CLASS_NAME => $className], $pattern);
-                $constants = $this->classConstantRepository->find($constantFilter);
+        $matchingElements = $this->objectElementRepository
+            ->getMatchingClassDetails($className, $pattern, $isStatic, $publicOnly);
 
-                $items = array_merge($items, $this->view->renderClassConstantCollection($constants));
-            }
-
-            $methodFilter = new MethodFilter([
-                MethodFilter::CLASS_NAME => $className,
-                MethodFilter::PUBLIC_ONLY => $publicOnly,
-                MethodFilter::STATIC_ONLY => $isStatic,
-            ], $pattern);
-
-            $methods = $this->methodRepository->find($methodFilter);
-
-            $items = array_merge($items, $this->view->renderMethodCollection($methods));
-
-            $propertyFilter = new PropertyFilter([
-                PropertyFilter::CLASS_NAME => $className,
-                PropertyFilter::PUBLIC_ONLY => $publicOnly,
-                PropertyFilter::STATIC_ONLY => $isStatic,
-            ], $pattern);
-
-            $properties = $this->propertyRepository->find($propertyFilter);
-
-            $items = array_merge($items, $this->view->renderPropertyCollection($properties));
-        } catch (\Exception $e) {
-            $this->logger->debug($e->getMessage());
-        }
-
-        return $items;
+        return $this->view->renderObjectElementCollection($matchingElements);
     }
 
     public function getFixForNewClassUsage($path, array $newClassParams)

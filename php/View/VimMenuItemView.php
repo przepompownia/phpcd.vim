@@ -8,6 +8,7 @@ use PHPCD\Element\ObjectElement\Constant\ClassConstantCollection;
 use PHPCD\Element\ConstantInfo\ConstantCollection;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\Element\ObjectElement\MethodCollection;
+use PHPCD\Element\ObjectElement\ObjectElementCollection;
 use PHPCD\Element\ObjectElement\PropertyCollection;
 use PHPCD\PHPFile\PHPFile;
 
@@ -53,6 +54,15 @@ class VimMenuItemView implements View
         $visitor = new VimMenuRenderPropertyVisitor();
 
         return $this->renderCollectionWithVisitor($collection, $visitor);
+    }
+
+    public function renderObjectElementCollection(ObjectElementCollection $collection)
+    {
+        $visitor = new VimMenuRenderObjectElementVisitor(new VimMenuItemFactory());
+
+        $collection->acceptObjectElement($visitor);
+
+        return $visitor->getOutput();
     }
 
     public function renderPHPFile(PHPFile $file)

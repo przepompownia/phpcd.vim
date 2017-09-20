@@ -8,13 +8,8 @@ class VimMenuRenderPropertyVisitor extends VimMenuRenderAbstractVisitor implemen
 {
     public function visitElement(PropertyInfo $propertyInfo)
     {
-        $modifiers = $this->getModifiers($propertyInfo);
-        $out = new VimMenuItem();
-        $out->setWord($propertyInfo->getName());
-        $out->setAbbr(sprintf('%3s %s', $modifiers, $propertyInfo->getName()));
-        $out->setKind('p');
-        $out->setInfo(preg_replace('#/?\*(\*|/)?#', '', $propertyInfo->getDocComment()));
+        $menuItem = (new VimMenuItemFactory())->createFromProperty($propertyInfo);
 
-        $this->output[] = $out->render();
+        $this->output[] = $menuItem->render();
     }
 }

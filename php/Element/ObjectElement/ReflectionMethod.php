@@ -2,9 +2,9 @@
 
 namespace PHPCD\Element\ObjectElement;
 
-use PHPCD\Element\PhysicalLocation;
-use PHPCD\View\MethodVisitor;
 use PHPCD\DocBlock\DocBlock;
+use PHPCD\Element\PhysicalLocation;
+use PHPCD\View\ObjectElementVisitor;
 
 class ReflectionMethod extends ReflectionObjectElement implements MethodInfo
 {
@@ -24,9 +24,9 @@ class ReflectionMethod extends ReflectionObjectElement implements MethodInfo
         return DocBlock::TAG_RETURN;
     }
 
-    public function accept(MethodVisitor $visitor)
+    public function acceptObjectElement(ObjectElementVisitor $visitor): void
     {
-        $visitor->visitElement($this);
+        $visitor->visitMethod($this);
     }
 
     /**

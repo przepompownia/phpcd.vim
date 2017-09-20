@@ -4,6 +4,7 @@ namespace PHPCD\Element\ObjectElement;
 
 use PHPCD\Element\ClassInfo\ClassInfo;
 use PHPCD\Element\PhysicalLocation;
+use PHPCD\View\ObjectElementVisitor;
 
 interface ObjectElement
 {
@@ -35,4 +36,6 @@ interface ObjectElement
     public function getNonTrivialTypes();
 
     public function getPhysicalLocation(): PhysicalLocation;
+
+    public function acceptObjectElement(ObjectElementVisitor $visitor): void;
 }

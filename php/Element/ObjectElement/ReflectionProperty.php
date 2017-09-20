@@ -2,9 +2,9 @@
 
 namespace PHPCD\Element\ObjectElement;
 
-use PHPCD\Element\PhysicalLocation;
-use PHPCD\View\PropertyVisitor;
 use PHPCD\DocBlock\DocBlock;
+use PHPCD\Element\PhysicalLocation;
+use PHPCD\View\ObjectElementVisitor;
 
 class ReflectionProperty extends ReflectionObjectElement implements PropertyInfo
 {
@@ -19,9 +19,9 @@ class ReflectionProperty extends ReflectionObjectElement implements PropertyInfo
         return DocBlock::TAG_VAR;
     }
 
-    public function accept(PropertyVisitor $visitor)
+    public function acceptObjectElement(ObjectElementVisitor $visitor): void
     {
-        $visitor->visitElement($this);
+        $visitor->visitProperty($this);
     }
 
     /**
