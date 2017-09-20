@@ -166,6 +166,7 @@ class PHPCD implements RpcHandler
     {
         $propertyPath = new PropertyPath($className, $propertyName);
         $property = $this->propertyRepository->getByPath($propertyPath);
+
         return $property->getNonTrivialTypes();
     }
 

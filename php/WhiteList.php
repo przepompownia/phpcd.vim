@@ -83,7 +83,8 @@ class WhiteList
         $whitelist = require self::getFileName();
 
         if (!is_array($whitelist)) {
-            error_log('Wrong whielist format.');
+            error_log('Wrong whitelist format.');
+
             return [];
         }
 
@@ -102,7 +103,6 @@ class WhiteList
                 try {
                     require_once $file['fileName'];
                 } catch (\Exception $e) {
-
                 }
             }
         }

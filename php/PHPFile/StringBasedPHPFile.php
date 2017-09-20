@@ -262,7 +262,7 @@ class StringBasedPHPFile implements PHPFile
     {
         $imports = [];
 
-        if (strtolower(substr($line, 0, 3) == 'use')) {
+        if (strtolower('use' == substr($line, 0, 3))) {
             if (preg_match(self::USE_PATTERN, $line, $useMatches) && !empty($useMatches)) {
                 $expansions = array_map('self::trim', explode(',', $useMatches['right']));
 
@@ -473,7 +473,7 @@ class StringBasedPHPFile implements PHPFile
 
         system($phpCmd, $returnCode);
 
-        if ($returnCode !== 0) {
+        if (0 !== $returnCode) {
             throw new FileException('Syntax error was detected by an external lint command.');
         }
 
@@ -518,7 +518,7 @@ class StringBasedPHPFile implements PHPFile
 
     private function getFullPath($className)
     {
-        if (strpos($className, '\\') !== 0) {
+        if (0 !== strpos($className, '\\')) {
             $path = explode('\\', $className);
             $first = array_shift($path);
 

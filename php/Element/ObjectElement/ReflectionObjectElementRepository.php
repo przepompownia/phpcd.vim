@@ -46,7 +46,7 @@ abstract class ReflectionObjectElementRepository
             return false;
         }
 
-        if ($filter->isStaticOnly() !== null && ($element->isStatic() xor $filter->isStaticOnly())) {
+        if (null !== $filter->isStaticOnly() && ($element->isStatic() xor $filter->isStaticOnly())) {
             return false;
         }
 

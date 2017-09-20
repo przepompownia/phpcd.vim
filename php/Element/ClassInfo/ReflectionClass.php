@@ -27,7 +27,7 @@ class ReflectionClass implements ClassInfo
         $methods = $classFilter->getCriteriaNames();
 
         foreach ($methods as $method) {
-            if ($classFilter->$method() !== null) {
+            if (null !== $classFilter->$method()) {
                 if ($classFilter->$method() !== $this->$method()) {
                     return false;
                 }

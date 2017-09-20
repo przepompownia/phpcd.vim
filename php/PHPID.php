@@ -129,7 +129,7 @@ class PHPID implements RpcHandler
         $this->vimOpenProgressBar(count($this->classMap));
 
         while ($this->classMap) {
-        $pipe = null;
+            $pipe = null;
             $pid = pcntl_fork();
 
             if ($pid == -1) {

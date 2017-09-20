@@ -82,7 +82,7 @@ class NamespaceInfo
                     trim($namespaceRoot, DIRECTORY_SEPARATOR)
                 );
 
-                if (strpos($classFileDir, $absoluteNsRoot) === 0) {
+                if (0 === strpos($classFileDir, $absoluteNsRoot)) {
                     $relativeClassFileDir = str_replace($absoluteNsRoot, '', $classFileDir);
 
                     $path = array_filter(explode(DIRECTORY_SEPARATOR, $relativeClassFileDir), 'strlen');

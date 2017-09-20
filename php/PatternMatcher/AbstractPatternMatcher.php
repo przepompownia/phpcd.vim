@@ -8,7 +8,7 @@ abstract class AbstractPatternMatcher implements PatternMatcher
 
     public function __construct($caseSensitive = null)
     {
-        if ($caseSensitive === true) {
+        if (true === $caseSensitive) {
             $this->caseSensitive = $caseSensitive;
         }
     }

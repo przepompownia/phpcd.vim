@@ -117,7 +117,7 @@ class Factory
 
     public function createMessenger(Io $io, $messengerType = null)
     {
-        if ($messengerType === 'json') {
+        if ('json' === $messengerType) {
             return new JsonMessenger($io);
         } else {
             return new MsgpackMessenger($io);

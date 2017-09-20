@@ -15,6 +15,7 @@ class FunctionFactory
     {
         $this->docBlock = $docBlock;
     }
+
     /**
      * @return ReflectionFunction
      */
