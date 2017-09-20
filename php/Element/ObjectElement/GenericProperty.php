@@ -4,6 +4,7 @@ namespace PHPCD\Element\ObjectElement;
 
 use PHPCD\Element\ClassInfo\ClassInfo;
 use PHPCD\Element\PhysicalLocation;
+use PHPCD\View\ObjectElementVisitor;
 
 class GenericProperty implements PropertyInfo
 {
@@ -105,5 +106,10 @@ class GenericProperty implements PropertyInfo
     public function getPhysicalLocation(): PhysicalLocation
     {
         return new PhysicalLocation($this->classInfo->getFileName(), 1);
+    }
+
+    public function acceptObjectElement(ObjectElementVisitor $visitor): void
+    {
+        $visitor->visitProperty($this);
     }
 }

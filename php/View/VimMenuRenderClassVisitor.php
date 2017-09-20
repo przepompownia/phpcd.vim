@@ -8,12 +8,9 @@ class VimMenuRenderClassVisitor extends VimMenuRenderAbstractVisitor implements 
 {
     public function visitElement(ClassInfo $classInfo)
     {
-        $out = new VimMenuItem();
-        $out->setWord($classInfo->getName());
-        $out->setAbbr('');
-        $out->setKind('');
-        $out->setInfo('');
+        $factory = new VimMenuItemFactory();
+        $menuItem = $factory->createFromClass($classInfo);
 
-        $this->output[] = $out->render();
+        $this->output[] = $menuItem->render();
     }
 }

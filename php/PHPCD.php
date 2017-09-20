@@ -7,16 +7,12 @@ use Lvht\MsgpackRpc\Server as RpcServer;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\ObjectElement\CompoundObjectElementRepository;
-use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Element\ObjectElement\MethodPath;
 use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyPath;
 use PHPCD\Element\ObjectElement\PropertyRepository;
-use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\FunctionFilter;
-use PHPCD\Filter\MethodFilter;
-use PHPCD\Filter\PropertyFilter;
 use PHPCD\PHPFile\PHPFileFactory;
 use PHPCD\View\View;
 use Psr\Log\LoggerAwareTrait;
@@ -35,11 +31,6 @@ class PHPCD implements RpcHandler
      * @var NamespaceInfo
      */
     private $nsinfo;
-
-    /**
-     * @var ClassConstantRepository
-     */
-    private $classConstantRepository;
 
     /**
      * @var ConstantRepository
@@ -85,7 +76,6 @@ class PHPCD implements RpcHandler
         NamespaceInfo $nsinfo,
         Logger $logger,
         ConstantRepository $constantRepository,
-        ClassConstantRepository $classConstantRepository,
         PropertyRepository $propertyRepository,
         MethodRepository $methodRepository,
         PHPFileFactory $fileFactory,
@@ -97,7 +87,6 @@ class PHPCD implements RpcHandler
         $this->setLogger($logger);
         $this->fileFactory = $fileFactory;
         $this->constantRepository = $constantRepository;
-        $this->classConstantRepository = $classConstantRepository;
         $this->propertyRepository = $propertyRepository;
         $this->methodRepository = $methodRepository;
         $this->view = $view;

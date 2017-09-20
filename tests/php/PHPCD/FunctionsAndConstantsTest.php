@@ -9,6 +9,7 @@ use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\FunctionInfo\ReflectionFunction;
+use PHPCD\Element\ObjectElement\CompoundObjectElementRepository;
 use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Element\ObjectElement\MethodRepository;
 use PHPCD\Element\ObjectElement\PropertyRepository;
@@ -44,6 +45,7 @@ class FunctionsAndConstantsTest extends MockeryTestCase
         $functionCollection = new FunctionCollection();
         $functionCollection->add(new ReflectionFunction($docBlock, new \ReflectionFunction('var_dump')));
         $functionRepository->shouldReceive('find')->once()->andReturn($functionCollection);
+        $objectElementRepository = Mockery::mock(CompoundObjectElementRepository::class);
 
         $phpcd = new PHPCD(
             $nsinfo,
@@ -54,7 +56,8 @@ class FunctionsAndConstantsTest extends MockeryTestCase
             $methodRepository,
             $fileFactory,
             $view,
-            $functionRepository
+            $functionRepository,
+            $objectElementRepository
         );
 
         $output = $phpcd->getFunctionsAndConstants('var');

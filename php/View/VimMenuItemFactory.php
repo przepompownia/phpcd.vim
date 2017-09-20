@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPCD\View;
 
+use PHPCD\Element\ClassInfo\ClassInfo;
 use PHPCD\Element\ObjectElement\Constant\ClassConstant;
 use PHPCD\Element\ObjectElement\MethodInfo;
 use PHPCD\Element\ObjectElement\ObjectElement;
@@ -22,7 +23,7 @@ class VimMenuItemFactory
         'static'    => '@',
     ];
 
-    private function clearDoc(string $doc): string
+    private function clearDoc($doc)
     {
         $doc = preg_replace('/[ \t]*\* ?/m', '', $doc);
 
@@ -77,6 +78,17 @@ class VimMenuItemFactory
         ));
         $menuItem->setKind('f');
         $menuItem->setInfo($this->clearDoc($methodInfo->getDocComment()));
+
+        return $menuItem;
+    }
+
+    public function createFromClass(ClassInfo $classInfo): VimMenuItem
+    {
+        $menuItem = new VimMenuItem();
+        $menuItem->setWord($classInfo->getName());
+        $menuItem->setAbbr('');
+        $menuItem->setKind('');
+        $menuItem->setInfo('');
 
         return $menuItem;
     }

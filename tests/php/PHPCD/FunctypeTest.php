@@ -5,6 +5,7 @@ namespace tests\PHPCD;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\DocBlock\DocBlock;
+use PHPCD\Element\ObjectElement\CompoundObjectElementRepository;
 use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
@@ -67,6 +68,7 @@ class FunctypeTest extends MockeryTestCase
         $fileFactory->shouldReceive('createFile')->andReturn($file);
         $view->shouldReceive('renderPHPFile')->andReturnNull();
         $methodRepository->shouldReceive('getByPath')->andReturn($methodInfo);
+        $objectElementRepository = Mockery::mock(CompoundObjectElementRepository::class);
 
         $phpcd = new PHPCD(
             $nsinfo,
@@ -77,7 +79,8 @@ class FunctypeTest extends MockeryTestCase
             $methodRepository,
             $fileFactory,
             $view,
-            $functionRepository
+            $functionRepository,
+            $objectElementRepository
         );
 
         $types = $phpcd->getTypesReturnedByMethod($class, $method);

@@ -4,12 +4,9 @@ namespace PHPCD\View;
 
 use PHPCD\Collection\Collection;
 use PHPCD\Element\ClassInfo\ClassCollection;
-use PHPCD\Element\ObjectElement\Constant\ClassConstantCollection;
 use PHPCD\Element\ConstantInfo\ConstantCollection;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
-use PHPCD\Element\ObjectElement\MethodCollection;
 use PHPCD\Element\ObjectElement\ObjectElementCollection;
-use PHPCD\Element\ObjectElement\PropertyCollection;
 use PHPCD\PHPFile\PHPFile;
 
 class VimMenuItemView implements View
@@ -21,13 +18,6 @@ class VimMenuItemView implements View
         return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
-    public function renderClassConstantCollection(ClassConstantCollection $collection)
-    {
-        $visitor = new VimMenuRenderClassConstantVisitor();
-
-        return $this->renderCollectionWithVisitor($collection, $visitor);
-    }
-
     public function renderClassCollection(ClassCollection $collection)
     {
         $visitor = new VimMenuRenderClassVisitor();
@@ -35,23 +25,9 @@ class VimMenuItemView implements View
         return $this->renderCollectionWithVisitor($collection, $visitor);
     }
 
-    public function renderMethodCollection(MethodCollection $collection)
-    {
-        $visitor = new VimMenuRenderMethodVisitor();
-
-        return $this->renderCollectionWithVisitor($collection, $visitor);
-    }
-
     public function renderFunctionCollection(FunctionCollection $collection)
     {
         $visitor = new VimMenuRenderFunctionVisitor();
-
-        return $this->renderCollectionWithVisitor($collection, $visitor);
-    }
-
-    public function renderPropertyCollection(PropertyCollection $collection)
-    {
-        $visitor = new VimMenuRenderPropertyVisitor();
 
         return $this->renderCollectionWithVisitor($collection, $visitor);
     }
