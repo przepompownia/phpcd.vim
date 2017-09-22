@@ -107,4 +107,20 @@ class CompoundObjectElementRepository
 
         return $collection;
     }
+
+    public function getTypesReturnedByMethod($className, $methodName)
+    {
+        $methodPath = new MethodPath($className, $methodName);
+        $method = $this->methodRepository->getByPath($methodPath);
+
+        return $method->getNonTrivialTypes();
+    }
+
+    public function getTypesOfProperty($className, $propertyName)
+    {
+        $propertyPath = new PropertyPath($className, $propertyName);
+        $property = $this->propertyRepository->getByPath($propertyPath);
+
+        return $property->getNonTrivialTypes();
+    }
 }

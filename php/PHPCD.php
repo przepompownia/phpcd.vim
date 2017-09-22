@@ -7,10 +7,6 @@ use Lvht\MsgpackRpc\Server as RpcServer;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\ObjectElement\CompoundObjectElementRepository;
-use PHPCD\Element\ObjectElement\MethodPath;
-use PHPCD\Element\ObjectElement\MethodRepository;
-use PHPCD\Element\ObjectElement\PropertyPath;
-use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\FunctionFilter;
 use PHPCD\PHPFile\PHPFileFactory;
@@ -36,16 +32,6 @@ class PHPCD implements RpcHandler
      * @var ConstantRepository
      */
     private $constantRepository;
-
-    /**
-     * @var PropertyRepository
-     */
-    private $propertyRepository;
-
-    /**
-     * @var MethodRepository
-     */
-    private $methodRepository;
 
     /**
      * @var View
@@ -76,8 +62,6 @@ class PHPCD implements RpcHandler
         NamespaceInfo $nsinfo,
         Logger $logger,
         ConstantRepository $constantRepository,
-        PropertyRepository $propertyRepository,
-        MethodRepository $methodRepository,
         PHPFileFactory $fileFactory,
         View $view,
         FunctionRepository $functionRepository,
@@ -87,8 +71,6 @@ class PHPCD implements RpcHandler
         $this->setLogger($logger);
         $this->fileFactory = $fileFactory;
         $this->constantRepository = $constantRepository;
-        $this->propertyRepository = $propertyRepository;
-        $this->methodRepository = $methodRepository;
         $this->view = $view;
         $this->functionRepository = $functionRepository;
         $this->objectElementRepository = $objectElementRepository;
@@ -151,23 +133,12 @@ class PHPCD implements RpcHandler
 
     public function getTypesReturnedByMethod($className, $methodName)
     {
-        $methodPath = new MethodPath($className, $methodName);
-        $method = $this->methodRepository->getByPath($methodPath);
-
-        return $method->getNonTrivialTypes();
+        return $this->objectElementRepository->getTypesReturnedByMethod($className, $methodName);
     }
 
-    /**
-     * Fetch class attribute's type by `@var` annotation.
-     *
-     * @return array array of types
-     */
     public function getTypesOfProperty($className, $propertyName)
     {
-        $propertyPath = new PropertyPath($className, $propertyName);
-        $property = $this->propertyRepository->getByPath($propertyPath);
-
-        return $property->getNonTrivialTypes();
+        return $this->objectElementRepository->getTypesOfProperty($className, $propertyName);
     }
 
     public function getMatchingClassDetails($className, $pattern, $isStatic, $publicOnly = true)

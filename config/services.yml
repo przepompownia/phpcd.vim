@@ -108,14 +108,20 @@ services:
             - '@method_info_repository'
             - '@default_logger'
 
+    view.menu_item_factory.vim:
+        class: PHPCD\View\VimMenuItemFactory
+
+    view.menu_render_object_element:
+        class: PHPCD\View\VimMenuRenderObjectElementVisitor
+        arguments:
+          - '@view.menu_item_factory.vim'
+
     handler.phpcd:
         class:              \PHPCD\PHPCD
         arguments:
             - '@nsinfo'
             - '@default_logger'
             - '@repository.constant'
-            - '@property_info_repository'
-            - '@method_info_repository'
             - '@file_info_factory'
             - '@view'
             - '@function_repository'
