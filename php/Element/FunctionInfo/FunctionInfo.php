@@ -18,10 +18,7 @@ interface FunctionInfo
 
     public function getStartLine();
 
-    /**
-     * @return array
-     */
-    public function getNonTrivialTypes();
+    public function getNonTrivialTypes(): array;
 
     public function accept(FunctionVisitor $visitor);
 }

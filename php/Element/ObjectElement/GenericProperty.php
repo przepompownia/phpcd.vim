@@ -96,10 +96,7 @@ class GenericProperty implements PropertyInfo
     {
     }
 
-    /**
-     * @return array
-     */
-    public function getNonTrivialTypes()
+    public function getNonTrivialTypes(): array
     {
     }
 

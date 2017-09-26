@@ -134,9 +134,7 @@ class ReflectionClass implements ClassInfo
 
     public function isThrowable()
     {
-        return (version_compare(PHP_VERSION, '7.0.0') >= 0
-            && $this->reflectionClass->implementsInterface(\Throwable::class)
-            || $this->reflectionClass->isSubclassOf(\Exception::class));
+        return $this->reflectionClass->implementsInterface(\Throwable::class);
     }
 
     public function accept(ClassVisitor $visitor)

@@ -7,6 +7,7 @@ use Lvht\MsgpackRpc\Server as RpcServer;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\ObjectElement\CompoundObjectElementRepository;
+use PHPCD\Element\ObjectElement\ObjectElementPath;
 use PHPCD\Filter\ConstantFilter;
 use PHPCD\Filter\FunctionFilter;
 use PHPCD\PHPFile\PHPFileFactory;
@@ -87,12 +88,12 @@ class PHPCD implements RpcHandler
      */
     public function findSymbolDeclaration($className, $symbol = '__construct'): array
     {
+        $path = new ObjectElementPath($className, $symbol);
+
         try {
-            $symbol = $this->objectElementRepository->findObjectElement($className, $symbol);
+            $symbol = $this->objectElementRepository->findObjectElement($path);
 
             $location = $symbol->getPhysicalLocation();
-
-//            $this->logger->debug($location->getFileName());
 
             return [$location->getFileName(), $location->getLineNumber()];
             // @todo render
@@ -133,12 +134,16 @@ class PHPCD implements RpcHandler
 
     public function getTypesReturnedByMethod($className, $methodName)
     {
-        return $this->objectElementRepository->getTypesReturnedByMethod($className, $methodName);
+        $methodPath = new ObjectElementPath($className, $methodName);
+
+        return $this->objectElementRepository->getTypesReturnedByMethod($methodPath);
     }
 
     public function getTypesOfProperty($className, $propertyName)
     {
-        return $this->objectElementRepository->getTypesOfProperty($className, $propertyName);
+        $propertyPath = new ObjectElementPath($className, $propertyName);
+
+        return $this->objectElementRepository->getTypesOfProperty($propertyPath);
     }
 
     public function getMatchingClassDetails($className, $pattern, $isStatic, $publicOnly = true)

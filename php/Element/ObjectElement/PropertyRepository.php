@@ -11,10 +11,5 @@ interface PropertyRepository
      */
     public function find(PropertyFilter $filter);
 
-    /**
-     * @param PropertyPath $path
-     *
-     * @return PropertyInfo
-     */
-    public function getByPath(PropertyPath $path);
+    public function getByPath(ObjectElementPath $path): PropertyInfo;
 }

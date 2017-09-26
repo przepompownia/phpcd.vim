@@ -24,10 +24,7 @@ class ReflectionProperty extends ReflectionObjectElement implements PropertyInfo
         $visitor->visitProperty($this);
     }
 
-    /**
-     * @return array
-     */
-    public function getNonTrivialTypes()
+    public function getNonTrivialTypes(): array
     {
         return $this->getNonTrivialTypesFromDocblock();
     }

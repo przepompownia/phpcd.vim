@@ -3,7 +3,7 @@
 namespace PHPCD\Element\ObjectElement\Constant;
 
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
-use PHPCD\Element\ObjectElement\ClassConstantPath;
+use PHPCD\Element\ObjectElement\ObjectElementPath;
 use PHPCD\Element\ObjectElement\ReflectionObjectElementRepository;
 use PHPCD\Filter\ClassConstantFilter;
 use PHPCD\NotFoundException;
@@ -34,7 +34,7 @@ class ReflectionClassConstantRepository extends ReflectionObjectElementRepositor
         return $collection;
     }
 
-    public function getByPath(ClassConstantPath $path): ClassConstant
+    public function getByPath(ObjectElementPath $path): ClassConstant
     {
         try {
             $reflectionConstant = new \ReflectionClassConstant($path->getClassName(), $path->getElementName());

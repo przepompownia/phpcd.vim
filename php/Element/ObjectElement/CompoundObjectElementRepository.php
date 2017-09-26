@@ -19,7 +19,7 @@ class CompoundObjectElementRepository
     /**
      * @var ClassConstantRepository
      */
-    private $classConstantRepository;
+    private $constantRepository;
 
     /**
      * @var PropertyRepository
@@ -32,29 +32,33 @@ class CompoundObjectElementRepository
     private $methodRepository;
 
     public function __construct(
-        ClassConstantRepository $classConstantRepository,
+        ClassConstantRepository $constantRepository,
         PropertyRepository $propertyRepository,
         MethodRepository $methodRepository,
         Logger $logger
     ) {
-        $this->classConstantRepository = $classConstantRepository;
+        $this->constantRepository = $constantRepository;
         $this->propertyRepository = $propertyRepository;
         $this->methodRepository = $methodRepository;
         $this->logger = $logger;
     }
 
-    public function findObjectElement($className, $symbol = '__construct'): ObjectElement
+    public function findObjectElement(ObjectElementPath $path): ObjectElement
     {
         try {
-            return $this->methodRepository->getByPath(new MethodPath($className, $symbol));
+            return $this->methodRepository->getByPath($path);
         } catch (NotFoundException $e) {
             try {
-                return $this->classConstantRepository->getByPath(new ClassConstantPath($className, $symbol));
+                return $this->constantRepository->getByPath($path);
             } catch (NotFoundException $e) {
                 try {
-                    return $this->propertyRepository->getByPath(new PropertyPath($className, $symbol));
+                    return $this->propertyRepository->getByPath($path);
                 } catch (NotFoundException $e) {
-                    throw new NotFoundException(sprintf('Symbol %s not found in class %s', $className, $symbol));
+                    throw new NotFoundException(sprintf(
+                        'Symbol %s not found in class %s',
+                        $path->getClassName(),
+                        $path->getElementName()
+                    ));
                 }
             }
         }
@@ -71,7 +75,7 @@ class CompoundObjectElementRepository
         try {
             if (false !== $isStatic) {
                 $constantFilter = new ClassConstantFilter([ClassConstantFilter::CLASS_NAME => $className], $pattern);
-                $constants = $this->classConstantRepository->find($constantFilter);
+                $constants = $this->constantRepository->find($constantFilter);
 
                 foreach ($constants as $constant) {
                     $collection->add($constant);
@@ -108,17 +112,15 @@ class CompoundObjectElementRepository
         return $collection;
     }
 
-    public function getTypesReturnedByMethod($className, $methodName)
+    public function getTypesReturnedByMethod(ObjectElementPath $methodPath): array
     {
-        $methodPath = new MethodPath($className, $methodName);
         $method = $this->methodRepository->getByPath($methodPath);
 
         return $method->getNonTrivialTypes();
     }
 
-    public function getTypesOfProperty($className, $propertyName)
+    public function getTypesOfProperty(ObjectElementPath $propertyPath): array
     {
-        $propertyPath = new PropertyPath($className, $propertyName);
         $property = $this->propertyRepository->getByPath($propertyPath);
 
         return $property->getNonTrivialTypes();

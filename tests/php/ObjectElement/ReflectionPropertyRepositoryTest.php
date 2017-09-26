@@ -7,8 +7,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use PHPCD\DocBlock\DocBlock;
 use PHPCD\Element\ClassInfo\ReflectionClass;
 use PHPCD\Element\ClassInfo\ReflectionClassFactory;
+use PHPCD\Element\ObjectElement\ObjectElementPath;
 use PHPCD\Element\ObjectElement\PropertyInfo;
-use PHPCD\Element\ObjectElement\PropertyPath;
 use PHPCD\Element\ObjectElement\ReflectionPropertyRepository;
 use PHPCD\Filter\PropertyFilter;
 use PHPCD\PatternMatcher\PatternMatcher;
@@ -80,7 +80,7 @@ class ReflectionPropertyRepositoryTest extends MockeryTestCase
 
         $className =  \tests\Fixtures\MethodRepository\Test1::class;
         $propertyName = 'doesnotexist';
-        $path = new PropertyPath($className, $propertyName);
+        $path = new ObjectElementPath($className, $propertyName);
 
         $property = $repository->getByPath($path);
     }
@@ -97,7 +97,7 @@ class ReflectionPropertyRepositoryTest extends MockeryTestCase
 
         $className =  \tests\Fixtures\MethodRepository\Test1::class;
         $propertyName = 'pub1';
-        $path = new PropertyPath($className, $propertyName);
+        $path = new ObjectElementPath($className, $propertyName);
 
         $property = $repository->getByPath($path);
         $this->assertInstanceof(PropertyInfo::class, $property);

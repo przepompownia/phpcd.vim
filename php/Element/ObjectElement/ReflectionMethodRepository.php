@@ -26,10 +26,10 @@ class ReflectionMethodRepository extends ReflectionObjectElementRepository imple
         return $collection;
     }
 
-    public function getByPath(MethodPath $path)
+    public function getByPath(ObjectElementPath $path): MethodInfo
     {
         try {
-            $reflectionMethod = new \ReflectionMethod($path->getClassName(), $path->getMethodName());
+            $reflectionMethod = new \ReflectionMethod($path->getClassName(), $path->getElementName());
         } catch (\ReflectionException $e) {
             throw new NotFoundException($e->getMessage(), $e->getCode(), $e);
         }

@@ -4,21 +4,18 @@ namespace tests\PHPCD;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPCD\DocBlock\DocBlock;
 use PHPCD\Element\ConstantInfo\ConstantCollection;
 use PHPCD\Element\ConstantInfo\ConstantRepository;
 use PHPCD\Element\FunctionInfo\FunctionCollection;
 use PHPCD\Element\FunctionInfo\FunctionRepository;
 use PHPCD\Element\FunctionInfo\ReflectionFunction;
 use PHPCD\Element\ObjectElement\CompoundObjectElementRepository;
-use PHPCD\Element\ObjectElement\Constant\ClassConstantRepository;
-use PHPCD\Element\ObjectElement\MethodRepository;
-use PHPCD\Element\ObjectElement\PropertyRepository;
 use PHPCD\NamespaceInfo;
 use PHPCD\PHPCD;
 use PHPCD\PHPFile\PHPFileFactory;
 use PHPCD\View\VimMenuItemView;
 use Psr\Log\LoggerInterface as Logger;
-use PHPCD\DocBlock\DocBlock;
 
 class FunctionsAndConstantsTest extends MockeryTestCase
 {
@@ -30,12 +27,9 @@ class FunctionsAndConstantsTest extends MockeryTestCase
     {
         $nsinfo = Mockery::mock(NamespaceInfo::class);
         $logger = Mockery::mock(Logger::class);
-        $propertyRepository = Mockery::mock(PropertyRepository::class);
-        $methodRepository = Mockery::mock(MethodRepository::class);
         $fileFactory = Mockery::mock(PHPFileFactory::class);
 
         $constantRepository = Mockery::mock(ConstantRepository::class);
-        $classConstantRepository = Mockery::mock(ClassConstantRepository::class);
         $functionRepository = Mockery::mock(FunctionRepository::class);
 
         $docBlock = Mockery::mock(DocBlock::class);
@@ -51,9 +45,6 @@ class FunctionsAndConstantsTest extends MockeryTestCase
             $nsinfo,
             $logger,
             $constantRepository,
-            $classConstantRepository,
-            $propertyRepository,
-            $methodRepository,
             $fileFactory,
             $view,
             $functionRepository,

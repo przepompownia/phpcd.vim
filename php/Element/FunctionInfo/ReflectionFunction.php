@@ -91,12 +91,9 @@ class ReflectionFunction implements FunctionInfo
         return $types;
     }
 
-    /**
-     * @return array
-     */
-    public function getNonTrivialTypes()
+    public function getNonTrivialTypes(): array
     {
-        if (version_compare(PHP_VERSION, '7.0.0') >= 0 && $this->reflectionFunction->hasReturnType()) {
+        if ($this->reflectionFunction->hasReturnType()) {
             return [(string) $this->reflectionFunction->getReturnType()];
         }
 

@@ -30,10 +30,7 @@ interface ObjectElement
      */
     public function getAllowedTypes();
 
-    /**
-     * @return array
-     */
-    public function getNonTrivialTypes();
+    public function getNonTrivialTypes(): array;
 
     public function getPhysicalLocation(): PhysicalLocation;
 

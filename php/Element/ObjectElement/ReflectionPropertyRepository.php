@@ -51,15 +51,10 @@ class ReflectionPropertyRepository extends ReflectionObjectElementRepository imp
         return $properties;
     }
 
-    /**
-     * @param PropertyPath $path
-     *
-     * @return PropertyInfo
-     */
-    public function getByPath(PropertyPath $path)
+    public function getByPath(ObjectElementPath $path): PropertyInfo
     {
         try {
-            $property = new \ReflectionProperty($path->getClassName(), $path->getPropertyName());
+            $property = new \ReflectionProperty($path->getClassName(), $path->getElementName());
 
             return new ReflectionProperty($this->docBlock, $property);
         } catch (\ReflectionException $e) {

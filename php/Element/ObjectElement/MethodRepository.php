@@ -11,8 +11,5 @@ interface MethodRepository
      */
     public function find(MethodFilter $filter);
 
-    /**
-     * @return MethodInfo
-     */
-    public function getByPath(MethodPath $path);
+    public function getByPath(ObjectElementPath $path): MethodInfo;
 }
